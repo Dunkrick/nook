@@ -1,10 +1,13 @@
 const sqlite3 = require("sqlite3").verbose();
+const path = require("path");
 
-const db = new sqlite3.Database("./dreams.db", (err) => {
+const dbPath = process.env.DB_PATH || path.join(__dirname, "dreams.db");
+
+const db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
         console.error("Database connection failed:", err.message);
     } else {
-        console.log("Connected to SQLite");
+        console.log(`Connected to SQLite database at ${dbPath}`);
     }
 });
 
