@@ -5,47 +5,83 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f7fb;
+    /* Softer, rounder system font stack */
+    font-family: 'Avenir', 'Helvetica Neue', 'Segoe UI', sans-serif;
+    background-color: #fcfaf8; /* Warm, creamy off-white */
+    color: #4a4036; /* Soft brownish-gray instead of harsh black */
     padding: 40px;
+    line-height: 1.6;
 }
 
 .container {
-    max-width: 700px;
+    max-width: 600px; /* Slightly narrower feels cozier */
     margin: 0 auto;
     background: white;
-    padding: 24px;
-    border-radius: 12px;
+    padding: 32px 40px;
+    border-radius: 20px; /* Rounder edges */
+    box-shadow: 0 10px 40px rgba(110, 95, 80, 0.08); /* Soft, warm shadow */
 }
 
 h1 {
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+    color: #6b5c4f;
+    text-align: center;
+    font-weight: 600;
 }
 
 .input-group {
     display: flex;
     gap: 12px;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 
 #dreamInput {
     flex: 1;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    padding: 14px 18px;
+    background-color: #f7f4ed; /* Light beige input */
+    border: 1px solid #e3dbd1;
+    border-radius: 12px;
     font-size: 16px;
+    color: #4a4036;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#dreamInput:focus {
+    border-color: #c9bdae;
+    box-shadow: 0 0 0 3px rgba(201, 189, 174, 0.2);
+}
+
+#dreamInput::placeholder {
+    color: #a89f94;
 }
 
 #saveBtn {
-    padding: 12px 18px;
+    padding: 14px 24px;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    background-color: #8c7b6d; /* Warm taupe */
+    color: white;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+#saveBtn:hover {
+    background-color: #7a6a5d;
+}
+
+#saveBtn:active {
+    transform: scale(0.98);
 }
 
 #message {
     min-height: 24px;
     margin-bottom: 16px;
+    text-align: center;
+    font-size: 14px;
+    color: #8c7b6d;
 }
 
 #dreamList {
@@ -56,27 +92,30 @@ h1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    background-color: #ffffff;
+    border: 1px solid #f0ebe1;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(110, 95, 80, 0.03);
+    transition: transform 0.2s;
+}
 
-    padding: 12px;
-    margin-bottom: 10px;
-
-    border: 1px solid #eee;
-    border-radius: 8px;
+#dreamList li:hover {
+    transform: translateY(-2px);
 }
 
 #dreamList button {
-    padding: 8px 12px;
+    padding: 8px 16px;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
+    font-size: 14px;
+    background-color: #dfc4c4; /* Soft, faded dusty rose */
+    color: #fff;
+    transition: background-color 0.2s;
 }
 
-#saveBtn {
-    background-color: black;
-    color: white;
-}
-
-#dreamList button {
-    background-color: crimson;
-    color: white;
+#dreamList button:hover {
+    background-color: #d1b0b0;
 }
