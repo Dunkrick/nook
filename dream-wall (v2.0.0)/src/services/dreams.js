@@ -1,21 +1,29 @@
 //The expert of dreams
 import pool from "../postgres.js";
+import prisma from "../prisma.js";
 
 export async function createDream(dreamText) {
-    const result = await pool.query(
-        `INSERT INTO dreams (text)
-         VALUES ($1)
-         RETURNING id, text`,
-        [dreamText]
-    );
-    return result.rows[0];
+    return prisma.dream.create({
+        data: {
+            text,
+        },
+        select: {
+            id: true,
+            text: true,
+        },
+    });
 };
 
 export async function getAllDreams() {
-    const result = await pool.query(
-        `SELECT * FROM dreams ORDER BY created_at DESC`
-    );
-    return result.rows;
+    return prisma.dream.findMany({
+        select: {
+            id: true,
+            text: true,
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+    });
 }
 
 export async function deleteDream(id) {
