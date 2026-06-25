@@ -53,6 +53,7 @@ router.post("/dreams", async (req, res) => {
     }
 });
 
+//succesfully migrated to postgres and TypeScript, is now working
 router.delete("/dreams/:id", async (req, res) => {
     const id = req.params.id;
 
