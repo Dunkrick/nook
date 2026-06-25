@@ -1,6 +1,6 @@
 import express from "express";
 import dreamRoutes from "./routes/dreams.js";
-import pool from "./db.js";
+import pool from "./postgres.js";
 
 const app = express();
 const PORT = process.env.PORT || 3003;
@@ -25,6 +25,8 @@ async function testConnection() {
         console.error("Database connection failed", error);
     }
 }
+
+testConnection();
 
 app.listen(PORT, () => {
     console.log(`server is running on port http://localhost:${PORT}`);

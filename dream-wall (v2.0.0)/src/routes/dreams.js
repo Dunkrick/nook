@@ -1,26 +1,37 @@
 import express from "express";
-import db from "../db.js";
+import pool from "../postgres.js";
 
 const router = express.Router();
 
 
-router.get("/", (req, res) => {
+router.get("/", (_, res) => {
     res.send("Hello, from the Dream Wall!");
 });
 
-router.get("/dreams", (req, res) => {
-    db.all("SELECT * FROM dreams", [], (err, rows) => {
-        if (err) {
+//succesfully migrated to postgres and TypeScript, is now working
+router.get("/dreams", async (_, res) => {
+
+    try {
+        const result = await pool.query(
+            `SELECT * FROM dreams ORDER BY created_at DESC`
+        );
+        res.status(200).json(result.rows);
+    }
+    catch (error) {
+        if (error instanceof Error) {
             return res.status(500).json({
-                error: err.message,
+                error: error.message,
             });
         }
 
-        res.json(rows);
-    });
+        res.status(500).json({
+            error: "Unknown error",
+        });
+    }
 });
 
-router.post("/dreams", (req, res) => {
+//succesfully migrated to postgres and TypeScript, is now working
+router.post("/dreams", async (req, res) => {
     const dreamText = req.body.dream?.trim();
 
     if (!dreamText) {
@@ -28,52 +39,43 @@ router.post("/dreams", (req, res) => {
             error: "Dream cannot be empty",
         });
     }
-
-    const sql = `
-    INSERT INTO dreams (text)
-    VALUES (?)
-  `;
-
-    db.run(sql, [dreamText], function (err) {
-        if (err) {
-            return res.status(500).json({
-                error: err.message,
-            });
-        }
-
-        res.status(201).json({
-            id: this.lastID,
-            text: dreamText,
+    try {
+        const result = await pool.query(
+            `INSERT INTO dreams (text)
+                VALUES ($1)
+                RETURNING id, text
+            `, [dreamText]);
+        res.status(201).json(result.rows[0]);
+    } catch (err) {
+        res.status(500).json({
+            error: err.message,
         });
-    });
+    }
 });
 
-router.delete("/dreams/:id", (req, res) => {
+router.delete("/dreams/:id", async (req, res) => {
     const id = req.params.id;
 
-    const sql = `
-    DELETE FROM dreams
-    WHERE id = ?
-  `;
-
-    db.run(sql, [id], function (err) {
-        if (err) {
-            return res.status(500).json({
-                error: err.message,
-            });
-        }
-
-        if (this.changes === 0) {
+    try {
+        const result = await pool.query(
+            `DELETE FROM dreams
+        WHERE id = $1
+        RETURNING id`,
+            [id]
+        );
+        res.status(200).json(result.rowCount);
+    }
+    catch (error) {
+        if (error instanceof Error) {
             return res.status(404).json({
-                error: "Dream not found",
-            });
+                error: error.message
+            })
         }
-
-        res.status(200).json({
-            message: "Dream deleted",
-            id: Number(id),
+        return res.status(500).json({
+            error: "Unknown error"
         });
-    });
+    }
+
 });
 
 export default router;
