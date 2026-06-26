@@ -1,4 +1,4 @@
-export function validateDream(text) {
+export function validateDream(text: string) {
     const dream = text?.trim();
 
     if (!dream) {
