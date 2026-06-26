@@ -1,7 +1,7 @@
 //The expert of dreams
 import prisma from "../prisma.js";
 
-export async function createDream(dreamText) {
+export async function createDream(dreamText: string) {
     return prisma.dreams.create({
         data: {
             text: dreamText,
@@ -25,7 +25,7 @@ export async function getAllDreams() {
     });
 }
 
-export async function deleteDream(id) {
+export async function deleteDream(id: number) {
     return prisma.dreams.delete({
         where: {
             id: id,
@@ -37,7 +37,7 @@ export async function deleteDream(id) {
     })
 }
 
-export async function updateDream(id, dreamText) {
+export async function updateDream(id: number, dreamText: string) {
     return prisma.dreams.update({
         where: {
             id: id,
