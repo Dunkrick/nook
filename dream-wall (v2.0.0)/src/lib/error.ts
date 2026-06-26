@@ -1,4 +1,6 @@
-export function handleServerError(res, error) {
+import { Response } from "express";
+
+export function handleServerError(res: Response, error: unknown) {
     if (error instanceof Error) {
         return res.status(500).json({
             error: error.message,
