@@ -1,8 +1,11 @@
+# Dependencies
 node_modules/
+
+# Production/Build Output
 dist/
 
-*.js.map
-*.d.ts
-*.d.ts.map
-*.db
+# Environment files (never commit secrets)
 .env
+
+# OS Files
+.DS_Store

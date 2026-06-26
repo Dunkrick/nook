@@ -4,9 +4,12 @@
   "description": "",
   "main": "dist/server.js",
   "scripts": {
-    "start": "node dist/server.js",
+    "dev": "tsx watch src/server.ts",
     "build": "tsc",
-    "dev": "tsx src/server.ts"
+    "start": "node dist/server.js",
+    "setup": "prisma generate && prisma migrate dev",
+    "lint": "...",
+    "format": "..."
   },
   "engines": {
     "node": "22.x"

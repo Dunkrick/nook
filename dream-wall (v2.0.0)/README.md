@@ -13,40 +13,31 @@ Dream Wall is a full-stack web app that gives you a digital wall to:
 
 ## How it works
 
-Under the hood, we're keeping it simple and solid:
+Under the hood, we've upgraded the stack to be robust and type-safe:
 - **Frontend:** Vanilla HTML, CSS, and JavaScript. No heavy frameworks, just pure web magic.
-- **Backend:** An Express.js API handling all the requests on port `3003`.
-- **Database:** SQLite3 to safely tuck away your dreams without needing a complex database setup.
+- **Backend:** An Express.js API handling all the requests, written in TypeScript.
+- **Database:** PostgreSQL for reliable data storage, with Prisma acting as our modern, type-safe ORM.
 
-## Getting Started
+## Project Architecture
 
-Want to run your own Dream Wall locally? It's super easy!
+The codebase follows a clean, modular structure emphasizing separation of concerns:
 
-### Prerequisites
-Make sure you have [Node.js](https://nodejs.org/) installed (version 22.x or higher is recommended).
+- `src/server.ts`: The entry point for the Express application.
+- `src/routes/`: HTTP layer. Defines API endpoints and handles request/response formatting.
+- `src/services/`: Business logic layer. Handles database queries and core application rules, isolated from HTTP context.
+- `src/validation/`: Input validation to ensure clean data before processing.
+- `src/lib/`: Shared utilities, such as standardized error handling.
+- `src/prisma.ts` & `src/postgres.ts`: Database configuration and ORM initialization.
+- `prisma/`: Database schema definitions and migrations.
+- `docs/`: Learning journals and architectural decisions.
 
-### Setup
-
-1. **Navigate to the project directory** in your terminal.
-2. **Install the dependencies**:
-   ```bash
-   npm install
-   ```
-3. **Start the server**:
-   ```bash
-   npm start
-   ```
-   *(This runs `node server.js` under the hood).*
-
-4. **Open your browser** and visit `http://localhost:3003`. 
-5. Start dreaming! ✨
-
-## 🗂️ Project Structure
-
-- `server.js`: The heart of the backend Express API.
-- `db.js`: Where the SQLite database connection and setup lives.
-- `public/`: The frontend files (`index.html`, `style.css`, `script.js`).
-- `package.json`: Project metadata and dependencies.
+## Current Roadmap
+- [x] Migrate from SQLite to PostgreSQL
+- [x] Integrate Prisma ORM for type-safe database queries
+- [x] Refactor into a 3-tier architecture (Routes, Services, Data)
+- [ ] **Next:** Build out the frontend UI to consume the new REST API
+- [ ] Implement comprehensive error logging
+- [ ] Add unit and integration tests for services and routes
 
 ---
 

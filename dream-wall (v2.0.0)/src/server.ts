@@ -1,6 +1,6 @@
 import express from "express";
 import dreamRoutes from "./routes/dreams.js";
-import pool from "./postgres.js";
+import prisma from "./prisma.js";
 
 const app = express();
 const PORT = process.env.PORT || 3003;
@@ -17,12 +17,11 @@ app.get("/", (_, res) => {
 
 async function testConnection() {
     try {
-        const result = await pool.query("SELECT NOW()");
-        console.log("Database connected!");
-        console.log(result.rows[0]);
+        await prisma.$queryRaw`SELECT NOW()`;
+        console.log("Database connected via Prisma!");
     }
     catch (error) {
-        console.error("Database connection failed", error);
+        console.error("Database connection failed via Prisma:", error);
     }
 }
 

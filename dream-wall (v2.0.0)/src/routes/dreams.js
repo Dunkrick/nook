@@ -38,7 +38,7 @@ router.post("/dreams", async (req, res) => {
 });
 
 router.delete("/dreams/:id", async (req, res) => {
-    const id = req.params.id;
+    const id = Number(req.params.id);
 
     try {
         const deletedDream = await deleteDream(id);
@@ -58,7 +58,7 @@ router.delete("/dreams/:id", async (req, res) => {
 });
 
 router.patch("/dreams/:id", async (req, res) => {
-    const id = req.params.id;
+    const id = Number(req.params.id);
     const dreamText = validateDream(req.body.dream);
 
     if (!dreamText) {
