@@ -1,6 +1,6 @@
+//Route has two jobs
 import express from "express";
 import { createDream, getAllDreams, deleteDream, updateDream } from "../services/dreams.js";
-import { handleServerError } from "../lib/error.js";
 import { validateDream } from "../validation/dreams.js";
 
 const router = express.Router();
@@ -11,13 +11,8 @@ router.get("/", (_, res) => {
 });
 
 router.get("/dreams", async (_, res) => {
-    try {
-        const dreams = await getAllDreams();
-        res.status(200).json(dreams);
-    }
-    catch (error) {
-        return handleServerError(res, error);
-    }
+    const dreams = await getAllDreams();
+    res.status(200).json(dreams);
 });
 
 router.post("/dreams", async (req, res) => {
@@ -28,32 +23,22 @@ router.post("/dreams", async (req, res) => {
         });
     }
 
-    try {
-        const result = await createDream(dreamText);
-        return res.status(201).json(result);
-    }
-    catch (error) {
-        return handleServerError(res, error);
-    }
+    const result = await createDream(dreamText);
+    return res.status(201).json(result);
 });
 
 router.delete("/dreams/:id", async (req, res) => {
     const id = Number(req.params.id);
+    const deletedDream = await deleteDream(id);
 
-    try {
-        const deletedDream = await deleteDream(id);
-
-        if (!deletedDream) {
-            return res.status(404).json({
-                error: "Dream not found"
-            });
-        }
-
-        return res.status(200).json(deletedDream);
+    if (!deletedDream) {
+        return res.status(404).json({
+            error: "Dream not found"
+        });
     }
-    catch (error) {
-        return handleServerError(res, error);
-    }
+
+    return res.status(200).json(deletedDream);
+
 
 });
 
@@ -67,20 +52,16 @@ router.patch("/dreams/:id", async (req, res) => {
         });
     }
 
-    try {
-        const updatedDream = await updateDream(id, dreamText);
+    const updatedDream = await updateDream(id, dreamText);
 
-        if (!updatedDream) {
-            return res.status(404).json({
-                error: "Dream not found"
-            });
-        }
+    if (!updatedDream) {
+        return res.status(404).json({
+            error: "Dream not found"
+        });
+    }
 
-        return res.status(200).json(updatedDream);
-    }
-    catch (error) {
-        return handleServerError(res, error);
-    }
+    return res.status(200).json(updatedDream);
+
 });
 
 export default router;

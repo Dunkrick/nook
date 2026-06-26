@@ -1,13 +1,17 @@
-import { Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 
-export function handleServerError(res: Response, error: unknown) {
-    if (error instanceof Error) {
-        return res.status(500).json({
-            error: error.message,
-        });
-    }
+export function errorHandler(
+    error: Error,
+    req: Request,
+    res: Response,
+    next: NextFunction
+) {
+    console.error(error);
 
-    return res.status(500).json({
-        error: "Unknown error",
+    res.status(500).json({
+        success: false,
+        error: {
+            message: "Internal Server Error",
+        },
     });
 }

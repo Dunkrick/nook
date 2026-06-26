@@ -1,6 +1,7 @@
 import express from "express";
 import dreamRoutes from "./routes/dreams.js";
 import prisma from "./prisma.js";
+import { errorHandler } from "./lib/error.js";
 
 const app = express();
 const PORT = process.env.PORT || 3003;
@@ -14,6 +15,18 @@ app.use("/", dreamRoutes);
 app.get("/", (_, res) => {
     res.send("Hello from Dream Wall v2");
 });
+
+app.get("/crash", async (_, res) => {
+    res.status(500).json({
+        "success": false,
+        "error": {
+            "message": "Something went wrong!",
+            "code": "INTERNAL_SERVER_ERROR"
+        }
+    });
+});
+
+app.use(errorHandler);
 
 async function testConnection() {
     try {

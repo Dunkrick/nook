@@ -7,3 +7,5 @@ EP-006: Optimize for the next developer, not the current one.
 EP-007: Make the correct path the easiest path.
 EP-008: Every abstraction must remove more complexity than it adds.
 EP-009: Language of your code should match the language of your product.
+EP-010: Finish what you start before expanding the system.
+EP-011: Code should be optimistic. Infrastructure should be defensive.
