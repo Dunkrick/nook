@@ -65,14 +65,14 @@ npm run dev
 ```
 
 ## Architecture
-- Every request follows a layered Architecture. Please read more in [docs/Architecture.md](docs/Architecture.md).
+- Every request follows a layered Architecture. Please read more in [docs/Architecture.md](docs/architecture.md).
 
 ## Documentation
-- [Architecture](docs/Architecture.md)
-- [Setup](docs/Setup.md)
-- [Roadmap](docs/Roadmap.md)
-- [Release Notes](docs/ReleaseNotes.md)
-- [ADRs](docs/ADRs.md)
+- [Architecture](docs/architecture.md)
+- [Setup](docs/setup.md)
+- [Roadmap](docs/roadmap.md)
+- [Release Notes](docs/release_notes)
+- [ADRs](docs/adr)
 
 ## Engineering Philosophy
 - Build incrementally.
