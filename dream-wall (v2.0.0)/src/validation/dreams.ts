@@ -1,9 +1,15 @@
-export function validateDream(text: string) {
-    const dream = text?.trim();
+import type { Request, Response, NextFunction } from "express";
+import { ValidationError } from "../lib/error.js";
+
+export function validateDream(req: Request, res: Response, next: NextFunction) {
+    const dream = req.body.dream?.trim();
 
     if (!dream) {
-        return null;
+        throw new ValidationError("Dream cannot be empty");
     }
 
-    return dream;
+    // Clean up the body so the route gets the trimmed version
+    req.body.dream = dream;
+    
+    next();
 }

@@ -1,46 +1,82 @@
 # Dream Wall
 
-Welcome to **Dream Wall**! I originally built this project as a personal space to learn and understand how full-stack development works from the ground up. Beyond just being a learning experience, it has become a simple, cozy little corner of the web where you can pin your dreams, aspirations, and fleeting midnight thoughts. 
+Dream Wall is a minimal full-stack application that evolved from a simple CRUD app into a production-oriented backend through iterative engineering. Honestly, I wanted to explore how full stack works and this project made me understand it deeply.
 
-Built with Node.js, Express, and SQLite, it's a lightweight app ready to store everything you hope to achieve (or just whatever weird stuff you dreamed about last night!).
+Instead of building multiple tutorial projects, every version introduces one real engineering concept while preserving the same product.
 
-## What is it?
-
-Dream Wall is a full-stack web app that gives you a digital wall to:
-- **Save** your dreams 
-- **View** all the dreams you've pinned to the wall
-- **Remove** dreams once they've come true (or if you change your mind)
-
-## How it works
-
-Under the hood, we've upgraded the stack to be robust and type-safe:
-- **Frontend:** Vanilla HTML, CSS, and JavaScript. No heavy frameworks, just pure web magic.
-- **Backend:** An Express.js API handling all the requests, written in TypeScript.
-- **Database:** PostgreSQL for reliable data storage, with Prisma acting as our modern, type-safe ORM.
-
-## Project Architecture
-
-The codebase follows a clean, modular structure emphasizing separation of concerns:
-
-- `src/server.ts`: The entry point for the Express application.
-- `src/routes/`: HTTP layer. Defines API endpoints and handles request/response formatting.
-- `src/services/`: Business logic layer. Handles database queries and core application rules, isolated from HTTP context.
-- `src/validation/`: Input validation to ensure clean data before processing.
-- `src/lib/`: Shared utilities, such as standardized error handling.
-- `src/prisma.ts` & `src/postgres.ts`: Database configuration and ORM initialization.
-- `prisma/`: Database schema definitions and migrations.
-- `docs/`: Learning journals and architectural decisions.
-
-## Current Roadmap
-- [x] Migrate from SQLite to PostgreSQL
-- [x] Integrate Prisma ORM for type-safe database queries
-- [x] Refactor into a 3-tier architecture (Routes, Services, Data)
-- [ ] **Next:** Build out the frontend UI to consume the new REST API
-- [ ] Implement comprehensive error logging
-- [ ] Add unit and integration tests for services and routes
+Current Version: **v2.5**
 
 ---
 
-*"A dream you dream alone is only a dream. A dream you dream together is reality."* - Yoko Ono
+## Why Dream Wall?
 
-Go ahead, add your first dream to the wall!
+Most tutorial projects are abandoned after they work.
+
+Dream Wall follows a different philosophy.
+
+The same product evolves over time.
+
+Each version introduces one new engineering challenge:
+
+- SQLite → PostgreSQL
+- Raw SQL → Prisma
+- JavaScript → TypeScript
+- Business Logic → Service Layer
+- Route Validation → Middleware
+- Local Project → Production Ready
+
+The goal isn't to build many projects.
+
+The goal is to build one project well.
+
+---
+
+## Tech Stack
+
+### Frontend
+
+- HTML
+- CSS
+- JavaScript
+
+### Backend
+
+- Express
+- TypeScript
+- Prisma
+- PostgreSQL
+
+---
+
+## Quick Start
+
+```bash
+git clone ...
+
+cd dream-wall
+
+npm install
+
+cp .env.example .env
+
+npm run setup
+
+npm run dev
+```
+
+## Architecture
+- Every request follows a layered Architecture. Please read more in [docs/Architecture.md](docs/Architecture.md).
+
+## Documentation
+- [Architecture](docs/Architecture.md)
+- [Setup](docs/Setup.md)
+- [Roadmap](docs/Roadmap.md)
+- [Release Notes](docs/ReleaseNotes.md)
+- [ADRs](docs/ADRs.md)
+
+## Engineering Philosophy
+- Build incrementally.
+- Ship before adding complexity.
+- Pass data, not frameworks.
+- Stable interfaces enable replaceable implementations.
+- Optimize for the next developer.
