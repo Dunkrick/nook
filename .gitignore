@@ -1,1 +1,11 @@
+# Dependencies
+node_modules/
+
+# Production/Build Output
+dist/
+
+# Environment files (never commit secrets)
+.env
+
+# OS Files
 .DS_Store
