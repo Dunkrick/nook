@@ -1,10 +1,13 @@
 //The expert of dreams
 import prisma from "../prisma.js";
+import { CreateDreamInput } from "../types/dreams.js";
+import { Prisma } from "@prisma/client";
 
-export async function createDream(dreamText: string) {
-    return prisma.dreams.create({
+export async function createDream(input: CreateDreamInput) {
+    return prisma.dream.create({
         data: {
-            text: dreamText,
+            text: input.text,
+            userId: input.userId,
         },
         select: {
             id: true,
@@ -13,41 +16,56 @@ export async function createDream(dreamText: string) {
     });
 };
 
-export async function getAllDreams() {
-    return prisma.dreams.findMany({
-        select: {
-            id: true,
-            text: true,
+export async function getAllDreams(userId: number) {
+    return prisma.dream.findMany({
+        where: {
+            userId,
         },
         orderBy: {
-            created_at: "desc",
+            createdAt: "desc",
         },
     });
 }
 
-export async function deleteDream(id: number) {
-    return prisma.dreams.delete({
-        where: {
-            id: id,
-        },
-        select: {
-            id: true,
-            text: true,
-        },
-    })
+export async function deleteDream(id: number, userId: number) {
+    try {
+        return await prisma.dream.delete({
+            where: {
+                id,
+                userId,
+            },
+            select: {
+                id: true,
+                text: true,
+            },
+        });
+    } catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+            return null;
+        }
+        throw error;
+    }
 }
 
-export async function updateDream(id: number, dreamText: string) {
-    return prisma.dreams.update({
-        where: {
-            id: id,
-        },
-        data: {
-            text: dreamText,
-        },
-        select: {
-            id: true,
-            text: true,
-        },
-    });
+export async function updateDream(id: number, dreamText: string, userId: number) {
+    try {
+        return await prisma.dream.update({
+            where: {
+                id,
+                userId,
+            },
+            data: {
+                text: dreamText,
+            },
+            select: {
+                id: true,
+                text: true,
+            },
+        });
+    } catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+            return null;
+        }
+        throw error;
+    }
 }
