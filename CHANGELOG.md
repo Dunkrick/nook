@@ -17,3 +17,28 @@
 
 - Raw PostgreSQL client
 - Duplicate validation logic
+
+# v3.0.0 (In Progress)
+
+## Added
+
+### Authentication
+
+- User registration
+- User login
+- Password hashing with bcrypt
+- JWT authentication
+- Authentication middleware
+
+### Authorization
+
+- User-owned dreams
+- Protected CRUD operations
+- Route protection using middleware
+
+### Architecture
+
+- Authentication service
+- Authentication validation
+- Shared authentication types
+- Express request extension

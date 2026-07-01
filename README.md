@@ -80,3 +80,21 @@ npm run dev
 - Pass data, not frameworks.
 - Stable interfaces enable replaceable implementations.
 - Optimize for the next developer.
+
+## Features
+
+- Create dreams
+- Update dreams
+- Delete dreams
+- User Registration
+- User Login
+- JWT Authentication
+- User-owned Dreams
+
+## Authentication
+
+All protected routes require
+
+Authorization
+
+Bearer <JWT>
