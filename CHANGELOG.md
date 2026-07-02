@@ -18,9 +18,16 @@
 - Raw PostgreSQL client
 - Duplicate validation logic
 
-# v3.0.0 (In Progress)
+## v3.0.0
 
-## Added
+Added
+
+- JWT Authentication
+- React Frontend
+- Protected Routes
+- Login / Register
+- Logout
+- Reusable AuthForm
 
 ### Authentication
 

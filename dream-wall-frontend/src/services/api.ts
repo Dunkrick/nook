@@ -1,9 +1,6 @@
-const API_URL = import.meta.env.VITE_API_URL;
-const TOKEN_KEY = "dream-wall-token";
+import { getToken } from "../lib/storage";
 
-function getToken() {
-    return localStorage.getItem(TOKEN_KEY);
-}
+const API_URL = import.meta.env.VITE_API_URL;
 
 //private helper function to process the enpoint requests
 async function request(method: string, endpoint: string, options?: any) {

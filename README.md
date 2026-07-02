@@ -89,7 +89,13 @@ npm run dev
 - User Registration
 - User Login
 - JWT Authentication
+- Protected Routes
 - User-owned Dreams
+- Logout
+- PostgreSQL
+- Prisma
+- React
+
 
 ## Authentication
 
