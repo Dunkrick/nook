@@ -3,9 +3,10 @@ import { useState } from "react";
 interface AuthFormProps {
     buttonText: string;
     loadingButtonText: string;
-    onSubmit: (credentials: { email: string; password: string }) => Promise<any>;
+    onSubmit: (credentials: { email: string; password: string }) => Promise<void>;
     onSuccess: () => void;
     togglePrompt: string;
+    toggleButtonText: string;
     onToggle: () => void;
 }
 
@@ -15,6 +16,7 @@ export default function AuthForm({
     onSubmit, 
     onSuccess, 
     togglePrompt, 
+    toggleButtonText,
     onToggle 
 }: AuthFormProps) {
     const [email, setEmail] = useState("");
@@ -24,7 +26,7 @@ export default function AuthForm({
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault(); 
-        if (email === "" || password === "") {
+        if (email.trim() === "" || password === "") {
             setError("Email and password are required");
             return;
         }
@@ -75,7 +77,7 @@ export default function AuthForm({
             </button>
             <p>{togglePrompt}</p>
             <button type="button" onClick={onToggle}>
-                {buttonText === "Login" ? "Register" : "Login"}
+                {toggleButtonText}
             </button>
         </form>
     );

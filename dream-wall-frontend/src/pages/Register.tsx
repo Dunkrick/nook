@@ -6,7 +6,7 @@ export default function Register() {
     const navigate = useNavigate();
 
     const handleSubmit = async (credentials: { email: string; password: string }) => {
-        return await authService.register(credentials);
+        await authService.register(credentials);
     };
 
     return (
@@ -16,6 +16,7 @@ export default function Register() {
             onSubmit={handleSubmit}
             onSuccess={() => navigate("/home")}
             togglePrompt="Already have an account?"
+            toggleButtonText="Login"
             onToggle={() => navigate("/")}
         />
     );
