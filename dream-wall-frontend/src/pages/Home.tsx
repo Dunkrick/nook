@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { logout } from "../services/auth";
-import { getDreams, createDream, updateDream,type Dream } from "../services/dreams";
+import { getDreams, createDream, updateDream, deleteDream,type Dream } from "../services/dreams";
 import "../assets/dreamwall-tokens.css";
 
 export default function Home() {
@@ -43,6 +43,14 @@ async function handleUpdateDream(id: number) {
     
     // Close edit mode
     setEditingDreamId(null);
+}
+
+async function handleDeleteDream(id: number) {
+    // Call the backend to delete
+    await deleteDream(id);
+    
+    // Filter it out of our local React state
+    setDreams(dreams.filter(d => d.id !== id));
 }
 
     return (
@@ -112,20 +120,28 @@ async function handleUpdateDream(id: number) {
             <button onClick={() => setEditingDreamId(null)} style={{ background: "transparent", border: "none", cursor: "pointer" }}>Cancel</button>
         </div>
     ) : (
-        // --- NORMAL MODE ---
+                // --- NORMAL MODE ---
         <>
             <p style={{ margin: 0, color: "var(--dw-text-primary)", fontWeight: "var(--dw-weight-medium)" }}>
                 {dream.text}
             </p>
-            <button 
-                onClick={() => {
-                    setEditingDreamId(dream.id);
-                    setEditingDreamText(dream.text);
-                }}
-                style={{ background: "transparent", border: "none", color: "var(--dw-accent)", cursor: "pointer", fontWeight: "var(--dw-weight-medium)" }}>
-                Edit
-            </button>
+            <div style={{ display: "flex", gap: "var(--dw-space-3)" }}>
+                <button 
+                    onClick={() => {
+                        setEditingDreamId(dream.id);
+                        setEditingDreamText(dream.text);
+                    }}
+                    style={{ background: "transparent", border: "none", color: "var(--dw-text-primary)", cursor: "pointer", fontWeight: "var(--dw-weight-medium)" }}>
+                    Edit
+                </button>
+                <button 
+                    onClick={() => handleDeleteDream(dream.id)}
+                    style={{ background: "transparent", border: "none", color: "var(--dw-accent-cta)", cursor: "pointer", fontWeight: "var(--dw-weight-medium)" }}>
+                    Delete
+                </button>
+            </div>
         </>
+
     )}
 </div>
 
