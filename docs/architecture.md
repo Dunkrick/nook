@@ -73,13 +73,12 @@ flowchart TD
     V5[Extracted Service Layer] --> V6
     V6[Added Validation Middleware] --> V7
     V7[Global Error Middleware] --> V8
-    V8(((Production Ready)))
+    V8[Added Authentication] --> V9
+    V9(((Version 3: React Frontend)))
 ```
 
 Future versions will extend this architecture without changing its overall structure.
 
 Upcoming additions include:
-- Authentication
-- Authorization
 - AI Services
 - Background Jobs

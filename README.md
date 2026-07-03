@@ -4,7 +4,7 @@ Dream Wall is a minimal full-stack application that evolved from a simple CRUD a
 
 Instead of building multiple tutorial projects, every version introduces one real engineering concept while preserving the same product.
 
-Current Version: **v2.5**
+Current Version: **v3.0.0**
 
 ---
 
@@ -24,6 +24,7 @@ Each version introduces one new engineering challenge:
 - Business Logic → Service Layer
 - Route Validation → Middleware
 - Local Project → Production Ready
+- **Fullstack Integration → React & Vite**
 
 The goal isn't to build many projects.
 
@@ -35,9 +36,9 @@ The goal is to build one project well.
 
 ### Frontend
 
-- HTML
-- CSS
-- JavaScript
+- React
+- TypeScript
+- Vite
 
 ### Backend
 
@@ -45,6 +46,16 @@ The goal is to build one project well.
 - TypeScript
 - Prisma
 - PostgreSQL
+
+---
+
+## Screenshots
+
+### Login Page
+![Login Page](docs/login.png)
+
+### Home Page
+![Home Page](docs/home.png)
 
 ---
 
@@ -56,16 +67,43 @@ git clone ...
 cd dream-wall
 
 npm install
+cd dream-wall-frontend
+npm install
+cd ..
 
 cp .env.example .env
+# Also copy frontend env
+cp dream-wall-frontend/.env.example dream-wall-frontend/.env
 
 npm run setup
 
+# Run backend
+npm run dev
+
+# Run frontend in a new terminal
+cd dream-wall-frontend
 npm run dev
 ```
 
 ## Architecture
-- Every request follows a layered Architecture. Please read more in [docs/Architecture.md](docs/architecture.md).
+
+```mermaid
+graph TD
+    subgraph Frontend [React Frontend]
+        Router --> Pages
+        Pages --> Components
+        Components --> Services[API Services]
+        Services --> API[Network Layer]
+    end
+
+    subgraph Backend [Express Backend]
+        API --> Middleware[Auth/Validation Middleware]
+        Middleware --> Routes[API Routes]
+        Routes --> BServices[Business Logic Services]
+        BServices --> Prisma[Prisma ORM]
+        Prisma --> DB[(PostgreSQL)]
+    end
+```
 
 ## Documentation
 - [Architecture](docs/architecture.md)

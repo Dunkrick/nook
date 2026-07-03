@@ -45,10 +45,17 @@ Generate the Prisma client and push the schema/migrations to your database:
     npx prisma migrate dev
 ```
 
-## 5. Start Development Server
+## 5. Start Development Servers
 
+Run the backend in your first terminal:
 ```bash
 npm run dev
 ```
+The backend server will be running at `http://localhost:3003`.
 
-The server will be running at `http://localhost:3003`.
+Run the frontend in a second terminal:
+```bash
+cd dream-wall-frontend
+npm run dev
+```
+The React application will be running at `http://localhost:5173`.
