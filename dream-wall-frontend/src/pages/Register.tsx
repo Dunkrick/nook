@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import AuthForm from "../components/AuthForm";
 import * as authService from "../services/auth";
+import "../App.css";
 
 export default function Register() {
     const navigate = useNavigate();
@@ -9,7 +10,12 @@ export default function Register() {
         await authService.register(credentials);
     };
 
-    return (
+    return (<div className="auth-container">
+            <div className="auth-header">
+                <h1 className="auth-title">Dream Wall</h1>
+                <p className="auth-tagline">Turning dreams into momentum.</p>
+            </div>
+            <div className="auth-card">
         <AuthForm
             buttonText="Register"
             loadingButtonText="Registering..."
@@ -19,5 +25,7 @@ export default function Register() {
             toggleButtonText="Login"
             onToggle={() => navigate("/")}
         />
+        </div>
+        </div>
     );
 }
