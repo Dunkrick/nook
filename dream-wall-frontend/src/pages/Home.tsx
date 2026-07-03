@@ -1,15 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { logout } from "../services/auth";
-import { getDreams, createDream, updateDream, deleteDream,type Dream } from "../services/dreams";
+import { getDreams, createDream, updateDream, deleteDream, type Dream } from "../services/dreams";
+import DreamCard from "../components/DreamCard";
 import "../assets/dreamwall-tokens.css";
 
 export default function Home() {
     const navigate = useNavigate();
     const [dreams, setDreams] = useState<Dream[]>([]);
     const [newDreamText, setNewDreamText] = useState("");
-    const [editingDreamId, setEditingDreamId] = useState<number | null>(null);
-    const [editingDreamText, setEditingDreamText] = useState("");
 
     useEffect(() => {
         async function fetchDreams() {
@@ -32,17 +31,12 @@ export default function Home() {
     setNewDreamText("");
 }
 
-async function handleUpdateDream(id: number) {
-    if (!editingDreamText.trim()) return;
-    
+async function handleUpdateDream(id: number, text: string) {
     // Call the backend
-    const updated = await updateDream(id, editingDreamText);
+    const updated = await updateDream(id, text);
     
     // Update the specific dream in our array
     setDreams(dreams.map(d => d.id === id ? updated : d));
-    
-    // Close edit mode
-    setEditingDreamId(null);
 }
 
 async function handleDeleteDream(id: number) {
@@ -98,59 +92,15 @@ async function handleDeleteDream(id: number) {
             </div>
         ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: "var(--dw-space-4)" }}>
-                {dreams.map((dream, index) => {
-                    const blockColor = `var(--dw-block-${(index % 4) + 1})`;
-                    return (
-                        <div 
-                            key={dream.id} 
-                            className="dw-block"
-                            style={{ 
-                                display: "flex", 
-                                justifyContent: "space-between", 
-                                alignItems: "center",
-                                background: blockColor
-                            }}>
-                            
-                            {editingDreamId === dream.id ? (
-                                // --- EDITING MODE ---
-                                <div style={{ display: "flex", gap: "var(--dw-space-2)", width: "100%" }}>
-                                    <input 
-                                        value={editingDreamText}
-                                        onChange={(e) => setEditingDreamText(e.target.value)}
-                                        style={{ flex: 1, padding: "var(--dw-space-2)", border: "1px solid var(--dw-border-block)", borderRadius: "var(--dw-radius-sm)", fontFamily: "var(--dw-font-sans)" }}
-                                    />
-                                    <button className="dw-button-primary" style={{ background: "var(--dw-text-on-block)", color: "var(--dw-bg)" }} onClick={() => handleUpdateDream(dream.id)}>Save</button>
-                                    <button onClick={() => setEditingDreamId(null)} style={{ background: "transparent", border: "none", cursor: "pointer", color: "var(--dw-text-on-block)", fontWeight: "var(--dw-weight-bold)" }}>Cancel</button>
-                                </div>
-                            ) : (
-                                // --- NORMAL MODE ---
-                                <>
-                                    <div style={{ display: "flex", alignItems: "center", gap: "var(--dw-space-4)" }}>
-                                        <span className="dw-block__number">{(index + 1).toString().padStart(2, '0')}</span>
-                                        <p className="dw-block__label" style={{ margin: 0 }}>
-                                            {dream.text}
-                                        </p>
-                                    </div>
-                                    <div style={{ display: "flex", gap: "var(--dw-space-3)" }}>
-                                        <button 
-                                            onClick={() => {
-                                                setEditingDreamId(dream.id);
-                                                setEditingDreamText(dream.text);
-                                            }}
-                                            style={{ background: "transparent", border: "none", color: "var(--dw-text-on-block)", cursor: "pointer", fontWeight: "var(--dw-weight-medium)" }}>
-                                            Edit
-                                        </button>
-                                        <button 
-                                            onClick={() => handleDeleteDream(dream.id)}
-                                            style={{ background: "transparent", border: "none", color: "var(--dw-text-on-block)", cursor: "pointer", fontWeight: "var(--dw-weight-bold)" }}>
-                                            Delete
-                                        </button>
-                                    </div>
-                                </>
-                            )}
-                        </div>
-                    );
-                })}
+                {dreams.map((dream, index) => (
+                    <DreamCard 
+                        key={dream.id}
+                        dream={dream}
+                        index={index}
+                        onUpdate={handleUpdateDream}
+                        onDelete={handleDeleteDream}
+                    />
+                ))}
             </div>
         )}
 
