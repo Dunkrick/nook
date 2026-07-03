@@ -2,8 +2,13 @@ import { getToken } from "../lib/storage";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
+interface RequestOptions {
+    body?: unknown;
+    params?: Record<string, string>;
+}
+
 //private helper function to process the enpoint requests
-async function request(method: string, endpoint: string, options?: any) {
+async function request(method: string, endpoint: string, options?: RequestOptions) {
     const token = getToken();
 
     const headers: Record<string, string> = {
@@ -21,7 +26,7 @@ async function request(method: string, endpoint: string, options?: any) {
     const response = await fetch(
         `${API_URL}${endpoint}`,
         {
-            method: method,
+            method,
             headers,
             ...(options?.body ? { body: JSON.stringify(options?.body) } : {}),
         }
@@ -39,11 +44,10 @@ async function request(method: string, endpoint: string, options?: any) {
 
 
 export async function post(endpoint: string, body = {}) {
-    console.log(import.meta.env.VITE_API_URL);
     return request("POST", endpoint, { body });
 }
 
-export async function get(endpoint: string, params?: any) {
+export async function get(endpoint: string, params?: Record<string, string>) {
     return request("GET", endpoint, { params });
 }
 
