@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { ValidationError } from "../lib/error.js";
 
 export function validateAuthCredentials(
     req: Request,
@@ -8,15 +9,11 @@ export function validateAuthCredentials(
     const { email, password } = req.body;
 
     if (!email?.trim()) {
-        return res.status(400).json({
-            error: "Email is required",
-        });
+        throw new ValidationError("Email is required");
     }
 
     if (!password?.trim()) {
-        return res.status(400).json({
-            error: "Password is required",
-        });
+        throw new ValidationError("Password is required");
     }
 
     next();
