@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { logout } from "../services/auth";
-import { getDreams, type Dream } from "../services/dreams";
+import { getDreams, createDream, type Dream } from "../services/dreams";
 import "../assets/dreamwall-tokens.css";
 
 export default function Home() {
     const navigate = useNavigate();
     const [dreams, setDreams] = useState<Dream[]>([]);
+    const [newDreamText, setNewDreamText] = useState("");
 
     useEffect(() => {
         async function fetchDreams() {
@@ -15,6 +16,20 @@ export default function Home() {
         }
         fetchDreams();
     }, []);
+
+    async function handleAddDream() {
+    if (!newDreamText.trim()) return; // Don't submit empty strings
+    
+    // Call our backend
+    const savedDream = await createDream(newDreamText);
+    
+    // Update the UI immediately
+    setDreams([...dreams, savedDream]); 
+    
+    // Clear the input
+    setNewDreamText("");
+}
+
     return (
     <div style={{ padding: "var(--dw-space-5)", maxWidth: "600px", margin: "0 auto" }}>
         
@@ -41,9 +56,11 @@ export default function Home() {
                     borderRadius: "var(--dw-radius-md)", 
                     border: "1px solid var(--dw-border)",
                     fontFamily: "var(--dw-font-sans)"
-                }} 
+                }}
+                value={newDreamText} 
+                onChange={(e) => setNewDreamText(e.target.value)}
             />
-            <button className="dw-button-primary">Add</button>
+            <button className="dw-button-primary" onClick={handleAddDream}>Add</button>
         </div>
 
         {/* DREAMS LIST */}
