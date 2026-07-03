@@ -75,10 +75,12 @@ export default function AuthForm({
             <button type="submit" disabled={loading}>
                 {loading ? loadingButtonText : buttonText}
             </button>
-            <p>{togglePrompt}</p>
-            <button type="button" onClick={onToggle}>
-                {toggleButtonText}
-            </button>
+            <div className="auth-toggle-container">
+                <p>{togglePrompt}</p>
+                <button type="button" className="auth-toggle-btn" onClick={onToggle}>
+                    {toggleButtonText}
+                </button>
+            </div>
         </form>
     );
 }
