@@ -1,0 +1,77 @@
+{
+  "brand": {
+    "name": "Dreamwall",
+    "personality": ["Warm", "Propulsive", "Grounded"],
+    "structuralReference": "units.gr — disciplined color blocks, thick rounded corners, charcoal outlines, confident bold type. Bold color contained by strict structure is what keeps the brand feeling professional rather than childish."
+  },
+  "color": {
+    "iris":       { "value": "#4A4368", "usage": "wordmark, headings on cream, hero block fill" },
+    "coral":      { "value": "#F2735C", "usage": "block color 1, tags, illustration" },
+    "coralDeep":  { "value": "#D9573F", "usage": "CTA fills only — never used as a block color" },
+    "gold":       { "value": "#F6B352", "usage": "block color 2, celebration accent" },
+    "blue":       { "value": "#4A5FB8", "usage": "block color 3 (new — Twilight Blue)" },
+    "green":      { "value": "#5FA777", "usage": "block color 4 (new — Momentum Green)" },
+    "cream":      { "value": "#FBF7F4", "usage": "default page background" },
+    "charcoal":   { "value": "#2A2438", "usage": "body text; text and borders on top of color blocks" },
+    "border":     { "value": "#E4DDE0", "usage": "dividers, hairlines on cream surfaces" }
+  },
+  "blockPalette": ["coral", "gold", "blue", "green"],
+  "typography": {
+    "fontFamily": "Plus Jakarta Sans",
+    "scale": {
+      "hero":    { "size": "40px", "weight": 800, "note": "800 inside hero/block contexts, 700 on plain cream" },
+      "h2":      { "size": "24px", "weight": 600 },
+      "h3":      { "size": "18px", "weight": 600 },
+      "body":    { "size": "16px", "weight": 400, "lineHeight": 1.6 },
+      "label":   { "size": "14px", "weight": 500 },
+      "caption": { "size": "12px", "weight": 400 }
+    },
+    "logo": {
+      "case": "sentence",
+      "text": "Dreamwall",
+      "weight": 600,
+      "color": "#4A4368",
+      "colorInverse": "#FBF7F4",
+      "letterSpacing": "-0.3px",
+      "note": "Single weight, single color. No weight or color splitting within the word.",
+      "periodDetail": {
+        "shape": "diamond",
+        "color": "#F2735C",
+        "description": "The period is a small rotated coral square (diamond/spark) instead of a plain dot — subtle, inspired by units.gr hiding a tiny house in their period. Barely visible at normal size; a quiet detail, not a focal point."
+      }
+    },
+    "monogram": {
+      "text": "D",
+      "weight": 600,
+      "shape": "circle"
+    }
+  },
+  "spacing": {
+    "1": "4px",
+    "2": "8px",
+    "3": "12px",
+    "4": "16px",
+    "5": "24px",
+    "6": "32px",
+    "7": "48px",
+    "8": "64px",
+    "9": "96px"
+  },
+  "radius": {
+    "sm": "8px",
+    "md": "12px",
+    "lg": "16px",
+    "xl": "24px"
+  },
+  "borderBlock": {
+    "width": "2px",
+    "color": "#2A2438",
+    "usage": "outline on color-block cards — the discipline that keeps bold color feeling professional, not childish"
+  },
+  "gradient": {
+    "hero": {
+      "value": "linear-gradient(135deg, #4A4368 0%, #F2735C 100%)",
+      "usage": "landing hero or milestone/celebration screens only — never on dashboards or lists"
+    }
+  }
+}

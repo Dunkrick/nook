@@ -1,0 +1,191 @@
+/* ==========================================================================
+   DreamWall Design Tokens
+   Brand personality: Warm · Propulsive · Grounded
+   Structural language inspired by units.gr: disciplined color blocks,
+   thick rounded corners, charcoal outlines, confident bold type.
+   ========================================================================== */
+
+:root {
+
+  /* -------------------------------------------------------------
+     Color — raw brand colors
+     ------------------------------------------------------------- */
+  --dw-color-iris:        #4A4368; /* Dusk Iris — wordmark, headings on cream */
+  --dw-color-coral:       #F2735C; /* Sunset Coral — block color 1 */
+  --dw-color-coral-deep:  #D9573F; /* Coral Deep — CTA fills only, never a block */
+  --dw-color-gold:        #F6B352; /* Golden Glow — block color 2, celebration accent */
+  --dw-color-blue:        #4A5FB8; /* Twilight Blue — block color 3 */
+  --dw-color-green:       #5FA777; /* Momentum Green — block color 4 */
+  --dw-color-cream:       #FBF7F4; /* Warm Cream — default page background */
+  --dw-color-charcoal:    #2A2438; /* Warm Charcoal — body text, borders/text on color blocks */
+  --dw-color-border:      #E4DDE0; /* Warm border / divider on cream surfaces */
+
+  /* -------------------------------------------------------------
+     Color — semantic aliases (use these in components, not raw colors)
+     ------------------------------------------------------------- */
+  --dw-bg:               var(--dw-color-cream);
+  --dw-bg-inverse:       var(--dw-color-iris);
+  --dw-text-primary:     var(--dw-color-charcoal);
+  --dw-text-heading:     var(--dw-color-iris);
+  --dw-text-on-inverse:  var(--dw-color-cream);
+  --dw-text-on-block:    var(--dw-color-charcoal); /* text/borders sitting on coral/gold/blue/green blocks */
+  --dw-accent:           var(--dw-color-coral);
+  --dw-accent-cta:       var(--dw-color-coral-deep);  /* buttons w/ white or cream text */
+  --dw-accent-celebrate: var(--dw-color-gold);
+  --dw-border:           var(--dw-color-border);
+  --dw-border-block:     var(--dw-color-charcoal);    /* outline used on color-block cards */
+
+  /* Block palette, in intended rotation order */
+  --dw-block-1: var(--dw-color-coral);
+  --dw-block-2: var(--dw-color-gold);
+  --dw-block-3: var(--dw-color-blue);
+  --dw-block-4: var(--dw-color-green);
+
+  /* -------------------------------------------------------------
+     Typography
+     ------------------------------------------------------------- */
+  --dw-font-sans: 'Plus Jakarta Sans', sans-serif;
+
+  --dw-text-hero:    40px; /* weight 800 in block/hero contexts, 700 on plain cream */
+  --dw-text-h2:      24px; /* weight 600 */
+  --dw-text-h3:      18px; /* weight 600 */
+  --dw-text-body:    16px; /* weight 400 */
+  --dw-text-label:   14px; /* weight 500 */
+  --dw-text-caption: 12px; /* weight 400 */
+
+  --dw-weight-regular:  400;
+  --dw-weight-medium:   500;
+  --dw-weight-semibold: 600;
+  --dw-weight-bold:     700;
+  --dw-weight-extrabold: 800; /* confident hero headlines only */
+
+  --dw-leading-body:    1.6;
+  --dw-leading-heading: 1.15;
+  --dw-tracking-logo:   -0.3px;
+
+  /* -------------------------------------------------------------
+     Spacing — 8px base rhythm. Never use a value outside this scale.
+     ------------------------------------------------------------- */
+  --dw-space-1: 4px;
+  --dw-space-2: 8px;
+  --dw-space-3: 12px;
+  --dw-space-4: 16px;
+  --dw-space-5: 24px;
+  --dw-space-6: 32px;
+  --dw-space-7: 48px;
+  --dw-space-8: 64px;
+  --dw-space-9: 96px;
+
+  /* -------------------------------------------------------------
+     Radius — larger values reserved for color-block cards (units.gr-style)
+     ------------------------------------------------------------- */
+  --dw-radius-sm: 8px;
+  --dw-radius-md: 12px;
+  --dw-radius-lg: 16px;
+  --dw-radius-xl: 24px; /* nav/section blocks, hero panels */
+
+  /* -------------------------------------------------------------
+     Background — reserve the gradient for hero / celebration only
+     ------------------------------------------------------------- */
+  --dw-gradient-hero: linear-gradient(135deg, var(--dw-color-iris) 0%, var(--dw-color-coral) 100%);
+}
+
+/* ==========================================================================
+   Logo — sentence case, single weight, single color, one quiet detail.
+   The period is a small coral diamond/spark instead of a plain dot —
+   barely noticeable at normal size, a small reward on closer look.
+   ========================================================================== */
+
+.dw-logo {
+  font-family: var(--dw-font-sans);
+  font-size: 32px;
+  font-weight: var(--dw-weight-semibold);
+  letter-spacing: var(--dw-tracking-logo);
+  color: var(--dw-text-heading);
+  display: inline-flex;
+  align-items: center;
+}
+.dw-logo--inverse {
+  color: var(--dw-text-on-inverse);
+}
+.dw-logo__spark {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  background: var(--dw-color-coral);
+  border-radius: 2px;
+  transform: rotate(45deg);
+  margin-left: 2px;
+}
+
+.dw-monogram {
+  width: 64px;
+  height: 64px;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--dw-font-sans);
+  font-size: 26px;
+  font-weight: var(--dw-weight-semibold);
+  background: var(--dw-bg);
+  color: var(--dw-text-heading);
+  border: 1px solid var(--dw-border);
+}
+.dw-monogram--inverse {
+  background: var(--dw-bg-inverse);
+  color: var(--dw-text-on-inverse);
+  border: none;
+}
+
+/* ==========================================================================
+   Color-block card — units.gr-inspired structural unit.
+   Thick charcoal outline contains the saturated fill; the discipline
+   of the border + radius is what keeps bold color feeling professional.
+   ========================================================================== */
+
+.dw-block {
+  border: 2px solid var(--dw-border-block);
+  border-radius: var(--dw-radius-xl);
+  padding: var(--dw-space-4);
+  color: var(--dw-text-on-block);
+  font-family: var(--dw-font-sans);
+}
+.dw-block__number {
+  font-size: var(--dw-text-caption);
+  font-weight: var(--dw-weight-bold);
+}
+.dw-block__label {
+  font-size: var(--dw-text-label);
+  font-weight: var(--dw-weight-bold);
+}
+
+.dw-hero-block {
+  background: var(--dw-color-iris);
+  border: 2px solid var(--dw-border-block);
+  border-radius: var(--dw-radius-xl);
+  padding: var(--dw-space-6);
+  color: var(--dw-text-on-inverse);
+}
+.dw-hero-block h1 {
+  font-family: var(--dw-font-sans);
+  font-size: var(--dw-text-hero);
+  font-weight: var(--dw-weight-extrabold);
+  line-height: var(--dw-leading-heading);
+  margin: 0 0 var(--dw-space-3);
+}
+
+/* ==========================================================================
+   Reference usage — delete once real components exist
+   ========================================================================== */
+
+.dw-button-primary {
+  background: var(--dw-accent-cta);
+  color: var(--dw-color-cream);
+  font-family: var(--dw-font-sans);
+  font-size: var(--dw-text-label);
+  font-weight: var(--dw-weight-medium);
+  padding: var(--dw-space-3) var(--dw-space-5);
+  border-radius: var(--dw-radius-sm);
+  border: none;
+}

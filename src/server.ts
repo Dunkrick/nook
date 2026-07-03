@@ -1,15 +1,24 @@
 import express from "express";
 import dreamRoutes from "./routes/dreams.js";
+import authRouter from "./routes/auth.js";
 import prisma from "./prisma.js";
+import cors from "cors";
 import { errorHandler } from "./lib/error.js";
 
 const app = express();
 const PORT = process.env.PORT || 3003;
 
+app.use(
+    cors({
+        origin: "http://localhost:5173",
+    })
+);
+
 //middleware
 app.use(express.json());
 app.use(express.static("public"));
 app.use("/", dreamRoutes);
+app.use("/auth", authRouter);
 
 //router
 app.get("/", (_, res) => {

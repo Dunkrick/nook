@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import './assets/dreamwall-tokens.css';
+
+:root {
+  font-family: var(--dw-font-sans);
+  line-height: var(--dw-leading-body);
+  color: var(--dw-text-primary);
+  background-color: var(--dw-bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  background-color: var(--dw-bg);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--dw-text-heading);
+  line-height: var(--dw-leading-heading);
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}

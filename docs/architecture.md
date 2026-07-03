@@ -17,13 +17,25 @@ Dream Wall follows a layered backend architecture designed around a few core pri
 
 The application processes requests in a strict, top-down flow. Layers generally only communicate with the layer directly beneath them.
 
-- **1. Browser:** Sends HTTP Requests.
-- **2. Express:** Receives the request and routes it into the application.
-- **3. Middleware:** Performs cross-cutting concerns (like input validation) before business logic runs.
-- **4. Routes:** Understand HTTP. They extract request parameters and format JSON responses.
-- **5. Services:** Understand Dreams (Business Logic). They enforce application rules independent of HTTP.
-- **6. Prisma:** Translates application operations into type-safe database queries.
-- **7. PostgreSQL:** Stores persistent data.
+```mermaid
+flowchart TD
+    Browser[Browser] --> Auth[Authentication]
+    Auth --> JWT[JWT]
+    JWT --> Middleware[Middleware]
+    Middleware --> Routes[Routes]
+    Routes --> Services[Services]
+    Services --> Prisma[Prisma]
+    Prisma --> DB[(PostgreSQL)]
+```
+
+- **Browser:** Sends HTTP Requests.
+- **Authentication:** Validates identity via credentials.
+- **JWT:** Provides stateless session tokens.
+- **Middleware:** Performs cross-cutting concerns (authentication, validation, error handling).
+- **Routes:** Understand HTTP. They extract request parameters and format JSON responses.
+- **Services:** Understand Business Logic. They enforce application rules independent of HTTP.
+- **Prisma:** Translates application operations into type-safe database queries.
+- **PostgreSQL:** Stores persistent data.
 
 ---
 
@@ -61,13 +73,12 @@ flowchart TD
     V5[Extracted Service Layer] --> V6
     V6[Added Validation Middleware] --> V7
     V7[Global Error Middleware] --> V8
-    V8(((Production Ready)))
+    V8[Added Authentication] --> V9
+    V9(((Version 3: React Frontend)))
 ```
 
 Future versions will extend this architecture without changing its overall structure.
 
 Upcoming additions include:
-- Authentication
-- Authorization
 - AI Services
 - Background Jobs
