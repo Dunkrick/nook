@@ -52,10 +52,10 @@ The goal is to build one project well.
 ## Screenshots
 
 ### Login Page
-![Login Page](docs/login.png)
+![Login Page](docs/login.jpeg)
 
 ### Home Page
-![Home Page](docs/home.png)
+![Home Page](docs/home.jpeg)
 
 ---
 
