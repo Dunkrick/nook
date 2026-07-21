@@ -10,30 +10,42 @@
   /* -------------------------------------------------------------
      Color — raw brand colors
      ------------------------------------------------------------- */
-  --nook-color-iris:        #4A4368; /* Dusk Iris — wordmark, headings on cream */
-  --nook-color-coral:       #F2735C; /* Sunset Coral — block color 1 */
-  --nook-color-coral-deep:  #D9573F; /* Coral Deep — CTA fills only, never a block */
-  --nook-color-gold:        #F6B352; /* Golden Glow — block color 2, celebration accent */
-  --nook-color-blue:        #4A5FB8; /* Twilight Blue — block color 3 */
-  --nook-color-green:       #5FA777; /* Momentum Green — block color 4 */
-  --nook-color-cream:       #FBF7F4; /* Warm Cream — default page background */
-  --nook-color-charcoal:    #2A2438; /* Warm Charcoal — body text, borders/text on color blocks */
-  --nook-color-border:      #E4DDE0; /* Warm border / divider on cream surfaces */
+  --nook-color-iris: #4A4368;
+  /* Dusk Iris — wordmark, headings on cream */
+  --nook-color-coral: #F2735C;
+  /* Sunset Coral — block color 1 */
+  --nook-color-coral-deep: #D9573F;
+  /* Coral Deep — CTA fills only, never a block */
+  --nook-color-gold: #F6B352;
+  /* Golden Glow — block color 2, celebration accent */
+  --nook-color-blue: #4A5FB8;
+  /* Twilight Blue — block color 3 */
+  --nook-color-green: #5FA777;
+  /* Momentum Green — block color 4 */
+  --nook-color-cream: #FBF7F4;
+  /* Warm Cream — default page background */
+  --nook-color-charcoal: #2A2438;
+  /* Warm Charcoal — body text, borders/text on color blocks */
+  --nook-color-border: #E4DDE0;
+  /* Warm border / divider on cream surfaces */
 
   /* -------------------------------------------------------------
      Color — semantic aliases (use these in components, not raw colors)
      ------------------------------------------------------------- */
-  --nook-bg:               var(--nook-color-cream);
-  --nook-bg-inverse:       var(--nook-color-iris);
-  --nook-text-primary:     var(--nook-color-charcoal);
-  --nook-text-heading:     var(--nook-color-iris);
-  --nook-text-on-inverse:  var(--nook-color-cream);
-  --nook-text-on-block:    var(--nook-color-charcoal); /* text/borders sitting on coral/gold/blue/green blocks */
-  --nook-accent:           var(--nook-color-coral);
-  --nook-accent-cta:       var(--nook-color-coral-deep);  /* buttons w/ white or cream text */
+  --nook-bg: var(--nook-color-cream);
+  --nook-bg-inverse: var(--nook-color-iris);
+  --nook-text-primary: var(--nook-color-charcoal);
+  --nook-text-heading: var(--nook-color-iris);
+  --nook-text-on-inverse: var(--nook-color-cream);
+  --nook-text-on-block: var(--nook-color-charcoal);
+  /* text/borders sitting on coral/gold/blue/green blocks */
+  --nook-accent: var(--nook-color-coral);
+  --nook-accent-cta: var(--nook-color-coral-deep);
+  /* buttons w/ white or cream text */
   --nook-accent-celebrate: var(--nook-color-gold);
-  --nook-border:           var(--nook-color-border);
-  --nook-border-block:     var(--nook-color-charcoal);    /* outline used on color-block cards */
+  --nook-border: var(--nook-color-border);
+  --nook-border-block: var(--nook-color-charcoal);
+  /* outline used on color-block cards */
 
   /* Block palette, in intended rotation order */
   --nook-block-1: var(--nook-color-coral);
@@ -46,22 +58,29 @@
      ------------------------------------------------------------- */
   --nook-font-sans: 'Plus Jakarta Sans', sans-serif;
 
-  --nook-text-hero:    40px; /* weight 800 in block/hero contexts, 700 on plain cream */
-  --nook-text-h2:      24px; /* weight 600 */
-  --nook-text-h3:      18px; /* weight 600 */
-  --nook-text-body:    16px; /* weight 400 */
-  --nook-text-label:   14px; /* weight 500 */
-  --nook-text-caption: 12px; /* weight 400 */
+  --nook-text-hero: 40px;
+  /* weight 800 in block/hero contexts, 700 on plain cream */
+  --nook-text-h2: 24px;
+  /* weight 600 */
+  --nook-text-h3: 18px;
+  /* weight 600 */
+  --nook-text-body: 16px;
+  /* weight 400 */
+  --nook-text-label: 14px;
+  /* weight 500 */
+  --nook-text-caption: 12px;
+  /* weight 400 */
 
-  --nook-weight-regular:  400;
-  --nook-weight-medium:   500;
+  --nook-weight-regular: 400;
+  --nook-weight-medium: 500;
   --nook-weight-semibold: 600;
-  --nook-weight-bold:     700;
-  --nook-weight-extrabold: 800; /* confident hero headlines only */
+  --nook-weight-bold: 700;
+  --nook-weight-extrabold: 800;
+  /* confident hero headlines only */
 
-  --nook-leading-body:    1.6;
+  --nook-leading-body: 1.6;
   --nook-leading-heading: 1.15;
-  --nook-tracking-logo:   -0.3px;
+  --nook-tracking-logo: -0.3px;
 
   /* -------------------------------------------------------------
      Spacing — 8px base rhythm. Never use a value outside this scale.
@@ -82,7 +101,8 @@
   --nook-radius-sm: 8px;
   --nook-radius-md: 12px;
   --nook-radius-lg: 16px;
-  --nook-radius-xl: 24px; /* nav/section blocks, hero panels */
+  --nook-radius-xl: 24px;
+  /* nav/section blocks, hero panels */
 
   /* -------------------------------------------------------------
      Background — reserve the gradient for hero / celebration only
@@ -105,9 +125,11 @@
   display: inline-flex;
   align-items: center;
 }
+
 .nook-logo--inverse {
   color: var(--nook-text-on-inverse);
 }
+
 .nook-logo__spark {
   display: inline-block;
   width: 9px;
@@ -132,6 +154,7 @@
   color: var(--nook-text-heading);
   border: 1px solid var(--nook-border);
 }
+
 .nook-monogram--inverse {
   background: var(--nook-bg-inverse);
   color: var(--nook-text-on-inverse);
@@ -150,11 +173,22 @@
   padding: var(--nook-space-4);
   color: var(--nook-text-on-block);
   font-family: var(--nook-font-sans);
+  box-shadow: 0 4px 16px rgba(42, 36, 56, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  rotate: var(--card-rotate, 0deg);
 }
+
+.nook-block:hover {
+  box-shadow: 0 4px 16px rgba(42, 36, 56, 0.24);
+  transform: scale(1.03);
+}
+
 .nook-block__number {
   font-size: var(--nook-text-caption);
   font-weight: var(--nook-weight-bold);
 }
+
 .nook-block__label {
   font-size: var(--nook-text-label);
   font-weight: var(--nook-weight-bold);
@@ -167,6 +201,7 @@
   padding: var(--nook-space-6);
   color: var(--nook-text-on-inverse);
 }
+
 .nook-hero-block h1 {
   font-family: var(--nook-font-sans);
   font-size: var(--nook-text-hero);
@@ -175,9 +210,12 @@
   margin: 0 0 var(--nook-space-3);
 }
 
-/* ==========================================================================
-   Reference usage — delete once real components exist
-   ========================================================================== */
+.nook-wall {
+  background-color: #e8ddd2;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(42, 36, 56, 0.12);
+}
 
 .nook-button-primary {
   background: var(--nook-accent-cta);
