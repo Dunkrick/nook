@@ -1,6 +1,6 @@
 {
   "brand": {
-    "name": "Dreamwall",
+    "name": "Nook",
     "personality": ["Warm", "Propulsive", "Grounded"],
     "structuralReference": "units.gr — disciplined color blocks, thick rounded corners, charcoal outlines, confident bold type. Bold color contained by strict structure is what keeps the brand feeling professional rather than childish."
   },
@@ -28,7 +28,7 @@
     },
     "logo": {
       "case": "sentence",
-      "text": "Dreamwall",
+      "text": "Nook",
       "weight": 600,
       "color": "#4A4368",
       "colorInverse": "#FBF7F4",

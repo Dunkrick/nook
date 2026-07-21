@@ -27,7 +27,7 @@ app.use("/auth", authRouter);
 
 //router
 app.get("/", (_, res) => {
-    res.send("Hello from Dream Wall v2");
+    res.send("Hello from Dream Wall v4");
 });
 
 app.get("/crash", async (_, res) => {

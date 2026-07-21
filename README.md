@@ -1,6 +1,6 @@
-# Dream Wall
+# Nook
 
-Dream Wall is a minimal full-stack application that evolved from a simple CRUD app into a production-oriented backend through iterative engineering. Honestly, I wanted to explore how full stack works and this project made me understand it deeply.
+Nook is a minimal full-stack application that evolved from a simple CRUD app into a production-oriented backend through iterative engineering. Honestly, I wanted to explore how full stack works and this project made me understand it deeply.
 
 Instead of building multiple tutorial projects, every version introduces one real engineering concept while preserving the same product.
 

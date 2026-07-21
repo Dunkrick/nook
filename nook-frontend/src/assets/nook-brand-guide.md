@@ -1,9 +1,9 @@
-# DreamWall Brand Guide
+# Nook Brand Guide
 
 ## Personality
 **Warm · Propulsive · Grounded**
 
-Every decision below should serve at least two of these three words. If it doesn't, it doesn't belong in DreamWall.
+Every decision below should serve at least two of these three words. If it doesn't, it doesn't belong in Nook.
 
 - **Warm** — never cold or corporate. Feels like a friend, not a productivity tool.
 - **Propulsive** — momentum over stillness. This isn't a vision board that sits there.
@@ -73,11 +73,11 @@ Single family: **Plus Jakarta Sans**. Hierarchy comes from weight, not from mixi
 
 ## Structural System — units.gr influence
 
-DreamWall borrows its structural grammar from units.gr, not its literal colors. The lesson from that reference: **loud color stays professional when it's contained by strict, repeated structure.** Four rules carry that discipline:
+Nook borrows its structural grammar from units.gr, not its literal colors. The lesson from that reference: **loud color stays professional when it's contained by strict, repeated structure.** Four rules carry that discipline:
 
 - **Thick charcoal borders (2px)** outline every color-block card. The border is what stops a bright fill from feeling like a toy — it gives the block a printed, intentional edge.
 - **Large rounded corners (24px)** on block/hero cards specifically — softer and friendlier than the 12–16px used elsewhere in the system. Reserve the bigger radius for these structural cards so it stays a meaningful signal, not a default.
-- **Numbered blocks** for navigation or sectioned content (01, 02, 03...) — a small, quiet way to suggest order and progress, which fits DreamWall's "propulsive" word better than an unordered grid would.
+- **Numbered blocks** for navigation or sectioned content (01, 02, 03...) — a small, quiet way to suggest order and progress, which fits Nook's "propulsive" word better than an unordered grid would.
 - **One hero block per screen, in Iris**, holding the boldest headline (weight 800) and the primary CTA in Coral Deep. Everything else — the numbered blocks — stays lower-key by comparison, so the hero has somewhere to lead the eye.
 
 **Rule:** never invent a fifth block color without retiring one of the existing four. Four is the ceiling, matching what's disciplined about the reference — Units doesn't have six nav colors either.
@@ -86,11 +86,11 @@ DreamWall borrows its structural grammar from units.gr, not its literal colors. 
 
 ## Logo
 
-Wordmark only, no symbol — **Dreamwall**, sentence case, one weight (600), one color (Dusk Iris on light, Warm Cream on dark) plus the coral spark in the period. No weight contrast, no color-splitting the word itself.
+Wordmark only, no symbol — **Nook**, sentence case, one weight (600), one color (Dusk Iris on light, Warm Cream on dark) plus the coral spark in the period. No weight contrast, no color-splitting the word itself.
 
-Two corrections got us here, then one addition. First, an earlier direction split "Dream" and "Wall" into different weights and colors — it read as a designed-in trick (FedEx-arrow territory), which fights "timeless." Second, an all-lowercase pass leaned too "dev-tool startup" (right for ASCIInator or Shapes.tools, wrong for a brand meant to feel human and lasting). Apple and Units.gr both use plain sentence-case naming with the wordmark doing most of the work — that's the base we landed on. The one deliberate exception is the period: units.gr hides a tiny house in theirs, so DreamWall hides a tiny coral spark in ours. The difference between that and the earlier rejected trick is scale — this lives in a single punctuation mark, invisible until you look closely, not a redesign of the whole word.
+Two corrections got us here, then one addition. First, an earlier direction split "Dream" and "Wall" into different weights and colors — it read as a designed-in trick (FedEx-arrow territory), which fights "timeless." Second, an all-lowercase pass leaned too "dev-tool startup" (right for ASCIInator or Shapes.tools, wrong for a brand meant to feel human and lasting). Apple and Units.gr both use plain sentence-case naming with the wordmark doing most of the work — that's the base we landed on. The one deliberate exception is the period: units.gr hides a tiny house in theirs, so Nook hides a tiny coral spark in ours. The difference between that and the earlier rejected trick is scale — this lives in a single punctuation mark, invisible until you look closely, not a redesign of the whole word.
 
-- **Case:** sentence case always — "Dreamwall," never "dreamwall" or "DREAMWALL."
+- **Case:** sentence case always — "Nook," never "nook" or "DREAMWALL."
 - **Weight:** 600 everywhere. Never mix weights within the wordmark.
 - **Clear space:** height of the capital "D" on all sides, minimum.
 - **Minimum size:** 120px wide. Below that, use the monogram.
@@ -102,5 +102,5 @@ Two corrections got us here, then one addition. First, an earlier direction spli
 
 ## Files in this kit
 
-- `dreamwall-tokens.css` — CSS custom properties, ready to `@import` or `<link>` directly
-- `dreamwall-tokens.json` — framework-agnostic tokens (Figma, JS themes, Tailwind config, etc.)
+- `nook-tokens.css` — CSS custom properties, ready to `@import` or `<link>` directly
+- `nook-tokens.json` — framework-agnostic tokens (Figma, JS themes, Tailwind config, etc.)

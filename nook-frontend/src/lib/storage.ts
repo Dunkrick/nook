@@ -1,4 +1,4 @@
-const TOKEN_KEY: string = "dream-wall-token";
+const TOKEN_KEY: string = "nook-token";
 
 export function getToken(): string | null {
     return localStorage.getItem(TOKEN_KEY);

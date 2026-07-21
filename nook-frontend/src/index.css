@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
-@import './assets/dreamwall-tokens.css';
+@import './assets/nook-tokens.css';
 
 :root {
-  font-family: var(--dw-font-sans);
-  line-height: var(--dw-leading-body);
-  color: var(--dw-text-primary);
-  background-color: var(--dw-bg);
+  font-family: var(--nook-font-sans);
+  line-height: var(--nook-leading-body);
+  color: var(--nook-text-primary);
+  background-color: var(--nook-bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -14,12 +14,12 @@
 
 body {
   margin: 0;
-  background-color: var(--dw-bg);
+  background-color: var(--nook-bg);
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: var(--dw-text-heading);
-  line-height: var(--dw-leading-heading);
+  color: var(--nook-text-heading);
+  line-height: var(--nook-leading-heading);
   margin: 0;
 }
 
