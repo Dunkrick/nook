@@ -87,16 +87,8 @@ async function handleDeleteCard(id: number) {
 
         {/* CARDS LIST / WALL */}
         <div style={{ padding: "var(--nook-space-5)"}}>
-        {cards.length === 0 ? (
-  <div style={{ textAlign: "center", padding: "var(--nook-space-6)", color: "var(--nook-text-primary)" }}>
-    <p style={{ fontSize: "var(--nook-text-h3)", fontWeight: "var(--nook-weight-medium)" }}>No cards yet.</p>
-    <p>Time to build some momentum on your Wall!</p>
-  </div>
-) : (
-  <Wall cards={cards} onUpdate={handleUpdateCard} onDelete={handleDeleteCard} />
-)}
+            <Wall cards={cards} onUpdate={handleUpdateCard} onDelete={handleDeleteCard} />
         </div>
     </div>
-);
-
-}
+    );
+};
