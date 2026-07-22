@@ -6,7 +6,7 @@ interface CardProps {
     index: number;
     onUpdate: (id: number, text: string) => Promise<void>;
     onDelete: (id: number) => Promise<void>;
-    style?: React.CSSProperties
+    style?: React.CSSProperties & { [key: `--${string}`]: string | number }
 }
 
 export default function CardComponent({ card, index, onUpdate, onDelete, style }: CardProps) {

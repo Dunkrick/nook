@@ -9,21 +9,50 @@ interface WallProps {
 
 const positions = [
   {
-    x: 10,
-    y: 40,
+    x: "13%",
+    y: 35,
+    rotate: -2,
   },
   {
-    x: 320,
-    y: 60
+    x: "39%",
+    y: 55,
+    rotate: 1.5,
   },
   {
-    x: 180,
-    y: 220
+    x: "67%",
+    y: 80,
+    rotate: 3,
   },
   {
-    x: 400,
-    y: 400
+    x: "17%",
+    y: 245,
+    rotate: -1,
   },
+  {
+    x: "43%",
+    y: 275,
+    rotate: 2.5,
+  },
+  {
+    x: "69%",
+    y: 295,
+    rotate: -1.5, 
+  },
+  {
+    x: "19%",
+    y: 445,
+    rotate: 1
+  },
+  {
+    x: "48%",
+    y: 475,
+    rotate: -1.5
+  },
+  {
+    x: "70%",
+    y: 500,
+    rotate: -2.5
+  }
 ]
 
 export default function Wall({ cards, onUpdate, onDelete }: WallProps) {
@@ -36,7 +65,7 @@ export default function Wall({ cards, onUpdate, onDelete }: WallProps) {
           index={index}
           onUpdate={onUpdate}
           onDelete={onDelete}
-          style={{ "--card-rotate" : "-2deg", position: "absolute", left: positions[index%positions.length].x, top: positions[index%positions.length].y}}
+          style={{ "--card-rotate": `${positions[index%positions.length].rotate}deg`, position: "absolute", left: positions[index%positions.length].x, top: positions[index%positions.length].y}}
         />
       ))}
     </div>
