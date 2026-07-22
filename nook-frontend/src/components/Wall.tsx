@@ -65,7 +65,7 @@ export default function Wall({ cards, onUpdate, onDelete }: WallProps) {
           index={index}
           onUpdate={onUpdate}
           onDelete={onDelete}
-          style={{ "--card-rotate": `${positions[index%positions.length].rotate}deg`, position: "absolute", left: positions[index%positions.length].x, top: positions[index%positions.length].y}}
+          style={{ "--card-rotate": `${positions[index%positions.length].rotate}deg`, position: "absolute", left: positions[index%positions.length].x, top: positions[index%positions.length].y, animationDelay: `${index * 0.09}s`}}
         />
       ))}
     </div>

@@ -177,6 +177,7 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
   rotate: var(--card-rotate, 0deg);
+  animation: card-pop-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 .nook-block:hover {
@@ -192,6 +193,18 @@
 .nook-block__label {
   font-size: var(--nook-text-label);
   font-weight: var(--nook-weight-bold);
+}
+
+@keyframes card-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .nook-hero-block {
