@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { logout } from "../services/auth";
 import { getCards, createCard, updateCard, deleteCard, type Card } from "../services/cards";
-import CardComponent from "../components/Card";
+import Wall from "../components/Wall"
 import "../assets/nook-tokens.css";
 
 export default function Home() {
@@ -48,9 +48,9 @@ async function handleDeleteCard(id: number) {
 }
 
     return (
-    <div style={{ padding: "var(--nook-space-5)", maxWidth: "600px", margin: "0 auto" }}>
-        
+    <div>
         {/* HEADER */}
+        <div style={{ padding: "var(--nook-space-5)", maxWidth: "600px", margin: "0 auto" }}>
         <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--nook-space-7)" }}>
             <h1 className="nook-logo">
                 Nook<span className="nook-logo__spark"></span>
@@ -83,28 +83,12 @@ async function handleDeleteCard(id: number) {
                 <button className="nook-button-primary" onClick={handleAddCard}>Add</button>
             </div>
         </div>
+        </div>
 
         {/* CARDS LIST / WALL */}
-        {cards.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "var(--nook-space-6)", color: "var(--nook-text-primary)" }}>
-                <p style={{ fontSize: "var(--nook-text-h3)", fontWeight: "var(--nook-weight-medium)" }}>No cards yet.</p>
-                <p>Time to build some momentum on your Wall!</p>
-            </div>
-        ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: "var(--nook-space-4)" }}>
-                {cards.map((card, index) => (
-                    <CardComponent 
-                        key={card.id}
-                        card={card}
-                        index={index}
-                        onUpdate={handleUpdateCard}
-                        onDelete={handleDeleteCard}
-                    />
-                ))}
-            </div>
-        )}
-
+        <div style={{ padding: "var(--nook-space-5)"}}>
+            <Wall cards={cards} onUpdate={handleUpdateCard} onDelete={handleDeleteCard} />
+        </div>
     </div>
-);
-
-}
+    );
+};

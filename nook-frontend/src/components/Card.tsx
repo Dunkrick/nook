@@ -6,9 +6,10 @@ interface CardProps {
     index: number;
     onUpdate: (id: number, text: string) => Promise<void>;
     onDelete: (id: number) => Promise<void>;
+    style?: React.CSSProperties & { [key: `--${string}`]: string | number }
 }
 
-export default function CardComponent({ card, index, onUpdate, onDelete }: CardProps) {
+export default function CardComponent({ card, index, onUpdate, onDelete, style }: CardProps) {
     const [isEditing, setIsEditing] = useState(false);
     const [editText, setEditText] = useState(card.text);
 
@@ -32,7 +33,8 @@ export default function CardComponent({ card, index, onUpdate, onDelete }: CardP
                 display: "flex", 
                 justifyContent: "space-between", 
                 alignItems: "center",
-                background: blockColor
+                background: blockColor,
+                ...style
             }}>
             
             {isEditing ? (
