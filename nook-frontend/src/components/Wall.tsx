@@ -1,11 +1,13 @@
 import type { Card } from "../services/cards";
 import CardComponent from "./Card";
+import { useState, useRef } from 'react';
 
 interface WallProps {
   cards: Card[];
   onUpdate: (id: number, text: string) => Promise<void>;
   onDelete: (id: number) => Promise<void>;
 }
+
 
 const positions = [
   {
@@ -54,6 +56,12 @@ const positions = [
     rotate: -2.5
   }
 ]
+
+// const [position, setPosition] = useState({
+//   x: "13%",
+//   y: 35,
+//   rotate: -2,
+// });
 
 export default function Wall({ cards, onUpdate, onDelete }: WallProps) {
   return (

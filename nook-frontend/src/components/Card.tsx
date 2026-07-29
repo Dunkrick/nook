@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import type { Card } from "../services/cards";
 
 interface CardProps {
@@ -26,16 +26,51 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style }
         setIsEditing(false);
     };
 
+    // Is the user currently dragging this card?
+    const [isDragging, setIsDragging] = useState(false);
+    // The temporary position while dragging
+    const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+    // Refs to remember where the mouse was when the drag started
+    const dragStartPos = useRef({ x: 0, y: 0 });
+
+    const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+        if (isEditing) return; // Don't drag while editing
+        setIsDragging(true);
+        dragStartPos.current = { x: e.clientX, y: e.clientY };
+        e.currentTarget.setPointerCapture(e.pointerId);
+    };
+
+    const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+        if (!isDragging) return;
+        const dx = e.clientX - dragStartPos.current.x;
+        const dy = e.clientY - dragStartPos.current.y;
+        setDragOffset({ x: dx, y: dy });
+    };
+
+    const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+        setIsDragging(false);
+        e.currentTarget.releasePointerCapture(e.pointerId);
+    };
+
     return (
         <div 
             className="nook-block"
-            style={{ 
+            onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+                        style={{ 
                 display: "flex", 
                 justifyContent: "space-between", 
-                alignItems: "center",
                 background: blockColor,
+                // USE translate INSTEAD OF transform:
+                translate: `${dragOffset.x}px ${dragOffset.y}px`, 
+                zIndex: isDragging ? 100 : 1,
+                cursor: isDragging ? "grabbing" : (isEditing ? "default" : "grab"),
+                // CRITICAL: disable the CSS transition while dragging so it doesn't "lag" behind your mouse
+                transition: isDragging ? "none" : "translate 0.2s ease, box-shadow 0.2s ease",
                 ...style
             }}>
+
             
             {isEditing ? (
                 // --- EDITING MODE ---
