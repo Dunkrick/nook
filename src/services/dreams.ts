@@ -4,7 +4,7 @@ import { CreateDreamInput } from "../types/dreams.js";
 import { Prisma } from "@prisma/client";
 
 export async function createDream(input: CreateDreamInput) {
-    return prisma.dream.create({
+    return prisma.card.create({
         data: {
             text: input.text,
             userId: input.userId,
@@ -17,7 +17,7 @@ export async function createDream(input: CreateDreamInput) {
 };
 
 export async function getAllDreams(userId: number) {
-    return prisma.dream.findMany({
+    return prisma.card.findMany({
         where: {
             userId,
         },
@@ -29,7 +29,7 @@ export async function getAllDreams(userId: number) {
 
 export async function deleteDream(id: number, userId: number) {
     try {
-        return await prisma.dream.delete({
+        return await prisma.card.delete({
             where: {
                 id,
                 userId,
@@ -49,7 +49,7 @@ export async function deleteDream(id: number, userId: number) {
 
 export async function updateDream(id: number, dreamText: string, userId: number) {
     try {
-        return await prisma.dream.update({
+        return await prisma.card.update({
             where: {
                 id,
                 userId,
