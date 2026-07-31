@@ -12,14 +12,16 @@ model User {
   passwordHash String
   createdAt    DateTime @default(now())
 
-  dreams Dream[]
+  cards Card[]
 }
 
-model Dream {
+model Card {
   id        Int      @id @default(autoincrement())
   text      String
+  x         Float    @default(0)
+  y         Float    @default(0)
   createdAt DateTime @default(now())
-
+  updatedAt DateTime @default(now()) @updatedAt
   userId Int
   user   User @relation(fields: [userId], references: [id])
 }
