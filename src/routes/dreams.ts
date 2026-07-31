@@ -1,5 +1,5 @@
 import express from "express";
-import { createDream, getAllDreams, deleteDream, updateDream } from "../services/dreams.js";
+import { createCard, getAllCards, deleteCard, updateCard } from "../services/cards.js";
 import { validateDream } from "../validation/dreams.js";
 import { authenticate } from "../middleware/auth.js";
 import { asyncHandler } from "../middleware/async.js";
@@ -12,7 +12,7 @@ router.get("/", (_, res) => {
 });
 
 router.get("/dreams", authenticate, asyncHandler(async (req, res) => {
-    const dreams = await getAllDreams(req.user.id);
+    const dreams = await getAllCards(req.user.id);
     res.status(200).json(dreams);
 }));
 
@@ -21,9 +21,11 @@ router.post(
     authenticate,
     validateDream,
     asyncHandler(async (req, res) => {
-        const result = await createDream({
+        const result = await createCard({
             text: req.body.dream,
             userId: req.user.id,
+            x: 0,
+            y: 0,
         });
 
         return res.status(201).json(result);
@@ -35,7 +37,7 @@ router.delete(
     authenticate,
     asyncHandler(async (req, res) => {
         const id = Number(req.params.id);
-        const deletedDream = await deleteDream(id, req.user.id);
+        const deletedDream = await deleteCard(id, req.user.id);
 
         if (!deletedDream) {
             return res.status(404).json({
@@ -53,7 +55,7 @@ router.patch(
     validateDream,
     asyncHandler(async (req, res) => {
         const id = Number(req.params.id);
-        const updatedDream = await updateDream(id, req.body.dream, req.user.id);
+        const updatedDream = await updateCard({ id, text: req.body.dream, userId: req.user.id });
 
         if (!updatedDream) {
             return res.status(404).json({
