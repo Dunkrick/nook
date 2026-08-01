@@ -1,10 +1,11 @@
 import { useState, useRef } from "react";
 import type { Card } from "../services/cards";
+import type { CardUpdate } from "../services/cards";
 
 interface CardProps {
     card: Card;
     index: number;
-    onUpdate: (id: number, text: string) => Promise<void>;
+    onUpdate: (id: number, update: CardUpdate) => Promise<void>;
     onDelete: (id: number) => Promise<void>;
     style?: React.CSSProperties & { [key: `--${string}`]: string | number }
 }
@@ -17,7 +18,7 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style }
 
     const handleSave = async () => {
         if (!editText.trim()) return;
-        await onUpdate(card.id, editText);
+        await onUpdate(card.id, { text: editText });
         setIsEditing(false);
     };
 
@@ -47,9 +48,21 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style }
         setDragOffset({ x: dx, y: dy });
     };
 
-    const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    const handlePointerUp = async (e: React.PointerEvent<HTMLDivElement>) => {
+        if (!isDragging) return;
+
         setIsDragging(false);
         e.currentTarget.releasePointerCapture(e.pointerId);
+        const nextPosition = {
+            x: card.x + dragOffset.x,
+            y: card.y + dragOffset.y,
+        };
+
+        try {
+            await onUpdate(card.id, nextPosition);
+        } finally {
+            setDragOffset({ x: 0, y: 0 });
+        }
     };
 
     return (
@@ -94,11 +107,13 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style }
                     </div>
                     <div style={{ display: "flex", gap: "var(--nook-space-3)" }}>
                         <button 
+                            onPointerDown={(event) => event.stopPropagation()}
                             onClick={() => setIsEditing(true)}
                             style={{ background: "transparent", border: "none", color: "var(--nook-text-on-block)", cursor: "pointer", fontWeight: "var(--nook-weight-medium)" }}>
                             Edit
                         </button>
                         <button 
+                            onPointerDown={(event) => event.stopPropagation()}
                             onClick={() => onDelete(card.id)}
                             style={{ background: "transparent", border: "none", color: "var(--nook-text-on-block)", cursor: "pointer", fontWeight: "var(--nook-weight-bold)" }}>
                             Delete

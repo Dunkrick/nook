@@ -1,5 +1,5 @@
 import express from "express";
-import dreamRoutes from "./routes/cards.js";
+import cardRouter from "./routes/cards.js";
 import authRouter from "./routes/auth.js";
 import prisma from "./prisma.js";
 import cors from "cors";
@@ -22,12 +22,12 @@ app.use(
 //middleware
 app.use(express.json());
 app.use(express.static("public"));
-app.use("/", dreamRoutes);
+app.use("/", cardRouter);
 app.use("/auth", authRouter);
 
 //router
 app.get("/", (_, res) => {
-    res.send("Hello from Dream Wall v4");
+    res.send("Hello from Nook! v4");
 });
 
 app.get("/crash", async (_, res) => {

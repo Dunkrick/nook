@@ -1,6 +1,6 @@
 import express from "express";
 import { createCard, getAllCards, deleteCard, updateCard } from "../services/cards.js";
-import { validateDream } from "../validation/cards.js";
+import { validateCreateCard, validateUpdateCard } from "../validation/cards.js";
 import { authenticate } from "../middleware/auth.js";
 import { asyncHandler } from "../middleware/async.js";
 
@@ -8,24 +8,24 @@ const router = express.Router();
 
 
 router.get("/", (_, res) => {
-    res.send("Hello, from the Dream Wall!");
+    res.send("Hello, from Nook!");
 });
 
-router.get("/dreams", authenticate, asyncHandler(async (req, res) => {
-    const dreams = await getAllCards(req.user.id);
-    res.status(200).json(dreams);
+router.get("/cards", authenticate, asyncHandler(async (req, res) => {
+    const cards = await getAllCards(req.user.id);
+    res.status(200).json(cards);
 }));
 
 router.post(
-    "/dreams",
+    "/cards",
     authenticate,
-    validateDream,
+    validateCreateCard,
     asyncHandler(async (req, res) => {
         const result = await createCard({
-            text: req.body.dream,
+            text: req.body.text,
             userId: req.user.id,
-            x: 0,
-            y: 0,
+            x: req.body.x,
+            y: req.body.y,
         });
 
         return res.status(201).json(result);
@@ -33,37 +33,37 @@ router.post(
 );
 
 router.delete(
-    "/dreams/:id",
+    "/cards/:id",
     authenticate,
     asyncHandler(async (req, res) => {
         const id = Number(req.params.id);
-        const deletedDream = await deleteCard(id, req.user.id);
+        const deletedCard = await deleteCard(id, req.user.id);
 
-        if (!deletedDream) {
+        if (!deletedCard) {
             return res.status(404).json({
-                error: "Dream not found",
+                error: "Card not found",
             });
         }
 
-        return res.status(200).json(deletedDream);
+        return res.status(200).json(deletedCard);
     })
 );
 
 router.patch(
-    "/dreams/:id",
+    "/cards/:id",
     authenticate,
-    validateDream,
+    validateUpdateCard,
     asyncHandler(async (req, res) => {
         const id = Number(req.params.id);
-        const updatedDream = await updateCard({ id, text: req.body.dream, userId: req.user.id });
+        const updatedCard = await updateCard({ id, ...req.body, userId: req.user.id });
 
-        if (!updatedDream) {
+        if (!updatedCard) {
             return res.status(404).json({
-                error: "Dream not found",
+                error: "Card not found",
             });
         }
 
-        return res.status(200).json(updatedDream);
+        return res.status(200).json(updatedCard);
     })
 );
 

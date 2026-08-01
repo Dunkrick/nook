@@ -1,8 +1,7 @@
-//The expert of dreams
+//Card domain service
 import prisma from "../prisma.js";
 import { CreateCardInput, UpdateCardInput } from "../types/cards.js";
 import { Prisma } from "@prisma/client";
-
 export async function createCard(input: CreateCardInput) {
     return prisma.card.create({
         data: {
@@ -10,10 +9,6 @@ export async function createCard(input: CreateCardInput) {
             userId: input.userId,
             x: input.x,
             y: input.y,
-        },
-        select: {
-            id: true,
-            text: true,
         },
     });
 };

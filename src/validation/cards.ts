@@ -3,19 +3,15 @@ import { ValidationError } from "../lib/error.js";
 
 export function validateCreateCard(req: Request, res: Response, next: NextFunction) {
     const { text, x, y } = req.body;
-    const parsedX = Number(x);
-    const parsedY = Number(y);
 
-    if (!text?.trim() ||
-        !Number.isFinite(parsedX) ||
-        !Number.isFinite(parsedY)) {
-        throw new ValidationError("Invalid Card data, card requires valid text, x and y coordinates.");
+    if (!text?.trim()) {
+        throw new ValidationError("Invalid Card data, card requires valid text.");
     }
 
     // Clean up the body so the route gets the trimmed version
     req.body.text = text.trim();
-    req.body.x = Number(x);
-    req.body.y = Number(y);
+    req.body.x = Number.isFinite(Number(x)) ? Number(x) : 0;
+    req.body.y = Number.isFinite(Number(y)) ? Number(y) : 0;
 
     next();
 }

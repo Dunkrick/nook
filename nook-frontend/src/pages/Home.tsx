@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { logout } from "../services/auth";
-import { getCards, createCard, updateCard, deleteCard, type Card } from "../services/cards";
+import { getCards, createCard, updateCard, deleteCard, type Card, type CardUpdate } from "../services/cards";
 import Wall from "../components/Wall"
 import "../assets/nook-tokens.css";
 
@@ -22,21 +22,27 @@ export default function Home() {
     if (!newCardText.trim()) return; // Don't submit empty strings
     
     // Call our backend
-    const savedCard = await createCard(newCardText);
+    const column = cards.length % 3;
+    const row = Math.floor(cards.length / 3);
+    const savedCard = await createCard({
+        text: newCardText,
+        x: 32 + column * 260,
+        y: 32 + row * 170,
+    });
     
     // Update the UI immediately
-    setCards([...cards, savedCard]); 
+    setCards((currentCards) => [...currentCards, savedCard]);
     
     // Clear the input
     setNewCardText("");
 }
 
-async function handleUpdateCard(id: number, text: string) {
+async function handleUpdateCard(id: number, update: CardUpdate) {
     // Call the backend
-    const updated = await updateCard(id, text);
+    const updated = await updateCard(id, update);
     
     // Update the specific card in our array
-    setCards(cards.map(c => c.id === id ? updated : c));
+    setCards((currentCards) => currentCards.map((card) => card.id === id ? updated : card));
 }
 
 async function handleDeleteCard(id: number) {
@@ -44,7 +50,7 @@ async function handleDeleteCard(id: number) {
     await deleteCard(id);
     
     // Filter it out of our local React state
-    setCards(cards.filter(c => c.id !== id));
+    setCards((currentCards) => currentCards.filter((card) => card.id !== id));
 }
 
     return (
