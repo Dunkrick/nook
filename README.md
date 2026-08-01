@@ -6,6 +6,8 @@ Instead of building multiple tutorial projects, every version introduces one rea
 
 Current Version: **v3.0.0**
 
+A wall that thinks like software, but feels like paper.
+
 ---
 
 ## Why Dream Wall?
