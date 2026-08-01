@@ -1,6 +1,6 @@
 import express from "express";
 import { createCard, getAllCards, deleteCard, updateCard } from "../services/cards.js";
-import { validateDream } from "../validation/dreams.js";
+import { validateDream } from "../validation/cards.js";
 import { authenticate } from "../middleware/auth.js";
 import { asyncHandler } from "../middleware/async.js";
 

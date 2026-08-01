@@ -1,5 +1,5 @@
 import express from "express";
-import dreamRoutes from "./routes/dreams.js";
+import dreamRoutes from "./routes/cards.js";
 import authRouter from "./routes/auth.js";
 import prisma from "./prisma.js";
 import cors from "cors";
