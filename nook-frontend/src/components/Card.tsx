@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
-import type { Card } from "../services/cards";
-import type { CardUpdate } from "../services/cards";
+import type { Card, CardUpdate } from "../types/cards";
 
 interface CardProps {
     card: Card;

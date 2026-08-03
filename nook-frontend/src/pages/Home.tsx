@@ -1,19 +1,25 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { logout } from "../services/auth";
-import { getCards, createCard, updateCard, deleteCard, type Card, type CardUpdate } from "../services/cards";
+import { getCards, createCard, updateCard, deleteCard } from "../services/cards";
+import type { Card, CardUpdate, DraftCard } from "../types/cards";
 import Wall from "../components/Wall"
 import "../assets/nook-tokens.css";
+
+function handleCreate(position: Position) {
+    console.log(position);
+}
 
 export default function Home() {
     const navigate = useNavigate();
     const [cards, setCards] = useState<Card[]>([]);
+    const [draftCard, setDraftCard] = useState<DraftCard | null>(null);
     const [newCardText, setNewCardText] = useState("");
 
     useEffect(() => {
         async function fetchCards() {
-            const cards = await getCards();
-            setCards(cards);
+            const fetchedCards = await getCards();
+            setCards(fetchedCards);
         }
         fetchCards();
     }, []);
@@ -93,7 +99,7 @@ async function handleDeleteCard(id: number) {
 
         {/* CARDS LIST / WALL */}
         <div style={{ padding: "var(--nook-space-5)"}}>
-            <Wall cards={cards} onUpdate={handleUpdateCard} onDelete={handleDeleteCard} />
+            <Wall cards={cards} draftCard={draftCard} onUpdate={handleUpdateCard} onDelete={handleDeleteCard} onCreate={handleCreate}/>
         </div>
     </div>
     );

@@ -1,16 +1,28 @@
-import type { Card } from "../services/cards";
+import type { Card, CardUpdate, DraftCard, Position } from "../types/cards";
 import CardComponent from "./Card";
-import type { CardUpdate } from "../services/cards";
 
 interface WallProps {
   cards: Card[];
+  draftCard: DraftCard | null;
+  onCreate: (position: Position) => void;
   onUpdate: (id: number, update: CardUpdate) => Promise<void>;
   onDelete: (id: number) => Promise<void>;
 }
 
-export default function Wall({ cards, onUpdate, onDelete }: WallProps) {
+export default function Wall({ cards, draftCard, onUpdate, onDelete, onCreate }: WallProps) {
+  function handleDoubleClick(
+    e: React.MouseEvent<HTMLDivElement>
+) {
+    console.log("Wall double clicked");
+    const rect = e.currentTarget.getBoundingClientRect();
+    onCreate({
+        x: e.nativeEvent.offsetX,
+        y: e.nativeEvent.offsetY,
+    });
+}
+  
   return (
-    <div className="nook-wall" style={{ position: "relative", minHeight: "80vh" }}>
+    <div className="nook-wall" style={{ position: "relative", minHeight: "80vh" }} onDoubleClick={handleDoubleClick}>
       
       {cards.length === 0 ? (
         

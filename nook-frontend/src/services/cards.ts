@@ -1,20 +1,5 @@
 import * as api from "./api";
-
-export interface Card {
-    id: number;
-    text: string;
-    userId: number;
-    x: number;
-    y: number;
-    createdAt: string;
-    updatedAt: string;
-}
-
-export interface CardUpdate {
-    text?: string;
-    x?: number;
-    y?: number;
-}
+import type { Card, CardUpdate } from "../types/cards";
 
 export async function getCards(): Promise<Card[]> {
     const data = await api.get("/cards");
