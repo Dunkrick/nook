@@ -1,5 +1,23 @@
 # Changelog
 
+All notable changes to Nook will be documented in this file.
+
+## v3.1.0
+
+### Added
+- **Wall-First Interaction**: Added mouse double-click coordinate listener on the canvas (`Wall.tsx`) to map note placements dynamically.
+- **Transient Draft Notes**: Created `DraftCardComponent` rendering an inline absolute-positioned textarea.
+- **Save/Cancel Hotkeys**: Integrated keyboard actions (pressing `Enter` to submit, `Escape` to cancel/discard drafts).
+
+### Changed
+- **Component Separation**: Extracted `DraftCardComponent` into its own source file, decoupling creation concerns from `CardComponent`.
+- **Interaction Rules**: Implemented `e.stopPropagation()` on double clicks within cards and buttons, blocking nested draft note instantiation.
+
+### Removed
+- **Unused Props**: Retired the unused `startEditing` parameter from the persisted card rendering configurations.
+
+---
+
 ## v3.0.0
 
 ### Added
@@ -26,6 +44,8 @@
 - User registration and Login controllers.
 - JWT storage and authorization headers injection.
 - Reusable `<AuthForm />` component.
+
+---
 
 ## v2.5.0
 

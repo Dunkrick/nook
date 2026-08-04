@@ -11,8 +11,9 @@ export default function Home() {
     const [cards, setCards] = useState<Card[]>([]);
     const [draftCard, setDraftCard] = useState<DraftCard | null>(null);
     const [newCardText, setNewCardText] = useState("");
+    // TODO(v5): Remove hero input once wall-first creation is complete.
 
-    function handleCreate(position: Position) {
+    function handleCreateDraft(position: Position) {
         setDraftCard({
             text: "",
             x: position.x,
@@ -125,7 +126,7 @@ async function handleDeleteCard(id: number) {
                 draftCard={draftCard} 
                 onUpdate={handleUpdateCard} 
                 onDelete={handleDeleteCard} 
-                onCreate={handleCreate} 
+                onCreate={handleCreateDraft} 
                 onCommitDraft={handleCommitDraft}
                 onCancelDraft={handleCancelDraft}/>
         </div>
