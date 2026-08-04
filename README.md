@@ -1,146 +1,192 @@
-# Nook
+# Nook: Evolving Wall-First Workspace
 
-Nook is a minimal full-stack application that evolved from a simple CRUD app into a production-oriented backend through iterative engineering. Honestly, I wanted to explore how full stack works and this project made me understand it deeply.
+Nook is a full-stack digital workspace that has evolved from a basic single-file CRUD application into an interactive, wall-first canvas interaction model. 
 
-Instead of building multiple tutorial projects, every version introduces one real engineering concept while preserving the same product.
-
-Current Version: **v3.0.0**
-
-A wall that thinks like software, but feels like paper.
+Instead of building multiple throwaway projects, Nook uses a single core product domain to explore robust architectural evolutions—progressing through SQLite to PostgreSQL, raw SQL queries to Prisma ORM, JavaScript to TypeScript, and finally, incorporating a highly responsive React client.
 
 ---
 
-## Why Dream Wall?
+## Project Vision
 
-Most tutorial projects are abandoned after they work.
+Traditional kanban boards and note apps feel structured but restrictive. Nook's vision is to build a wall that **thinks like software, but feels like paper**. 
 
-Dream Wall follows a different philosophy.
-
-The same product evolves over time.
-
-Each version introduces one new engineering challenge:
-
-- SQLite → PostgreSQL
-- Raw SQL → Prisma
-- JavaScript → TypeScript
-- Business Logic → Service Layer
-- Route Validation → Middleware
-- Local Project → Production Ready
-- **Fullstack Integration → React & Vite**
-
-The goal isn't to build many projects.
-
-The goal is to build one project well.
+By shifting from a legacy table-based note submission model to a **wall-first spatial model**, users can capture thoughts instantly anywhere on their screen via double-clicks, arrange them organically through drag-and-drop, and visually organize their workspace.
 
 ---
 
 ## Tech Stack
 
-### Frontend
+### Frontend Client
+* **Framework**: React 19 (Functional components, custom hooks)
+* **Build System**: Vite 8 + TypeScript
+* **Styling**: Pure CSS Design Tokens (for responsive layouts and customizable themes)
+* **Routing**: React Router DOM v7
+* **State Management**: Local React state with unidirectional data-flow callback interfaces
 
-- React
-- TypeScript
-- Vite
-
-### Backend
-
-- Express
-- TypeScript
-- Prisma
-- PostgreSQL
-
----
-
-## Screenshots
-
-### Login Page
-![Login Page](docs/login.jpeg)
-
-### Home Page
-![Home Page](docs/home.jpeg)
+### Backend Service
+* **Server**: Express 5 + TypeScript (using `tsx watch` for hot-reloading)
+* **Persistence Layer**: Prisma ORM with PostgreSQL database
+* **Authentication**: JWT (JSON Web Tokens) with custom stateless middleware
+* **Validation**: Custom validation layers checking input coordinates and text lengths
 
 ---
 
-## Quick Start
+## Project Structure
 
+```
+systems-builder/
+├── src/                      # Express Backend Source
+│   ├── server.ts             # App Entry Point
+│   ├── routes/               # API Routes & Express Routers
+│   ├── services/             # Business Logic & Database Services
+│   ├── middleware/           # Auth, Validation & Global Error Handlers
+│   └── lib/                  # Shared Constants & Utilities
+├── prisma/                   # Schema definitions and migration files
+├── nook-frontend/            # React Client Workspace
+│   ├── src/
+│   │   ├── assets/           # Global Tokens & Stylesheets
+│   │   ├── components/       # Wall, Card, and DraftCard Components
+│   │   ├── pages/            # View Pages (Home, Login, Register)
+│   │   ├── services/         # API Service Wrappers & Network Layer
+│   │   ├── types/            # TypeScript Interface Definitions
+│   │   └── lib/              # Browser LocalStorage Helpers
+│   ├── package.json
+│   └── vite.config.ts
+├── package.json              # Backend Package Manifest
+└── docs/                     # Architectural ADRs and diagrams
+```
+
+---
+
+## Setup & Installation
+
+### Prerequisites
+* Node.js (v22.x or higher)
+* PostgreSQL database instance running locally or hosted
+
+### 1. Repository Setup
+Clone the repository and install root dependencies:
 ```bash
-git clone ...
-
-cd dream-wall
-
+git clone <repository-url>
+cd systems-builder
 npm install
-cd dream-wall-frontend
-npm install
-cd ..
+```
 
-cp .env.example .env
-# Also copy frontend env
-cp dream-wall-frontend/.env.example dream-wall-frontend/.env
+### 2. Environment Variables Configuration
+Create a `.env` file in the root directory:
+```env
+# Backend Environment Setup
+PORT=5001
+DATABASE_URL="postgresql://<user>:<password>@localhost:5432/nook_db?schema=public"
+JWT_SECRET="your_jwt_secret_key_here"
+```
 
+Configure the frontend client `.env` inside the `nook-frontend/` directory:
+```env
+# Frontend Client Setup
+VITE_API_URL="http://localhost:5001"
+```
+
+### 3. Database Migration
+Run the automated setup to run migrations and generate the Prisma Client:
+```bash
 npm run setup
+```
 
-# Run backend
-npm run dev
+---
 
-# Run frontend in a new terminal
-cd dream-wall-frontend
+## Development Workflow
+
+To start developing local changes on both layers concurrently:
+
+### Run Backend
+In the workspace root directory:
+```bash
 npm run dev
 ```
 
-## Architecture
+### Run Frontend Client
+In a new terminal window inside the `nook-frontend/` directory:
+```bash
+npm install
+npm run dev
+```
+The client application will launch locally at `http://localhost:5173`.
 
-```mermaid
-graph TD
-    subgraph Frontend [React Frontend]
-        Router --> Pages
-        Pages --> Components
-        Components --> Services[API Services]
-        Services --> API[Network Layer]
-    end
+---
 
-    subgraph Backend [Express Backend]
-        API --> Middleware[Auth/Validation Middleware]
-        Middleware --> Routes[API Routes]
-        Routes --> BServices[Business Logic Services]
-        BServices --> Prisma[Prisma ORM]
-        Prisma --> DB[(PostgreSQL)]
-    end
+## 🔑 Available Scripts
+
+### Root Scripts (Backend & DB)
+* `npm run dev`: Starts the Express server using `tsx watch` for active reload.
+* `npm run build`: Compiles TypeScript files into the `dist/` production folder.
+* `npm run start`: Runs compiled production code from `dist/server.js`.
+* `npm run setup`: Generates Prisma clients and migrates the PostgreSQL database.
+
+### Frontend Client Scripts (`nook-frontend/`)
+* `npm run dev`: Launches the local Vite development web server.
+* `npm run build`: Compiles TSX files and builds static production assets.
+* `npm run lint`: Runs ESLint to check for syntax and style issues.
+* `npm run preview`: Launches a local preview server for the built production assets.
+
+---
+
+## API Overview
+
+All protected route endpoints require an `Authorization: Bearer <JWT>` header.
+
+| Endpoint | Method | Authentication | Description |
+| :--- | :---: | :---: | :--- |
+| `/auth/register` | `POST` | Public | Register a new user account |
+| `/auth/login` | `POST` | Public | Authenticate credentials & retrieve token |
+| `/cards` | `GET` | Protected | Fetch all cards belonging to the logged-in user |
+| `/cards` | `POST` | Protected | Create a new card with text and optional (x, y) coordinates |
+| `/cards/:id` | `PATCH` | Protected | Update card text content or coordinate position (x, y) |
+| `/cards/:id` | `DELETE`| Protected | Delete a card from the user's wall |
+
+---
+
+## Interaction Model
+
+Nook implements an intuitive, wall-first workspace:
+
+```
+[Double-Click on Canvas]
+         │
+         ▼
+ ┌───────────────┐
+ │   DraftCard   │ ──(Esc Key / Empty Text Commit)──> [Discard Draft]
+ └───────────────┘
+         │
+    (Enter Key)
+         │
+         ▼
+ ┌───────────────┐
+ │ Persisted Card│ ──(Pointer Down + Move)─────────> [Drag & Move Position]
+ └───────────────┘
+         │
+    (Edit Click)
+         │
+         ▼
+ ┌───────────────┐
+ │  Inline Edit  │ ──(Save / Cancel)───────────────> [Update State]
+ └───────────────┘
 ```
 
-## Documentation
-- [Architecture](docs/architecture.md)
-- [Setup](docs/setup.md)
-- [Roadmap](docs/roadmap.md)
-- [Release Notes](docs/release_notes)
-- [ADRs](docs/adr)
+1. **Double Click Canvas**: Spawns a transient `<DraftCardComponent />` at the cursor position.
+2. **Focus**: The editor textarea auto-focuses instantly, allowing the user to start typing.
+3. **Commit**: Pressing `Enter` (without Shift) commits the note. A request is sent to the backend and a `<CardComponent />` is rendered.
+4. **Cancel**: Pressing `Escape` (or clicking away/leaving text empty) removes the draft card.
+5. **Drag and Drop**: Users can click and hold any card to drag it to a new location. Moving coordinates are saved to the backend on release.
+6. **Double-Click Protection**: Double-clicking inside cards or buttons does not trigger new drafts.
 
-## Engineering Philosophy
-- Build incrementally.
-- Ship before adding complexity.
-- Pass data, not frameworks.
-- Stable interfaces enable replaceable implementations.
-- Optimize for the next developer.
+---
 
-## Features
+## Evolutionary Roadmap
 
-- Create dreams
-- Update dreams
-- Delete dreams
-- User Registration
-- User Login
-- JWT Authentication
-- Protected Routes
-- User-owned Dreams
-- Logout
-- PostgreSQL
-- Prisma
-- React
-
-
-## Authentication
-
-All protected routes require
-
-Authorization
-
-Bearer <JWT>
+* **Version 1**: Express server, single-file SQLite database (Learn Full Stack).
+* **Version 2**: Migrated to PostgreSQL, added TypeScript definitions, extracted controllers.
+* **Version 2.5**: Introduced Prisma ORM, routing middlewares, validation rules, global error filters.
+* **Version 3 (Current)**: React + Vite Frontend client, Wall-first interaction model, Private Walls via JWT.
+* **Version 4**: AI Integration (Analyze user note topics, suggest tags, organize cards automatically).
+* **Version 5**: Product Polish (Introduce Canvas panning, snapping to grids, soft animation transitions).

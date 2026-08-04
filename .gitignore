@@ -9,3 +9,6 @@ dist/
 
 # OS Files
 .DS_Store
+
+CONTRIBUTING.md
+TODO.md

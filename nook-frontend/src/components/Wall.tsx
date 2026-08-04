@@ -84,7 +84,6 @@ export default function Wall({
               index={index}
               onUpdate={onUpdate}
               onDelete={onDelete}
-              startEditing={false}
               style={{ 
                 animationDelay: `${index * 0.09}s`,
                 position: "absolute",

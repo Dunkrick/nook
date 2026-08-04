@@ -49,6 +49,7 @@ export default function DraftCardComponent({
         value={text}
         onChange={(e) => setText(e.target.value)}
         onKeyDown={handleKeyDown}
+        onDoubleClick={(e) => e.stopPropagation()}
         placeholder="What's on your mind?"
         style={{
             position: "absolute",

@@ -6,13 +6,12 @@ interface CardProps {
     index: number;
     onUpdate: (id: number, update: CardUpdate) => Promise<void>;
     onDelete: (id: number) => Promise<void>;
-    startEditing: boolean;
     style?: React.CSSProperties & { [key: `--${string}`]: string | number }
 }
 
-export default function CardComponent({ card, index, onUpdate, onDelete, startEditing, style }: CardProps) {
+export default function CardComponent({ card, index, onUpdate, onDelete, style }: CardProps) {
     const inputRef = useRef<HTMLInputElement>(null);
-    const [isEditing, setIsEditing] = useState(startEditing);
+    const [isEditing, setIsEditing] = useState(false);
     const [editText, setEditText] = useState(card.text);
 
     useEffect(() => {
@@ -76,9 +75,10 @@ export default function CardComponent({ card, index, onUpdate, onDelete, startEd
         <div 
             className="nook-block"
             onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-                        style={{ 
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onDoubleClick={(e) => e.stopPropagation()}
+            style={{ 
                 display: "flex", 
                 justifyContent: "space-between", 
                 background: blockColor,
