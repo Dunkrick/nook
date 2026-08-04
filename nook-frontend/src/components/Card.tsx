@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import type { RenderableCard, CardUpdate } from "../types/cards";
+import type { Card, CardUpdate } from "../types/cards";
 
 interface CardProps {
-    card: RenderableCard;
+    card: Card;
     index: number;
     onUpdate: (id: number, update: CardUpdate) => Promise<void>;
     onDelete: (id: number) => Promise<void>;
