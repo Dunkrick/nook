@@ -1,17 +1,25 @@
-import { useState, useRef } from "react";
-import type { Card, CardUpdate } from "../types/cards";
+import { useState, useRef, useEffect } from "react";
+import type { RenderableCard, CardUpdate } from "../types/cards";
 
 interface CardProps {
-    card: Card;
+    card: RenderableCard;
     index: number;
     onUpdate: (id: number, update: CardUpdate) => Promise<void>;
     onDelete: (id: number) => Promise<void>;
+    startEditing: boolean;
     style?: React.CSSProperties & { [key: `--${string}`]: string | number }
 }
 
-export default function CardComponent({ card, index, onUpdate, onDelete, style }: CardProps) {
-    const [isEditing, setIsEditing] = useState(false);
+export default function CardComponent({ card, index, onUpdate, onDelete, startEditing, style }: CardProps) {
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [isEditing, setIsEditing] = useState(startEditing);
     const [editText, setEditText] = useState(card.text);
+
+    useEffect(() => {
+        if (isEditing) {
+            inputRef.current?.focus();
+        }
+    }, [isEditing]);
 
     const blockColor = `var(--nook-block-${(index % 4) + 1})`;
 
@@ -89,6 +97,7 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style }
                 <div style={{ display: "flex", gap: "var(--nook-space-2)", width: "100%" }}>
                     <input 
                         value={editText}
+                        ref={inputRef}
                         onChange={(e) => setEditText(e.target.value)}
                         style={{ flex: 1, padding: "var(--nook-space-2)", border: "1px solid var(--nook-border-block)", borderRadius: "var(--nook-radius-sm)", fontFamily: "var(--nook-font-sans)" }}
                     />

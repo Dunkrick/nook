@@ -2,13 +2,9 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { logout } from "../services/auth";
 import { getCards, createCard, updateCard, deleteCard } from "../services/cards";
-import type { Card, CardUpdate, DraftCard } from "../types/cards";
+import type { Card, CardUpdate, DraftCard, Position } from "../types/cards";
 import Wall from "../components/Wall"
 import "../assets/nook-tokens.css";
-
-function handleCreate(position: Position) {
-    console.log(position);
-}
 
 export default function Home() {
     const navigate = useNavigate();
@@ -16,6 +12,31 @@ export default function Home() {
     const [draftCard, setDraftCard] = useState<DraftCard | null>(null);
     const [newCardText, setNewCardText] = useState("");
 
+    function handleCreate(position: Position) {
+        setDraftCard({
+            text: "",
+            x: position.x,
+            y: position.y,
+        });
+    }
+
+    async function handleCommitDraft(text: string) {
+    if (!draftCard) return;
+
+    const savedCard = await createCard({
+        text,
+        x: draftCard.x,
+        y: draftCard.y,
+    });
+
+    setCards((current) => [...current, savedCard]);
+    setDraftCard(null);
+    }
+
+    function handleCancelDraft() {
+    setDraftCard(null);
+    }
+    
     useEffect(() => {
         async function fetchCards() {
             const fetchedCards = await getCards();
@@ -99,7 +120,14 @@ async function handleDeleteCard(id: number) {
 
         {/* CARDS LIST / WALL */}
         <div style={{ padding: "var(--nook-space-5)"}}>
-            <Wall cards={cards} draftCard={draftCard} onUpdate={handleUpdateCard} onDelete={handleDeleteCard} onCreate={handleCreate}/>
+            <Wall 
+                cards={cards} 
+                draftCard={draftCard} 
+                onUpdate={handleUpdateCard} 
+                onDelete={handleDeleteCard} 
+                onCreate={handleCreate} 
+                onCommitDraft={handleCommitDraft}
+                onCancelDraft={handleCancelDraft}/>
         </div>
     </div>
     );

@@ -1,30 +1,47 @@
 import type { Card, CardUpdate, DraftCard, Position } from "../types/cards";
 import CardComponent from "./Card";
+import DraftCardComponent from "./DraftCard";
 
 interface WallProps {
   cards: Card[];
   draftCard: DraftCard | null;
+
   onCreate: (position: Position) => void;
+
   onUpdate: (id: number, update: CardUpdate) => Promise<void>;
   onDelete: (id: number) => Promise<void>;
+
+  onCommitDraft: (text: string) => Promise<void>;
+  onCancelDraft: () => void;
 }
 
-export default function Wall({ cards, draftCard, onUpdate, onDelete, onCreate }: WallProps) {
+export default function Wall({ 
+    cards, 
+    draftCard, 
+    onUpdate, 
+    onDelete, 
+    onCreate, 
+    onCommitDraft, 
+    onCancelDraft 
+}: WallProps) {
   function handleDoubleClick(
     e: React.MouseEvent<HTMLDivElement>
 ) {
-    console.log("Wall double clicked");
     const rect = e.currentTarget.getBoundingClientRect();
     onCreate({
-        x: e.nativeEvent.offsetX,
-        y: e.nativeEvent.offsetY,
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
     });
 }
   
   return (
-    <div className="nook-wall" style={{ position: "relative", minHeight: "80vh" }} onDoubleClick={handleDoubleClick}>
+    <div 
+        className="nook-wall" 
+        style={{ position: "relative", minHeight: "80vh" }} 
+        onDoubleClick={handleDoubleClick}
+    >
       
-      {cards.length === 0 ? (
+      {cards.length === 0 && !draftCard ? (
         
         /* THE EMPTY STATE */
         <div style={{ 
@@ -58,24 +75,36 @@ export default function Wall({ cards, draftCard, onUpdate, onDelete, onCreate }:
         </div>
 
       ) : (
-
-        /* THE CARDS */
-        cards.map((card, index) => (
-          <CardComponent
-            key={card.id}
-            card={card}
-            index={index}
-            onUpdate={onUpdate}
-            onDelete={onDelete}
-            style={{ 
-              animationDelay: `${index * 0.09}s`,
-              position: "absolute",
-              left: card.x,
-              top: card.y,
-              "--card-rotate": `${[-2, 1.5, 3, -1, 2.5, -1.5][index % 6]}deg`
-            }}
-          />
-        ))
+        <>
+          {/* THE CARDS */}
+          {cards.map((card, index) => (
+            <CardComponent
+              key={card.id}
+              card={card}
+              index={index}
+              onUpdate={onUpdate}
+              onDelete={onDelete}
+              startEditing={false}
+              style={{ 
+                animationDelay: `${index * 0.09}s`,
+                position: "absolute",
+                left: card.x,
+                top: card.y,
+                "--card-rotate": `${[-2, 1.5, 3, -1, 2.5, -1.5][index % 6]}deg`
+              }}
+            />
+          ))}
+          {draftCard && (
+    <DraftCardComponent
+        position={{
+            x: draftCard.x,
+            y: draftCard.y,
+        }}
+        onCommit={onCommitDraft}
+        onCancel={onCancelDraft}
+    />
+)}
+        </>
       )}
 
     </div>
