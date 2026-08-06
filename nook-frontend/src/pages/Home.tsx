@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { logout } from "../services/auth";
+import SelectionToolbar from "../components/SelectionToolbar"
 import { getCards, createCard, updateCard, deleteCard } from "../services/cards";
 import type { Card, CardUpdate, DraftCard, Position } from "../types/cards";
 import Wall from "../components/Wall"
@@ -13,6 +14,7 @@ export default function Home() {
     const [newCardText, setNewCardText] = useState("");
     // TODO(v5): Remove hero input once wall-first creation is complete.
     const [selectedCardIds, setSelectedCardIds] = useState<number[]>([]);
+    const [isInsightOpen, setIsReflectionOpen] = useState(false);
 
     function handleCreateDraft(position: Position) {
         setDraftCard({
@@ -94,6 +96,14 @@ function toggleCardSelection(cardId: number) {
     });
 }
 
+function handleClearSelection(){
+    setSelectedCardIds([]);
+}
+
+function handleFindInsight() {
+    console.log("Find Insight");
+    setIsReflectionOpen(true);
+}
     return (
     <div>
         {/* HEADER */}
@@ -123,6 +133,13 @@ function toggleCardSelection(cardId: number) {
                 selectedCardIds={selectedCardIds}
                 onToggleCardSelection={toggleCardSelection}
             />
+            {selectedCardIds.length > 0 && (
+                <SelectionToolbar
+                    selectedCount={selectedCardIds.length}
+                    onFindInsight={handleFindInsight}
+                    onClearSelection={handleClearSelection}
+                />
+            )}
         </div>
     </div>
     );
