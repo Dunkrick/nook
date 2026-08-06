@@ -117,21 +117,17 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style, 
 
                 translate: `${dragOffset.x}px ${dragOffset.y}px`,
 
-                boxShadow: isSelected
-    ? "0 12px 30px rgba(0,0,0,.25)"
-    : undefined,
+                boxShadow: isSelected ? "0 16px 40px rgba(0,0,0,0.28)" : undefined,
 
-outline: isSelected
-    ? "3px solid rgba(255,255,255,.85)"
-    : "none",
+                outline: isSelected ? "3px solid rgba(255,255,255,0.9)" : "none",
 
-scale: isSelected ? "1.03" : "1",
+                scale: isSelected ? "1.03" : "1",
 
-zIndex: isSelected ? 50 : 1,   
+                zIndex: isDragging ? 100 : isSelected ? 50 : 1,
 
                 cursor: isDragging ? "grabbing" : (isEditing ? "default" : "grab"),
 
-                transition: isDragging ? "none" : "translate 0.2s ease, box-shadow 0.2s ease, scale 0.2s ease",
+                transition: isDragging ? "none" : "translate 0.2s ease, box-shadow 0.2s ease, scale 0.2s ease, outline-color 0.2s ease",
 
                 ...style
             }}>
