@@ -12,6 +12,7 @@ export default function Home() {
     const [draftCard, setDraftCard] = useState<DraftCard | null>(null);
     const [newCardText, setNewCardText] = useState("");
     // TODO(v5): Remove hero input once wall-first creation is complete.
+    const [selectedCardIds, setSelectedCardIds] = useState<number[]>([]);
 
     function handleCreateDraft(position: Position) {
         setDraftCard({
@@ -81,11 +82,23 @@ async function handleDeleteCard(id: number) {
     setCards((currentCards) => currentCards.filter((card) => card.id !== id));
 }
 
+function toggleCardSelection(cardId: number) {
+    setSelectedCardIds((current) => {
+        const isSelected = current.includes(cardId);
+
+        if (isSelected) {
+            return current.filter((id) => id !== cardId);
+        }
+
+        return [...current, cardId];
+    });
+}
+
     return (
     <div>
         {/* HEADER */}
         <div style={{ padding: "var(--nook-space-5)", maxWidth: "600px", margin: "0 auto" }}>
-        <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--nook-space-7)" }}>
+        <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--nook-space-2)" }}>
             <h1 className="nook-logo">
                 Nook<span className="nook-logo__spark"></span>
             </h1>
@@ -96,29 +109,7 @@ async function handleDeleteCard(id: number) {
                 Logout
             </button>
         </header>
-
-        {/* HERO BLOCK: CREATE CARD FORM */}
-        <div className="nook-hero-block" style={{ marginBottom: "var(--nook-space-7)" }}>
-            <h1>What's next on your Wall?</h1>
-            <div style={{ display: "flex", gap: "var(--nook-space-3)" }}>
-                <input 
-                    placeholder="Type it into reality..." 
-                    style={{ 
-                        flex: 1, 
-                        padding: "var(--nook-space-3)", 
-                        borderRadius: "var(--nook-radius-md)", 
-                        border: "none",
-                        fontFamily: "var(--nook-font-sans)",
-                        fontSize: "var(--nook-text-body)"
-                    }}
-                    value={newCardText} 
-                    onChange={(e) => setNewCardText(e.target.value)}
-                />
-                <button className="nook-button-primary" onClick={handleAddCard}>Add</button>
-            </div>
         </div>
-        </div>
-
         {/* CARDS LIST / WALL */}
         <div style={{ padding: "var(--nook-space-5)"}}>
             <Wall 
@@ -128,7 +119,10 @@ async function handleDeleteCard(id: number) {
                 onDelete={handleDeleteCard} 
                 onCreate={handleCreateDraft} 
                 onCommitDraft={handleCommitDraft}
-                onCancelDraft={handleCancelDraft}/>
+                onCancelDraft={handleCancelDraft}
+                selectedCardIds={selectedCardIds}
+                onToggleCardSelection={toggleCardSelection}
+            />
         </div>
     </div>
     );

@@ -7,9 +7,11 @@ interface CardProps {
     onUpdate: (id: number, update: CardUpdate) => Promise<void>;
     onDelete: (id: number) => Promise<void>;
     style?: React.CSSProperties & { [key: `--${string}`]: string | number }
+    isSelected: boolean;
+    onToggleSelection: () => void;
 }
 
-export default function CardComponent({ card, index, onUpdate, onDelete, style }: CardProps) {
+export default function CardComponent({ card, index, onUpdate, onDelete, style, isSelected, onToggleSelection }: CardProps) {
     const inputRef = useRef<HTMLInputElement>(null);
     const [isEditing, setIsEditing] = useState(false);
     const [editText, setEditText] = useState(card.text);
@@ -71,6 +73,20 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style }
         }
     };
 
+    function handleClick(e: React.MouseEvent<HTMLDivElement>) {
+    // Only select when Cmd (Mac) or Ctrl (Windows/Linux) is held
+    if (!e.metaKey && !e.ctrlKey) {
+        return;
+    }
+
+    e.stopPropagation();
+    onToggleSelection();
+}
+    // TODO(vNext):
+    // Ignore click events that follow a drag.
+    // This temporary Cmd/Ctrl+Click selection will be replaced
+    // by rectangle selection.
+
     return (
         <div 
             className="nook-block"
@@ -78,20 +94,32 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style }
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onDoubleClick={(e) => e.stopPropagation()}
-            style={{ 
-                display: "flex", 
-                justifyContent: "space-between", 
+            onClick={handleClick}
+            style={{
+                display: "flex",
+                justifyContent: "space-between",
                 background: blockColor,
-                // USE translate INSTEAD OF transform:
-                translate: `${dragOffset.x}px ${dragOffset.y}px`, 
-                zIndex: isDragging ? 100 : 1,
+
+                translate: `${dragOffset.x}px ${dragOffset.y}px`,
+
+                boxShadow: isSelected
+    ? "0 12px 30px rgba(0,0,0,.25)"
+    : undefined,
+
+outline: isSelected
+    ? "3px solid rgba(255,255,255,.85)"
+    : "none",
+
+scale: isSelected ? "1.03" : "1",
+
+zIndex: isSelected ? 50 : 1,   
+
                 cursor: isDragging ? "grabbing" : (isEditing ? "default" : "grab"),
-                // CRITICAL: disable the CSS transition while dragging so it doesn't "lag" behind your mouse
-                transition: isDragging ? "none" : "translate 0.2s ease, box-shadow 0.2s ease",
+
+                transition: isDragging ? "none" : "translate 0.2s ease, box-shadow 0.2s ease, scale 0.2s ease",
+
                 ...style
             }}>
-
-            
             {isEditing ? (
                 // --- EDITING MODE ---
                 <div style={{ display: "flex", gap: "var(--nook-space-2)", width: "100%" }}>
@@ -113,16 +141,28 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style }
                             {card.text}
                         </p>
                     </div>
-                    <div style={{ display: "flex", gap: "var(--nook-space-3)" }}>
+                    <div
+                        onClick={(e) => e.stopPropagation()}
+                        style={{
+                            display: "flex",
+                            gap: "var(--nook-space-2)",
+                            width: "100%",
+                        }}>
                         <button 
                             onPointerDown={(event) => event.stopPropagation()}
-                            onClick={() => setIsEditing(true)}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsEditing(true);
+                            }}
                             style={{ background: "transparent", border: "none", color: "var(--nook-text-on-block)", cursor: "pointer", fontWeight: "var(--nook-weight-medium)" }}>
                             Edit
                         </button>
                         <button 
                             onPointerDown={(event) => event.stopPropagation()}
-                            onClick={() => onDelete(card.id)}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onDelete(card.id);
+                            }}
                             style={{ background: "transparent", border: "none", color: "var(--nook-text-on-block)", cursor: "pointer", fontWeight: "var(--nook-weight-bold)" }}>
                             Delete
                         </button>
