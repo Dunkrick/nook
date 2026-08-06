@@ -35,6 +35,21 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style, 
         setIsEditing(false);
     };
 
+    function handleKeyDown(
+    e: React.KeyboardEvent<HTMLInputElement>
+) {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        handleSave();
+        return;
+    }
+
+    if (e.key === "Escape") {
+        e.preventDefault();
+        handleCancel();
+    }
+}
+
     // Is the user currently dragging this card?
     const [isDragging, setIsDragging] = useState(false);
     // The temporary position while dragging
@@ -127,6 +142,7 @@ zIndex: isSelected ? 50 : 1,
                         value={editText}
                         ref={inputRef}
                         onChange={(e) => setEditText(e.target.value)}
+                        onKeyDown={handleKeyDown}
                         style={{ flex: 1, padding: "var(--nook-space-2)", border: "1px solid var(--nook-border-block)", borderRadius: "var(--nook-radius-sm)", fontFamily: "var(--nook-font-sans)" }}
                     />
                     <button className="nook-button-primary" style={{ background: "var(--nook-text-on-block)", color: "var(--nook-bg)" }} onClick={handleSave}>Save</button>
