@@ -15,12 +15,32 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style, 
     const inputRef = useRef<HTMLInputElement>(null);
     const [isEditing, setIsEditing] = useState(false);
     const [editText, setEditText] = useState(card.text);
+    const [position, setPosition] = useState({
+        x: card.x,
+        y: card.y,
+    });
+
+    // Is the user currently dragging this card?
+    const [isDragging, setIsDragging] = useState(false);
+    // Refs to remember where the mouse was when the drag started
+    const dragStartPos = useRef({ x: 0, y: 0 });
+    const dragStartCardPos = useRef({ x: 0, y: 0 });
 
     useEffect(() => {
         if (isEditing) {
             inputRef.current?.focus();
         }
     }, [isEditing]);
+
+    useEffect(() => {
+        if (isDragging) {
+            return;
+        }
+        setPosition({
+            x: card.x,
+            y: card.y,
+        });
+    }, [card.x, card.y, isDragging]);
 
     const blockColor = `var(--nook-block-${(index % 4) + 1})`;
 
@@ -36,67 +56,68 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style, 
     };
 
     function handleKeyDown(
-    e: React.KeyboardEvent<HTMLInputElement>
-) {
-    if (e.key === "Enter") {
-        e.preventDefault();
-        handleSave();
-        return;
-    }
+        e: React.KeyboardEvent<HTMLInputElement>
+    ) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            handleSave();
+            return;
+        }
 
-    if (e.key === "Escape") {
-        e.preventDefault();
-        handleCancel();
+        if (e.key === "Escape") {
+            e.preventDefault();
+            handleCancel();
+        }
     }
-}
-
-    // Is the user currently dragging this card?
-    const [isDragging, setIsDragging] = useState(false);
-    // The temporary position while dragging
-    const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
-    // Refs to remember where the mouse was when the drag started
-    const dragStartPos = useRef({ x: 0, y: 0 });
 
     const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
         if (isEditing) return; // Don't drag while editing
         setIsDragging(true);
-        dragStartPos.current = { x: e.clientX, y: e.clientY };
+        dragStartPos.current = {
+            x: e.clientX,
+            y: e.clientY,
+        };
+
+        dragStartCardPos.current = {
+            x: position.x,
+            y: position.y,
+        };
         e.currentTarget.setPointerCapture(e.pointerId);
     };
 
     const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-        if (!isDragging) return;
-        const dx = e.clientX - dragStartPos.current.x;
-        const dy = e.clientY - dragStartPos.current.y;
-        setDragOffset({ x: dx, y: dy });
-    };
+    if (!isDragging) return;
+
+    const dx = e.clientX - dragStartPos.current.x;
+    const dy = e.clientY - dragStartPos.current.y;
+
+    setPosition({
+        x: dragStartCardPos.current.x + dx,
+        y: dragStartCardPos.current.y + dy,
+    });
+};
 
     const handlePointerUp = async (e: React.PointerEvent<HTMLDivElement>) => {
-        if (!isDragging) return;
-
+        if (!isDragging) return;        
         setIsDragging(false);
-        e.currentTarget.releasePointerCapture(e.pointerId);
-        const nextPosition = {
-            x: card.x + dragOffset.x,
-            y: card.y + dragOffset.y,
-        };
 
-        try {
-            await onUpdate(card.id, nextPosition);
-        } finally {
-            setDragOffset({ x: 0, y: 0 });
-        }
+        e.currentTarget.releasePointerCapture(e.pointerId);
+
+        const nextPosition = position;
+
+        // Fire-and-forget because Home is optimistic now
+        void onUpdate(card.id, nextPosition);
     };
 
     function handleClick(e: React.MouseEvent<HTMLDivElement>) {
-    // Only select when Cmd (Mac) or Ctrl (Windows/Linux) is held
-    if (!e.metaKey && !e.ctrlKey) {
-        return;
-    }
+        // Only select when Cmd (Mac) or Ctrl (Windows/Linux) is held
+        if (!e.metaKey && !e.ctrlKey) {
+            return;
+        }
 
-    e.stopPropagation();
-    onToggleSelection();
-}
+        e.stopPropagation();
+        onToggleSelection();
+    }
     // TODO(vNext):
     // Ignore click events that follow a drag.
     // This temporary Cmd/Ctrl+Click selection will be replaced
@@ -115,8 +136,6 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style, 
                 justifyContent: "space-between",
                 background: blockColor,
 
-                translate: `${dragOffset.x}px ${dragOffset.y}px`,
-
                 boxShadow: isSelected ? "0 16px 40px rgba(0,0,0,0.28)" : undefined,
 
                 outline: isSelected ? "3px solid rgba(255,255,255,0.9)" : "none",
@@ -129,7 +148,9 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style, 
 
                 transition: isDragging ? "none" : "translate 0.2s ease, box-shadow 0.2s ease, scale 0.2s ease, outline-color 0.2s ease",
 
-                ...style
+                ...style,
+                left: position.x,
+                top: position.y
             }}>
             {isEditing ? (
                 // --- EDITING MODE ---

@@ -69,11 +69,32 @@ export default function Home() {
 }
 
 async function handleUpdateCard(id: number, update: CardUpdate) {
-    // Call the backend
-    const updated = await updateCard(id, update);
-    
-    // Update the specific card in our array
-    setCards((currentCards) => currentCards.map((card) => card.id === id ? updated : card));
+    // Keep a snapshot in case the request fails
+    const previousCards = cards;
+
+    // Optimistic UI update
+    setCards((current) =>
+        current.map((card) =>
+            card.id === id
+                ? { ...card, ...update }
+                : card
+        )
+    );
+
+    try {
+        const updated = await updateCard(id, update);
+
+        // Synchronize with the server response
+        setCards((current) =>
+            current.map((card) =>
+                card.id === id ? updated : card
+            )
+        );
+    } catch (error) {
+        // Roll back if persistence failed
+        setCards(previousCards);
+        console.error(error);
+    }
 }
 
 async function handleDeleteCard(id: number) {
