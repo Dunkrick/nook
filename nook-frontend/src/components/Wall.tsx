@@ -13,6 +13,9 @@ interface WallProps {
 
   onCommitDraft: (text: string) => Promise<void>;
   onCancelDraft: () => void;
+
+  selectedCardIds: number[]
+  onToggleCardSelection: (cardId: number) => void
 }
 
 export default function Wall({ 
@@ -22,7 +25,9 @@ export default function Wall({
     onDelete, 
     onCreate, 
     onCommitDraft, 
-    onCancelDraft 
+    onCancelDraft,
+    selectedCardIds,
+    onToggleCardSelection,
 }: WallProps) {
   function handleDoubleClick(
     e: React.MouseEvent<HTMLDivElement>
@@ -67,10 +72,10 @@ export default function Wall({
             <span style={{ fontSize: "24px" }}>[]</span>
           </div>
           <p style={{ fontSize: "var(--nook-text-h3)", fontWeight: "var(--nook-weight-medium)", margin: 0 }}>
-            Your wall is clear.
+            Double-click anywhere to begin.
           </p>
           <p style={{ marginTop: "var(--nook-space-2)" }}>
-            Add a card above to start placing your thoughts.
+            Capture ideas, plans, reminders, or anything worth remembering.
           </p>
         </div>
 
@@ -84,6 +89,8 @@ export default function Wall({
               index={index}
               onUpdate={onUpdate}
               onDelete={onDelete}
+              isSelected={selectedCardIds.includes(card.id)}
+              onToggleSelection={() => onToggleCardSelection(card.id)}
               style={{ 
                 animationDelay: `${index * 0.09}s`,
                 position: "absolute",

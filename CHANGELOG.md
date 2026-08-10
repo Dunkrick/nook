@@ -4,6 +4,13 @@ All notable changes to Nook will be documented in this file.
 
 ## v3.1.0
 
+BREAKING CHANGE
+
+The wall is now the primary interaction surface.
+
+Card creation no longer depends on a separate input form.
+Users create thoughts directly inside the wall through transient draft cards.
+
 ### Added
 - **Wall-First Interaction**: Added mouse double-click coordinate listener on the canvas (`Wall.tsx`) to map note placements dynamically.
 - **Transient Draft Notes**: Created `DraftCardComponent` rendering an inline absolute-positioned textarea.

@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { logout } from "../services/auth";
+import SelectionToolbar from "../components/SelectionToolbar"
 import { getCards, createCard, updateCard, deleteCard } from "../services/cards";
 import type { Card, CardUpdate, DraftCard, Position } from "../types/cards";
 import Wall from "../components/Wall"
@@ -12,6 +13,8 @@ export default function Home() {
     const [draftCard, setDraftCard] = useState<DraftCard | null>(null);
     const [newCardText, setNewCardText] = useState("");
     // TODO(v5): Remove hero input once wall-first creation is complete.
+    const [selectedCardIds, setSelectedCardIds] = useState<number[]>([]);
+    const [isInsightOpen, setIsReflectionOpen] = useState(false);
 
     function handleCreateDraft(position: Position) {
         setDraftCard({
@@ -66,11 +69,32 @@ export default function Home() {
 }
 
 async function handleUpdateCard(id: number, update: CardUpdate) {
-    // Call the backend
-    const updated = await updateCard(id, update);
-    
-    // Update the specific card in our array
-    setCards((currentCards) => currentCards.map((card) => card.id === id ? updated : card));
+    // Keep a snapshot in case the request fails
+    const previousCards = cards;
+
+    // Optimistic UI update
+    setCards((current) =>
+        current.map((card) =>
+            card.id === id
+                ? { ...card, ...update }
+                : card
+        )
+    );
+
+    try {
+        const updated = await updateCard(id, update);
+
+        // Synchronize with the server response
+        setCards((current) =>
+            current.map((card) =>
+                card.id === id ? updated : card
+            )
+        );
+    } catch (error) {
+        // Roll back if persistence failed
+        setCards(previousCards);
+        console.error(error);
+    }
 }
 
 async function handleDeleteCard(id: number) {
@@ -81,11 +105,31 @@ async function handleDeleteCard(id: number) {
     setCards((currentCards) => currentCards.filter((card) => card.id !== id));
 }
 
+function toggleCardSelection(cardId: number) {
+    setSelectedCardIds((current) => {
+        const isSelected = current.includes(cardId);
+
+        if (isSelected) {
+            return current.filter((id) => id !== cardId);
+        }
+
+        return [...current, cardId];
+    });
+}
+
+function handleClearSelection(){
+    setSelectedCardIds([]);
+}
+
+function handleFindInsight() {
+    console.log("Find Insight");
+    setIsReflectionOpen(true);
+}
     return (
     <div>
         {/* HEADER */}
         <div style={{ padding: "var(--nook-space-5)", maxWidth: "600px", margin: "0 auto" }}>
-        <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--nook-space-7)" }}>
+        <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--nook-space-2)" }}>
             <h1 className="nook-logo">
                 Nook<span className="nook-logo__spark"></span>
             </h1>
@@ -96,29 +140,7 @@ async function handleDeleteCard(id: number) {
                 Logout
             </button>
         </header>
-
-        {/* HERO BLOCK: CREATE CARD FORM */}
-        <div className="nook-hero-block" style={{ marginBottom: "var(--nook-space-7)" }}>
-            <h1>What's next on your Wall?</h1>
-            <div style={{ display: "flex", gap: "var(--nook-space-3)" }}>
-                <input 
-                    placeholder="Type it into reality..." 
-                    style={{ 
-                        flex: 1, 
-                        padding: "var(--nook-space-3)", 
-                        borderRadius: "var(--nook-radius-md)", 
-                        border: "none",
-                        fontFamily: "var(--nook-font-sans)",
-                        fontSize: "var(--nook-text-body)"
-                    }}
-                    value={newCardText} 
-                    onChange={(e) => setNewCardText(e.target.value)}
-                />
-                <button className="nook-button-primary" onClick={handleAddCard}>Add</button>
-            </div>
         </div>
-        </div>
-
         {/* CARDS LIST / WALL */}
         <div style={{ padding: "var(--nook-space-5)"}}>
             <Wall 
@@ -128,7 +150,17 @@ async function handleDeleteCard(id: number) {
                 onDelete={handleDeleteCard} 
                 onCreate={handleCreateDraft} 
                 onCommitDraft={handleCommitDraft}
-                onCancelDraft={handleCancelDraft}/>
+                onCancelDraft={handleCancelDraft}
+                selectedCardIds={selectedCardIds}
+                onToggleCardSelection={toggleCardSelection}
+            />
+            {selectedCardIds.length > 0 && (
+                <SelectionToolbar
+                    selectedCount={selectedCardIds.length}
+                    onFindInsight={handleFindInsight}
+                    onClearSelection={handleClearSelection}
+                />
+            )}
         </div>
     </div>
     );
