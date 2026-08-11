@@ -5,6 +5,7 @@ import SelectionToolbar from "../components/SelectionToolbar"
 import { getCards, createCard, updateCard, deleteCard } from "../services/cards";
 import type { Card, CardUpdate, DraftCard, Position } from "../types/cards";
 import Wall from "../components/Wall"
+import InsightPanel from "../components/InsightPanel";
 import "../assets/nook-tokens.css";
 
 export default function Home() {
@@ -14,7 +15,7 @@ export default function Home() {
     const [newCardText, setNewCardText] = useState("");
     // TODO(v5): Remove hero input once wall-first creation is complete.
     const [selectedCardIds, setSelectedCardIds] = useState<number[]>([]);
-    const [isInsightOpen, setIsReflectionOpen] = useState(false);
+    const [isInsightOpen, setIsInsightOpen] = useState(false);
 
     function handleCreateDraft(position: Position) {
         setDraftCard({
@@ -122,8 +123,11 @@ function handleClearSelection(){
 }
 
 function handleFindInsight() {
-    console.log("Find Insight");
-    setIsReflectionOpen(true);
+    setIsInsightOpen(true);
+}
+
+function handleCloseInsight(){
+    setIsInsightOpen(false);
 }
     return (
     <div>
@@ -159,6 +163,12 @@ function handleFindInsight() {
                     selectedCount={selectedCardIds.length}
                     onFindInsight={handleFindInsight}
                     onClearSelection={handleClearSelection}
+                />
+            )}
+            {isInsightOpen && (
+                <InsightPanel
+                    selectedCount={selectedCardIds.length}
+                    onClose={handleCloseInsight}
                 />
             )}
         </div>
