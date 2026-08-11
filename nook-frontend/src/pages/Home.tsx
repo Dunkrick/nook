@@ -12,8 +12,6 @@ export default function Home() {
     const navigate = useNavigate();
     const [cards, setCards] = useState<Card[]>([]);
     const [draftCard, setDraftCard] = useState<DraftCard | null>(null);
-    const [newCardText, setNewCardText] = useState("");
-    // TODO(v5): Remove hero input once wall-first creation is complete.
     const [selectedCardIds, setSelectedCardIds] = useState<number[]>([]);
     const [isInsightOpen, setIsInsightOpen] = useState(false);
 
@@ -49,25 +47,6 @@ export default function Home() {
         }
         fetchCards();
     }, []);
-
-    async function handleAddCard() {
-    if (!newCardText.trim()) return; // Don't submit empty strings
-    
-    // Call our backend
-    const column = cards.length % 3;
-    const row = Math.floor(cards.length / 3);
-    const savedCard = await createCard({
-        text: newCardText,
-        x: 32 + column * 260,
-        y: 32 + row * 170,
-    });
-    
-    // Update the UI immediately
-    setCards((currentCards) => [...currentCards, savedCard]);
-    
-    // Clear the input
-    setNewCardText("");
-}
 
 async function handleUpdateCard(id: number, update: CardUpdate) {
     // Keep a snapshot in case the request fails
