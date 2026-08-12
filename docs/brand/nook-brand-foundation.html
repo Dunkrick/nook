@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nook — Brand Foundation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,440;0,9..144,560;1,9..144,440;1,9..144,560&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+/* ============ TOKENS ============ */
+:root{
+  --paper:#EFEDE6;
+  --paper-deep:#E3DECF;
+  --ink:#221F18;
+  --ink-soft:#6E6858;
+  --line:#D6D0BF;
+  --spark:#C6813C;
+  --spark-dim:#E6C299;
+  --focus:#3F5C68;
+  --night:#1A170F;
+  --night-line:#3A3527;
+
+  --radius-sm:6px;
+  --radius-md:12px;
+  --radius-lg:22px;
+  --radius-full:999px;
+
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px;
+  --space-5:24px; --space-6:32px; --space-7:48px; --space-8:64px; --space-9:96px;
+
+  --shadow-rest:0 1px 2px rgba(34,31,24,.06);
+  --shadow-raised:0 8px 20px rgba(34,31,24,.09);
+  --shadow-float:0 24px 56px rgba(34,31,24,.16);
+
+  --ease-calm:cubic-bezier(.22,1,.36,1);
+  --ease-ambient:cubic-bezier(.45,0,.55,1);
+  --dur-micro:120ms;
+  --dur-standard:220ms;
+  --dur-entrance:460ms;
+
+  --font-display:'Fraunces', ui-serif, Georgia, serif;
+  --font-body:'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono:'JetBrains Mono', ui-monospace, monospace;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth; scroll-padding-top:76px;}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--font-body); font-size:16px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+img,svg{display:block;}
+a{color:inherit;}
+.wrap{max-width:1040px; margin:0 auto; padding:0 var(--space-6);}
+@media (max-width:640px){ .wrap{padding:0 var(--space-4);} }
+
+.eyebrow{
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-soft);
+}
+h1,h2,h3{font-family:var(--font-display); font-weight:560; margin:0; letter-spacing:-.01em;}
+.italic{font-style:italic; font-weight:440;}
+
+/* ============ NAV ============ */
+nav.top{
+  position:sticky; top:0; z-index:50;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px var(--space-6);
+  background:rgba(239,237,230,.86); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.nav-id{display:flex; align-items:center; gap:10px;}
+.nav-id svg{width:22px; height:22px; color:var(--ink);}
+.nav-id span{font-family:var(--font-mono); font-size:12px; letter-spacing:.06em; color:var(--ink-soft);}
+.nav-links{display:flex; gap:var(--space-5); list-style:none; margin:0; padding:0;}
+.nav-links a{
+  font-family:var(--font-mono); font-size:12px; letter-spacing:.05em; text-transform:uppercase;
+  text-decoration:none; color:var(--ink-soft); transition:color var(--dur-standard) var(--ease-calm);
+  padding-bottom:3px; border-bottom:1px solid transparent;
+}
+.nav-links a.active, .nav-links a:hover{color:var(--ink); border-color:var(--spark);}
+@media (max-width:720px){ .nav-links{display:none;} }
+
+/* ============ HERO ============ */
+header.hero{padding:var(--space-9) 0 var(--space-7);}
+.hero-mark{width:64px; height:64px; color:var(--ink); margin-bottom:var(--space-5);}
+h1.wordmark{font-size:clamp(52px,9vw,96px); line-height:.95;}
+.statement{
+  font-family:var(--font-display); font-style:italic; font-weight:440;
+  font-size:clamp(22px,3vw,30px); color:var(--ink); margin-top:var(--space-5); max-width:640px;
+}
+.promise{color:var(--ink-soft); font-size:18px; margin-top:var(--space-2);}
+.chips{display:flex; flex-wrap:wrap; gap:var(--space-2); margin-top:var(--space-6);}
+.chip{
+  font-family:var(--font-mono); font-size:12px; letter-spacing:.03em;
+  padding:7px 14px; border-radius:var(--radius-full); border:1px solid var(--line); color:var(--ink-soft);
+}
+
+/* pipeline tracker */
+.pipeline{display:flex; align-items:center; gap:0; margin-top:var(--space-8); overflow-x:auto;}
+.pipeline a{
+  display:flex; align-items:center; gap:8px; text-decoration:none; color:var(--ink-soft);
+  font-family:var(--font-mono); font-size:12px; white-space:nowrap; padding:8px 0;
+  transition:color var(--dur-standard) var(--ease-calm);
+}
+.pipeline a:hover{color:var(--ink);}
+.pipeline a .n{color:var(--spark);}
+.pipeline .arrow{color:var(--line); margin:0 14px; font-size:14px;}
+
+/* ============ SECTION SHELL ============ */
+section{padding:var(--space-9) 0; border-top:1px solid var(--line);}
+.section-head{display:flex; justify-content:space-between; align-items:flex-end; gap:var(--space-5); margin-bottom:var(--space-7); flex-wrap:wrap;}
+.section-head h2{font-size:clamp(30px,4vw,42px);}
+.section-num{font-family:var(--font-mono); font-size:12px; color:var(--spark); letter-spacing:.08em;}
+
+/* ============ BRAND SECTION ============ */
+.foundation-grid{display:grid; grid-template-columns:1fr 1fr; gap:var(--space-7);}
+@media (max-width:760px){ .foundation-grid{grid-template-columns:1fr;} }
+.pull{
+  font-family:var(--font-display); font-size:24px; line-height:1.35; font-weight:440;
+}
+.pull .label{display:block; font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); letter-spacing:.1em; text-transform:uppercase; margin-bottom:10px;}
+
+.checklist{list-style:none; padding:0; margin:var(--space-6) 0 0; display:grid; grid-template-columns:1fr 1fr; gap:var(--space-3);}
+@media (max-width:520px){ .checklist{grid-template-columns:1fr;} }
+.checklist li{display:flex; align-items:center; gap:10px; font-size:15px;}
+.checklist svg{width:16px; height:16px; color:var(--spark); flex-shrink:0;}
+
+.refs{display:grid; grid-template-columns:1fr 1fr; gap:var(--space-6); margin-top:var(--space-8);}
+@media (max-width:640px){ .refs{grid-template-columns:1fr;} }
+.ref-group .eyebrow{margin-bottom:var(--space-4);}
+.ref-row{display:flex; justify-content:space-between; align-items:baseline; padding:14px 0; border-top:1px solid var(--line);}
+.ref-row:last-child{border-bottom:1px solid var(--line);}
+.ref-name{font-family:var(--font-display); font-size:18px;}
+.ref-note{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); text-align:right;}
+
+.synth{
+  margin-top:var(--space-8); padding-top:var(--space-6); border-top:1px solid var(--line);
+  font-family:var(--font-display); font-style:italic; font-size:20px; color:var(--ink-soft); max-width:560px;
+}
+
+/* ============ TOKENS SECTION ============ */
+.tok-block{margin-bottom:var(--space-8);}
+.tok-block:last-child{margin-bottom:0;}
+.tok-label{font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:var(--space-4);}
+
+.swatches{display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-3);}
+@media (max-width:720px){ .swatches{grid-template-columns:repeat(2,1fr);} }
+.swatch{border:1px solid var(--line); border-radius:var(--radius-md); overflow:hidden;}
+.swatch-fill{height:76px;}
+.swatch-meta{padding:10px 12px; background:var(--paper);}
+.swatch-meta .name{font-size:13px; font-weight:600;}
+.swatch-meta .hex{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft);}
+.swatch-meta .use{font-size:11px; color:var(--ink-soft); margin-top:3px;}
+
+.type-spec{border:1px solid var(--line); border-radius:var(--radius-lg); padding:var(--space-6); margin-bottom:var(--space-4); background:var(--paper);}
+.type-spec .role{display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-4);}
+.type-spec .role .rn{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.08em;}
+.spec-display{font-family:var(--font-display); font-size:clamp(32px,5vw,52px); line-height:1.1;}
+.spec-display.i{font-style:italic; font-weight:440; font-size:clamp(20px,3vw,28px); color:var(--ink-soft); margin-top:6px;}
+.spec-body{font-size:16px; max-width:520px; color:var(--ink-soft);}
+.spec-mono{font-family:var(--font-mono); font-size:13px; letter-spacing:.03em; color:var(--ink-soft);}
+
+.scale-rows{display:flex; flex-direction:column; gap:10px;}
+.scale-row{display:flex; align-items:center; gap:var(--space-4);}
+.scale-row .bar{height:10px; background:var(--spark); border-radius:2px;}
+.scale-row .lbl{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); width:74px; flex-shrink:0;}
+
+.rad-shadow{display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-4);}
+@media (max-width:720px){ .rad-shadow{grid-template-columns:repeat(2,1fr);} }
+.rs-box{aspect-ratio:1; background:var(--paper); border:1px solid var(--line); display:flex; align-items:flex-end; padding:10px;}
+.rs-box .lbl{font-family:var(--font-mono); font-size:10px; color:var(--ink-soft);}
+
+/* ============ COMPONENTS SECTION ============ */
+.comp-grid{display:grid; grid-template-columns:1fr 1fr; gap:var(--space-5);}
+@media (max-width:720px){ .comp-grid{grid-template-columns:1fr;} }
+.comp-card{border:1px solid var(--line); border-radius:var(--radius-lg); padding:var(--space-5); background:var(--paper);}
+.comp-card .lbl{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.08em; margin-bottom:var(--space-4); display:block;}
+
+.btn-row{display:flex; flex-wrap:wrap; gap:10px;}
+.btn{
+  font-family:var(--font-body); font-size:14px; font-weight:600; border:none; cursor:pointer;
+  padding:11px 20px; border-radius:var(--radius-full);
+  transition:transform var(--dur-standard) var(--ease-calm), box-shadow var(--dur-standard) var(--ease-calm), background var(--dur-standard) var(--ease-calm);
+}
+.btn--primary{background:var(--spark); color:#241705; box-shadow:var(--shadow-rest);}
+.btn--primary:hover{transform:translateY(-2px); box-shadow:var(--shadow-raised);}
+.btn--secondary{background:transparent; border:1px solid var(--line); color:var(--ink);}
+.btn--secondary:hover{border-color:var(--ink);}
+.btn--ghost{background:transparent; color:var(--ink-soft); padding-left:4px; padding-right:4px;}
+.btn--ghost:hover{color:var(--ink);}
+
+.field{margin-top:var(--space-4);}
+.field input{
+  width:100%; font-family:var(--font-body); font-size:15px; color:var(--ink);
+  background:var(--paper-deep); border:1px solid var(--line); border-radius:var(--radius-md);
+  padding:12px 14px; outline:none; transition:border-color var(--dur-standard) var(--ease-calm), box-shadow var(--dur-standard) var(--ease-calm);
+}
+.field input:focus{border-color:var(--focus); box-shadow:0 0 0 3px rgba(63,92,104,.15);}
+.field input::placeholder{color:var(--ink-soft);}
+
+.thought-card{
+  background:var(--paper-deep); border-radius:var(--radius-lg); padding:var(--space-5);
+  box-shadow:var(--shadow-rest); transition:transform var(--dur-standard) var(--ease-calm), box-shadow var(--dur-standard) var(--ease-calm);
+}
+.thought-card:hover{transform:translateY(-3px); box-shadow:var(--shadow-raised);}
+.thought-card .ts{font-family:var(--font-mono); font-size:10px; color:var(--ink-soft); letter-spacing:.05em;}
+.thought-card p{margin:10px 0 14px; font-family:var(--font-display); font-size:17px; font-style:italic; font-weight:440;}
+.tag-row{display:flex; gap:8px;}
+.chip-tag{font-family:var(--font-mono); font-size:10px; padding:4px 10px; border-radius:var(--radius-full); background:var(--paper); border:1px solid var(--line); color:var(--ink-soft);}
+
+.toggle-row{display:flex; align-items:center; gap:12px; margin-top:var(--space-4);}
+.toggle{width:38px; height:22px; border-radius:var(--radius-full); background:var(--line); position:relative; cursor:pointer; transition:background var(--dur-standard) var(--ease-calm);}
+.toggle::after{content:''; position:absolute; width:16px; height:16px; background:var(--paper); border-radius:50%; top:3px; left:3px; transition:transform var(--dur-standard) var(--ease-calm);}
+.toggle.on{background:var(--spark);}
+.toggle.on::after{transform:translateX(16px);}
+
+.canvas-mini{
+  position:relative; height:150px; border-radius:var(--radius-md);
+  background-image:radial-gradient(var(--line) 1px, transparent 1px);
+  background-size:16px 16px; overflow:hidden; border:1px solid var(--line);
+}
+.node{position:absolute; padding:6px 10px; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius-sm); font-family:var(--font-mono); font-size:10px; box-shadow:var(--shadow-rest); animation:breathe 3.6s var(--ease-ambient) infinite;}
+.node.n1{top:18px; left:14px; animation-delay:0s;}
+.node.n2{top:70px; left:110px; animation-delay:.6s;}
+.node.n3{top:22px; left:200px; animation-delay:1.2s;}
+.node.n4{top:96px; left:20px; animation-delay:1.8s;}
+@keyframes breathe{0%,100%{opacity:.65; transform:scale(.98);} 50%{opacity:1; transform:scale(1);}}
+
+/* ============ MOTION SECTION ============ */
+.motion-grid{display:grid; grid-template-columns:1fr 1fr; gap:var(--space-7);}
+@media (max-width:760px){ .motion-grid{grid-template-columns:1fr;} }
+.principles{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:var(--space-5);}
+.principles li{padding-left:var(--space-5); border-left:2px solid var(--spark);}
+.principles .pn{font-family:var(--font-mono); font-size:11px; color:var(--spark);}
+.principles h3{font-size:17px; font-weight:600; font-family:var(--font-body); margin:4px 0 4px;}
+.principles p{margin:0; color:var(--ink-soft); font-size:14px;}
+
+.curve-box{border:1px solid var(--line); border-radius:var(--radius-lg); padding:var(--space-5); background:var(--paper); margin-bottom:var(--space-4);}
+.curve-box svg{width:100%; height:auto;}
+.curve-box .cap{display:flex; justify-content:space-between; margin-top:8px; font-family:var(--font-mono); font-size:11px; color:var(--ink-soft);}
+
+.demo-box{border:1px solid var(--line); border-radius:var(--radius-lg); padding:var(--space-6); text-align:center; background:var(--paper); position:relative; overflow:visible;}
+.demo-box p{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); margin-top:var(--space-4);}
+#sparkBtn{position:relative;}
+.spark-particle{position:absolute; width:6px; height:6px; background:var(--spark); border-radius:50%; pointer-events:none; top:50%; left:50%; opacity:0;}
+
+/* ============ LOGO SECTION ============ */
+.mark-stage{
+  display:flex; align-items:center; justify-content:center; padding:var(--space-9) 0;
+  border:1px solid var(--line); border-radius:var(--radius-lg); position:relative; background:var(--paper);
+}
+.mark-stage svg{width:180px; height:180px; color:var(--ink);}
+.callouts{display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-4); margin-top:var(--space-5);}
+@media (max-width:720px){ .callouts{grid-template-columns:repeat(2,1fr);} }
+.callout{border-top:2px solid var(--spark); padding-top:12px;}
+.callout .cn{font-family:var(--font-mono); font-size:11px; color:var(--spark);}
+.callout h4{font-family:var(--font-body); font-size:14px; font-weight:600; margin:4px 0 4px;}
+.callout p{margin:0; font-size:12.5px; color:var(--ink-soft); line-height:1.5;}
+
+.variant-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-3); margin-top:var(--space-7);}
+@media (max-width:720px){ .variant-grid{grid-template-columns:repeat(2,1fr);} }
+.variant-tile{border-radius:var(--radius-md); height:120px; display:flex; align-items:center; justify-content:center; border:1px solid var(--line);}
+.variant-tile svg{width:52px; height:52px;}
+.variant-tile.light{background:var(--paper);} .variant-tile.light svg{color:var(--ink);}
+.variant-tile.dark{background:var(--night); border-color:var(--night-line);} .variant-tile.dark svg{color:var(--paper);}
+.variant-tile.mono-ink{background:var(--ink);} .variant-tile.mono-ink svg{color:var(--paper);}
+.variant-tile.mono-paper{background:var(--paper-deep);} .variant-tile.mono-paper svg{color:var(--ink);}
+.variant-caption{font-family:var(--font-mono); font-size:10px; color:var(--ink-soft); text-align:center; margin-top:8px;}
+
+.lockup{display:flex; align-items:center; gap:16px; justify-content:center; padding:var(--space-8) 0; border:1px solid var(--line); border-radius:var(--radius-lg); margin-top:var(--space-7); background:var(--paper);}
+.lockup svg{width:48px; height:48px; color:var(--ink);}
+.lockup .word{font-family:var(--font-display); font-size:38px; font-weight:500;}
+
+.donts{display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-3); margin-top:var(--space-7);}
+@media (max-width:720px){ .donts{grid-template-columns:repeat(2,1fr);} }
+.dont-tile{border:1px solid var(--line); border-radius:var(--radius-md); padding:var(--space-4); text-align:center;}
+.dont-tile svg{width:44px; height:44px; margin:0 auto 10px; color:var(--ink-soft);}
+.dont-tile p{margin:0; font-size:11.5px; color:var(--ink-soft);}
+
+footer{padding:var(--space-7) 0 var(--space-9); font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ MARK SYMBOL (defined once, reused everywhere) ============ -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="nookMark" viewBox="0 0 120 120">
+      <path class="m-line" d="M34,38 L34,86" fill="none" stroke="currentColor" stroke-width="11" stroke-linecap="round"/>
+      <path class="m-line" d="M34,38 Q57,64 80,86" fill="none" stroke="currentColor" stroke-width="11" stroke-linecap="round"/>
+      <path class="m-line" d="M80,38 L80,58" fill="none" stroke="currentColor" stroke-width="11" stroke-linecap="round"/>
+      <circle class="m-line" cx="80" cy="75" r="16" fill="none" stroke="currentColor" stroke-width="11" stroke-linecap="round" pathLength="100" stroke-dasharray="80 20" stroke-dashoffset="27"/>
+      <path class="m-spark" d="M100,17 C101,23 104,26 110,27 C104,28 101,31 100,37 C99,31 96,28 90,27 C96,26 99,23 100,17 Z" fill="var(--spark)"/>
+    </symbol>
+  </defs>
+</svg>
+
+<nav class="top">
+  <div class="nav-id">
+    <svg><use href="#nookMark"/></svg>
+    <span>NOOK / BRAND FOUNDATION / V1</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#brand">Brand</a></li>
+    <li><a href="#tokens">Tokens</a></li>
+    <li><a href="#components">Components</a></li>
+    <li><a href="#motion">Motion</a></li>
+    <li><a href="#logo">Logo</a></li>
+  </ul>
+</nav>
+
+<div class="wrap">
+
+  <header class="hero">
+    <svg class="hero-mark"><use href="#nookMark"/></svg>
+    <div class="eyebrow">A quiet place where thoughts become clearer</div>
+    <h1 class="wordmark">nook</h1>
+    <p class="statement">Capture first. <span class="italic">Find clarity next.</span></p>
+    <p class="promise">A quiet place to think.</p>
+    <div class="chips">
+      <span class="chip">Calm</span><span class="chip">Curious</span><span class="chip">Human</span>
+      <span class="chip">Thoughtful</span><span class="chip">Imperfect</span><span class="chip">Warm</span>
+    </div>
+
+    <nav class="pipeline">
+      <a href="#brand"><span class="n">01</span> Brand</a><span class="arrow">→</span>
+      <a href="#tokens"><span class="n">02</span> Tokens</a><span class="arrow">→</span>
+      <a href="#components"><span class="n">03</span> Components</a><span class="arrow">→</span>
+      <a href="#motion"><span class="n">04</span> Motion</a><span class="arrow">→</span>
+      <a href="#logo"><span class="n">05</span> Logo</a>
+    </nav>
+  </header>
+
+  <!-- ============ BRAND ============ -->
+  <section id="brand">
+    <div class="section-head">
+      <h2>Foundation</h2>
+      <span class="section-num">01 / BRAND</span>
+    </div>
+
+    <div class="foundation-grid">
+      <p class="pull"><span class="label">Brand statement</span>Capture first. Find clarity next.</p>
+      <p class="pull"><span class="label">Product promise</span>A quiet place to think.</p>
+    </div>
+
+    <div class="tok-label" style="margin-top:var(--space-8)">What Nook is</div>
+    <ul class="checklist">
+      <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Thinking workspace</li>
+      <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Reflection companion</li>
+      <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Spatial canvas</li>
+      <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Calm environment</li>
+    </ul>
+
+    <div class="refs">
+      <div class="ref-group">
+        <div class="eyebrow">Visual language</div>
+        <div class="ref-row"><span class="ref-name">Excalidraw</span><span class="ref-note">playful imperfection</span></div>
+        <div class="ref-row"><span class="ref-name">Arc Browser</span><span class="ref-note">calm craftsmanship</span></div>
+        <div class="ref-row"><span class="ref-name">Linear</span><span class="ref-note">clarity</span></div>
+        <div class="ref-row"><span class="ref-name">Notion</span><span class="ref-note">breathing room</span></div>
+      </div>
+      <div class="ref-group">
+        <div class="eyebrow">Emotional language</div>
+        <div class="ref-row"><span class="ref-name">Muji</span><span class="ref-note">unhurried honesty</span></div>
+        <div class="ref-row"><span class="ref-name">Bear Notes</span><span class="ref-note">quiet confidence</span></div>
+        <div class="ref-row"><span class="ref-name">Craft</span><span class="ref-note">considered warmth</span></div>
+        <div class="ref-row"><span class="ref-name">Readwise Reader</span><span class="ref-note">focused attention</span></div>
+      </div>
+    </div>
+
+    <p class="synth">None of them lean on a clever logo. They lean on consistency. So will we.</p>
+  </section>
+
+  <!-- ============ TOKENS ============ -->
+  <section id="tokens">
+    <div class="section-head">
+      <h2>Design tokens</h2>
+      <span class="section-num">02 / TOKENS</span>
+    </div>
+
+    <div class="tok-block">
+      <div class="tok-label">Color</div>
+      <div class="swatches">
+        <div class="swatch"><div class="swatch-fill" style="background:var(--paper)"></div><div class="swatch-meta"><div class="name">Paper</div><div class="hex">#EFEDE6</div><div class="use">Primary surface</div></div></div>
+        <div class="swatch"><div class="swatch-fill" style="background:var(--paper-deep)"></div><div class="swatch-meta"><div class="name">Paper Deep</div><div class="hex">#E3DECF</div><div class="use">Cards, fields</div></div></div>
+        <div class="swatch"><div class="swatch-fill" style="background:var(--ink)"></div><div class="swatch-meta"><div class="name">Ink</div><div class="hex">#221F18</div><div class="use">Primary text</div></div></div>
+        <div class="swatch"><div class="swatch-fill" style="background:var(--ink-soft)"></div><div class="swatch-meta"><div class="name">Ink Soft</div><div class="hex">#6E6858</div><div class="use">Secondary text</div></div></div>
+        <div class="swatch"><div class="swatch-fill" style="background:var(--line)"></div><div class="swatch-meta"><div class="name">Line</div><div class="hex">#D6D0BF</div><div class="use">Borders, rules</div></div></div>
+        <div class="swatch"><div class="swatch-fill" style="background:var(--spark)"></div><div class="swatch-meta"><div class="name">Spark</div><div class="hex">#C6813C</div><div class="use">Primary accent</div></div></div>
+        <div class="swatch"><div class="swatch-fill" style="background:var(--focus)"></div><div class="swatch-meta"><div class="name">Focus</div><div class="hex">#3F5C68</div><div class="use">Interactive, focus</div></div></div>
+        <div class="swatch"><div class="swatch-fill" style="background:var(--night)"></div><div class="swatch-meta"><div class="name">Night</div><div class="hex">#1A170F</div><div class="use">Dark surface</div></div></div>
+      </div>
+    </div>
+
+    <div class="tok-block">
+      <div class="tok-label">Typography</div>
+      <div class="type-spec">
+        <div class="role"><span class="rn">Display — Fraunces</span><span class="spec-mono">wght 440–560</span></div>
+        <div class="spec-display">Find clarity next</div>
+        <div class="spec-display i">find clarity next</div>
+      </div>
+      <div class="type-spec">
+        <div class="role"><span class="rn">Body — Instrument Sans</span><span class="spec-mono">wght 400–600</span></div>
+        <p class="spec-body">A quiet place to think. Nook holds your half-formed thoughts without asking them to be finished — capture first, arrange later, understand whenever you're ready.</p>
+      </div>
+      <div class="type-spec">
+        <div class="role"><span class="rn">Mono — JetBrains Mono</span><span class="spec-mono">wght 400–500</span></div>
+        <div class="spec-mono">NOOK / CAPTURED · 09:41 / CONFIDENCE 0.82 / TAG: idea</div>
+      </div>
+    </div>
+
+    <div class="tok-block">
+      <div class="tok-label">Spacing</div>
+      <div class="scale-rows">
+        <div class="scale-row"><span class="lbl">space-1 · 4</span><div class="bar" style="width:4px"></div></div>
+        <div class="scale-row"><span class="lbl">space-2 · 8</span><div class="bar" style="width:8px"></div></div>
+        <div class="scale-row"><span class="lbl">space-3 · 12</span><div class="bar" style="width:12px"></div></div>
+        <div class="scale-row"><span class="lbl">space-4 · 16</span><div class="bar" style="width:16px"></div></div>
+        <div class="scale-row"><span class="lbl">space-5 · 24</span><div class="bar" style="width:24px"></div></div>
+        <div class="scale-row"><span class="lbl">space-6 · 32</span><div class="bar" style="width:32px"></div></div>
+        <div class="scale-row"><span class="lbl">space-7 · 48</span><div class="bar" style="width:48px"></div></div>
+        <div class="scale-row"><span class="lbl">space-8 · 64</span><div class="bar" style="width:64px"></div></div>
+        <div class="scale-row"><span class="lbl">space-9 · 96</span><div class="bar" style="width:96px"></div></div>
+      </div>
+    </div>
+
+    <div class="tok-block">
+      <div class="tok-label">Radius &amp; elevation</div>
+      <div class="rad-shadow">
+        <div class="rs-box" style="border-radius:var(--radius-sm)"><span class="lbl">radius-sm · 6</span></div>
+        <div class="rs-box" style="border-radius:var(--radius-md)"><span class="lbl">radius-md · 12</span></div>
+        <div class="rs-box" style="border-radius:var(--radius-lg)"><span class="lbl">radius-lg · 22</span></div>
+        <div class="rs-box" style="border-radius:var(--radius-full)"><span class="lbl">radius-full</span></div>
+        <div class="rs-box" style="box-shadow:var(--shadow-rest)"><span class="lbl">shadow-rest</span></div>
+        <div class="rs-box" style="box-shadow:var(--shadow-raised)"><span class="lbl">shadow-raised</span></div>
+        <div class="rs-box" style="box-shadow:var(--shadow-float)"><span class="lbl">shadow-float</span></div>
+        <div class="rs-box" style="border-style:dashed"><span class="lbl">line · 1px</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ COMPONENTS ============ -->
+  <section id="components">
+    <div class="section-head">
+      <h2>Components</h2>
+      <span class="section-num">03 / COMPONENTS</span>
+    </div>
+
+    <div class="comp-grid">
+      <div class="comp-card">
+        <span class="lbl">Buttons</span>
+        <div class="btn-row">
+          <button class="btn btn--primary">Capture</button>
+          <button class="btn btn--secondary">Not now</button>
+          <button class="btn btn--ghost">Skip</button>
+        </div>
+      </div>
+
+      <div class="comp-card">
+        <span class="lbl">Capture field</span>
+        <div class="field"><input type="text" placeholder="Capture a thought…"></div>
+        <div class="toggle-row"><div class="toggle on"></div><span class="spec-mono" style="font-size:12px">Auto-tag on</span></div>
+      </div>
+
+      <div class="comp-card">
+        <span class="lbl">Thought card</span>
+        <div class="thought-card">
+          <div class="ts">09:41 · CAPTURED</div>
+          <p>Maybe the onboarding shouldn't ask anything at all.</p>
+          <div class="tag-row"><span class="chip-tag">idea</span><span class="chip-tag">product</span></div>
+        </div>
+      </div>
+
+      <div class="comp-card">
+        <span class="lbl">Spatial canvas</span>
+        <div class="canvas-mini">
+          <div class="node n1">onboarding</div>
+          <div class="node n2">quiet by default</div>
+          <div class="node n3">no forced fields</div>
+          <div class="node n4">capture → cluster</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MOTION ============ -->
+  <section id="motion">
+    <div class="section-head">
+      <h2>Motion</h2>
+      <span class="section-num">04 / MOTION</span>
+    </div>
+
+    <div class="motion-grid">
+      <ul class="principles">
+        <li><span class="pn">01</span><h3>Calm, not snappy</h3><p>Everything eases out gently. Nothing arrives faster than the eye can follow.</p></li>
+        <li><span class="pn">02</span><h3>Breathe, don't bounce</h3><p>No spring, no overshoot. Motion settles the way a thought settles.</p></li>
+        <li><span class="pn">03</span><h3>Motion means something</h3><p>Every animation marks a real state change — captured, connected, cleared.</p></li>
+        <li><span class="pn">04</span><h3>Stillness is allowed</h3><p>Reduced-motion is respected everywhere. Quiet is a valid default.</p></li>
+      </ul>
+
+      <div>
+        <div class="curve-box">
+          <svg viewBox="0 0 260 120">
+            <line x1="20" y1="100" x2="240" y2="100" stroke="var(--line)" stroke-width="1"/>
+            <line x1="20" y1="10" x2="20" y2="100" stroke="var(--line)" stroke-width="1"/>
+            <path d="M20,100 C64,100 90,16 240,16" fill="none" stroke="var(--spark)" stroke-width="2.4"/>
+            <path d="M20,100 C90,100 150,16 240,16" fill="none" stroke="var(--line)" stroke-width="2" stroke-dasharray="3 4"/>
+          </svg>
+          <div class="cap"><span>ease-calm · (.22, 1, .36, 1)</span><span style="color:var(--ink-soft)">vs. default ease</span></div>
+        </div>
+
+        <div class="demo-box">
+          <button class="btn btn--primary" id="sparkBtn">Capture</button>
+          <p>click to capture — hover the cards above to feel the lift</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LOGO ============ -->
+  <section id="logo">
+    <div class="section-head">
+      <h2>Logo system</h2>
+      <span class="section-num">05 / LOGO</span>
+    </div>
+
+    <div class="mark-stage">
+      <svg><use href="#nookMark"/></svg>
+    </div>
+
+    <div class="callouts">
+      <div class="callout"><span class="cn">01</span><h4>Custom N</h4><p>A hand-set N, not a typeface glyph — the diagonal bows very slightly rather than running straight.</p></div>
+      <div class="callout"><span class="cn">02</span><h4>Slightly open O</h4><p>The right stroke resolves into a ring that never fully closes — a nook is a space you can still enter.</p></div>
+      <div class="callout"><span class="cn">03</span><h4>Tiny spark</h4><p>A small, detached mark above the O. The moment a thought becomes clear.</p></div>
+      <div class="callout"><span class="cn">04</span><h4>Subtle asymmetry</h4><p>Unequal stroke lengths and an off-axis spark keep the mark from feeling manufactured.</p></div>
+    </div>
+
+    <div class="tok-label" style="margin-top:var(--space-8)">Variants</div>
+    <div class="variant-grid">
+      <div><div class="variant-tile light"><svg><use href="#nookMark"/></svg></div><div class="variant-caption">On paper</div></div>
+      <div><div class="variant-tile dark"><svg><use href="#nookMark"/></svg></div><div class="variant-caption">On night</div></div>
+      <div><div class="variant-tile mono-ink"><svg style="color:var(--paper)"><use href="#nookMark"/></svg></div><div class="variant-caption">Mono, on ink</div></div>
+      <div><div class="variant-tile mono-paper"><svg style="color:var(--ink)"><use href="#nookMark"/></svg></div><div class="variant-caption">Mono, on paper</div></div>
+    </div>
+
+    <div class="tok-label" style="margin-top:var(--space-8)">Lockup</div>
+    <div class="lockup">
+      <svg><use href="#nookMark"/></svg>
+      <span class="word">nook</span>
+    </div>
+
+    <div class="tok-label" style="margin-top:var(--space-8)">Don't</div>
+    <div class="donts">
+      <div class="dont-tile"><svg style="transform:scaleX(1.6)"><use href="#nookMark"/></svg><p>Stretch or distort the mark</p></div>
+      <div class="dont-tile"><svg style="filter:hue-rotate(160deg)"><use href="#nookMark"/></svg><p>Recolor the spark</p></div>
+      <div class="dont-tile"><svg><circle cx="60" cy="60" r="50" fill="none" stroke="currentColor" stroke-width="11"/></svg><p>Close the O into a perfect ring</p></div>
+      <div class="dont-tile"><svg style="transform:scaleX(-1)"><use href="#nookMark"/></svg><p>Mirror it into perfect symmetry</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>NOOK — BRAND FOUNDATION</span>
+    <span>V1 · CONSISTENCY OVER DECORATION</span>
+  </footer>
+</div>
+
+<script>
+// active nav highlighting
+const links = document.querySelectorAll('.nav-links a');
+const sections = document.querySelectorAll('section');
+const obs = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      links.forEach(l=>l.classList.remove('active'));
+      const match = document.querySelector('.nav-links a[href="#'+e.target.id+'"]');
+      if(match) match.classList.add('active');
+    }
+  });
+},{ rootMargin:'-40% 0px -50% 0px' });
+sections.forEach(s=>obs.observe(s));
+
+// toggle demo
+document.querySelectorAll('.toggle').forEach(t=>{
+  t.addEventListener('click', ()=>t.classList.toggle('on'));
+});
+
+// spark burst on capture click
+const sparkBtn = document.getElementById('sparkBtn');
+if(sparkBtn){
+  sparkBtn.addEventListener('click', ()=>{
+    for(let i=0;i<6;i++){
+      const p = document.createElement('span');
+      p.className = 'spark-particle';
+      sparkBtn.appendChild(p);
+      const angle = (Math.PI*2/6)*i;
+      const dist = 34 + Math.random()*14;
+      const dx = Math.cos(angle)*dist, dy = Math.sin(angle)*dist;
+      p.animate([
+        { transform:'translate(-50%,-50%) scale(0.4)', opacity:1 },
+        { transform:`translate(${dx-3}px, ${dy-3}px) scale(1)`, opacity:0 }
+      ], { duration:560, easing:'cubic-bezier(.22,1,.36,1)' });
+      setTimeout(()=>p.remove(), 580);
+    }
+  });
+}
+</script>
+</body>
+</html>

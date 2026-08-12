@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nook — Brand Guidelines</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,440;1,9..144,560&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EFEDE6; --paper-deep:#E3DECF; --ink:#221F18; --ink-soft:#6E6858;
+  --line:#D6D0BF; --spark:#C6813C; --focus:#3F5C68; --night:#1A170F;
+  --radius-sm:6px; --radius-md:12px; --radius-lg:22px; --radius-full:999px;
+  --space-2:8px; --space-3:12px; --space-4:16px; --space-5:24px; --space-6:32px; --space-7:48px; --space-8:64px; --space-9:88px;
+  --shadow-rest:0 1px 2px rgba(34,31,24,.06); --shadow-raised:0 8px 20px rgba(34,31,24,.09);
+  --ease-calm:cubic-bezier(.22,1,.36,1);
+  --font-display:'Fraunces', serif; --font-body:'Instrument Sans', sans-serif; --font-mono:'JetBrains Mono', monospace;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth; scroll-padding-top:70px;}
+body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body); font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;}
+.wrap{max-width:820px; margin:0 auto; padding:0 var(--space-6);}
+@media (max-width:600px){.wrap{padding:0 var(--space-4);}}
+h1,h2,h3{font-family:var(--font-display); font-weight:560; margin:0; letter-spacing:-.01em;}
+.eyebrow{font-family:var(--font-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft);}
+
+nav.top{position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between; padding:14px var(--space-6); background:rgba(239,237,230,.88); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);}
+.nav-id{display:flex; align-items:center; gap:9px;}
+.nav-id svg{width:20px; height:20px; color:var(--ink);}
+.nav-id span{font-family:var(--font-mono); font-size:11px; letter-spacing:.05em; color:var(--ink-soft);}
+.nav-links{display:flex; gap:14px; list-style:none; margin:0; padding:0; overflow-x:auto;}
+.nav-links a{font-family:var(--font-mono); font-size:10.5px; letter-spacing:.03em; text-transform:uppercase; text-decoration:none; color:var(--ink-soft); white-space:nowrap; border-bottom:1px solid transparent; padding-bottom:2px; transition:color .2s var(--ease-calm);}
+.nav-links a.active, .nav-links a:hover{color:var(--ink); border-color:var(--spark);}
+
+header.cover{padding:var(--space-9) 0 var(--space-8);}
+header.cover svg{width:46px; height:46px; color:var(--ink); margin-bottom:var(--space-5);}
+h1.title{font-size:clamp(38px,6vw,58px); line-height:1;}
+.cover-sub{font-family:var(--font-display); font-style:italic; font-size:20px; color:var(--ink-soft); margin-top:10px;}
+
+section{padding:var(--space-8) 0; border-top:1px solid var(--line);}
+.shead{display:flex; align-items:baseline; gap:14px; margin-bottom:var(--space-6);}
+.shead .num{font-family:var(--font-mono); font-size:12px; color:var(--spark);}
+.shead h2{font-size:clamp(26px,3.6vw,34px);}
+
+/* Mission */
+.statement{font-family:var(--font-display); font-style:italic; font-weight:440; font-size:24px; margin:0;}
+.promise{color:var(--ink-soft); margin-top:6px;}
+.mission-copy{max-width:600px; margin-top:var(--space-5); color:var(--ink-soft);}
+.isisnt{display:grid; grid-template-columns:1fr 1fr; gap:var(--space-6); margin-top:var(--space-6);}
+@media (max-width:560px){.isisnt{grid-template-columns:1fr;}}
+.isisnt .lbl{font-family:var(--font-mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:10px;}
+.isisnt ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px;}
+.isisnt li{font-size:14.5px; display:flex; gap:8px;}
+.isisnt li::before{content:'—'; color:var(--line);}
+.isisnt.is li::before{content:'✓'; color:var(--spark);}
+
+/* Personality */
+.traits{display:flex; flex-direction:column;}
+.trait{display:grid; grid-template-columns:140px 1fr; gap:var(--space-5); padding:16px 0; border-top:1px solid var(--line);}
+.trait:last-child{border-bottom:1px solid var(--line);}
+.trait h3{font-size:19px; font-weight:500; font-family:var(--font-body);}
+.trait p{margin:0; color:var(--ink-soft); font-size:14.5px;}
+@media (max-width:560px){.trait{grid-template-columns:1fr; gap:4px;}}
+
+/* Design Principles */
+.principle{padding:18px 0; border-top:1px solid var(--line); display:grid; grid-template-columns:32px 1fr; gap:14px;}
+.principle:last-child{border-bottom:1px solid var(--line);}
+.principle .pn{font-family:var(--font-mono); font-size:12px; color:var(--spark);}
+.principle h3{font-size:17px; font-weight:600; font-family:var(--font-body); margin:0 0 4px;}
+.principle p{margin:0; font-size:14px; color:var(--ink-soft);}
+.principle .src{font-family:var(--font-mono); font-size:10px; color:var(--ink-soft); margin-left:8px;}
+
+/* Voice */
+.voice-attrs{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:var(--space-6);}
+.voice-attrs span{font-family:var(--font-mono); font-size:11px; padding:6px 12px; border:1px solid var(--line); border-radius:var(--radius-full); color:var(--ink-soft);}
+.dd{display:grid; grid-template-columns:1fr 1fr; border:1px solid var(--line); border-radius:var(--radius-md); overflow:hidden; margin-bottom:10px;}
+@media (max-width:560px){.dd{grid-template-columns:1fr;}}
+.dd>div{padding:14px 16px;}
+.dd .do{background:var(--paper);}
+.dd .dont{background:var(--paper-deep); border-left:1px solid var(--line);}
+@media (max-width:560px){.dd .dont{border-left:none; border-top:1px solid var(--line);}}
+.dd .k{font-family:var(--font-mono); font-size:9.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); display:block; margin-bottom:5px;}
+.dd .do .k{color:var(--spark);}
+.dd p{margin:0; font-size:14px;}
+.dd-context{font-family:var(--font-mono); font-size:10.5px; color:var(--ink-soft); margin:18px 0 6px;}
+
+/* Color */
+.swatches{display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-3);}
+@media (max-width:600px){.swatches{grid-template-columns:repeat(2,1fr);}}
+.swatch{border:1px solid var(--line); border-radius:var(--radius-md); overflow:hidden;}
+.swatch-fill{height:64px;}
+.swatch-meta{padding:9px 11px; background:var(--paper);}
+.swatch-meta .name{font-size:12.5px; font-weight:600;}
+.swatch-meta .hex{font-family:var(--font-mono); font-size:10.5px; color:var(--ink-soft);}
+.color-phil{font-family:var(--font-display); font-style:italic; color:var(--ink-soft); font-size:16px; margin-top:var(--space-5); max-width:560px;}
+
+/* Motion */
+.motion-grid{display:grid; grid-template-columns:1fr 1fr; gap:var(--space-6);}
+@media (max-width:640px){.motion-grid{grid-template-columns:1fr;}}
+.principles-sm{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:16px;}
+.principles-sm li{padding-left:16px; border-left:2px solid var(--spark);}
+.principles-sm h3{font-size:15px; font-weight:600; font-family:var(--font-body); margin:0 0 3px;}
+.principles-sm p{margin:0; font-size:13px; color:var(--ink-soft);}
+.tok-table{width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:12px;}
+.tok-table td{padding:8px 0; border-top:1px solid var(--line); color:var(--ink-soft);}
+.tok-table td:first-child{color:var(--ink);}
+.hover-demo{margin-top:var(--space-4); padding:16px; background:var(--paper-deep); border-radius:var(--radius-md); font-size:13px; text-align:center; box-shadow:var(--shadow-rest); transition:transform .3s var(--ease-calm), box-shadow .3s var(--ease-calm); cursor:default;}
+.hover-demo:hover{transform:translateY(-3px); box-shadow:var(--shadow-raised);}
+
+/* Type */
+.type-row{display:flex; justify-content:space-between; align-items:baseline; border-top:1px solid var(--line); padding:16px 0;}
+.type-row:last-child{border-bottom:1px solid var(--line);}
+.type-row .role{font-family:var(--font-mono); font-size:10.5px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.08em; width:110px; flex-shrink:0;}
+.type-row .sample.display{font-family:var(--font-display); font-size:28px; font-weight:500;}
+.type-row .sample.body{font-family:var(--font-body); font-size:16px;}
+.type-row .sample.mono{font-family:var(--font-mono); font-size:13px;}
+
+/* Icons */
+.icon-principles{margin-bottom:var(--space-6); color:var(--ink-soft); font-size:14px; max-width:600px;}
+.icon-grid{display:grid; grid-template-columns:repeat(6,1fr); gap:var(--space-3);}
+@media (max-width:600px){.icon-grid{grid-template-columns:repeat(3,1fr);}}
+.icon-tile{border:1px solid var(--line); border-radius:var(--radius-md); padding:16px 8px; display:flex; flex-direction:column; align-items:center; gap:8px; background:var(--paper);}
+.icon-tile svg{width:24px; height:24px; color:var(--ink); stroke-width:1.75;}
+.icon-tile span{font-family:var(--font-mono); font-size:9.5px; color:var(--ink-soft);}
+
+footer{padding:var(--space-7) 0 var(--space-9); font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;}
+
+@media (prefers-reduced-motion:reduce){*{transition-duration:.001ms !important;}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+  <symbol id="nookMark" viewBox="0 0 120 120">
+    <path d="M34,38 L34,86" fill="none" stroke="currentColor" stroke-width="11" stroke-linecap="round"/>
+    <path d="M34,38 Q57,64 80,86" fill="none" stroke="currentColor" stroke-width="11" stroke-linecap="round"/>
+    <path d="M80,38 L80,58" fill="none" stroke="currentColor" stroke-width="11" stroke-linecap="round"/>
+    <circle cx="80" cy="75" r="16" fill="none" stroke="currentColor" stroke-width="11" stroke-linecap="round" pathLength="100" stroke-dasharray="80 20" stroke-dashoffset="27"/>
+    <path d="M100,17 C101,23 104,26 110,27 C104,28 101,31 100,37 C99,31 96,28 90,27 C96,26 99,23 100,17 Z" fill="var(--spark)"/>
+  </symbol>
+</defs></svg>
+
+<nav class="top">
+  <div class="nav-id"><svg><use href="#nookMark"/></svg><span>NOOK / GUIDELINES</span></div>
+  <ul class="nav-links">
+    <li><a href="#mission">Mission</a></li>
+    <li><a href="#personality">Personality</a></li>
+    <li><a href="#principles">Principles</a></li>
+    <li><a href="#voice">Voice</a></li>
+    <li><a href="#color">Color</a></li>
+    <li><a href="#motion">Motion</a></li>
+    <li><a href="#type">Type</a></li>
+    <li><a href="#icons">Icons</a></li>
+  </ul>
+</nav>
+
+<div class="wrap">
+  <header class="cover">
+    <svg><use href="#nookMark"/></svg>
+    <div class="eyebrow">Brand Guidelines · V1</div>
+    <h1 class="title">nook</h1>
+    <p class="cover-sub">A quiet place to think.</p>
+  </header>
+
+  <section id="mission">
+    <div class="shead"><span class="num">01</span><h2>Mission</h2></div>
+    <p class="statement">Capture first. Find clarity next.</p>
+    <p class="promise">A quiet place to think.</p>
+    <p class="mission-copy">Most tools ask you to organize before you understand. Nook does the opposite — get the thought down, let structure arrive later, on its own time. It exists for the five minutes before an idea is ready to be filed anywhere.</p>
+    <div class="isisnt">
+      <div>
+        <div class="lbl">Is</div>
+        <ul class="is">
+          <li>Thinking workspace</li>
+          <li>Reflection companion</li>
+          <li>Spatial canvas</li>
+          <li>Calm environment</li>
+        </ul>
+      </div>
+      <div>
+        <div class="lbl">Isn't</div>
+        <ul>
+          <li>A task manager</li>
+          <li>A note dump</li>
+          <li>A productivity score</li>
+          <li>A feed</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="personality">
+    <div class="shead"><span class="num">02</span><h2>Personality</h2></div>
+    <div class="traits">
+      <div class="trait"><h3>Calm</h3><p>Never demands urgency. Nothing blinks, counts down, or asks to be checked again.</p></div>
+      <div class="trait"><h3>Curious</h3><p>Asks one honest question at a time. Never interrogates.</p></div>
+      <div class="trait"><h3>Human</h3><p>Written and built like someone is actually on the other end, not a system.</p></div>
+      <div class="trait"><h3>Thoughtful</h3><p>Every default has a reason. Nothing is there because it was easy to build.</p></div>
+      <div class="trait"><h3>Imperfect</h3><p>Straight lines are for rulers. A little wobble means a person made this.</p></div>
+      <div class="trait"><h3>Warm</h3><p>Quiet doesn't mean cold. Closer to a good notebook than a good dashboard.</p></div>
+    </div>
+  </section>
+
+  <section id="principles">
+    <div class="shead"><span class="num">03</span><h2>Design Principles</h2></div>
+    <div class="principle"><span class="pn">01</span><div><h3>Breathing room over density <span class="src">— Notion</span></h3><p>Generous space is a feature. It is never empty space waiting to be filled.</p></div></div>
+    <div class="principle"><span class="pn">02</span><div><h3>Craft over polish <span class="src">— Arc</span></h3><p>A few considered details beat uniform shine spread everywhere evenly.</p></div></div>
+    <div class="principle"><span class="pn">03</span><div><h3>Clarity over cleverness <span class="src">— Linear</span></h3><p>If someone has to think about the interface, the interface has failed — not them.</p></div></div>
+    <div class="principle"><span class="pn">04</span><div><h3>Imperfect over engineered <span class="src">— Excalidraw</span></h3><p>A few degrees of asymmetry read as made. Perfect symmetry reads as manufactured.</p></div></div>
+    <div class="principle"><span class="pn">05</span><div><h3>Consistency over a clever logo</h3><p>None of the references above lean on their mark. They lean on the same few decisions, repeated everywhere.</p></div></div>
+  </section>
+
+  <section id="voice">
+    <div class="shead"><span class="num">04</span><h2>Voice</h2></div>
+    <div class="voice-attrs">
+      <span>Plain verbs</span><span>Sentence case</span><span>No exclamation marks</span><span>Second person</span><span>Never apologizes for what it never promised</span>
+    </div>
+
+    <div class="dd-context">Empty state</div>
+    <div class="dd"><div class="do"><span class="k">Do</span><p>Nothing captured yet. Start typing.</p></div><div class="dont"><span class="k">Don't</span><p>Oops! Your canvas is looking a little empty 👀</p></div></div>
+
+    <div class="dd-context">Error</div>
+    <div class="dd"><div class="do"><span class="k">Do</span><p>Couldn't save that thought. Try again.</p></div><div class="dont"><span class="k">Don't</span><p>Oh no! Something went wrong on our end!</p></div></div>
+
+    <div class="dd-context">Capture placeholder</div>
+    <div class="dd"><div class="do"><span class="k">Do</span><p>Capture a thought…</p></div><div class="dont"><span class="k">Don't</span><p>What's on your mind today?! ✨</p></div></div>
+
+    <div class="dd-context">Onboarding</div>
+    <div class="dd"><div class="do"><span class="k">Do</span><p>Write first. Sort later.</p></div><div class="dont"><span class="k">Don't</span><p>Welcome aboard! Let's supercharge your thinking 🚀</p></div></div>
+  </section>
+
+  <section id="color">
+    <div class="shead"><span class="num">05</span><h2>Color Direction</h2></div>
+    <div class="swatches">
+      <div class="swatch"><div class="swatch-fill" style="background:#EFEDE6"></div><div class="swatch-meta"><div class="name">Paper</div><div class="hex">#EFEDE6</div></div></div>
+      <div class="swatch"><div class="swatch-fill" style="background:#E3DECF"></div><div class="swatch-meta"><div class="name">Paper Deep</div><div class="hex">#E3DECF</div></div></div>
+      <div class="swatch"><div class="swatch-fill" style="background:#221F18"></div><div class="swatch-meta"><div class="name">Ink</div><div class="hex">#221F18</div></div></div>
+      <div class="swatch"><div class="swatch-fill" style="background:#6E6858"></div><div class="swatch-meta"><div class="name">Ink Soft</div><div class="hex">#6E6858</div></div></div>
+      <div class="swatch"><div class="swatch-fill" style="background:#D6D0BF"></div><div class="swatch-meta"><div class="name">Line</div><div class="hex">#D6D0BF</div></div></div>
+      <div class="swatch"><div class="swatch-fill" style="background:#C6813C"></div><div class="swatch-meta"><div class="name">Spark</div><div class="hex">#C6813C</div></div></div>
+      <div class="swatch"><div class="swatch-fill" style="background:#3F5C68"></div><div class="swatch-meta"><div class="name">Focus</div><div class="hex">#3F5C68</div></div></div>
+      <div class="swatch"><div class="swatch-fill" style="background:#1A170F"></div><div class="swatch-meta"><div class="name">Night</div><div class="hex">#1A170F</div></div></div>
+    </div>
+    <p class="color-phil">One warm neutral base. One warm accent, used sparingly. One cool accent, reserved for interaction only. Never a gradient.</p>
+  </section>
+
+  <section id="motion">
+    <div class="shead"><span class="num">06</span><h2>Motion Principles</h2></div>
+    <div class="motion-grid">
+      <ul class="principles-sm">
+        <li><h3>Calm, not snappy</h3><p>Eases out gently. Never arrives faster than the eye can follow.</p></li>
+        <li><h3>Breathe, don't bounce</h3><p>No spring, no overshoot. Settles the way a thought settles.</p></li>
+        <li><h3>Motion means something</h3><p>Marks a real state change — captured, connected, cleared.</p></li>
+        <li><h3>Stillness is allowed</h3><p>Reduced-motion respected everywhere. Quiet is a valid default.</p></li>
+      </ul>
+      <div>
+        <table class="tok-table">
+          <tr><td>ease-calm</td><td>cubic-bezier(.22, 1, .36, 1)</td></tr>
+          <tr><td>dur-micro</td><td>120ms</td></tr>
+          <tr><td>dur-standard</td><td>220ms</td></tr>
+          <tr><td>dur-entrance</td><td>460ms</td></tr>
+        </table>
+        <div class="hover-demo">hover me — this is ease-calm</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="type">
+    <div class="shead"><span class="num">07</span><h2>Typography</h2></div>
+    <div class="type-row"><span class="role">Display</span><span class="sample display">Fraunces — find clarity</span></div>
+    <div class="type-row"><span class="role">Body</span><span class="sample body">Instrument Sans — capture first, arrange later.</span></div>
+    <div class="type-row"><span class="role">Mono</span><span class="sample mono">JetBrains Mono — 09:41 · CAPTURED</span></div>
+  </section>
+
+  <section id="icons">
+    <div class="shead"><span class="num">08</span><h2>Iconography</h2></div>
+    <p class="icon-principles">24px grid. 1.75px stroke. Rounded caps and joins, matching the mark. No fill except an active state, always in Spark.</p>
+    <div class="icon-grid">
+      <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12,3 L12,14 M7,10 L12,15 L17,10"/><path d="M4,17 L4,20 Q4,21 5,21 L19,21 Q20,21 20,20 L20,17"/></svg><span>capture</span></div>
+      <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="8" r="1.6" fill="currentColor" stroke="none"/><circle cx="17" cy="7" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="17" r="1.6" fill="currentColor" stroke="none"/><path d="M7.4,8.6 L15.6,7.6 M7,9.4 L11,15.8 M16.4,8.4 L12.6,15.6"/></svg><span>cluster</span></div>
+      <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1" fill="currentColor" stroke="none"/><path d="M4,12 Q8,8 12,12 Q16,16 20,12"/></svg><span>reflect</span></div>
+      <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4,5 H13 L19,12 L13,19 H4 Z"/><circle cx="8" cy="9" r="1.2" fill="currentColor" stroke="none"/></svg><span>tag</span></div>
+      <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="6"/><path d="M14.2,14.2 L20,20"/></svg><span>search</span></div>
+      <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.6"/></svg><span>settle</span></div>
+    </div>
+  </section>
+
+  <footer><span>NOOK — BRAND GUIDELINES</span><span>V1</span></footer>
+</div>
+
+<script>
+const links = document.querySelectorAll('.nav-links a');
+const obs = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      links.forEach(l=>l.classList.remove('active'));
+      const m = document.querySelector('.nav-links a[href="#'+e.target.id+'"]');
+      if(m) m.classList.add('active');
+    }
+  });
+},{rootMargin:'-40% 0px -50% 0px'});
+document.querySelectorAll('section').forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>
