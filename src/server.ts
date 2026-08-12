@@ -27,7 +27,7 @@ app.use("/auth", authRouter);
 
 //router
 app.get("/", (_, res) => {
-    res.send("Hello from Nook! v4");
+    res.send("Hello from Nook! v1.0.4");
 });
 
 app.get("/crash", async (_, res) => {
