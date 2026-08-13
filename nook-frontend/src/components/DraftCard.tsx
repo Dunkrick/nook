@@ -20,6 +20,16 @@ export default function DraftCardComponent({
       textareaRef.current?.focus();  
     }, []);
 
+    useEffect(() => {
+    const el = textareaRef.current;
+
+    if (!el) return;
+
+    el.style.height = "0px";
+    el.style.height = `${el.scrollHeight}px`;
+
+    }, [text]);
+
     async function handleKeyDown(
         e: React.KeyboardEvent<HTMLTextAreaElement>
     ) {
@@ -50,34 +60,23 @@ export default function DraftCardComponent({
         onChange={(e) => setText(e.target.value)}
         onKeyDown={handleKeyDown}
         onDoubleClick={(e) => e.stopPropagation()}
-        placeholder="What's on your mind?"
+        placeholder="Start with a thought..."
         style={{
             position: "absolute",
             left: position.x,
             top: position.y,
-
-            minWidth: "240px",
-            minHeight: "140px",
-
+            width: "300px",
+            minHeight: "100px",
             resize: "none",
-
-            padding: "var(--nook-space-4)",
-
+            padding:"var(--nook-space-6)",
             borderRadius: "var(--nook-radius-lg)",
-
-            border: "none",
-
+            border:"2px solid var(--nook-border-block)",
             outline: "none",
-
             background: "var(--nook-block-1)",
-
             color: "var(--nook-text-on-block)",
-
             fontFamily: "var(--nook-font-sans)",
-
             fontSize: "var(--nook-text-body)",
-
-            boxShadow: "var(--nook-shadow-md)",
+            boxShadow:"var(--shadow-resting)",
         }}
     />
 );

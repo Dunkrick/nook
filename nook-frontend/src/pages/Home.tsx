@@ -109,57 +109,54 @@ function handleCloseInsight(){
     setIsInsightOpen(false);
 }
     return (
-    <div>
-        {/* HEADER */}
-        <div style={{
-            position: "sticky",
-            top: 0,
-            zIndex: 1000,
-            padding: "var(--nook-space-5) var(--nook-space-7)",
-            background: "rgba(251,247,244,.72)",
-            backdropFilter: "blur(12px)",
-        }}>
-        <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--nook-space-2)" }}>
+    <main className="nook-canvas">
+
+        <header className="nook-topbar">
+
             <h1 className="nook-logo">
-                Nook<span className="nook-logo__spark"></span>
+                Nook
+                <span className="nook-logo__spark"></span>
             </h1>
-            <button 
-                className="nook-button-primary" 
-                style={{ padding: "var(--nook-space-2) var(--nook-space-4)", fontSize: "var(--nook-text-caption)" }}
-                onClick={() => { logout(); navigate("/") }}>
+
+            <button
+                className="nook-button-primary"
+                onClick={() => {
+                    logout();
+                    navigate("/");
+                }}
+            >
                 Logout
             </button>
+
         </header>
-        </div>
-        {/* CARDS LIST / WALL */}
-        <main className="nook-workspace">
-            <div className="nook-canvas">
-            <Wall 
-                cards={cards} 
-                draftCard={draftCard} 
-                onUpdate={handleUpdateCard} 
-                onDelete={handleDeleteCard} 
-                onCreate={handleCreateDraft} 
-                onCommitDraft={handleCommitDraft}
-                onCancelDraft={handleCancelDraft}
-                selectedCardIds={selectedCardIds}
-                onToggleCardSelection={toggleCardSelection}
+
+        <Wall
+            cards={cards}
+            draftCard={draftCard}
+            onUpdate={handleUpdateCard}
+            onDelete={handleDeleteCard}
+            onCreate={handleCreateDraft}
+            onCommitDraft={handleCommitDraft}
+            onCancelDraft={handleCancelDraft}
+            selectedCardIds={selectedCardIds}
+            onToggleCardSelection={toggleCardSelection}
+        />
+
+        {selectedCardIds.length > 0 && (
+            <SelectionToolbar
+                selectedCount={selectedCardIds.length}
+                onFindInsight={handleFindInsight}
+                onClearSelection={handleClearSelection}
             />
-            {selectedCardIds.length > 0 && (
-                <SelectionToolbar
-                    selectedCount={selectedCardIds.length}
-                    onFindInsight={handleFindInsight}
-                    onClearSelection={handleClearSelection}
-                />
-            )}
-            {isInsightOpen && (
-                <InsightPanel
-                    selectedCount={selectedCardIds.length}
-                    onClose={handleCloseInsight}
-                />
-            )}
-            </div>
-        </main>
-    </div>
+        )}
+
+        {isInsightOpen && (
+            <InsightPanel
+                selectedCount={selectedCardIds.length}
+                onClose={handleCloseInsight}
+            />
+        )}
+
+    </main>
     );
 };

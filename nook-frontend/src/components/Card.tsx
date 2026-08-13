@@ -7,8 +7,8 @@ interface CardProps {
     onUpdate: (id: number, update: CardUpdate) => Promise<void>;
     onDelete: (id: number) => Promise<void>;
     style?: React.CSSProperties & { [key: `--${string}`]: string | number }
-    isSelected: boolean;
     onToggleSelection: () => void;
+    isSelected: boolean;
 }
 
 export default function CardComponent({ card, index, onUpdate, onDelete, style, isSelected, onToggleSelection }: CardProps) {
@@ -138,19 +138,12 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style, 
                 display: "flex",
                 justifyContent: "space-between",
                 background: blockColor,
-
-                boxShadow: isSelected || isDragging ? "var(--shadow-drag)" : undefined,
-
+                boxShadow: isDragging ? "var(--shadow-drag)" : isSelected ? "var(--shadow-hover)" : "var(--shadow-resting)",
                 outline: isSelected ? "3px solid rgba(255,255,255,0.9)" : "none",
-
-                scale: isSelected ? "1.03" : "1",
-
+                scale: isDragging ? "1.02" : isSelected ? "1.015" : isHovered ? "1.01" : "1",
                 zIndex: isDragging ? 100 : isSelected ? 50 : 1,
-
                 cursor: isDragging ? "grabbing" : (isEditing ? "default" : "grab"),
-
                 transition: isDragging ? "none" : `translate var(--motion-settle), box-shadow var(--motion-settle), scale var(--motion-settle), outline-color var(--motion-settle)`,
-
                 ...style,
                 left: position.x,
                 top: position.y
@@ -158,52 +151,40 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style, 
             {isEditing ? (
                 // --- EDITING MODE ---
                 <div style={{ display: "flex", gap: "var(--nook-space-2)", width: "100%" }}>
-                    <input 
+                    <input
                         value={editText}
                         ref={inputRef}
                         onChange={(e) => setEditText(e.target.value)}
                         onKeyDown={handleKeyDown}
+                        onBlur={handleSave}
                         style={{ flex: 1, padding: "var(--nook-space-3)", border: "1px solid var(--nook-border-block)", borderRadius: "var(--nook-radius-sm)", fontFamily: "var(--nook-font-sans)" }}
                     />
-                    <button className="nook-button-primary" style={{ background: "var(--nook-text-on-block)", color: "var(--nook-bg)" }} onClick={handleSave}>Save</button>
-                    <button onClick={handleCancel} style={{ background: "transparent", border: "none", cursor: "pointer", color: "var(--nook-text-on-block)", fontWeight: "var(--nook-weight-bold)" }}>Cancel</button>
                 </div>
             ) : (
                 // --- NORMAL MODE ---
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "var(--nook-space-2)", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
-                        <span className="nook-block__number" style={{opacity: .35}}>{(index + 1).toString().padStart(2, '0')}</span>
-                    <div
-                        onClick={(e) => e.stopPropagation()}
-                        style={{
-                            opacity: isHovered ? 1 : 0,
-                            pointerEvents: isHovered ? "auto" : "none",
-                            transition: "opacity var(--motion-settle)",
-                            gap: "var(--nook-space-2)",
-                        }}>
-                        <button 
-                            onPointerDown={(event) => event.stopPropagation()}
+                    <div style={{ opacity: isHovered ? 1 : 0, transition: "opacity var(--motion-settle)" }}>
+                        <button
+                            onPointerDown={(e) => e.stopPropagation()}
                             onClick={(e) => {
                                 e.stopPropagation();
                                 setIsEditing(true);
                             }}
-                            style={{ background: "transparent", border: "none", color: "var(--nook-text-on-block)", cursor: "pointer", fontWeight: "var(--nook-weight-medium)" }}>
-                            Edit
-                        </button>
-                        <button 
-                            onPointerDown={(event) => event.stopPropagation()}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                onDelete(card.id);
-                            }}
-                            style={{ background: "transparent", border: "none", color: "var(--nook-text-on-block)", cursor: "pointer", fontWeight: "var(--nook-weight-bold)" }}>
-                            Delete
+                            style={{
+                                background: "transparent",
+                                border: "none",
+                                cursor: "pointer",
+                                fontSize: "20px",
+                                color: "rgba(42,36,56,.55)",
+                            }}>
+                            ⋯
                         </button>
                     </div>
                 </div>
-                    <p className="nook-block__label" style={{ margin: 0 }}>
+                    <p className="nook-block__label" style={{ margin: "var(--nook-space-3)", whiteSpace: "pre-wrap", lineHeight: 1.55, fontWeight: 600 }}>
                             {card.text}
-                        </p>
+                    </p>
                 </div>
             )}
         </div>

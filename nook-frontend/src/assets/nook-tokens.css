@@ -148,6 +148,12 @@
      Background — reserve the gradient for hero / celebration only
      ------------------------------------------------------------- */
   --nook-gradient-hero: linear-gradient(135deg, var(--nook-color-iris) 0%, var(--nook-color-coral) 100%);
+
+  /* Block palette */
+  --nook-block-1: var(--nook-color-coral);
+  --nook-block-2: var(--nook-color-gold);
+  --nook-block-3: var(--nook-color-blue);
+  --nook-block-4: var(--nook-color-green);
 }
 
 /* ==========================================================================
@@ -211,12 +217,9 @@
   border: 2px solid var(--nook-border-block);
   border-radius: var(--nook-radius-xl);
   padding: var(--nook-space-6);
-  min-width: 260px;
-  max-width: 320px;
+  max-width: 300px;
   color: var(--nook-text-on-block);
   font-family: var(--nook-font-sans);
-  background: var(--nook-paper-wall);
-  border: 1px solid rgba(42, 36, 56, 0.08);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35);
   transition: transform var(--motion-settle), box-shadow var(--motion-settle), opacity var(--motion-settle);
   cursor: pointer;
@@ -269,36 +272,38 @@
   margin: 0 0 var(--nook-space-3);
 }
 
-.nook-workspace {
-
-  padding:
-
-    0 var(--nook-space-6) var(--nook-space-6);
-
-  min-height: calc(100vh - 88px);
-
-}
-
 .nook-canvas {
-
-  max-width: 1680px;
-
-  margin: 0 auto;
-
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--nook-paper);
 }
 
 .nook-wall {
   position: relative;
   width: 100%;
-  min-height: calc(100vh - 120px);
-  border-radius: var(--nook-radius-xl);
-  padding: var(--nook-space-8);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35);
+  height: 100%;
   overflow: hidden;
-  background-image: radial-gradient(rgba(255, 255, 255, .14) 1px, transparent 1px);
-  background-size: 28px 28px;
 }
 
+.nook-topbar {
+  position: absolute;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 64px;
+  padding: 12px 20px;
+  background: rgba(255, 253, 251, .82);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(42, 36, 56, .08);
+  border-radius: 18px;
+  box-shadow: var(--shadow-floating);
+  z-index: 1000;
+}
 
 .nook-button-primary {
   background: var(--nook-accent-cta);

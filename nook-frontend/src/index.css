@@ -14,8 +14,8 @@
 
 body {
   margin: 0;
-  background: #F8F5F1;
-  color: var(--nook-text-primary);
+  overflow: hidden;
+  background: #f7f4ef;
 }
 
 h1,
