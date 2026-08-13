@@ -1,84 +1,140 @@
-# Dream Wall Architecture
+# Architecture
 
-## Purpose
-This document explains how Dream Wall is structured and why architectural decision exists.
-The goal is to help contributors understand the system before reading the code.
+Nook is a full-stack workspace composed of an independent React frontend and an Express backend communicating through a REST API.
 
-## Philosophy
-
-Dream Wall follows a layered backend architecture designed around a few core principles:
-- Every request moves through a predictable pipeline.
-- Each layer owns exactly one responsibility.
-- The goal is to keep the codebase easy to understand, test and extend.
+The architecture favors simple, replaceable components with clear ownership. Every layer has a single responsibility and communicates only with the layer immediately below it.
 
 ---
 
-## Request Lifecycle
+## High-Level Architecture
 
-The application processes requests in a strict, top-down flow. Layers generally only communicate with the layer directly beneath them.
-
-```mermaid
-flowchart TD
-    Browser[Browser] --> Auth[Authentication]
-    Auth --> JWT[JWT]
-    JWT --> Middleware[Middleware]
-    Middleware --> Routes[Routes]
-    Routes --> Services[Services]
-    Services --> Prisma[Prisma]
-    Prisma --> DB[(PostgreSQL)]
+```text
+                Browser
+                    │
+                    ▼
+          React + TypeScript
+                    │
+          HTTP (REST + JWT)
+                    │
+                    ▼
+          Express + TypeScript
+                    │
+              Route Layer
+                    │
+             Service Layer
+                    │
+               Prisma ORM
+                    │
+                    ▼
+            Neon PostgreSQL
 ```
 
-- **Browser:** Sends HTTP Requests.
-- **Authentication:** Validates identity via credentials.
-- **JWT:** Provides stateless session tokens.
-- **Middleware:** Performs cross-cutting concerns (authentication, validation, error handling).
-- **Routes:** Understand HTTP. They extract request parameters and format JSON responses.
-- **Services:** Understand Business Logic. They enforce application rules independent of HTTP.
-- **Prisma:** Translates application operations into type-safe database queries.
-- **PostgreSQL:** Stores persistent data.
-
 ---
 
-## Why this architecture?
+## Backend Request Lifecycle
 
-As the project evolved, responsibilities that were originally handled entirely inside route files were gradually extracted into dedicated layers.
-
-Examples of refactoring:
-- Raw SQL queries → Extracted to **Services**
-- Input checking → Extracted to **Validation Middleware**
-- Manual `try/catch` blocks → Extracted to **Global Error Middleware**
-- Database Connection Logic → Extracted to **Prisma Client**
-
-Each refactor reduced code duplication and improved maintainability *without changing the public API*.
-
-## Engineering Principles
-
-- **One responsibility per layer.**
-- **Pass data, not frameworks.** (e.g., Services should not know about Express `req` or `res` objects).
-- **Stable interfaces, replaceable implementations.**
-- **Optimize for the next developer.**
-
----
-
-## Evolution
-
-Dream Wall was not built this way on day one. It evolved naturally as complexity grew:
-
-```mermaid
-flowchart TD
-    V1[Version 1: Express, SQLite, Single File Backend] --> V2
-    V2[Added TypeScript] --> V3
-    V3[Migrated to PostgreSQL] --> V4
-    V4[Introduced Prisma ORM] --> V5
-    V5[Extracted Service Layer] --> V6
-    V6[Added Validation Middleware] --> V7
-    V7[Global Error Middleware] --> V8
-    V8[Added Authentication] --> V9
-    V9(((Version 3: React Frontend)))
+```text
+Browser
+   │
+   ▼
+Authentication (JWT)
+   │
+   ▼
+Middleware
+   │
+   ▼
+Routes
+   │
+   ▼
+Services
+   │
+   ▼
+Prisma
+   │
+   ▼
+PostgreSQL
 ```
 
-Future versions will extend this architecture without changing its overall structure.
+### Responsibilities
 
-Upcoming additions include:
-- AI Services
-- Background Jobs
+**Authentication**
+
+- Authenticates users.
+- Issues and validates JWTs.
+
+**Middleware**
+
+- Authentication
+- Validation
+- Error handling
+
+**Routes**
+
+- Understand HTTP.
+- Parse requests.
+- Return responses.
+- Delegate business logic.
+
+**Services**
+
+- Own business rules.
+- Remain independent of Express.
+- Coordinate persistence.
+
+**Prisma**
+
+- Type-safe data access.
+- Maps application models to PostgreSQL.
+
+---
+
+## Frontend Architecture
+
+```text
+Pages
+   │
+   ▼
+Components
+   │
+   ▼
+Services
+   │
+   ▼
+REST API
+```
+
+The frontend follows a simple ownership model.
+
+- Pages own application state.
+- Components own presentation and interaction.
+- Services own network communication.
+
+---
+
+## Design Principles
+
+- One responsibility per layer.
+- Pass data instead of framework objects.
+- Optimistic interactions wherever possible.
+- Stateless backend.
+- Clear ownership over shared state.
+- Simplicity over abstraction.
+
+---
+
+## Deployment
+
+```text
+React Frontend
+       │
+       ▼
+Cloud Run (Express)
+       │
+       ▼
+Prisma ORM
+       │
+       ▼
+Neon PostgreSQL
+```
+
+The frontend and backend are deployed independently, allowing each application to evolve without coupling deployment pipelines.

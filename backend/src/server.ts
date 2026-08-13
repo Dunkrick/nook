@@ -28,8 +28,9 @@ app.use("/auth", authRouter);
 //router
 app.get("/health", (_, res) => {
     res.status(200).json({
-        status: "ok",
-        service: "nook-api",
+        "status": "ok",
+        "database": "connected",
+        "version": "1.1.0"
     });
 });
 

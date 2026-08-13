@@ -1,6 +1,6 @@
-# Dream Wall Roadmap
+# Nook Roadmap
 
-Dream Wall is built in distinct, intentional phases. Instead of doing everything at once, each version has a single, clear objective.
+Nook is built in distinct, intentional phases. Instead of doing everything at once, each version has a single, clear objective.
 
 ```mermaid
 flowchart TD

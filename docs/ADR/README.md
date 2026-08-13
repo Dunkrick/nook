@@ -1,24 +1,33 @@
-# Architecture Decision Records
+# Architecture Decision Records (ADRs)
 
-This directory records significant architectural decisions made throughout the evolution of Dream Wall.
+This directory captures the major architectural decisions behind Nook.
 
-Each ADR explains:
+Rather than documenting implementation details, each ADR explains **why** a significant decision was made, the alternatives considered, and its long-term consequences.
 
-- The context
-- The decision
-- Alternatives considered
+---
+
+## Format
+
+Each ADR contains:
+
+- Context
+- Decision
+- Alternatives
 - Consequences
-- Trade-offs
 
-ADRs are written retrospectively after each major release.
+Once accepted, ADRs are considered part of the project's engineering history and should not be rewritten. New decisions should be captured in new ADRs.
 
-## Records
+---
+
+## Accepted ADRs
 
 | ADR | Title | Status |
-| --- | ----- | ------ |
-| [ADR-001](0001-wall-first-interaction-model.md) | Wall-first interaction model | Accepted |
-| [ADR-002](0002-dedicated-draftcard-component.md) | Dedicated DraftCard component | Accepted |
-| [ADR-003](0003-home-owns-application-state.md) | Home owns application state | Accepted |
-| [ADR-004](0004-wall-owns-composition.md) | Wall owns composition | Accepted |
-| [ADR-005](0006-draft-separated-from-persisted-cards.md) | Draft state separated from persisted cards | Accepted |
-| [0005-wall-coordinates](0005-wall-coordinates.md) | Card wall coordinates | Accepted |
+|------|-------|--------|
+| ADR-0001 | Wall-first interaction model | Accepted |
+| ADR-0002 | Dedicated DraftCard component | Accepted |
+| ADR-0003 | Home owns application state | Accepted |
+| ADR-0004 | Wall owns composition | Accepted |
+| ADR-0005 | Wall coordinate system | Accepted |
+| ADR-0006 | Draft state separated from persisted cards | Accepted |
+| ADR-0007 | Backend containerization | Accepted |
+| ADR-0008 | Google Cloud Run deployment | Accepted |

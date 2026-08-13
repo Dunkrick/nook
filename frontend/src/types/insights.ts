@@ -1,11 +1,11 @@
-interface Insight {
-    theme: string;
+// interface Insight {
+//     theme: string;
 
-    summary: string;
+//     summary: string;
 
-    connections: string[];
+//     connections: string[];
 
-    blindSpots: string[];
+//     blindSpots: string[];
 
-    reflectionQuestions: string[];
-}
+//     reflectionQuestions: string[];
+// }

@@ -1,70 +1,96 @@
 # Changelog
 
-All notable changes to Nook will be documented in this file.
+All notable changes to Nook are documented in this file.
 
-## v3.1.0
+The project follows Semantic Versioning.
 
-BREAKING CHANGE
+---
 
-The wall is now the primary interaction surface.
-
-Card creation no longer depends on a separate input form.
-Users create thoughts directly inside the wall through transient draft cards.
+## v1.1.0
 
 ### Added
-- **Wall-First Interaction**: Added mouse double-click coordinate listener on the canvas (`Wall.tsx`) to map note placements dynamically.
-- **Transient Draft Notes**: Created `DraftCardComponent` rendering an inline absolute-positioned textarea.
-- **Save/Cancel Hotkeys**: Integrated keyboard actions (pressing `Enter` to submit, `Escape` to cancel/discard drafts).
+
+#### Infrastructure
+- Containerized backend using Docker.
+- Production deployment to Google Cloud Run.
+- Google Artifact Registry for Docker image management.
+- Health check endpoint for production verification.
+
+#### Development Experience
+- Repository restructured into independent `frontend/` and `backend/` applications.
+- Root workspace orchestrator for local development.
+- Cloud deployment documentation.
+
+#### Product
+- Spatial wall-first interaction model.
+- Draft cards created directly on the canvas.
+- Optimistic drag persistence.
+- Multi-selection toolbar.
+- Insight panel foundation.
+
+---
 
 ### Changed
-- **Component Separation**: Extracted `DraftCardComponent` into its own source file, decoupling creation concerns from `CardComponent`.
-- **Interaction Rules**: Implemented `e.stopPropagation()` on double clicks within cards and buttons, blocking nested draft note instantiation.
 
-### Removed
-- **Unused Props**: Retired the unused `startEditing` parameter from the persisted card rendering configurations.
+#### Backend
+- Migrated deployment from Render to Google Cloud Run.
+- Standardized production environment configuration.
+- Improved Docker compatibility for Apple Silicon (amd64 builds).
 
----
-
-## v3.0.0
-
-### Added
-
-**Frontend (React + Vite)**
-- Bootstrapped frontend using React, TypeScript, and Vite.
-- Implemented client-side routing via `react-router-dom`.
-- Created robust Network Service (`api.ts`) to centralize standard HTTP fetch requests.
-- Integrated `localStorage` manager for handling JWT tokens across browser sessions.
-- Added Protected Route middleware component to guard authenticated views.
-
-**Branding & UI**
-- Adopted strict CSS Design Tokens (`dreamwall-tokens.css`).
-- Designed a Block-card system featuring thick 2px charcoal borders and 24px rounded corners.
-- Created dynamic 4-color block cycling (Sunset Coral, Golden Glow, Twilight Blue, Momentum Green).
-
-**Complete CRUD Work**
-- **Create**: Added a "Create Dream" Hero Block utilizing POST endpoints.
-- **Read**: Fetching and rendering user-specific dreams automatically on Home mount.
-- **Update**: Built inline Edit-mode toggles on cards utilizing PATCH endpoints.
-- **Delete**: Implemented optimistic UI deletion mapping to DELETE endpoints.
-
-**Authentication**
-- User registration and Login controllers.
-- JWT storage and authorization headers injection.
-- Reusable `<AuthForm />` component.
+#### Frontend
+- Refined wall-first interaction.
+- Improved drag responsiveness.
+- Improved optimistic UI updates.
+- Semantic design token system.
+- Initial workspace redesign.
 
 ---
 
-## v2.5.0
+### Infrastructure
 
-### Added
+- Google Cloud Run
+- Google Artifact Registry
+- Docker
+- Neon PostgreSQL
 - Prisma ORM
-- Validation middleware
-- Global error middleware
 
-### Changed
-- Migrated JavaScript to TypeScript
-- Replaced raw SQL with Prisma
+---
 
-### Removed
-- Raw PostgreSQL client
-- Duplicate validation logic
+## v1.0.0
+
+### Added
+
+#### Frontend
+- React + Vite application.
+- Protected routes.
+- Authentication flow.
+- Wall interaction model.
+- Spatial card rendering.
+- Drag-and-drop cards.
+- Inline editing.
+- Draft card workflow.
+
+#### Backend
+- Express API.
+- TypeScript.
+- Prisma ORM.
+- PostgreSQL persistence.
+- JWT Authentication.
+- Validation middleware.
+- Global error handling.
+
+#### Design System
+- Semantic design tokens.
+- Brand color system.
+- Motion tokens.
+- Elevation tokens.
+- Typography scale.
+- Block-based card components.
+
+---
+
+### Infrastructure
+
+- Neon PostgreSQL
+- Prisma ORM
+- TypeScript

@@ -1,61 +1,122 @@
-# Setup
+# Local Setup
 
-This guide helps you run Dream Wall locally.
+This guide explains how to run Nook locally.
+
+---
 
 ## Prerequisites
 
-- **Node.js** (v22+)
-- **PostgreSQL** (running locally)
-- **Git**
+- Node.js 22+
+- Docker Desktop (optional, for container testing)
+- PostgreSQL or Neon
+- Git
 
-## 1. Clone the repository
+---
+
+## Clone
 
 ```bash
-git clone https://github.com/Dunkrick/dream-wall.git
-cd dream-wall
+git clone https://github.com/Dunkrick/nook.git
+cd nook
 ```
 
-## 2. Install Dependencies
+---
+
+## Install
 
 ```bash
 npm install
 ```
 
-## 3. Configure Environment
+This installs the root workspace dependencies.
 
-Copy the example environment file to create your own local config:
+---
 
-```bash
-cp .env.example .env
+## Configure Environment
+
+### Backend
+
+Create:
+
+```
+backend/.env
 ```
 
-Open the newly created `.env` file in your editor and verify or update your variables. Make sure your `DATABASE_URL` matches your local PostgreSQL credentials:
+Example:
 
 ```env
-DATABASE_URL=postgresql://username:password@localhost:5432/dreamwall
 PORT=3003
+
+DATABASE_URL=
+
+JWT_SECRET=
+
+FRONTEND_URL=http://localhost:5173
 ```
 
-## 4. Initialize Database
+---
 
-Generate the Prisma client and push the schema/migrations to your database:
+### Frontend
+
+Create:
+
+```
+frontend/.env
+```
+
+Example:
+
+```env
+VITE_API_URL=http://localhost:3003
+```
+
+---
+
+## Database
+
+Generate Prisma Client
 
 ```bash
-    npx prisma generate
-    npx prisma migrate dev
+cd backend
+
+npx prisma generate
 ```
 
-## 5. Start Development Servers
+Run migrations
 
-Run the backend in your first terminal:
+```bash
+npx prisma migrate dev
+```
+
+---
+
+## Development
+
+From the repository root
+
 ```bash
 npm run dev
 ```
-The backend server will be running at `http://localhost:3003`.
 
-Run the frontend in a second terminal:
-```bash
-cd dream-wall-frontend
-npm run dev
+This starts both
+
+- frontend
+- backend
+
+simultaneously.
+
+---
+
+## URLs
+
+Frontend
+
 ```
-The React application will be running at `http://localhost:5173`.
+http://localhost:5173
+```
+
+Backend
+
+```
+http://localhost:3003
+```
