@@ -26,8 +26,15 @@ app.use("/", cardRouter);
 app.use("/auth", authRouter);
 
 //router
+app.get("/health", (_, res) => {
+    res.status(200).json({
+        status: "ok",
+        service: "nook-api",
+    });
+});
+
 app.get("/", (_, res) => {
-    res.send("Hello from Nook! v1.0.4");
+    res.send("Hello from Nook!");
 });
 
 app.get("/crash", async (_, res) => {
@@ -42,18 +49,19 @@ app.get("/crash", async (_, res) => {
 
 app.use(errorHandler);
 
-async function testConnection() {
+async function startServer() {
     try {
-        await prisma.$queryRaw`SELECT NOW()`;
-        console.log("Database connected via Prisma!");
-    }
-    catch (error) {
-        console.error("Database connection failed via Prisma:", error);
+        await prisma.$connect();
+
+        console.log("Database connected.");
+
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+    } catch (error) {
+        console.error("Failed to start server:", error);
+        process.exit(1);
     }
 }
 
-testConnection();
-
-app.listen(PORT, () => {
-    console.log(`server is running on port http://localhost:${PORT}`);
-});
+startServer();

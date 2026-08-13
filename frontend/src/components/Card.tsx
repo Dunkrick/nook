@@ -138,19 +138,12 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style, 
                 display: "flex",
                 justifyContent: "space-between",
                 background: blockColor,
-
                 boxShadow: isSelected || isDragging ? "var(--shadow-drag)" : undefined,
-
                 outline: isSelected ? "3px solid rgba(255,255,255,0.9)" : "none",
-
                 scale: isSelected ? "1.03" : "1",
-
                 zIndex: isDragging ? 100 : isSelected ? 50 : 1,
-
                 cursor: isDragging ? "grabbing" : (isEditing ? "default" : "grab"),
-
                 transition: isDragging ? "none" : `translate var(--motion-settle), box-shadow var(--motion-settle), scale var(--motion-settle), outline-color var(--motion-settle)`,
-
                 ...style,
                 left: position.x,
                 top: position.y
