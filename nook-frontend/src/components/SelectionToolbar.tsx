@@ -19,7 +19,7 @@ export default function SelectionToolbar({
             padding: "var(--nook-space-4)",
             borderRadius: "var(--nook-radius-lg)",
             border: "1px solid var(--nook-border-block)",
-            boxShadow: "0 16px 40px rgba(0,0,0,0.28)",
+            boxShadow: "var(--shadow-floating)",
             display: "flex",
             gap: "var(--nook-space-2)",
             alignItems: "center",
