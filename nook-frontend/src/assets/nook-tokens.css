@@ -1,11 +1,32 @@
-/* ==========================================================================
-   Nook Design Tokens
-   Brand personality: Warm · Propulsive · Grounded
-   Structural language inspired by units.gr: disciplined color blocks,
-   thick rounded corners, charcoal outlines, confident bold type.
-   ========================================================================== */
+/* ===========================
+   BRAND
+=========================== */
+
+/* Typography */
+
+/* Radius */
+
+/* Spacing */
+
+/* Semantic Colors */
+
+/* Components */
 
 :root {
+
+  /* Motion */
+  --motion-lift: 180ms cubic-bezier(0.2, 0, 0, 1);
+  --motion-settle: 160ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Elevation */
+  --shadow-resting: 0 4px 16px rgba(42, 36, 56, 0.12);
+  --shadow-hover: 0 8px 24px rgba(42, 36, 56, 0.18);
+  --shadow-drag: 0 16px 40px rgba(42, 36, 56, 0.24);
+  --shadow-floating: 0 24px 64px rgba(42, 36, 56, 0.32);
+
+  /* Opacity */
+  --opacity-muted: 0.35;
+  --opacity-focus: 1;
 
   /* -------------------------------------------------------------
      Color — raw brand colors
@@ -30,28 +51,47 @@
   /* Warm border / divider on cream surfaces */
 
   /* -------------------------------------------------------------
+   Material
+------------------------------------------------------------- */
+
+  --nook-paper: var(--nook-color-cream);
+
+  --nook-paper-raised: #fffdfb;
+
+  --nook-paper-wall: #efe5da;
+
+  --nook-ink: var(--nook-color-charcoal);
+
+  --nook-graphite: #665f73;
+
+  --nook-spark: var(--nook-color-coral);
+
+  --nook-divider: var(--nook-color-border);
+
+  /* -------------------------------------------------------------
      Color — semantic aliases (use these in components, not raw colors)
      ------------------------------------------------------------- */
-  --nook-bg: var(--nook-color-cream);
-  --nook-bg-inverse: var(--nook-color-iris);
-  --nook-text-primary: var(--nook-color-charcoal);
-  --nook-text-heading: var(--nook-color-iris);
-  --nook-text-on-inverse: var(--nook-color-cream);
-  --nook-text-on-block: var(--nook-color-charcoal);
-  /* text/borders sitting on coral/gold/blue/green blocks */
-  --nook-accent: var(--nook-color-coral);
-  --nook-accent-cta: var(--nook-color-coral-deep);
-  /* buttons w/ white or cream text */
-  --nook-accent-celebrate: var(--nook-color-gold);
-  --nook-border: var(--nook-color-border);
-  --nook-border-block: var(--nook-color-charcoal);
-  /* outline used on color-block cards */
+  --nook-bg: var(--nook-paper);
 
-  /* Block palette, in intended rotation order */
-  --nook-block-1: var(--nook-color-coral);
-  --nook-block-2: var(--nook-color-gold);
-  --nook-block-3: var(--nook-color-blue);
-  --nook-block-4: var(--nook-color-green);
+  --nook-bg-inverse: var(--nook-color-iris);
+
+  --nook-text-primary: var(--nook-ink);
+
+  --nook-text-heading: var(--nook-color-iris);
+
+  --nook-text-on-inverse: var(--nook-paper);
+
+  --nook-text-on-block: var(--nook-ink);
+
+  --nook-accent: var(--nook-spark);
+
+  --nook-accent-cta: var(--nook-color-coral-deep);
+
+  --nook-accent-celebrate: var(--nook-color-gold);
+
+  --nook-border: var(--nook-divider);
+
+  --nook-border-block: var(--nook-ink);
 
   /* -------------------------------------------------------------
      Typography
@@ -170,29 +210,31 @@
 .nook-block {
   border: 2px solid var(--nook-border-block);
   border-radius: var(--nook-radius-xl);
-  padding: var(--nook-space-4);
+  padding: var(--nook-space-5);
   color: var(--nook-text-on-block);
   font-family: var(--nook-font-sans);
-  box-shadow: 0 4px 16px rgba(42, 36, 56, 0.12);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: var(--shadow-resting);
+  transition: transform var(--motion-settle), box-shadow var(--motion-settle), opacity var(--motion-settle);
   cursor: pointer;
   rotate: var(--card-rotate, 0deg);
   animation: card-pop-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 .nook-block:hover {
-  box-shadow: 0 4px 16px rgba(42, 36, 56, 0.24);
-  transform: scale(1.03);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
 }
 
 .nook-block__number {
   font-size: var(--nook-text-caption);
-  font-weight: var(--nook-weight-bold);
+  font-weight: var(--nook-weight-medium);
+  opacity: var(--opacity-muted);
 }
 
 .nook-block__label {
-  font-size: var(--nook-text-label);
-  font-weight: var(--nook-weight-bold);
+  font-size: var(--nook-text-h3);
+  font-weight: var(--nook-weight-extrabold);
+  line-height: var(--nook-leading-heading);
 }
 
 @keyframes card-pop-in {
@@ -224,10 +266,10 @@
 }
 
 .nook-wall {
-  background-color: #e8ddd2;
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(42, 36, 56, 0.12);
+  background: var(--nook-paper-wall);
+  padding: var(--nook-space-5);
+  border-radius: var(--nook-radius-lg);
+  box-shadow: var(--shadow-resting);
 }
 
 .nook-button-primary {

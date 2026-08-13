@@ -14,6 +14,7 @@ interface CardProps {
 export default function CardComponent({ card, index, onUpdate, onDelete, style, isSelected, onToggleSelection }: CardProps) {
     const inputRef = useRef<HTMLInputElement>(null);
     const [isEditing, setIsEditing] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
     const [editText, setEditText] = useState(card.text);
     const [position, setPosition] = useState({
         x: card.x,
@@ -131,12 +132,14 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style, 
             onPointerUp={handlePointerUp}
             onDoubleClick={(e) => e.stopPropagation()}
             onClick={handleClick}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
             style={{
                 display: "flex",
                 justifyContent: "space-between",
                 background: blockColor,
 
-                boxShadow: isSelected ? "0 16px 40px rgba(0,0,0,0.28)" : undefined,
+                boxShadow: isSelected || isDragging ? "var(--shadow-drag)" : undefined,
 
                 outline: isSelected ? "3px solid rgba(255,255,255,0.9)" : "none",
 
@@ -146,7 +149,7 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style, 
 
                 cursor: isDragging ? "grabbing" : (isEditing ? "default" : "grab"),
 
-                transition: isDragging ? "none" : "translate 0.2s ease, box-shadow 0.2s ease, scale 0.2s ease, outline-color 0.2s ease",
+                transition: isDragging ? "none" : `translate var(--motion-settle), box-shadow var(--motion-settle), scale var(--motion-settle), outline-color var(--motion-settle)`,
 
                 ...style,
                 left: position.x,
@@ -160,26 +163,23 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style, 
                         ref={inputRef}
                         onChange={(e) => setEditText(e.target.value)}
                         onKeyDown={handleKeyDown}
-                        style={{ flex: 1, padding: "var(--nook-space-2)", border: "1px solid var(--nook-border-block)", borderRadius: "var(--nook-radius-sm)", fontFamily: "var(--nook-font-sans)" }}
+                        style={{ flex: 1, padding: "var(--nook-space-3)", border: "1px solid var(--nook-border-block)", borderRadius: "var(--nook-radius-sm)", fontFamily: "var(--nook-font-sans)" }}
                     />
                     <button className="nook-button-primary" style={{ background: "var(--nook-text-on-block)", color: "var(--nook-bg)" }} onClick={handleSave}>Save</button>
                     <button onClick={handleCancel} style={{ background: "transparent", border: "none", cursor: "pointer", color: "var(--nook-text-on-block)", fontWeight: "var(--nook-weight-bold)" }}>Cancel</button>
                 </div>
             ) : (
                 // --- NORMAL MODE ---
-                <>
-                    <div style={{ display: "flex", alignItems: "center", gap: "var(--nook-space-4)" }}>
-                        <span className="nook-block__number">{(index + 1).toString().padStart(2, '0')}</span>
-                        <p className="nook-block__label" style={{ margin: 0 }}>
-                            {card.text}
-                        </p>
-                    </div>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "var(--nook-space-2)", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
+                        <span className="nook-block__number" style={{opacity: .35}}>{(index + 1).toString().padStart(2, '0')}</span>
                     <div
                         onClick={(e) => e.stopPropagation()}
                         style={{
-                            display: "flex",
+                            opacity: isHovered ? 1 : 0,
+                            pointerEvents: isHovered ? "auto" : "none",
+                            transition: "opacity var(--motion-settle)",
                             gap: "var(--nook-space-2)",
-                            width: "100%",
                         }}>
                         <button 
                             onPointerDown={(event) => event.stopPropagation()}
@@ -200,7 +200,11 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style, 
                             Delete
                         </button>
                     </div>
-                </>
+                </div>
+                    <p className="nook-block__label" style={{ margin: 0 }}>
+                            {card.text}
+                        </p>
+                </div>
             )}
         </div>
     );

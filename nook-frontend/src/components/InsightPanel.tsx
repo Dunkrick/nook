@@ -21,6 +21,7 @@ export default function InsightPanel({
             padding: "var(--nook-space-6)",
             display: "flex",
             flexDirection: "column",
+            boxShadow: "var(--shadow-floating)",
         }}>
             <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--nook-space-6)" }}>
                 <h2 className="nook-text-headline" style={{ margin: 0 }}>💡 What Stands Out</h2>
