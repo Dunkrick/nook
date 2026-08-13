@@ -111,7 +111,14 @@ function handleCloseInsight(){
     return (
     <div>
         {/* HEADER */}
-        <div style={{ padding: "var(--nook-space-5)", maxWidth: "600px", margin: "0 auto" }}>
+        <div style={{
+            position: "sticky",
+            top: 0,
+            zIndex: 1000,
+            padding: "var(--nook-space-5) var(--nook-space-7)",
+            background: "rgba(251,247,244,.72)",
+            backdropFilter: "blur(12px)",
+        }}>
         <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--nook-space-2)" }}>
             <h1 className="nook-logo">
                 Nook<span className="nook-logo__spark"></span>
@@ -125,7 +132,8 @@ function handleCloseInsight(){
         </header>
         </div>
         {/* CARDS LIST / WALL */}
-        <div style={{ padding: "var(--nook-space-5)"}}>
+        <main className="nook-workspace">
+            <div className="nook-canvas">
             <Wall 
                 cards={cards} 
                 draftCard={draftCard} 
@@ -150,7 +158,8 @@ function handleCloseInsight(){
                     onClose={handleCloseInsight}
                 />
             )}
-        </div>
+            </div>
+        </main>
     </div>
     );
 };

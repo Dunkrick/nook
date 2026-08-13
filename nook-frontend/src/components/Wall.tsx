@@ -42,7 +42,7 @@ export default function Wall({
   return (
     <div 
         className="nook-wall" 
-        style={{ position: "relative", minHeight: "80vh" }} 
+        style={{ position: "relative" }} 
         onDoubleClick={handleDoubleClick}
     >
       

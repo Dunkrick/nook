@@ -14,10 +14,16 @@
 
 body {
   margin: 0;
-  background-color: var(--nook-bg);
+  background: #F8F5F1;
+  color: var(--nook-text-primary);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: var(--nook-text-heading);
   line-height: var(--nook-leading-heading);
   margin: 0;

@@ -158,7 +158,7 @@
 
 .nook-logo {
   font-family: var(--nook-font-sans);
-  font-size: 32px;
+  font-size: 30px;
   font-weight: var(--nook-weight-semibold);
   letter-spacing: var(--nook-tracking-logo);
   color: var(--nook-text-heading);
@@ -210,10 +210,14 @@
 .nook-block {
   border: 2px solid var(--nook-border-block);
   border-radius: var(--nook-radius-xl);
-  padding: var(--nook-space-5);
+  padding: var(--nook-space-6);
+  min-width: 260px;
+  max-width: 320px;
   color: var(--nook-text-on-block);
   font-family: var(--nook-font-sans);
-  box-shadow: var(--shadow-resting);
+  background: var(--nook-paper-wall);
+  border: 1px solid rgba(42, 36, 56, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35);
   transition: transform var(--motion-settle), box-shadow var(--motion-settle), opacity var(--motion-settle);
   cursor: pointer;
   rotate: var(--card-rotate, 0deg);
@@ -221,8 +225,8 @@
 }
 
 .nook-block:hover {
-  box-shadow: var(--shadow-hover);
   transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
 }
 
 .nook-block__number {
@@ -265,12 +269,36 @@
   margin: 0 0 var(--nook-space-3);
 }
 
-.nook-wall {
-  background: var(--nook-paper-wall);
-  padding: var(--nook-space-5);
-  border-radius: var(--nook-radius-lg);
-  box-shadow: var(--shadow-resting);
+.nook-workspace {
+
+  padding:
+
+    0 var(--nook-space-6) var(--nook-space-6);
+
+  min-height: calc(100vh - 88px);
+
 }
+
+.nook-canvas {
+
+  max-width: 1680px;
+
+  margin: 0 auto;
+
+}
+
+.nook-wall {
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 120px);
+  border-radius: var(--nook-radius-xl);
+  padding: var(--nook-space-8);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35);
+  overflow: hidden;
+  background-image: radial-gradient(rgba(255, 255, 255, .14) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
 
 .nook-button-primary {
   background: var(--nook-accent-cta);
