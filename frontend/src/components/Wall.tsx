@@ -1,6 +1,6 @@
 import type { Card, CardUpdate, DraftCard, Position } from "../types/cards";
 import EmptyWorkspace from "./EmptyWorkspace";
-import CardComponent from "./Card";
+import CardComponent from "./Card/Card";
 import { CARD_ROTATIONS } from "../lib/CardRotation";
 import DraftCardComponent from "./DraftCard";
 

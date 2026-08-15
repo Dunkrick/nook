@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-import type { Card, CardUpdate } from "../types/cards";
+import type { Card, CardUpdate } from "../../types/cards";
+import CardHeader from "./CardHeader";
+import CardBody from "./CardBody";
 
 interface CardProps {
     card: Card;
@@ -87,16 +89,16 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style, 
     };
 
     const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isDragging) return;
+        if (!isDragging) return;
 
-    const dx = e.clientX - dragStartPos.current.x;
-    const dy = e.clientY - dragStartPos.current.y;
+        const dx = e.clientX - dragStartPos.current.x;
+        const dy = e.clientY - dragStartPos.current.y;
 
-    setPosition({
-        x: dragStartCardPos.current.x + dx,
-        y: dragStartCardPos.current.y + dy,
-    });
-};
+        setPosition({
+            x: dragStartCardPos.current.x + dx,
+            y: dragStartCardPos.current.y + dy,
+        });
+    };
 
     const handlePointerUp = async (e: React.PointerEvent<HTMLDivElement>) => {
         if (!isDragging) return;        
@@ -164,39 +166,13 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style, 
             ) : (
                 // --- NORMAL MODE ---
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "var(--nook-space-2)", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
-                        <span className="nook-block__number" style={{opacity: .35}}>{(index + 1).toString().padStart(2, '0')}</span>
-                    <div
-                        onClick={(e) => e.stopPropagation()}
-                        style={{
-                            opacity: isHovered ? 1 : 0,
-                            pointerEvents: isHovered ? "auto" : "none",
-                            transition: "opacity var(--motion-settle)",
-                            gap: "var(--nook-space-2)",
-                        }}>
-                        <button 
-                            onPointerDown={(event) => event.stopPropagation()}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setIsEditing(true);
-                            }}
-                            style={{ background: "transparent", border: "none", color: "var(--nook-text-on-block)", cursor: "pointer", fontWeight: "var(--nook-weight-medium)" }}>
-                            Edit
-                        </button>
-                        <button 
-                            onPointerDown={(event) => event.stopPropagation()}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                onDelete(card.id);
-                            }}
-                            style={{ background: "transparent", border: "none", color: "var(--nook-text-on-block)", cursor: "pointer", fontWeight: "var(--nook-weight-bold)" }}>
-                            Delete
-                        </button>
-                    </div>
-                </div>
-                    <p className="nook-block__label" style={{ margin: 0 }}>
-                            {card.text}
-                        </p>
+                    <CardHeader
+                        index={index}
+                        isHovered={isHovered}
+                        onEdit={() => setIsEditing(true)}
+                        onDelete={() => onDelete(card.id)}
+                    />
+                    <CardBody text={card.text} />
                 </div>
             )}
         </div>
