@@ -4,6 +4,7 @@ import { useCardEditing } from "../../hooks/useCardEditing";
 import { useCardDrag } from "../../hooks/useCardDrag";
 import CardHeader from "./CardHeader";
 import CardBody from "./CardBody";
+import CardEditor from "./CardEditor";
 
 interface CardProps {
     card: Card;
@@ -73,18 +74,14 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style, 
             }}
         >
             {editing.isEditing ? (
-                // --- EDITING MODE ---
-                <div style={{ display: "flex", gap: "var(--nook-space-2)", width: "100%" }}>
-                    <input
-                        value={editing.editText}
-                        ref={editing.inputRef}
-                        onChange={(e) => editing.setEditText(e.target.value)}
-                        onKeyDown={editing.handleKeyDown}
-                        style={{ flex: 1, padding: "var(--nook-space-3)", border: "1px solid var(--nook-border-block)", borderRadius: "var(--nook-radius-sm)", fontFamily: "var(--nook-font-sans)" }}
-                    />
-                    <button className="nook-button-primary" style={{ background: "var(--nook-text-on-block)", color: "var(--nook-bg)" }} onClick={editing.handleSave}>Save</button>
-                    <button onClick={editing.handleCancel} style={{ background: "transparent", border: "none", cursor: "pointer", color: "var(--nook-text-on-block)", fontWeight: "var(--nook-weight-bold)" }}>Cancel</button>
-                </div>
+                <CardEditor
+                    editText={editing.editText}
+                    inputRef={editing.inputRef}
+                    onTextChange={editing.setEditText}
+                    onKeyDown={editing.handleKeyDown}
+                    onSave={editing.handleSave}
+                    onCancel={editing.handleCancel}
+                />
             ) : (
                 // --- NORMAL MODE ---
                 <div style={{ display: "flex", flexDirection: "column" }}>
