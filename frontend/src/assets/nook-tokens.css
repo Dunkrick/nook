@@ -58,7 +58,7 @@
 
   --nook-paper-raised: #fffdfb;
 
-  --nook-paper-wall: #efe5da;
+  --nook-paper: #efe5da;
 
   --nook-ink: var(--nook-color-charcoal);
 
@@ -158,7 +158,7 @@
 
 .nook-logo {
   font-family: var(--nook-font-sans);
-  font-size: 30px;
+  font-size: 26px;
   font-weight: var(--nook-weight-semibold);
   letter-spacing: var(--nook-tracking-logo);
   color: var(--nook-text-heading);
@@ -215,7 +215,7 @@
   max-width: 320px;
   color: var(--nook-text-on-block);
   font-family: var(--nook-font-sans);
-  background: var(--nook-paper-wall);
+  background: var(--nook-paper);
   border: 1px solid rgba(42, 36, 56, 0.08);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35);
   transition: transform var(--motion-settle), box-shadow var(--motion-settle), opacity var(--motion-settle);
@@ -269,36 +269,77 @@
   margin: 0 0 var(--nook-space-3);
 }
 
-.nook-workspace {
-
-  padding:
-
-    0 var(--nook-space-6) var(--nook-space-6);
-
-  min-height: calc(100vh - 88px);
-
+.nook-workspace-shell {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--nook-paper);
 }
 
-.nook-canvas {
-
-  max-width: 1680px;
-
-  margin: 0 auto;
-
+.nook-workspace-content {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  height: 100%;
 }
 
 .nook-wall {
   position: relative;
   width: 100%;
-  min-height: calc(100vh - 120px);
-  border-radius: var(--nook-radius-xl);
-  padding: var(--nook-space-8);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35);
+  height: 100%;
+  padding: 96px 80px 80px 80px;
   overflow: hidden;
-  background-image: radial-gradient(rgba(255, 255, 255, .14) 1px, transparent 1px);
+  background: var(--nook-paper);
+  background-image: radial-gradient(rgba(42, 36, 56, 0.025) 1px, transparent 1px);
   background-size: 28px 28px;
 }
 
+.nook-toolbar {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(640px, 92vw);
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 var(--nook-space-5);
+  border-radius: 999px;
+  background: rgba(255, 253, 251, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(42, 36, 56, 0.08);
+  box-shadow: 0 8px 20px rgba(42, 36, 56, 0.08);
+  transition: background var(--motion-settle), box-shadow var(--motion-settle);
+  z-index: 1000;
+}
+
+.nook-toolbar__button {
+  background: transparent;
+  border: none;
+  color: var(--nook-text-primary);
+  font-family: var(--nook-font-sans);
+  font-size: var(--nook-text-label);
+  font-weight: var(--nook-weight-medium);
+  padding: 10px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background var(--motion-settle), color var(--motion-settle);
+}
+
+.nook-toolbar__button:hover {
+  background: rgba(42, 36, 56, 0.06);
+}
+
+.nook-toolbar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--nook-space-3);
+}
 
 .nook-button-primary {
   background: var(--nook-accent-cta);

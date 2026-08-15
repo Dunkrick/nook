@@ -1,12 +1,14 @@
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { logout } from "../services/auth";
 import SelectionToolbar from "../components/SelectionToolbar"
 import { getCards, createCard, updateCard, deleteCard } from "../services/cards";
 import type { Card, CardUpdate, DraftCard, Position } from "../types/cards";
 import Wall from "../components/Wall"
 import InsightPanel from "../components/InsightPanel";
+import WorkspaceShell from "../components/WorkspaceShell";
+import FloatingToolbar from "../components/FloatingToolbar";
+import { logout } from "../services/auth";
 import "../assets/nook-tokens.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
     const navigate = useNavigate();
@@ -111,29 +113,13 @@ function handleCloseInsight(){
     return (
     <div>
         {/* HEADER */}
-        <div style={{
-            position: "sticky",
-            top: 0,
-            zIndex: 1000,
-            padding: "var(--nook-space-5) var(--nook-space-7)",
-            background: "rgba(251,247,244,.72)",
-            backdropFilter: "blur(12px)",
-        }}>
-        <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--nook-space-2)" }}>
-            <h1 className="nook-logo">
-                Nook<span className="nook-logo__spark"></span>
-            </h1>
-            <button 
-                className="nook-button-primary" 
-                style={{ padding: "var(--nook-space-2) var(--nook-space-4)", fontSize: "var(--nook-text-caption)" }}
-                onClick={() => { logout(); navigate("/") }}>
-                Logout
-            </button>
-        </header>
-        </div>
-        {/* CARDS LIST / WALL */}
-        <main className="nook-workspace">
-            <div className="nook-canvas">
+        <WorkspaceShell>
+            <FloatingToolbar
+                onLogout={() => {
+                    logout();
+                    navigate("/");
+                }}
+            />
             <Wall 
                 cards={cards} 
                 draftCard={draftCard} 
@@ -158,8 +144,7 @@ function handleCloseInsight(){
                     onClose={handleCloseInsight}
                 />
             )}
-            </div>
-        </main>
+            </WorkspaceShell>
     </div>
     );
 };
