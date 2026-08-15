@@ -76,7 +76,7 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style, 
             {editing.isEditing ? (
                 <CardEditor
                     editText={editing.editText}
-                    inputRef={editing.inputRef}
+                    inputRef={editing.inputRef as React.RefObject<HTMLInputElement>}
                     onTextChange={editing.setEditText}
                     onKeyDown={editing.handleKeyDown}
                     onSave={editing.handleSave}

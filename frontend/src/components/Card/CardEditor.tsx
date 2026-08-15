@@ -1,6 +1,6 @@
 interface CardEditorProps {
     editText: string;
-    inputRef: React.RefObject<HTMLInputElement>;
+    inputRef: React.RefObject<HTMLInputElement | null>;
     onTextChange: (text: string) => void;
     onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
     onSave: () => void;
