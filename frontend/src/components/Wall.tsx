@@ -1,5 +1,7 @@
 import type { Card, CardUpdate, DraftCard, Position } from "../types/cards";
+import EmptyWorkspace from "./EmptyWorkspace";
 import CardComponent from "./Card";
+import { CARD_ROTATIONS } from "../lib/CardRotation";
 import DraftCardComponent from "./DraftCard";
 
 interface WallProps {
@@ -42,42 +44,11 @@ export default function Wall({
   return (
     <div 
         className="nook-wall" 
-        style={{ position: "relative" }} 
-        onDoubleClick={handleDoubleClick}
-    >
-      
+        onDoubleClick={handleDoubleClick}>
       {cards.length === 0 && !draftCard ? (
         
         /* THE EMPTY STATE */
-        <div style={{ 
-          position: "absolute", 
-          top: "50%", 
-          left: "50%", 
-          transform: "translate(-50%, -50%)", 
-          textAlign: "center",
-          color: "var(--nook-text-primary)",
-          opacity: 0.6
-        }}>
-          <div style={{
-            width: "260px",
-            height: "140px",
-            border: "2px dashed var(--nook-color-charcoal)",
-            borderRadius: "var(--nook-radius-xl)",
-            margin: "0 auto var(--nook-space-4)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            opacity: 0.4
-          }}>
-            <span style={{ fontSize: "24px" }}>[]</span>
-          </div>
-          <p style={{ fontSize: "var(--nook-text-h3)", fontWeight: "var(--nook-weight-medium)", margin: 0 }}>
-            Double-click anywhere to begin.
-          </p>
-          <p style={{ marginTop: "var(--nook-space-2)" }}>
-            Capture ideas, plans, reminders, or anything worth remembering.
-          </p>
-        </div>
+        <EmptyWorkspace />
 
       ) : (
         <>
@@ -96,7 +67,7 @@ export default function Wall({
                 position: "absolute",
                 left: card.x,
                 top: card.y,
-                "--card-rotate": `${[-2, 1.5, 3, -1, 2.5, -1.5][index % 6]}deg`
+                "--card-rotate": `${CARD_ROTATIONS[index % 6]}deg`
               }}
             />
           ))}

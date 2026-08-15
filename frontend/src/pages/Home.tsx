@@ -7,6 +7,8 @@ import InsightPanel from "../components/InsightPanel";
 import WorkspaceShell from "../components/WorkspaceShell";
 import FloatingToolbar from "../components/FloatingToolbar";
 import { logout } from "../services/auth";
+import Viewport from "../components/ViewPort";
+import World from "../components/World";
 import "../assets/nook-tokens.css";
 import { useNavigate } from "react-router-dom";
 
@@ -120,7 +122,9 @@ function handleCloseInsight(){
                     navigate("/");
                 }}
             />
-            <Wall 
+            <Viewport>
+                <World>
+                    <Wall 
                 cards={cards} 
                 draftCard={draftCard} 
                 onUpdate={handleUpdateCard} 
@@ -130,7 +134,9 @@ function handleCloseInsight(){
                 onCancelDraft={handleCancelDraft}
                 selectedCardIds={selectedCardIds}
                 onToggleCardSelection={toggleCardSelection}
-            />
+                    />
+                </World>
+            </Viewport>
             {selectedCardIds.length > 0 && (
                 <SelectionToolbar
                     selectedCount={selectedCardIds.length}
