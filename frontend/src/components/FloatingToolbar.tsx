@@ -5,9 +5,8 @@ interface FloatingToolbarProps {
 export default function FloatingToolbar({
     onLogout,
 }: FloatingToolbarProps) {
-
     return (
-        <header className="nook-toolbar">
+        <div className="nook-toolbar">
 
             <div className="nook-toolbar__brand">
                 <span className="nook-logo">
@@ -23,6 +22,6 @@ export default function FloatingToolbar({
                 Logout
             </button>
 
-        </header>
+        </div>
     );
 }

@@ -302,17 +302,37 @@
   width: var(--toolbar-width);
   height: var(--toolbar-height);
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   padding: 0 var(--nook-space-5);
-  border-radius: var(--toolbar-radius);
-  background: rgba(255, 253, 251, 0.72);
-  backdrop-filter: blur(var(--toolbar-blur));
-  -webkit-backdrop-filter: blur(var(--toolbar-blur));
-  border: 1px solid rgba(42, 36, 56, 0.08);
-  box-shadow: 0 8px 20px rgba(42, 36, 56, 0.08);
-  transition: background var(--motion-settle), box-shadow var(--motion-settle);
+  border-radius: 999px;
+  background: rgba(255, 253, 251, .62);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(42, 36, 56, .08);
+  box-shadow: 0 6px 14px rgba(42, 36, 56, .08);
+  transition: opacity var(--motion-settle),
+    transform var(--motion-settle),
+    background var(--motion-settle),
+    box-shadow var(--motion-settle);
   z-index: 1000;
+  will-change: transform, opacity;
+}
+
+.nook-toolbar--idle {
+  opacity: .72;
+  transform: translateX(-50%) translateY(0);
+}
+
+.nook-toolbar--active {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-2px);
+}
+
+.nook-toolbar:hover {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 10px 24px rgba(42, 36, 56, .10);
 }
 
 .nook-toolbar__button {
@@ -329,7 +349,7 @@
 }
 
 .nook-toolbar__button:hover {
-  background: rgba(42, 36, 56, 0.06);
+  background: rgba(42, 36, 56, 0.45);
 }
 
 .nook-toolbar__brand {
@@ -386,6 +406,7 @@
   flex-direction: column;
   overflow: hidden;
   background: linear-gradient(180deg, rgba(255, 255, 255, .28), rgba(255, 255, 255, 0)), var(--nook-paper);
+  cursor: default;
 }
 
 .nook-workspace-content {
