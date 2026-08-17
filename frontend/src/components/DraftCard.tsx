@@ -56,16 +56,16 @@ export default function DraftCardComponent({
             left: position.x,
             top: position.y,
 
-            minWidth: "240px",
+            minWidth: "var(--card-min-width)",
             minHeight: "140px",
 
             resize: "none",
 
             padding: "var(--nook-space-4)",
 
-            borderRadius: "var(--nook-radius-lg)",
+            borderRadius: "var(--card-radius)",
 
-            border: "none",
+            border: "var(--card-border)",
 
             outline: "none",
 
@@ -77,7 +77,9 @@ export default function DraftCardComponent({
 
             fontSize: "var(--nook-text-body)",
 
-            boxShadow: "var(--nook-shadow-md)",
+            boxShadow: "var(--card-highlight), var(--card-shadow)",
+
+            opacity: "var(--card-draft-opacity)",
         }}
     />
 );
