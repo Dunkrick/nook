@@ -67,7 +67,8 @@ export default function Wall({
                 position: "absolute",
                 left: card.x,
                 top: card.y,
-                "--card-rotate": `${CARD_ROTATIONS[index % 6]}deg`
+                "--card-rotate": `${CARD_ROTATIONS[index % 6]}deg`,
+                background: `var(--nook-block-${(index%4) + 1})`
               }}
             />
           ))}

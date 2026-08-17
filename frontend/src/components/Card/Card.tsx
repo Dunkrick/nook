@@ -32,8 +32,6 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style, 
         onUpdate,
     });
 
-    const blockColor = `var(--nook-block-${(index % 4) + 1})`;
-
     function handleClick(e: React.MouseEvent<HTMLDivElement>) {
         // Only select when Cmd (Mac) or Ctrl (Windows/Linux) is held
         if (!e.metaKey && !e.ctrlKey) return;
@@ -61,14 +59,23 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style, 
             style={{
                 display: "flex",
                 justifyContent: "space-between",
-                background: blockColor,
-                boxShadow: isSelected || drag.isDragging ? "var(--card-shadow-drag)" : undefined,
-                outline: isSelected ? "3px solid rgba(255,255,255,0.9)" : "none",
-                scale: isSelected ? "1.03" : "1",
-                transform: drag.isDragging ? `rotate(var(--card-rotate, 0deg)) scale(1.03)` : undefined,
+                // Drag: deep shadow, lift, tilt — no outline (you know it's moving)
+                // Selected: gentle shadow, subtle outline — not moving
+                boxShadow: drag.isDragging
+                    ? "var(--card-shadow-drag)"
+                    : isSelected
+                        ? "var(--card-selected-shadow)"
+                        : undefined,
+                outline: isSelected && !drag.isDragging
+                    ? "var(--card-selected-outline)"
+                    : "none",
+                transform: drag.isDragging
+                    ? `rotate(${style?.["--card-rotate"] ?? "0deg"}) scale(1.03)`
+                    : `rotate(${style?.["--card-rotate"] ?? "0deg"})`,
                 zIndex: drag.isDragging ? 100 : isSelected ? 50 : 1,
-                cursor: drag.isDragging ? "grabbing" : (editing.isEditing ? "default" : "grab"),
-                transition: drag.isDragging ? "none" : `translate var(--motion-settle), transform var(--motion-settle), box-shadow var(--motion-settle), scale var(--motion-settle), outline-color var(--motion-settle)`,
+                cursor: editing.isEditing ? "text" : drag.isDragging ? "grabbing" : "grab",
+                transition: drag.isDragging ? "none" : `transform var(--motion-settle), box-shadow var(--motion-settle), opacity var(--motion-settle), outline-color var(--motion-settle)`,
+                opacity: drag.isDragging || editing.isEditing || isHovered ? 1 : 0,
                 ...style,
                 left: drag.position.x,
                 top: drag.position.y,

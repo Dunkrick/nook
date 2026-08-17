@@ -55,30 +55,18 @@ export default function DraftCardComponent({
             position: "absolute",
             left: position.x,
             top: position.y,
-
             minWidth: "var(--card-min-width)",
             minHeight: "140px",
-
             resize: "none",
-
             padding: "var(--nook-space-4)",
-
             borderRadius: "var(--card-radius)",
-
             border: "var(--card-border)",
-
             outline: "none",
-
-            background: "var(--nook-block-1)",
-
+            background: `linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0)), var(--card-color, var(--nook-paper))`,
             color: "var(--nook-text-on-block)",
-
             fontFamily: "var(--nook-font-sans)",
-
             fontSize: "var(--nook-text-body)",
-
             boxShadow: "var(--card-highlight), var(--card-shadow)",
-
             opacity: "var(--card-draft-opacity)",
         }}
     />
