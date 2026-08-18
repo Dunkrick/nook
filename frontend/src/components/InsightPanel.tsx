@@ -8,41 +8,30 @@ export default function InsightPanel({
     onClose,
 }: InsightPanelProps) {
     return (
-        //we replace the mock insight with real api call to AI
-        <aside 
-        style={{
-            position: "fixed",
-            top: 0,
-            right: 0,
-            width: "420px",
-            height: "100vh",
-            background: "var(--nook-bg)",
-            borderLeft: "1px solid var(--nook-border)",
-            padding: "var(--nook-space-6)",
-            display: "flex",
-            flexDirection: "column",
-            boxShadow: "var(--shadow-floating)",
-        }}>
-            <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--nook-space-6)" }}>
-                <h2 className="nook-text-headline" style={{ margin: 0 }}>💡 What Stands Out</h2>
-                <button className="nook-button-ghost" style={{ padding: "var(--nook-space-2) var(--nook-space-4)" }} onClick={onClose}>Close</button>
+        <aside className="nook-insight-panel" aria-label="Thought insights">
+            <header className="nook-insight-panel__header">
+                <div>
+                    <span className="nook-insight-panel__eyebrow">pattern finder</span>
+                    <h2>What stands out</h2>
+                </div>
+                <button className="nook-button nook-button--quiet" onClick={onClose}>Close</button>
             </header>
-            <section style={{ marginBottom: "var(--nook-space-4)" }}>
-                <p className="nook-text-caption" style={{ margin: 0 }}>
+            <section className="nook-insight-panel__status">
+                <p>
                     Looking for patterns across {selectedCount} thoughts...
                 </p>
             </section>
-            <section style={{ marginBottom: "var(--nook-space-5)" }}>
-                <p style={{ marginBottom: "var(--nook-space-3)" }}>
+            <section className="nook-insight-panel__copy">
+                <p>
                     It seems you're investing in multiple long-term goals simultaneously.
                 </p>
                 <p>
                     Rather than trying to progress everything today, identify the one task that unlocks the most momentum before switching context.
                 </p>
             </section>
-            <section style={{ display: "flex", flexDirection: "column", gap: "var(--nook-space-4)", border: "1px solid var(--nook-border)", padding: "var(--nook-space-2)", borderRadius: "var(--nook-radius-md)", backgroundColor: "var(--nook-bg-tertiary)" }}>
-                <p className="nook-text-caption" style={{ margin: 0, fontWeight: "var(--nook-weight-medium)" }}>Suggested next step</p>
-                <p className="nook-text-caption" style={{ margin: 0 }}>Complete the drag interaction refactor.</p>
+            <section className="nook-insight-panel__next-step">
+                <strong>Suggested next step</strong>
+                <p>Choose the one thought that unlocks the most momentum today.</p>
             </section>
         </aside>
     );

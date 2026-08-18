@@ -9,7 +9,6 @@ import FloatingToolbar from "../components/FloatingToolbar";
 import { logout } from "../services/auth";
 import Viewport from "../components/Viewport";
 import World from "../components/World";
-import "../assets/nook-tokens.css";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {

@@ -34,56 +34,53 @@ export default function Wall({
   function handleDoubleClick(
     e: React.MouseEvent<HTMLDivElement>
 ) {
-    const rect = e.currentTarget.getBoundingClientRect();
+    const world = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - world.left;
+    const y = e.clientY - world.top;
     onCreate({
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
+        x,
+        y,
     });
+
 }
   
   return (
     <div 
         className="nook-wall" 
+        aria-label="Thought wall. Double-click to add a thought."
         onDoubleClick={handleDoubleClick}>
-      {cards.length === 0 && !draftCard ? (
-        
-        /* THE EMPTY STATE */
+      {cards.length === 0 && !draftCard && (
         <EmptyWorkspace />
+      )}
 
-      ) : (
-        <>
-          {/* THE CARDS */}
-          {cards.map((card, index) => (
-            <CardComponent
-              key={card.id}
-              card={card}
-              index={index}
-              onUpdate={onUpdate}
-              onDelete={onDelete}
-              isSelected={selectedCardIds.includes(card.id)}
-              onToggleSelection={() => onToggleCardSelection(card.id)}
-              style={{ 
-                animationDelay: `${index * 0.09}s`,
-                position: "absolute",
+      {cards.map((card, index) => (
+        <CardComponent
+            key={card.id}
+            card={card}
+            index={index}
+            onUpdate={onUpdate}
+            onDelete={onDelete}
+            isSelected={selectedCardIds.includes(card.id)}
+            onToggleSelection={() => onToggleCardSelection(card.id)}
+            style={{
                 left: card.x,
                 top: card.y,
                 "--card-rotate": `${CARD_ROTATIONS[index % 6]}deg`,
-                background: `var(--nook-block-${(index%4) + 1})`
-              }}
-            />
-          ))}
-          {draftCard && (
-    <DraftCardComponent
-        position={{
-            x: draftCard.x,
-            y: draftCard.y,
-        }}
-        onCommit={onCommitDraft}
-        onCancel={onCancelDraft}
-    />
-)}
-        </>
-      )}
+                "--card-color": `var(--artifact-${(index % 4) + 1})`,
+            }}
+        />
+    ))}
+
+    {draftCard && (
+        <DraftCardComponent
+            position={{
+                x: draftCard.x,
+                y: draftCard.y,
+            }}
+            onCommit={onCommitDraft}
+            onCancel={onCancelDraft}
+        />
+    )}
 
     </div>
   );

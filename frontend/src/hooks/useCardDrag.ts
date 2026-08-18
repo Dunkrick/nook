@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import type { CardUpdate } from "../types/cards";
 
 interface UseCardDragOptions {
@@ -9,21 +9,19 @@ interface UseCardDragOptions {
 }
 
 export function useCardDrag({ cardId, initialX, initialY, onUpdate }: UseCardDragOptions) {
-    const [position, setPosition] = useState({ x: initialX, y: initialY });
+    const [dragPosition, setDragPosition] = useState({ x: initialX, y: initialY });
     const [isDragging, setIsDragging] = useState(false);
+    const positionRef = useRef(dragPosition);
     const dragStartPos = useRef({ x: 0, y: 0 });
     const dragStartCardPos = useRef({ x: 0, y: 0 });
 
-    // Keep position in sync with server-pushed updates, but not while dragging
-    useEffect(() => {
-        if (isDragging) return;
-        setPosition({ x: initialX, y: initialY });
-    }, [initialX, initialY, isDragging]);
-
     const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+        const startPosition = { x: initialX, y: initialY };
         setIsDragging(true);
         dragStartPos.current = { x: e.clientX, y: e.clientY };
-        dragStartCardPos.current = { x: position.x, y: position.y };
+        dragStartCardPos.current = startPosition;
+        positionRef.current = startPosition;
+        setDragPosition(startPosition);
         e.currentTarget.setPointerCapture(e.pointerId);
     };
 
@@ -31,10 +29,12 @@ export function useCardDrag({ cardId, initialX, initialY, onUpdate }: UseCardDra
         if (!isDragging) return;
         const dx = e.clientX - dragStartPos.current.x;
         const dy = e.clientY - dragStartPos.current.y;
-        setPosition({
+        const nextPosition = {
             x: dragStartCardPos.current.x + dx,
             y: dragStartCardPos.current.y + dy,
-        });
+        };
+        positionRef.current = nextPosition;
+        setDragPosition(nextPosition);
     };
 
     const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -42,14 +42,24 @@ export function useCardDrag({ cardId, initialX, initialY, onUpdate }: UseCardDra
         setIsDragging(false);
         e.currentTarget.releasePointerCapture(e.pointerId);
         // Fire-and-forget because Home is optimistic now
-        void onUpdate(cardId, { x: position.x, y: position.y });
+        void onUpdate(cardId, positionRef.current);
+    };
+
+    const handlePointerCancel = (e: React.PointerEvent<HTMLDivElement>) => {
+        if (!isDragging) return;
+        setIsDragging(false);
+        if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+            e.currentTarget.releasePointerCapture(e.pointerId);
+        }
+        void onUpdate(cardId, positionRef.current);
     };
 
     return {
-        position,
+        position: isDragging ? dragPosition : { x: initialX, y: initialY },
         isDragging,
         handlePointerDown,
         handlePointerMove,
         handlePointerUp,
+        handlePointerCancel,
     };
 }

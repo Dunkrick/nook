@@ -8,10 +8,7 @@ export default function CardBody({
 
     return (
 
-        <p
-            className="nook-block__label"
-            style={{ margin: 0 }}
-        >
+        <p className="nook-card__body">
             {text}
         </p>
 

@@ -1,0 +1,46 @@
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.nook-button {
+  min-height: 38px;
+  border: 1px solid transparent;
+  border-radius: 999px; padding: 0 var(--space-4); color: var(--text-primary);
+  font-size: var(--type-label-size); font-weight: var(--weight-semibold);
+  transition: transform var(--motion-lift), background-color var(--motion-lift), box-shadow var(--motion-lift), border-color var(--motion-lift);
+}
+
+.nook-button:hover { transform: translateY(-1px); }
+.nook-button:active { transform: translateY(0); }
+
+.nook-button--primary {
+  border-color: var(--border-strong); background: var(--border-strong); color: var(--text-on-dark);
+  box-shadow: 0 3px 0 var(--text-heading);
+}
+
+.nook-button--primary:hover { box-shadow: 0 5px 0 var(--text-heading); }
+
+.nook-button--quiet {
+  border-color: color-mix(in srgb, var(--border-strong) 14%, transparent);
+  background: color-mix(in srgb, var(--color-artifact) 66%, transparent);
+}
+
+.nook-button--quiet:hover { background: var(--color-artifact); }
+
+.nook-icon-button {
+  display: inline-grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  font-size: var(--type-hint-size); font-weight: var(--weight-bold);
+}
+
+.nook-icon-button:hover { background: color-mix(in srgb, var(--border-strong) 10%, transparent); }
+.nook-icon-button--danger:hover { background: color-mix(in srgb, var(--accent-action) 18%, transparent); color: #a93e2d; }

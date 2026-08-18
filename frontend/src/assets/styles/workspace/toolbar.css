@@ -1,0 +1,48 @@
+.nook-toolbar {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  width: min(760px, 92vw);
+  padding: 0 24px;
+}
+
+.nook-toolbar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.nook-logo {
+  display: inline-flex;
+  align-items: center;
+  color: var(--text-heading);
+  font-size: 25px;
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.05em;
+}
+
+.nook-logo__spark {
+  width: 8px;
+  height: 8px;
+  margin: 0 0 1px 3px;
+  border-radius: 2px;
+  background: var(--accent-primary);
+  transform: rotate(45deg);
+}
+
+.nook-toolbar__descriptor {
+  padding-left: var(--space-3);
+  border-left: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: var(--type-hint-size);
+  font-weight: var(--weight-medium);
+}
+
+.nook-toolbar__button {
+  min-height: 40px;
+}

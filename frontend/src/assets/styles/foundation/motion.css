@@ -1,0 +1,5 @@
+:root {
+  --motion-lift: 180ms cubic-bezier(0.2, 0, 0, 1);
+  --motion-pop: 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  --motion-settle: 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}

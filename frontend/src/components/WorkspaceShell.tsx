@@ -1,23 +1,13 @@
-import { useState, type ReactNode } from "react";
-
-interface WorkspaceShellProps {
-    children: ReactNode;
-}
+import type { PropsWithChildren } from "react";
 
 export default function WorkspaceShell({
     children,
-}: WorkspaceShellProps) {
-
-    const [toolbarActive, setToolbarActive] = useState(false);
-
+}: PropsWithChildren) {
     return (
-        <div
-            className="nook-workspace-shell"
-            onMouseMove={(e) => setToolbarActive(e.clientY < 100)}
-        >
+        <main className="nook-workspace-shell" aria-label="Nook workspace">
             <div className="nook-workspace-content">
                 {children}
             </div>
-        </div>
+        </main>
     );
 }

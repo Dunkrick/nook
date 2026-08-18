@@ -1,15 +1,17 @@
-import type { ReactNode } from "react";
-
-interface ViewportProps {
-    children: ReactNode;
-}
+import type { PropsWithChildren } from "react";
 
 export default function Viewport({
     children,
-}: ViewportProps) {
-    return (
-        <section className="nook-viewport">
+}: PropsWithChildren){
+
+    return(
+
+        <div className="nook-viewport">
+
             {children}
-        </section>
+
+        </div>
+
     );
+
 }

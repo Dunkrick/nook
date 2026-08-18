@@ -4,29 +4,29 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: var(--nook-space-5);
-  background: var(--nook-bg);
+  gap: var(--space-5);
+  background: var(--color-canvas);
 }
 
 .auth-header {
   text-align: center;
-  margin-bottom: var(--nook-space-4);
+  margin-bottom: var(--space-4);
 }
 
 .auth-tagline {
-  font-weight: var(--nook-weight-medium);
-  font-size: var(--nook-text-body);
-  color: var(--nook-text-primary);
-  margin: var(--nook-space-2) var(--nook-space-5) 0;
+  font-weight: var(--weight-medium);
+  font-size: var(--type-body-size);
+  color: var(--text-primary);
+  margin: var(--space-2) var(--space-5) 0;
 }
 
 .auth-card {
   width: 100%;
   max-width: 400px;
-  padding: var(--nook-space-7) var(--nook-space-6);
-  background: white;
-  border: 2px solid var(--nook-border-block);
-  border-radius: var(--nook-radius-xl);
+  padding: var(--space-7) var(--space-6);
+  background: var(--color-artifact);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-panel);
   display: flex;
   flex-direction: column;
 }
@@ -34,40 +34,40 @@
 .auth-card label {
   display: block;
   text-align: left;
-  font-size: var(--nook-text-label);
-  font-weight: var(--nook-weight-semibold);
-  margin-bottom: var(--nook-space-2);
-  color: var(--nook-text-heading);
+  font-size: var(--type-label-size);
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--space-2);
+  color: var(--text-heading);
 }
 
 .auth-card input {
   width: 100%;
-  padding: var(--nook-space-3) var(--nook-space-4);
-  border: 1px solid var(--nook-border);
-  border-radius: var(--nook-radius-sm);
-  background: var(--nook-bg);
-  color: var(--nook-text-primary);
-  font-family: var(--nook-font-sans);
-  font-size: var(--nook-text-body);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-control);
+  background: var(--color-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: var(--type-body-size);
   box-sizing: border-box;
   transition: border-color 0.2s;
 }
 
 .auth-card input:focus {
   outline: none;
-  border-color: var(--nook-accent);
+  border-color: var(--accent-primary);
 }
 
 .auth-card button[type="submit"] {
-  background: var(--nook-accent-cta);
-  color: var(--nook-text-on-inverse);
-  font-family: var(--nook-font-sans);
-  font-size: var(--nook-text-label);
-  font-weight: var(--nook-weight-medium);
-  padding: var(--nook-space-3);
+  background: var(--accent-action);
+  color: var(--text-on-dark);
+  font-family: var(--font-ui);
+  font-size: var(--type-label-size);
+  font-weight: var(--weight-medium);
+  padding: var(--space-3);
   border: none;
-  border-radius: var(--nook-radius-sm);
-  margin-top: var(--nook-space-5);
+  border-radius: var(--radius-control);
+  margin-top: var(--space-5);
   cursor: pointer;
   transition: opacity 0.2s;
   width: 100%;
@@ -80,25 +80,25 @@
 .auth-card form {
     display: flex;
     flex-direction: column;
-    gap: var(--nook-space-4);
+    gap: var(--space-4);
 }
 
 .auth-toggle-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--nook-space-2);
-    margin-top: var(--nook-space-4);
-    font-size: var(--nook-text-label);
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+    font-size: var(--type-label-size);
 }
 
 .auth-toggle-btn {
     background: transparent;
     border: none;
-    color: var(--nook-accent);
-    font-weight: var(--nook-weight-medium);
+    color: var(--accent-primary);
+    font-weight: var(--weight-medium);
     cursor: pointer;
-    font-family: var(--nook-font-sans);
+    font-family: var(--font-ui);
     padding: 0;
 }
 

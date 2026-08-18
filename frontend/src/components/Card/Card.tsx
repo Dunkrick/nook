@@ -1,4 +1,3 @@
-import { useState } from "react";
 import type { Card, CardUpdate } from "../../types/cards";
 import { useCardEditing } from "../../hooks/useCardEditing";
 import { useCardDrag } from "../../hooks/useCardDrag";
@@ -17,8 +16,6 @@ interface CardProps {
 }
 
 export default function CardComponent({ card, index, onUpdate, onDelete, style, isSelected, onToggleSelection }: CardProps) {
-    const [isHovered, setIsHovered] = useState(false);
-
     const editing = useCardEditing({
         cardId: card.id,
         initialText: card.text,
@@ -45,37 +42,22 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style, 
 
     return (
         <div
-            className="nook-block"
+            className={[
+                "nook-card",
+                isSelected && "nook-card--selected",
+                drag.isDragging && "nook-card--dragging",
+                editing.isEditing && "nook-card--editing",
+            ].filter(Boolean).join(" ")}
             onPointerDown={(e) => {
                 if (editing.isEditing) return; // Don't drag while editing
                 drag.handlePointerDown(e);
             }}
             onPointerMove={drag.handlePointerMove}
             onPointerUp={drag.handlePointerUp}
+            onPointerCancel={drag.handlePointerCancel}
             onDoubleClick={(e) => e.stopPropagation()}
             onClick={handleClick}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
             style={{
-                display: "flex",
-                justifyContent: "space-between",
-                // Drag: deep shadow, lift, tilt — no outline (you know it's moving)
-                // Selected: gentle shadow, subtle outline — not moving
-                boxShadow: drag.isDragging
-                    ? "var(--card-shadow-drag)"
-                    : isSelected
-                        ? "var(--card-selected-shadow)"
-                        : undefined,
-                outline: isSelected && !drag.isDragging
-                    ? "var(--card-selected-outline)"
-                    : "none",
-                transform: drag.isDragging
-                    ? `rotate(${style?.["--card-rotate"] ?? "0deg"}) scale(1.03)`
-                    : `rotate(${style?.["--card-rotate"] ?? "0deg"})`,
-                zIndex: drag.isDragging ? 100 : isSelected ? 50 : 1,
-                cursor: editing.isEditing ? "text" : drag.isDragging ? "grabbing" : "grab",
-                transition: drag.isDragging ? "none" : `transform var(--motion-settle), box-shadow var(--motion-settle), opacity var(--motion-settle), outline-color var(--motion-settle)`,
-                opacity: drag.isDragging || editing.isEditing || isHovered ? 1 : 0,
                 ...style,
                 left: drag.position.x,
                 top: drag.position.y,
@@ -92,10 +74,9 @@ export default function CardComponent({ card, index, onUpdate, onDelete, style, 
                 />
             ) : (
                 // --- NORMAL MODE ---
-                <div style={{ display: "flex", flexDirection: "column" }}>
+                <div className="nook-card__content">
                     <CardHeader
                         index={index}
-                        isHovered={isHovered}
                         onEdit={() => editing.setIsEditing(true)}
                         onDelete={() => onDelete(card.id)}
                     />

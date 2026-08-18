@@ -1,34 +1,31 @@
-import "../assets/nook-tokens.css";
+import { WORKSPACE_ORIGIN, DEFAULT_CARD_OFFSET } from "../lib/workspace";
 
 export default function EmptyWorkspace() {
     return (
-    <div style={{ 
-          top: "50%", 
-          left: "50%", 
-          transform: "translate(-50%, -50%)", 
-          textAlign: "center",
-          color: "var(--nook-text-primary)",
-          opacity: 0.6
-        }}>
-          <div style={{
-            width: "260px",
-            height: "140px",
-            border: "2px dashed var(--nook-color-charcoal)",
-            borderRadius: "var(--nook-radius-xl)",
-            margin: "0 auto var(--nook-space-4)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            opacity: 0.4
-          }}>
-            <span style={{ fontSize: "24px" }}>[]</span>
-          </div>
-          <p style={{ fontSize: "var(--nook-text-h3)", fontWeight: "var(--nook-weight-medium)", margin: 0 }}>
-            Double-click anywhere to begin.
-          </p>
-          <p style={{ marginTop: "var(--nook-space-2)" }}>
-            Capture ideas, plans, reminders, or anything worth remembering.
-          </p>
-        </div>
+        <>
+            <div
+                className="nook-empty-note nook-empty-note--primary"
+                style={{ left: WORKSPACE_ORIGIN.x, top: WORKSPACE_ORIGIN.y }}
+            >
+                <div className="nook-empty-note__eyebrow">
+                    BEGIN HERE
+                </div>
+
+                <h2>Everything starts with one thought.</h2>
+
+                <p>
+                    Double-click anywhere on the wall and let the first idea
+                    land. It doesn't have to be perfect.
+                </p>
+            </div>
+
+            <div
+                className="nook-empty-note nook-empty-note--secondary"
+                style={{ left: WORKSPACE_ORIGIN.x + DEFAULT_CARD_OFFSET.x, top: WORKSPACE_ORIGIN.y + DEFAULT_CARD_OFFSET.y }}>
+                <div className="nook-empty-note__ghost-line" />
+                <div className="nook-empty-note__ghost-line short" />
+                <div className="nook-empty-note__ghost-line" />
+            </div>
+        </>
     );
 };

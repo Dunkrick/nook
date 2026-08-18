@@ -6,22 +6,23 @@ export default function FloatingToolbar({
     onLogout,
 }: FloatingToolbarProps) {
     return (
-        <div className="nook-toolbar">
+        <header className="nook-toolbar">
 
             <div className="nook-toolbar__brand">
                 <span className="nook-logo">
                     Nook
                     <span className="nook-logo__spark" />
                 </span>
+                <span className="nook-toolbar__descriptor">your thinking wall</span>
             </div>
 
             <button
-                className="nook-toolbar__button"
+                className="nook-button nook-button--quiet nook-toolbar__button"
                 onClick={onLogout}
             >
                 Logout
             </button>
 
-        </div>
+        </header>
     );
 }

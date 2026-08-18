@@ -1,20 +1,13 @@
 interface CardActionsProps {
-    isHovered: boolean;
     onEdit: () => void;
     onDelete: () => void;
 }
 
-export default function CardActions({ isHovered, onEdit, onDelete }: CardActionsProps) {
+export default function CardActions({ onEdit, onDelete }: CardActionsProps) {
     return (
         <div
+            className="nook-card__actions"
             onClick={(e) => e.stopPropagation()}
-            style={{
-                opacity: isHovered ? 1 : 0,
-                pointerEvents: isHovered ? "auto" : "none",
-                transition: "opacity var(--motion-settle)",
-                display: "flex",
-                gap: "var(--nook-space-2)",
-            }}
         >
             <button
                 onPointerDown={(e) => e.stopPropagation()}
@@ -22,13 +15,8 @@ export default function CardActions({ isHovered, onEdit, onDelete }: CardActions
                     e.stopPropagation();
                     onEdit();
                 }}
-                style={{
-                    background: "transparent",
-                    border: "none",
-                    color: "var(--nook-text-on-block)",
-                    cursor: "pointer",
-                    fontWeight: "var(--nook-weight-medium)",
-                }}
+                className="nook-icon-button"
+                aria-label="Edit thought"
             >
                 Edit
             </button>
@@ -38,13 +26,8 @@ export default function CardActions({ isHovered, onEdit, onDelete }: CardActions
                     e.stopPropagation();
                     onDelete();
                 }}
-                style={{
-                    background: "transparent",
-                    border: "none",
-                    color: "var(--nook-text-on-block)",
-                    cursor: "pointer",
-                    fontWeight: "var(--nook-weight-bold)",
-                }}
+                className="nook-icon-button nook-icon-button--danger"
+                aria-label="Delete thought"
             >
                 Delete
             </button>

@@ -1,0 +1,47 @@
+:root {
+  /* Primitive palette: use semantic aliases below in component rules. */
+  --palette-ink: #2a2438;
+  --palette-iris: #4a4368;
+  --palette-coral: #f2735c;
+  --palette-coral-deep: #d9573f;
+  --palette-gold: #f6b352;
+  --palette-blue: #4a5fb8;
+  --palette-green: #5fa777;
+  --palette-cream: #fbf7f4;
+  --palette-paper: #fffdfb;
+  --palette-border: #e4dde0;
+
+  /* Material roles */
+  --color-canvas: var(--palette-cream);
+  --color-surface: #f0e5d9;
+  --color-artifact: var(--palette-paper);
+  --color-selection: rgba(74, 67, 104, 0.42);
+  --color-overlay: rgba(42, 36, 56, 0.18);
+
+  /* Content roles */
+  --text-primary: var(--palette-ink);
+  --text-heading: var(--palette-iris);
+  --text-muted: #756d80;
+  --text-on-dark: var(--palette-cream);
+  --border-subtle: var(--palette-border);
+  --border-strong: var(--palette-ink);
+  --accent-primary: var(--palette-coral);
+  --accent-action: var(--palette-coral-deep);
+  --focus-ring: rgba(74, 95, 184, 0.34);
+  --artifact-1: var(--palette-coral);
+  --artifact-2: var(--palette-gold);
+  --artifact-3: var(--palette-blue);
+  --artifact-4: var(--palette-green);
+
+  /* Space and shape */
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px; --space-9: 96px;
+  --radius-control: 8px; --radius-surface: 12px; --radius-artifact: 18px; --radius-panel: 24px;
+
+  /* Elevation follows material level, never decoration alone. */
+  --elevation-artifact: 0 4px 16px rgba(42, 36, 56, 0.12);
+  --elevation-artifact-hover: 0 4px 16px rgba(42, 36, 56, 0.24);
+  --elevation-drag: 0 18px 42px rgba(42, 36, 56, 0.26);
+  --elevation-overlay: 0 24px 64px rgba(42, 36, 56, 0.22);
+  --elevation-surface: 0 10px 30px rgba(71, 56, 54, 0.14);
+}
