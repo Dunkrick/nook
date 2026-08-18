@@ -13,7 +13,6 @@ export default function FloatingToolbar({
                     Nook
                     <span className="nook-logo__spark" />
                 </span>
-                <span className="nook-toolbar__descriptor">your thinking wall</span>
             </div>
 
             <button

@@ -6,9 +6,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 32px;
+  gap: var(--space-6);
   width: min(760px, 92vw);
-  padding: 0 24px;
+  padding: 0 var(--space-5);
+  z-index: var(--z-toolbar);
 }
 
 .nook-toolbar__brand {

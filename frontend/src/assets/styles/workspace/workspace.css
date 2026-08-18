@@ -26,12 +26,14 @@
   top: 0;
   width: 100000px;
   height: 100000px;
+  z-index: var(--z-wall);
   will-change: transform;
 }
 
 .nook-wall {
   position: absolute;
   inset: 0;
+  z-index: var(--z-base);
   background:
     radial-gradient(rgba(42, 36, 56, .035) 1px,
       transparent 1px);

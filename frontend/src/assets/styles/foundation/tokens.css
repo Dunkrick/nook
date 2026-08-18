@@ -34,9 +34,19 @@
   --artifact-4: var(--palette-green);
 
   /* Space and shape */
-  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
-  --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px; --space-9: 96px;
-  --radius-control: 8px; --radius-surface: 12px; --radius-artifact: 18px; --radius-panel: 24px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --radius-control: 8px;
+  --radius-surface: 12px;
+  --radius-artifact: 18px;
+  --radius-panel: 24px;
 
   /* Elevation follows material level, never decoration alone. */
   --elevation-artifact: 0 4px 16px rgba(42, 36, 56, 0.12);
@@ -44,4 +54,35 @@
   --elevation-drag: 0 18px 42px rgba(42, 36, 56, 0.26);
   --elevation-overlay: 0 24px 64px rgba(42, 36, 56, 0.22);
   --elevation-surface: 0 10px 30px rgba(71, 56, 54, 0.14);
+  /* Layering Rules
+Wall
+↓
+
+Cards
+
+↓
+
+Selection
+
+↓
+
+Panels
+
+↓
+
+Toolbar
+
+↓
+
+Modal*/
+
+  /* Elevation Layering*/
+
+  --z-base: 0;
+  --z-wall: 10;
+  --z-selection: 100;
+  --z-panel: 200;
+  --z-toolbar: 300;
+  --z-modal: 400;
+  --z-toast: 500;
 }
