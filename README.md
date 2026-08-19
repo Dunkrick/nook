@@ -180,6 +180,13 @@ Double Click
 
 ---
 
+## Documentation
+
+- Architecture Decision Records → `/docs/adr`
+- Cleanup Log → `/docs/cleanup-log.md`
+
+---
+
 # Roadmap
 
 ## v1.2
