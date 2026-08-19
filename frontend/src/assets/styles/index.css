@@ -1,8 +1,8 @@
 /* Nook's single global stylesheet entry point. Import this file once in src/index.css. */
-@import "./foundation/reset.css";
-@import "./foundation/tokens.css";
-@import "./foundation/typography.css";
-@import "./foundation/motion.css";
+@import "./tokens/reset.css";
+@import "./tokens/tokens.css";
+@import "./tokens/typography.css";
+@import "./tokens/interaction.css";
 
 @import "./primitives/controls.css";
 

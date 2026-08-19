@@ -1,0 +1,18 @@
+/* ==========================================================
+   INTERACTION STATES
+   ========================================================== */
+
+:root {
+
+    --interaction-duration: 160ms;
+    --interaction-easing: cubic-bezier(.2, 0, 0, 1);
+
+    --interaction-hover-lift: -3px;
+    --interaction-hover-scale: 1.01;
+
+    --interaction-drag-scale: 1.02;
+
+    --interaction-selected-outline:
+        2px solid rgba(74, 67, 104, .28);
+
+}

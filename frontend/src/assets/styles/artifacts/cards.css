@@ -1,43 +1,68 @@
-:root {
-    --card-min-width: 260px;
-    --card-max-width: 380px;
-}
-
 .nook-card {
+
+    /* Layout */
+
     position: absolute;
     display: flex;
-    width: min(320px, var(--card-max-width));
-    min-height: 148px;
     flex-direction: column;
+    /*TODO: to clean up width according to product philosophy*/
+    min-width: var(--card-min-width);
+    max-width: var(--card-max-width);
+    min-height: 128px;
+    padding: var(--space-4);
+
+    /* Material */
+
     border: 2px solid var(--border-strong);
     border-radius: var(--radius-artifact);
-    padding: var(--space-4);
-    background: linear-gradient(180deg, color-mix(in srgb, var(--color-artifact) 30%, transparent), transparent), var(--card-color, var(--artifact-1));
+    background:
+        linear-gradient(180deg,
+            color-mix(in srgb, var(--color-artifact) 30%, transparent),
+            transparent),
+        var(--card-color, var(--artifact-1));
     color: var(--text-primary);
-    box-shadow: 4px 5px 0 color-mix(in srgb, var(--border-strong) 18%, transparent), var(--elevation-artifact);
-    transform: rotate(var(--card-rotate, 0deg));
-    transform-origin: center;
-    transition: transform var(--motion-settle), box-shadow var(--motion-settle), outline-color var(--motion-settle), opacity var(--motion-settle);
-    user-select: none;
+    box-shadow:
+        4px 5px 0 color-mix(in srgb, var(--border-strong) 18%, transparent),
+        var(--elevation-artifact);
+
+    /* Motion */
+
+    transition:
+        transform var(--interaction-duration) var(--interaction-easing),
+        box-shadow var(--interaction-duration) var(--interaction-easing),
+        outline-color var(--interaction-duration) var(--interaction-easing);
+
+    /* Interaction */
+
     cursor: grab;
+    user-select: none;
+    transform:
+        rotate(var(--card-rotate, 0deg));
+    transform-origin: center;
 }
 
 .nook-card:hover {
-    box-shadow: 6px 8px 0 color-mix(in srgb, var(--border-strong) 20%, transparent), var(--elevation-artifact-hover);
-    transform: rotate(var(--card-rotate, 0deg)) translateY(-4px);
-}
 
-.nook-card--selected {
-    outline: 3px solid var(--color-selection);
-    outline-offset: 4px;
+    transform:
+        rotate(var(--card-rotate)) translateY(var(--interaction-hover-lift)) scale(var(--interaction-hover-scale));
+
+    box-shadow:
+        6px 8px 0 color-mix(in srgb, var(--border-strong) 20%, transparent),
+        var(--elevation-artifact-hover);
+
 }
 
 .nook-card--dragging {
-    z-index: 100 !important;
-    box-shadow: 10px 14px 0 color-mix(in srgb, var(--border-strong) 18%, transparent), var(--elevation-drag);
-    transform: rotate(var(--card-rotate, 0deg)) scale(1.035);
-    transition: none;
     cursor: grabbing;
+    z-index: var(--z-selection);
+    transition: none;
+    transform: rotate(var(--card-rotate)) scale(var(--interaction-drag-scale));
+    box-shadow: 10px 14px 0 color-mix(in srgb, var(--border-strong) 18%, transparent), var(--elevation-drag);
+}
+
+.nook-card--selected {
+    outline: var(--interaction-selected-outline);
+    outline-offset: 4px;
 }
 
 .nook-card--editing {
@@ -59,7 +84,6 @@
 }
 
 .nook-card__number {
-    font-family: var(--font-mono);
     font-size: var(--type-overline-size);
     font-weight: var(--weight-medium);
     letter-spacing: var(--tracking-overline);
@@ -77,7 +101,7 @@
 
 .nook-card__actions {
     display: flex;
-    gap: 2px;
+    gap: var(--space-1);
     opacity: 0;
     pointer-events: none;
     transition: opacity var(--motion-lift);
@@ -110,13 +134,14 @@
     width: var(--card-min-width);
     min-height: 150px;
     resize: both;
+    padding: var(--space-4);
     border: 2px dashed var(--text-heading);
     border-radius: var(--radius-artifact);
-    padding: var(--space-4);
     background: var(--color-artifact);
     color: var(--text-primary);
-    box-shadow: var(--elevation-surface);
+    box-shadow: var(--elevation-overlay);
     line-height: var(--leading-body);
+    transform: rotate(-1deg);
     transition: box-shadow var(--motion-lift), transform var(--motion-lift);
 }
 
