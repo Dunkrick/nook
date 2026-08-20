@@ -6,9 +6,9 @@
 
 @import "./primitives/controls.css";
 
-@import "./workspace/workspace.css";
-@import "./workspace/toolbar.css";
-@import "./workspace/overlays.css";
+@import "./layouts/workspace.css";
+@import "./layouts/toolbar.css";
+@import "./layouts/overlays.css";
 
 @import "./artifacts/artifact.css";
 @import "./artifacts/empty-state.css";

@@ -15,6 +15,11 @@ async function request(method: string, endpoint: string, options?: RequestOption
         "Content-Type": "application/json",
     };
 
+    const fetchOptions: RequestInit = {
+        method,
+        headers,
+    };
+
     if (token) {
         headers["Authorization"] = `Bearer ${token}`;
     }
@@ -23,13 +28,14 @@ async function request(method: string, endpoint: string, options?: RequestOption
         endpoint += `?${new URLSearchParams(options?.params)}`;
     }
 
-    const response = await fetch(`${API_URL}${endpoint}`, {
-        method,
-        headers,
-        ...(options?.body && {
-            body: JSON.stringify(options.body),
-        }),
-    });
+    if (options?.body !== undefined) {
+        fetchOptions.body = JSON.stringify(options.body);
+    }
+
+    const response = await fetch(
+        `${API_URL}${endpoint}`,
+        fetchOptions
+    );
 
     const contentType =
         response.headers.get("content-type");
