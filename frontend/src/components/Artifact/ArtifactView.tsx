@@ -1,15 +1,15 @@
 //this file only renders UI. It knows nothing about hooks. Nothing about dragging or updating.
 //Presentation
 import { cn } from "../../lib/cn";
-import CardHeader from "./CardHeader";
-import CardBody from "./CardBody";
-import CardEditor from "./CardEditor";
-import useCardInteraction from "./useCardInteraction";
+import ArtifactHeader from "./ArtifactHeader";
+import ArtifactBody from "./ArtifactBody";
+import ArtifactEditor from "./ArtifactEditor";
+import useArtifactInteraction from "./useArtifactInteraction";
 
-interface CardViewProps {
+interface ArtifactViewProps {
     index: number;
-    cardText: string;
-    interaction: ReturnType<typeof useCardInteraction>;
+    artifactText: string;
+    interaction: ReturnType<typeof useArtifactInteraction>;
     isSelected: boolean;
     onDelete: () => void;
     style?: React.CSSProperties & {
@@ -17,14 +17,14 @@ interface CardViewProps {
     };
 }
 
-export default function CardView({
+export default function ArtifactView({
     index,
-    cardText,
+    artifactText,
     interaction,
     isSelected,
     onDelete,
     style,
-}: CardViewProps) {
+}: ArtifactViewProps) {
 
     const {
         editing,
@@ -59,7 +59,7 @@ export default function CardView({
 
             {editing.isEditing ? (
 
-                <CardEditor
+                <ArtifactEditor
                     editText={editing.editText}
                     inputRef={ editing.inputRef as React.RefObject<HTMLInputElement> }
                     onTextChange={ editing.setEditText }
@@ -68,12 +68,12 @@ export default function CardView({
                     onCancel={ editing.handleCancel }/>
             ) : (
                 <div className="nook-card__content">
-                    <CardHeader
+                    <ArtifactHeader
                         index={index}
                         onEdit={() => editing.setIsEditing(true) }
                         onDelete={onDelete} />
-                    <CardBody
-                        text={cardText} />
+                    <ArtifactBody
+                        text={artifactText} />
                 </div>
             )}
         </div>

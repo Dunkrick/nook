@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from "react";
-import type { Position } from "../types/cards";
+import type { Position } from "../types/artifacts";
 
-interface DraftCardProps {
+interface DraftArtifactProps {
     position: Position;
     onCommit: (text: string) => Promise<void>;
     onCancel: () => void;
 }
 
-export default function DraftCardComponent({
+export default function DraftArtifactComponent({
     position,
     onCommit,
     onCancel,
-}: DraftCardProps) {
+}: DraftArtifactProps) {
 
     const [text, setText] = useState("");
     const textareaRef = useRef<HTMLTextAreaElement>(null);

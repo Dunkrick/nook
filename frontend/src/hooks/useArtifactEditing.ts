@@ -1,13 +1,13 @@
 import { useState, useRef, useEffect } from "react";
-import type { CardUpdate } from "../types/cards";
+import type { ArtifactUpdate } from "../types/artifacts";
 
-interface UseCardEditingOptions {
-    cardId: number;
+interface UseArtifactEditingOptions {
+    artifactId: number;
     initialText: string;
-    onUpdate: (id: number, update: CardUpdate) => Promise<void>;
+    onUpdate: (id: number, update: ArtifactUpdate) => Promise<void>;
 }
 
-export function useCardEditing({ cardId, initialText, onUpdate }: UseCardEditingOptions) {
+export function useArtifactEditing({ artifactId, initialText, onUpdate }: UseArtifactEditingOptions) {
     const inputRef = useRef<HTMLInputElement>(null);
     const [isEditing, setIsEditing] = useState(false);
     const [editText, setEditText] = useState(initialText);
@@ -20,7 +20,7 @@ export function useCardEditing({ cardId, initialText, onUpdate }: UseCardEditing
 
     const handleSave = async () => {
         if (!editText.trim()) return;
-        await onUpdate(cardId, { text: editText });
+        await onUpdate(artifactId, { text: editText });
         setIsEditing(false);
     };
 

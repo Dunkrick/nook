@@ -1,4 +1,4 @@
-export const CARD_ROTATIONS = [
+export const ARTIFACT_ROTATIONS = [
     -2,
     1.5,
     3,

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import SelectionToolbar from "../components/SelectionToolbar"
-import { getCards, createCard, updateCard, deleteCard } from "../services/cards";
-import type { Card, CardUpdate, DraftCard, Position } from "../types/cards";
+import { getArtifacts, createArtifact, updateArtifact, deleteArtifact } from "../services/artifacts";
+import type { TextArtifact, ArtifactUpdate, DraftArtifact, Position } from "../types/artifacts";
 import Wall from "../components/Wall"
 import InsightPanel from "../components/InsightPanel";
 import WorkspaceShell from "../components/WorkspaceShell";
@@ -13,13 +13,13 @@ import { useNavigate } from "react-router-dom";
 
 export default function Home() {
     const navigate = useNavigate();
-    const [cards, setCards] = useState<Card[]>([]);
-    const [draftCard, setDraftCard] = useState<DraftCard | null>(null);
-    const [selectedCardIds, setSelectedCardIds] = useState<number[]>([]);
+    const [artifacts, setArtifacts] = useState<TextArtifact[]>([]);
+    const [draftArtifact, setDraftArtifact] = useState<DraftArtifact | null>(null);
+    const [selectedArtifactIds, setSelectedArtifactIds] = useState<number[]>([]);
     const [isInsightOpen, setIsInsightOpen] = useState(false);
 
     function handleCreateDraft(position: Position) {
-        setDraftCard({
+        setDraftArtifact({
             text: "",
             x: position.x,
             y: position.y,
@@ -27,81 +27,81 @@ export default function Home() {
     }
 
     async function handleCommitDraft(text: string) {
-    if (!draftCard) return;
+    if (!draftArtifact) return;
 
-    const savedCard = await createCard({
+    const savedArtifact = await createArtifact({
         text,
-        x: draftCard.x,
-        y: draftCard.y,
+        x: draftArtifact.x,
+        y: draftArtifact.y,
     });
 
-    setCards((current) => [...current, savedCard]);
-    setDraftCard(null);
+    setArtifacts((current) => [...current, savedArtifact]);
+    setDraftArtifact(null);
     }
 
     function handleCancelDraft() {
-    setDraftCard(null);
+    setDraftArtifact(null);
     }
     
     useEffect(() => {
-        async function fetchCards() {
-            const fetchedCards = await getCards();
-            setCards(fetchedCards);
+        async function fetchArtifacts() {
+            const fetchedArtifacts = await getArtifacts();
+            setArtifacts(fetchedArtifacts);
         }
-        fetchCards();
+        fetchArtifacts();
     }, []);
 
-async function handleUpdateCard(id: number, update: CardUpdate) {
+async function handleUpdateArtifact(id: number, update: ArtifactUpdate) {
     // Keep a snapshot in case the request fails
-    const previousCards = cards;
+    const previousArtifacts = artifacts;
 
     // Optimistic UI update
-    setCards((current) =>
-        current.map((card) =>
-            card.id === id
-                ? { ...card, ...update }
-                : card
+    setArtifacts((current) =>
+        current.map((artifact) =>
+            artifact.id === id
+                ? { ...artifact, ...update }
+                : artifact
         )
     );
 
     try {
-        const updated = await updateCard(id, update);
+        const updated = await updateArtifact(id, update);
 
         // Synchronize with the server response
-        setCards((current) =>
-            current.map((card) =>
-                card.id === id ? updated : card
+        setArtifacts((current) =>
+            current.map((artifact) =>
+                artifact.id === id ? updated : artifact
             )
         );
     } catch (error) {
         // Roll back if persistence failed
-        setCards(previousCards);
+        setArtifacts(previousArtifacts);
         console.error(error);
     }
 }
 
-async function handleDeleteCard(id: number) {
+async function handleDeleteArtifact(id: number) {
     // Call the backend to delete
-    await deleteCard(id);
+    await deleteArtifact(id);
     
     // Filter it out of our local React state
-    setCards((currentCards) => currentCards.filter((card) => card.id !== id));
+    setArtifacts((currentArtifacts) => currentArtifacts.filter((artifact) => artifact.id !== id));
 }
 
-function toggleCardSelection(cardId: number) {
-    setSelectedCardIds((current) => {
-        const isSelected = current.includes(cardId);
+function toggleArtifactSelection(artifactId: number) {
+    setSelectedArtifactIds((current) => {
+        const isSelected = current.includes(artifactId);
 
         if (isSelected) {
-            return current.filter((id) => id !== cardId);
+            return current.filter((id) => id !== artifactId);
         }
 
-        return [...current, cardId];
+        return [...current, artifactId];
     });
 }
 
 function handleClearSelection(){
-    setSelectedCardIds([]);
+    setSelectedArtifactIds([]);
 }
 
 function handleFindInsight() {
@@ -124,28 +124,28 @@ function handleCloseInsight(){
             <Viewport>
                 <World>
                     <Wall 
-                cards={cards} 
-                draftCard={draftCard} 
-                onUpdate={handleUpdateCard} 
-                onDelete={handleDeleteCard} 
+                artifacts={artifacts} 
+                draftArtifact={draftArtifact} 
+                onUpdate={handleUpdateArtifact} 
+                onDelete={handleDeleteArtifact} 
                 onCreate={handleCreateDraft} 
                 onCommitDraft={handleCommitDraft}
                 onCancelDraft={handleCancelDraft}
-                selectedCardIds={selectedCardIds}
-                onToggleCardSelection={toggleCardSelection}
+                selectedArtifactIds={selectedArtifactIds}
+                onToggleArtifactSelection={toggleArtifactSelection}
                     />
                 </World>
             </Viewport>
-            {selectedCardIds.length > 0 && (
+            {selectedArtifactIds.length > 0 && (
                 <SelectionToolbar
-                    selectedCount={selectedCardIds.length}
+                    selectedCount={selectedArtifactIds.length}
                     onFindInsight={handleFindInsight}
                     onClearSelection={handleClearSelection}
                 />
             )}
             {isInsightOpen && (
                 <InsightPanel
-                    selectedCount={selectedCardIds.length}
+                    selectedCount={selectedArtifactIds.length}
                     onClose={handleCloseInsight}
                 />
             )}

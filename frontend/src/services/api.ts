@@ -23,20 +23,38 @@ async function request(method: string, endpoint: string, options?: RequestOption
         endpoint += `?${new URLSearchParams(options?.params)}`;
     }
 
-    const response = await fetch(
-        `${API_URL}${endpoint}`,
-        {
-            method,
-            headers,
-            ...(options?.body ? { body: JSON.stringify(options?.body) } : {}),
+    const response = await fetch(`${API_URL}${endpoint}`, {
+        method,
+        headers,
+        ...(options?.body && {
+            body: JSON.stringify(options.body),
+        }),
+    });
+
+    const contentType =
+        response.headers.get("content-type");
+
+    const data =
+        contentType?.includes("application/json")
+            ? await response.json()
+            : await response.text();
+
+    if (!response.ok) {
+        if (
+            typeof data === "object" &&
+            data !== null &&
+            "error" in data
+        ) {
+            throw new Error(
+                (data as any).error.message
+            );
         }
-    );
 
-    const data = await response.json();
-
-    if (!response.ok || data.success === false) {
-        const errorMessage = data.error?.message || "Something went wrong";
-        throw new Error(errorMessage);
+        throw new Error(
+            typeof data === "string"
+                ? data
+                : response.statusText
+        );
     }
 
     return data;

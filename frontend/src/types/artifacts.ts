@@ -1,20 +1,24 @@
-export interface Card {
+export interface TextArtifact {
     id: number;
-    text: string;
-    userId: number;
+
+    type: "TEXT";
+
+    content: {
+        text: string;
+    };
+
     x: number;
     y: number;
-    createdAt: string;
-    updatedAt: string;
+    zIndex: number;
 }
 
-export interface DraftCard {
+export interface DraftArtifact {
     text: string;
     x: number;
     y: number;
 }
 
-export interface CardUpdate {
+export interface ArtifactUpdate {
     text?: string;
     x?: number;
     y?: number;

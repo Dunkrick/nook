@@ -1,35 +1,35 @@
-import type { Card, CardUpdate, DraftCard, Position } from "../types/cards";
+import type { TextArtifact, ArtifactUpdate, DraftArtifact, Position } from "../types/artifacts";
 import EmptyWorkspace from "./EmptyWorkspace";
-import CardComponent from "./Card/Card";
-import { CARD_ROTATIONS } from "../lib/CardRotation";
-import DraftCardComponent from "./DraftCard";
+import ArtifactComponent from "./Artifact/Artifact";
+import { ARTIFACT_ROTATIONS } from "../lib/ArtifactRotation";
+import DraftArtifactComponent from "./DraftArtifact";
 
 interface WallProps {
-  cards: Card[];
-  draftCard: DraftCard | null;
+  artifacts: TextArtifact[];
+  draftArtifact: DraftArtifact | null;
 
   onCreate: (position: Position) => void;
 
-  onUpdate: (id: number, update: CardUpdate) => Promise<void>;
+  onUpdate: (id: number, update: ArtifactUpdate) => Promise<void>;
   onDelete: (id: number) => Promise<void>;
 
   onCommitDraft: (text: string) => Promise<void>;
   onCancelDraft: () => void;
 
-  selectedCardIds: number[]
-  onToggleCardSelection: (cardId: number) => void
+  selectedArtifactIds: number[]
+  onToggleArtifactSelection: (artifactId: number) => void
 }
 
 export default function Wall({ 
-    cards, 
-    draftCard, 
+    artifacts, 
+    draftArtifact, 
     onUpdate, 
     onDelete, 
     onCreate, 
     onCommitDraft, 
     onCancelDraft,
-    selectedCardIds,
-    onToggleCardSelection,
+    selectedArtifactIds,
+    onToggleArtifactSelection,
 }: WallProps) {
   function handleDoubleClick(
     e: React.MouseEvent<HTMLDivElement>
@@ -49,33 +49,33 @@ export default function Wall({
         className="nook-wall" 
         aria-label="Thought wall. Double-click to add a thought."
         onDoubleClick={handleDoubleClick}>
-      {cards.length === 0 && !draftCard && (
+      {artifacts.length === 0 && !draftArtifact && (
         <EmptyWorkspace />
       )}
 
-      {cards.map((card, index) => (
-        <CardComponent
-            key={card.id}
-            card={card}
+      {artifacts.map((artifact, index) => (
+        <ArtifactComponent
+            key={artifact.id}
+            artifact={artifact}
             index={index}
             onUpdate={onUpdate}
             onDelete={onDelete}
-            isSelected={selectedCardIds.includes(card.id)}
-            onToggleSelection={() => onToggleCardSelection(card.id)}
+            isSelected={selectedArtifactIds.includes(artifact.id)}
+            onToggleSelection={() => onToggleArtifactSelection(artifact.id)}
             style={{
-                left: card.x,
-                top: card.y,
-                "--card-rotate": `${CARD_ROTATIONS[index % 6]}deg`,
-                "--card-color": `var(--artifact-${(index % 4) + 1})`,
+                left: artifact.x,
+                top: artifact.y,
+                "--artifact-rotate": `${ARTIFACT_ROTATIONS[index % 6]}deg`,
+                "--artifact-color": `var(--artifact-${(index % 4) + 1})`,
             }}
         />
     ))}
 
-    {draftCard && (
-        <DraftCardComponent
+    {draftArtifact && (
+        <DraftArtifactComponent
             position={{
-                x: draftCard.x,
-                y: draftCard.y,
+                x: draftArtifact.x,
+                y: draftArtifact.y,
             }}
             onCommit={onCommitDraft}
             onCancel={onCancelDraft}

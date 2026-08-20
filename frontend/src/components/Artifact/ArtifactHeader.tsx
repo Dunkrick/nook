@@ -1,4 +1,4 @@
-import CardActions from "./CardActions";
+import CardActions from "./ArtifactActions";
 
 interface CardHeaderProps {
     index: number;

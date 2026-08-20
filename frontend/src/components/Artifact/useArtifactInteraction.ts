@@ -1,36 +1,36 @@
 //this is the orchestrator as it calls useCardDrag() and userCardEditing()
 //this is not a smart one, it simply composes two existing hooks
-import { useCardEditing } from "../../hooks/useCardEditing";
-import { useCardDrag } from "../../hooks/useCardDrag";
+import { useArtifactEditing } from "../../hooks/useArtifactEditing";
+import { useArtifactDrag } from "../../hooks/useArtifactDrag";
 
-import type { Card, CardUpdate } from "../../types/cards";
+import type { TextArtifact, ArtifactUpdate } from "../../types/artifacts";
 
-interface UseCardInteractionProps {
-    card: Card;
+interface UseArtifactInteractionProps {
+    artifact: TextArtifact;
     onUpdate: (
         id: number,
-        update: CardUpdate
+        update: ArtifactUpdate
     ) => Promise<void>;
 
     onToggleSelection: () => void;
 }
 
-export default function useCardInteraction({
-    card,
+export default function useArtifactInteraction({
+    artifact,
     onUpdate,
     onToggleSelection,
-}: UseCardInteractionProps) {
+}: UseArtifactInteractionProps) {
 
-    const editing = useCardEditing({
-        cardId: card.id,
-        initialText: card.text,
+    const editing = useArtifactEditing({
+        artifactId: artifact.id,
+        initialText: artifact.content.text,
         onUpdate,
     });
 
-    const drag = useCardDrag({
-        cardId: card.id,
-        initialX: card.x,
-        initialY: card.y,
+    const drag = useArtifactDrag({
+        artifactId: artifact.id,
+        initialX: artifact.x,
+        initialY: artifact.y,
         onUpdate,
     });
 
@@ -58,15 +58,10 @@ export default function useCardInteraction({
     }
 
     return {
-
         editing,
-
         drag,
-
         handleClick,
-
         handlePointerDown,
-
     };
 
 }

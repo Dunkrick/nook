@@ -1,25 +1,25 @@
 import { useState, useRef } from "react";
-import type { CardUpdate } from "../types/cards";
+import type { ArtifactUpdate } from "../types/artifacts";
 
-interface UseCardDragOptions {
-    cardId: number;
+interface UseArtifactDragOptions {
+    artifactId: number;
     initialX: number;
     initialY: number;
-    onUpdate: (id: number, update: CardUpdate) => Promise<void>;
+    onUpdate: (id: number, update: ArtifactUpdate) => Promise<void>;
 }
 
-export function useCardDrag({ cardId, initialX, initialY, onUpdate }: UseCardDragOptions) {
+export function useArtifactDrag({ artifactId, initialX, initialY, onUpdate }: UseArtifactDragOptions) {
     const [dragPosition, setDragPosition] = useState({ x: initialX, y: initialY });
     const [isDragging, setIsDragging] = useState(false);
     const positionRef = useRef(dragPosition);
     const dragStartPos = useRef({ x: 0, y: 0 });
-    const dragStartCardPos = useRef({ x: 0, y: 0 });
+    const dragStartArtifactPos = useRef({ x: 0, y: 0 });
 
     const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
         const startPosition = { x: initialX, y: initialY };
         setIsDragging(true);
         dragStartPos.current = { x: e.clientX, y: e.clientY };
-        dragStartCardPos.current = startPosition;
+        dragStartArtifactPos.current = startPosition;
         positionRef.current = startPosition;
         setDragPosition(startPosition);
         e.currentTarget.setPointerCapture(e.pointerId);
@@ -30,8 +30,8 @@ export function useCardDrag({ cardId, initialX, initialY, onUpdate }: UseCardDra
         const dx = e.clientX - dragStartPos.current.x;
         const dy = e.clientY - dragStartPos.current.y;
         const nextPosition = {
-            x: dragStartCardPos.current.x + dx,
-            y: dragStartCardPos.current.y + dy,
+            x: dragStartArtifactPos.current.x + dx,
+            y: dragStartArtifactPos.current.y + dy,
         };
         positionRef.current = nextPosition;
         setDragPosition(nextPosition);
@@ -42,7 +42,7 @@ export function useCardDrag({ cardId, initialX, initialY, onUpdate }: UseCardDra
         setIsDragging(false);
         e.currentTarget.releasePointerCapture(e.pointerId);
         // Fire-and-forget because Home is optimistic now
-        void onUpdate(cardId, positionRef.current);
+        void onUpdate(artifactId, positionRef.current);
     };
 
     const handlePointerCancel = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -51,7 +51,7 @@ export function useCardDrag({ cardId, initialX, initialY, onUpdate }: UseCardDra
         if (e.currentTarget.hasPointerCapture(e.pointerId)) {
             e.currentTarget.releasePointerCapture(e.pointerId);
         }
-        void onUpdate(cardId, positionRef.current);
+        void onUpdate(artifactId, positionRef.current);
     };
 
     return {
