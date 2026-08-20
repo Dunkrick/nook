@@ -6,6 +6,10 @@ datasource db {
   provider = "postgresql"
 }
 
+enum ArtifactType {
+  TEXT
+}
+
 model User {
   id           Int      @id @default(autoincrement())
   email        String   @unique
@@ -17,12 +21,17 @@ model User {
 
 model Artifact {
   id        Int      @id @default(autoincrement())
-  type      String
+  type      ArtifactType
   content   Json
+
   x         Float    @default(0)
   y         Float    @default(0)
+
+  zIndex Int @default(0)
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+
   userId Int
   user   User @relation(fields: [userId], references: [id])
 }

@@ -1,5 +1,5 @@
 import express from "express";
-import { createArtifacts, getArtifacts, deleteArtifacts, updateArtifacts } from "../services/artifacts.js";
+import { createArtifact, getArtifacts, deleteArtifact, updateArtifact } from "../services/artifacts.js";
 import { validateCreateArtifact, validateUpdateArtifact } from "../validation/artifacts.js";
 import { authenticate } from "../middleware/auth.js";
 import { asyncHandler } from "../middleware/async.js";
@@ -21,7 +21,7 @@ router.post(
     authenticate,
     validateCreateArtifact,
     asyncHandler(async (req, res) => {
-        const result = await createArtifacts({
+        const result = await createArtifact({
             text: req.body.text,
             userId: req.user.id,
             x: req.body.x,
@@ -37,7 +37,7 @@ router.delete(
     authenticate,
     asyncHandler(async (req, res) => {
         const id = Number(req.params.id);
-        const deletedCard = await deleteArtifacts(id, req.user.id);
+        const deletedCard = await deleteArtifact(id, req.user.id);
 
         if (!deletedCard) {
             return res.status(404).json({
@@ -55,7 +55,7 @@ router.patch(
     validateUpdateArtifact,
     asyncHandler(async (req, res) => {
         const id = Number(req.params.id);
-        const updatedCard = await updateArtifacts({ id, ...req.body, userId: req.user.id });
+        const updatedCard = await updateArtifact({ id, ...req.body, userId: req.user.id });
 
         if (!updatedCard) {
             return res.status(404).json({

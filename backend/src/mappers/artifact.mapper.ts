@@ -1,21 +1,35 @@
-import type { Artifact } from "../domain/artifact.js";
+import type {
+    Artifact,
+    TextArtifactContent,
+} from "../domain/artifacts.js";
 
-export function toArtifact(record: any): Artifact {
+import type {
+    Artifact as PrismaArtifact,
+} from "@prisma/client";
+
+import { ArtifactType } from "@prisma/client";
+
+export function toArtifact(
+    record: PrismaArtifact
+): Artifact {
     return {
         id: record.id,
 
         userId: record.userId,
 
-        type: record.type,
+        type: ArtifactType.TEXT,
 
-        content: record.content,
+        // TODO(v2):
+        // Validate JSON content before casting.
+        content:
+            record.content as unknown as TextArtifactContent,
 
         x: record.x,
-
         y: record.y,
 
-        createdAt: record.createdAt,
+        zIndex: record.zIndex,
 
+        createdAt: record.createdAt,
         updatedAt: record.updatedAt,
     };
 }

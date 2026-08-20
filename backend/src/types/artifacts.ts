@@ -7,8 +7,8 @@ export interface CreateArtifactInput {
 
 export interface UpdateArtifactInput {
     id: number;
-    text?: string;
     userId: number;
+    text?: string;
     x?: number;
     y?: number;
 }

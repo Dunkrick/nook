@@ -1,15 +1,17 @@
-//Card domain service
 import prisma from "../prisma.js";
 import { toArtifact } from "../mappers/artifact.mapper.js";
-import { CreateArtifactInput, UpdateArtifactInput } from "../types/artifacts.js";
-import { Prisma } from "@prisma/client";
+import {
+    CreateArtifactInput,
+    UpdateArtifactInput,
+} from "../types/artifacts.js";
+import { Prisma, ArtifactType } from "@prisma/client";
 
-export async function createArtifacts(
+export async function createArtifact(
     input: CreateArtifactInput
 ) {
     const row = await prisma.artifact.create({
         data: {
-            type: "text",
+            type: ArtifactType.TEXT,
             content: {
                 text: input.text,
             },
@@ -30,37 +32,41 @@ export async function getArtifacts(
             userId,
         },
         orderBy: {
-            createdAt: "desc"
-        }
+            createdAt: "desc",
+        },
     });
 
     return rows.map(toArtifact);
 }
 
-export async function deleteArtifacts(
+export async function deleteArtifact(
     id: number,
     userId: number
 ) {
     try {
-        return await prisma.artifact.delete({
+        await prisma.artifact.delete({
             where: {
                 id,
                 userId,
             },
-            select: {
-                id: true,
-                content: true,
-            },
         });
+
+        return { id };
     } catch (error) {
-        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+        if (
+            error instanceof Prisma.PrismaClientKnownRequestError &&
+            error.code === "P2025"
+        ) {
             return null;
         }
+
         throw error;
     }
 }
 
-export async function updateArtifacts(input: UpdateArtifactInput) {
+export async function updateArtifact(
+    input: UpdateArtifactInput
+) {
     const data: {
         content?: {
             text: string;
@@ -73,6 +79,9 @@ export async function updateArtifacts(input: UpdateArtifactInput) {
         data.content = {
             text: input.text,
         };
+
+        // TODO(v2):
+        // Merge JSON instead of replacing the whole content object.
     }
 
     if (input.x !== undefined) {
@@ -91,6 +100,7 @@ export async function updateArtifacts(input: UpdateArtifactInput) {
             },
             data,
         });
+
         return toArtifact(row);
     } catch (error) {
         if (

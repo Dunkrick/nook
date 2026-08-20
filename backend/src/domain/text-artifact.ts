@@ -1,18 +1,22 @@
+import type { ArtifactType } from "@prisma/client";
+
 export interface TextArtifactContent {
     text: string;
 }
 
-export interface Artifact {
+export interface TextArtifact {
     id: number;
 
     userId: number;
 
-    type: "text";
+    type: ArtifactType;
 
     content: TextArtifactContent;
 
     x: number;
     y: number;
+
+    zIndex: number;
 
     createdAt: Date;
     updatedAt: Date;
