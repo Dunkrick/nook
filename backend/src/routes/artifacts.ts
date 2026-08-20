@@ -1,6 +1,6 @@
 import express from "express";
-import { createCard, getAllCards, deleteCard, updateCard } from "../services/artifacts.js";
-import { validateCreateCard, validateUpdateCard } from "../validation/artifacts.js";
+import { createArtifacts, getArtifacts, deleteArtifacts, updateArtifacts } from "../services/artifacts.js";
+import { validateCreateArtifact, validateUpdateArtifact } from "../validation/artifacts.js";
 import { authenticate } from "../middleware/auth.js";
 import { asyncHandler } from "../middleware/async.js";
 
@@ -11,17 +11,17 @@ router.get("/", (_, res) => {
     res.send("Hello, from Nook!");
 });
 
-router.get("/cards", authenticate, asyncHandler(async (req, res) => {
-    const cards = await getAllCards(req.user.id);
+router.get("/artifacts", authenticate, asyncHandler(async (req, res) => {
+    const cards = await getArtifacts(req.user.id);
     res.status(200).json(cards);
 }));
 
 router.post(
-    "/cards",
+    "/artifacts",
     authenticate,
-    validateCreateCard,
+    validateCreateArtifact,
     asyncHandler(async (req, res) => {
-        const result = await createCard({
+        const result = await createArtifacts({
             text: req.body.text,
             userId: req.user.id,
             x: req.body.x,
@@ -33,11 +33,11 @@ router.post(
 );
 
 router.delete(
-    "/cards/:id",
+    "/artifacts/:id",
     authenticate,
     asyncHandler(async (req, res) => {
         const id = Number(req.params.id);
-        const deletedCard = await deleteCard(id, req.user.id);
+        const deletedCard = await deleteArtifacts(id, req.user.id);
 
         if (!deletedCard) {
             return res.status(404).json({
@@ -50,12 +50,12 @@ router.delete(
 );
 
 router.patch(
-    "/cards/:id",
+    "/artifacts/:id",
     authenticate,
-    validateUpdateCard,
+    validateUpdateArtifact,
     asyncHandler(async (req, res) => {
         const id = Number(req.params.id);
-        const updatedCard = await updateCard({ id, ...req.body, userId: req.user.id });
+        const updatedCard = await updateArtifacts({ id, ...req.body, userId: req.user.id });
 
         if (!updatedCard) {
             return res.status(404).json({

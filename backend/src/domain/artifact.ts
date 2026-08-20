@@ -1,14 +1,15 @@
-export type ArtifactType = "text";
+export interface TextArtifactContent {
+    text: string;
+}
 
 export interface Artifact {
     id: number;
+
     userId: number;
 
-    type: ArtifactType;
+    type: "text";
 
-    content: {
-        text: string;
-    };
+    content: TextArtifactContent;
 
     x: number;
     y: number;

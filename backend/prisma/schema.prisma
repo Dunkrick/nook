@@ -17,7 +17,8 @@ model User {
 
 model Artifact {
   id        Int      @id @default(autoincrement())
-  text      String
+  type      String
+  content   Json
   x         Float    @default(0)
   y         Float    @default(0)
   createdAt DateTime @default(now())

@@ -1,11 +1,11 @@
-export interface CreateCardInput {
+export interface CreateArtifactInput {
     text: string;
     userId: number;
     x: number;
     y: number;
 }
 
-export interface UpdateCardInput {
+export interface UpdateArtifactInput {
     id: number;
     text?: string;
     userId: number;
@@ -13,7 +13,7 @@ export interface UpdateCardInput {
     y?: number;
 }
 
-export interface DeleteCardInput {
+export interface DeleteArtifactInput {
     id: number;
     userId: number;
 }

@@ -1,11 +1,11 @@
 import type { Request, Response, NextFunction } from "express";
 import { ValidationError } from "../lib/error.js";
 
-export function validateCreateCard(req: Request, res: Response, next: NextFunction) {
+export function validateCreateArtifact(req: Request, res: Response, next: NextFunction) {
     const { text, x, y } = req.body;
 
     if (!text?.trim()) {
-        throw new ValidationError("Invalid Card data, card requires valid text.");
+        throw new ValidationError("Invalid Artifact data, artifact requires valid text.");
     }
 
     // Clean up the body so the route gets the trimmed version
@@ -16,7 +16,7 @@ export function validateCreateCard(req: Request, res: Response, next: NextFuncti
     next();
 }
 
-export function validateUpdateCard(req: Request, res: Response, next: NextFunction) {
+export function validateUpdateArtifact(req: Request, res: Response, next: NextFunction) {
     const { text, x, y } = req.body;
     const parsedX = Number(x);
     const parsedY = Number(y);

@@ -1,39 +1,55 @@
 //Card domain service
 import prisma from "../prisma.js";
-import { CreateCardInput, UpdateCardInput } from "../types/artifacts.js";
+import { toArtifact } from "../mappers/artifact.mapper.js";
+import { CreateArtifactInput, UpdateArtifactInput } from "../types/artifacts.js";
 import { Prisma } from "@prisma/client";
-export async function createCard(input: CreateCardInput) {
-    return prisma.card.create({
+
+export async function createArtifacts(
+    input: CreateArtifactInput
+) {
+    const row = await prisma.artifact.create({
         data: {
-            text: input.text,
+            type: "text",
+            content: {
+                text: input.text,
+            },
             userId: input.userId,
             x: input.x,
             y: input.y,
         },
     });
-};
 
-export async function getAllCards(userId: number) {
-    return prisma.card.findMany({
+    return toArtifact(row);
+}
+
+export async function getArtifacts(
+    userId: number
+) {
+    const rows = await prisma.artifact.findMany({
         where: {
             userId,
         },
         orderBy: {
-            createdAt: "desc",
-        },
+            createdAt: "desc"
+        }
     });
+
+    return rows.map(toArtifact);
 }
 
-export async function deleteCard(id: number, userId: number) {
+export async function deleteArtifacts(
+    id: number,
+    userId: number
+) {
     try {
-        return await prisma.card.delete({
+        return await prisma.artifact.delete({
             where: {
                 id,
                 userId,
             },
             select: {
                 id: true,
-                text: true,
+                content: true,
             },
         });
     } catch (error) {
@@ -44,15 +60,19 @@ export async function deleteCard(id: number, userId: number) {
     }
 }
 
-export async function updateCard(input: UpdateCardInput) {
+export async function updateArtifacts(input: UpdateArtifactInput) {
     const data: {
-        text?: string;
+        content?: {
+            text: string;
+        };
         x?: number;
         y?: number;
     } = {};
 
     if (input.text !== undefined) {
-        data.text = input.text;
+        data.content = {
+            text: input.text,
+        };
     }
 
     if (input.x !== undefined) {
@@ -64,13 +84,14 @@ export async function updateCard(input: UpdateCardInput) {
     }
 
     try {
-        return await prisma.card.update({
+        const row = await prisma.artifact.update({
             where: {
                 id: input.id,
                 userId: input.userId,
             },
             data,
         });
+        return toArtifact(row);
     } catch (error) {
         if (
             error instanceof Prisma.PrismaClientKnownRequestError &&

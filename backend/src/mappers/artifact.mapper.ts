@@ -1,28 +1,21 @@
 import type { Artifact } from "../domain/artifact.js";
 
-export function mapCardToArtifact(card: {
-    id: number;
-    userId: number;
-    text: string;
-    x: number;
-    y: number;
-    createdAt: Date;
-    updatedAt: Date;
-}): Artifact {
+export function toArtifact(record: any): Artifact {
     return {
-        id: card.id,
-        userId: card.userId,
+        id: record.id,
 
-        type: "text",
+        userId: record.userId,
 
-        content: {
-            text: card.text,
-        },
+        type: record.type,
 
-        x: card.x,
-        y: card.y,
+        content: record.content,
 
-        createdAt: card.createdAt,
-        updatedAt: card.updatedAt,
+        x: record.x,
+
+        y: record.y,
+
+        createdAt: record.createdAt,
+
+        updatedAt: record.updatedAt,
     };
 }
