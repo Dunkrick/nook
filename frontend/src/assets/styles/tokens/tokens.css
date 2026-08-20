@@ -55,14 +55,14 @@
   --elevation-overlay: 0 24px 64px rgba(42, 36, 56, 0.22);
   --elevation-surface: 0 10px 30px rgba(71, 56, 54, 0.14);
 
-  /*Card Artifacts*/
-  --card-min-width: 260px;
-  --card-max-width: 380px;
+  /*Artifacts*/
+  --artifact-min-width: 260px;
+  --artifact-max-width: 380px;
   /* Layering Rules
 Wall
 ↓
 
-Cards
+Artifacts
 
 ↓
 

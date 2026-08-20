@@ -20,7 +20,7 @@
   margin: var(--space-2) var(--space-5) 0;
 }
 
-.auth-card {
+.auth-artifact {
   width: 100%;
   max-width: 400px;
   padding: var(--space-7) var(--space-6);
@@ -31,7 +31,7 @@
   flex-direction: column;
 }
 
-.auth-card label {
+.auth-artifact label {
   display: block;
   text-align: left;
   font-size: var(--type-label-size);
@@ -40,7 +40,7 @@
   color: var(--text-heading);
 }
 
-.auth-card input {
+.auth-artifact input {
   width: 100%;
   padding: var(--space-3) var(--space-4);
   border: 1px solid var(--border-subtle);
@@ -53,12 +53,12 @@
   transition: border-color 0.2s;
 }
 
-.auth-card input:focus {
+.auth-artifact input:focus {
   outline: none;
   border-color: var(--accent-primary);
 }
 
-.auth-card button[type="submit"] {
+.auth-artifact button[type="submit"] {
   background: var(--accent-action);
   color: var(--text-on-dark);
   font-family: var(--font-ui);
@@ -73,35 +73,35 @@
   width: 100%;
 }
 
-.auth-card button[type="submit"]:hover {
+.auth-artifact button[type="submit"]:hover {
   opacity: 0.9;
 }
 
-.auth-card form {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
+.auth-artifact form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
 }
 
 .auth-toggle-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-2);
-    margin-top: var(--space-4);
-    font-size: var(--type-label-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  font-size: var(--type-label-size);
 }
 
 .auth-toggle-btn {
-    background: transparent;
-    border: none;
-    color: var(--accent-primary);
-    font-weight: var(--weight-medium);
-    cursor: pointer;
-    font-family: var(--font-ui);
-    padding: 0;
+  background: transparent;
+  border: none;
+  color: var(--accent-primary);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  font-family: var(--font-ui);
+  padding: 0;
 }
 
 .auth-toggle-btn:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }

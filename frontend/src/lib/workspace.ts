@@ -3,7 +3,7 @@ export const WORKSPACE_ORIGIN = {
     y: 140,
 };
 
-export const DEFAULT_CARD_OFFSET = {
+export const DEFAULT_ARTIFACT_OFFSET = {
     x: 320,
     y: 180,
 };

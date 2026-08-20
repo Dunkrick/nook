@@ -25,7 +25,7 @@ Every decision below should serve at least two of these three words. If it doesn
 | Warm Charcoal | `#2A2438` | Body text on cream **and** text/borders sitting on top of color blocks |
 | Border | `#E4DDE0` | Dividers, hairlines on cream surfaces |
 
-**Rule:** Coral, Gold, Blue, and Green are the block palette — used for numbered navigation/section cards, one color per block, never mixed within a single block. Coral Deep is reserved exclusively for CTAs and never appears as a block fill; that separation (block colors vs. action color) is what units.gr does too, and it keeps "click here" visually distinct from "this is a category."
+**Rule:** Coral, Gold, Blue, and Green are the block palette — used for numbered navigation/section artifacts, one color per block, never mixed within a single block. Coral Deep is reserved exclusively for CTAs and never appears as a block fill; that separation (block colors vs. action color) is what units.gr does too, and it keeps "click here" visually distinct from "this is a category."
 
 **Rule:** Iris is for text on cream surfaces (headings, wordmark). Charcoal is for text and borders sitting on top of a color block — Iris doesn't have enough contrast against Coral or Green to stay accessible there.
 
@@ -67,7 +67,7 @@ Single family: **Plus Jakarta Sans**. Hierarchy comes from weight, not from mixi
 
 - Default surface is Warm Cream everywhere. Never pure white.
 - One gradient (Dusk Iris → Sunset Coral, low opacity) reserved for the landing hero or a "goal achieved" screen.
-- No textures, no noise, no card-on-card gradients anywhere else.
+- No textures, no noise, no artifact-on-artifact gradients anywhere else.
 
 ---
 
@@ -75,10 +75,10 @@ Single family: **Plus Jakarta Sans**. Hierarchy comes from weight, not from mixi
 
 Nook borrows its structural grammar from units.gr, not its literal colors. The lesson from that reference: **loud color stays professional when it's contained by strict, repeated structure.** Four rules carry that discipline:
 
-- **Thick charcoal borders (2px)** outline every color-block card. The border is what stops a bright fill from feeling like a toy — it gives the block a printed, intentional edge.
-- **Large rounded corners (24px)** on block/hero cards specifically — softer and friendlier than the 12–16px used elsewhere in the system. Reserve the bigger radius for these structural cards so it stays a meaningful signal, not a default.
-- **Numbered blocks** for navigation or sectioned content (01, 02, 03...) — a small, quiet way to suggest order and progress, which fits Nook's "propulsive" word better than an unordered grid would.
-- **One hero block per screen, in Iris**, holding the boldest headline (weight 800) and the primary CTA in Coral Deep. Everything else — the numbered blocks — stays lower-key by comparison, so the hero has somewhere to lead the eye.
+- **Thick charcoal borders (2px)** outline every color-block artifact. The border is what stops a bright fill from feeling like a toy — it gives the block a printed, intentional edge.
+- **Large rounded corners (24px)** on block/hero artifacts specifically — softer and friendlier than the 12–16px used elsewhere in the system. Reserve the bigger radius for these structural artifacts so it stays a meaningful signal, not a default.
+- **Numbered artifacts** for navigation or sectioned content (01, 02, 03...) — a small, quiet way to suggest order and progress, which fits Nook's "propulsive" word better than an unordered grid would.
+- **One hero artifact per screen, in Iris**, holding the boldest headline (weight 800) and the primary CTA in Coral Deep. Everything else — the numbered artifacts — stays lower-key by comparison, so the hero has somewhere to lead the eye.
 
 **Rule:** never invent a fifth block color without retiring one of the existing four. Four is the ceiling, matching what's disciplined about the reference — Units doesn't have six nav colors either.
 

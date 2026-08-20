@@ -1,4 +1,4 @@
-import { WORKSPACE_ORIGIN, DEFAULT_CARD_OFFSET } from "../lib/workspace";
+import { WORKSPACE_ORIGIN, DEFAULT_ARTIFACT_OFFSET } from "../lib/workspace";
 
 export default function EmptyWorkspace() {
     return (
@@ -21,7 +21,7 @@ export default function EmptyWorkspace() {
 
             <div
                 className="nook-empty-note nook-empty-note--secondary"
-                style={{ left: WORKSPACE_ORIGIN.x + DEFAULT_CARD_OFFSET.x, top: WORKSPACE_ORIGIN.y + DEFAULT_CARD_OFFSET.y }}>
+                style={{ left: WORKSPACE_ORIGIN.x + DEFAULT_ARTIFACT_OFFSET.x, top: WORKSPACE_ORIGIN.y + DEFAULT_ARTIFACT_OFFSET.y }}>
                 <div className="nook-empty-note__ghost-line" />
                 <div className="nook-empty-note__ghost-line short" />
                 <div className="nook-empty-note__ghost-line" />

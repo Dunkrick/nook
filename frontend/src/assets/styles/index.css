@@ -10,5 +10,5 @@
 @import "./workspace/toolbar.css";
 @import "./workspace/overlays.css";
 
-@import "./artifacts/cards.css";
+@import "./artifacts/artifact.css";
 @import "./artifacts/empty-state.css";

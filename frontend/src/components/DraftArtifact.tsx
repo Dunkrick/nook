@@ -45,7 +45,7 @@ export default function DraftArtifactComponent({
 
     return (
     <textarea
-        className="nook-draft-card"
+        className="nook-draft-artifact"
         ref={textareaRef}
         value={text}
         onChange={(e) => setText(e.target.value)}
