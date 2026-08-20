@@ -2,7 +2,7 @@ import * as api from "./api";
 import type { Card, CardUpdate } from "../types/cards";
 
 export async function getCards(): Promise<Card[]> {
-    const data = await api.get("/cards");
+    const data = await api.get("/artifacts");
     return data as Card[];
 }
 
@@ -15,15 +15,15 @@ export async function createCard({
     x?: number;
     y?: number;
 }): Promise<Card> {
-    const data = await api.post("/cards", { text, x, y });
+    const data = await api.post("/artifacts", { text, x, y });
     return data as Card;
 }
 
 export async function updateCard(id: number, { text, x, y }: CardUpdate): Promise<Card> {
-    const data = await api.patch(`/cards/${id}`, { text, x, y });
+    const data = await api.patch(`/artifacts/${id}`, { text, x, y });
     return data as Card;
 }
 
 export async function deleteCard(id: number) {
-    await api.del(`/cards/${id}`);
+    await api.del(`/artifacts/${id}`);
 }

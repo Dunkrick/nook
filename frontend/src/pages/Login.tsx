@@ -14,7 +14,7 @@ export default function Login() {
         <div className="auth-container">
             <div className="auth-header">
                 <h1 className="nook-logo">Nook<span className="nook-logo__spark"></span></h1>
-                <p className="auth-tagline">Turning cards into momentum.</p>
+                <p className="auth-tagline">Turning thoughts into momentum.</p>
             </div>
             <div className="auth-card">
                 <AuthForm
