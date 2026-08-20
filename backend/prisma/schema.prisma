@@ -12,10 +12,10 @@ model User {
   passwordHash String
   createdAt    DateTime @default(now())
 
-  cards Card[]
+  artifacts Artifact[]
 }
 
-model Card {
+model Artifact {
   id        Int      @id @default(autoincrement())
   text      String
   x         Float    @default(0)

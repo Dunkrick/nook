@@ -1,5 +1,5 @@
 import express from "express";
-import cardRouter from "./routes/cards.js";
+import cardRouter from "./routes/artifacts.js";
 import authRouter from "./routes/auth.js";
 import prisma from "./prisma.js";
 import cors from "cors";

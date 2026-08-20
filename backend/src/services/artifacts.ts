@@ -1,6 +1,6 @@
 //Card domain service
 import prisma from "../prisma.js";
-import { CreateCardInput, UpdateCardInput } from "../types/cards.js";
+import { CreateCardInput, UpdateCardInput } from "../types/artifacts.js";
 import { Prisma } from "@prisma/client";
 export async function createCard(input: CreateCardInput) {
     return prisma.card.create({

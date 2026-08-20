@@ -1,6 +1,6 @@
 import express from "express";
-import { createCard, getAllCards, deleteCard, updateCard } from "../services/cards.js";
-import { validateCreateCard, validateUpdateCard } from "../validation/cards.js";
+import { createCard, getAllCards, deleteCard, updateCard } from "../services/artifacts.js";
+import { validateCreateCard, validateUpdateCard } from "../validation/artifacts.js";
 import { authenticate } from "../middleware/auth.js";
 import { asyncHandler } from "../middleware/async.js";
 
