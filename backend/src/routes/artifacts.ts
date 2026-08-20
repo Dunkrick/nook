@@ -5,15 +5,29 @@ import { authenticate } from "../middleware/auth.js";
 import { asyncHandler } from "../middleware/async.js";
 
 const router = express.Router();
-
+/**
+ * Artifact API
+ *
+ * Phase 1:
+ * Supports text artifacts.
+ *
+ * Future:
+ * Images
+ * Links
+ * Quotes
+ * Documents
+ */
 
 router.get("/", (_, res) => {
-    res.send("Hello, from Nook!");
+    res.json({
+        service: "Nook API",
+        status: "ok",
+    });
 });
 
 router.get("/artifacts", authenticate, asyncHandler(async (req, res) => {
-    const cards = await getArtifacts(req.user.id);
-    res.status(200).json(cards);
+    const artifacts = await getArtifacts(req.user.id);
+    res.status(200).json(artifacts);
 }));
 
 router.post(
@@ -37,15 +51,15 @@ router.delete(
     authenticate,
     asyncHandler(async (req, res) => {
         const id = Number(req.params.id);
-        const deletedCard = await deleteArtifact(id, req.user.id);
+        const deletedArtifact = await deleteArtifact(id, req.user.id);
 
-        if (!deletedCard) {
+        if (!deletedArtifact) {
             return res.status(404).json({
-                error: "Card not found",
+                error: "Artifact not found",
             });
         }
 
-        return res.status(200).json(deletedCard);
+        return res.status(200).json(deletedArtifact);
     })
 );
 
@@ -55,15 +69,15 @@ router.patch(
     validateUpdateArtifact,
     asyncHandler(async (req, res) => {
         const id = Number(req.params.id);
-        const updatedCard = await updateArtifact({ id, ...req.body, userId: req.user.id });
+        const updatedArtifact = await updateArtifact({ id, ...req.body, userId: req.user.id });
 
-        if (!updatedCard) {
+        if (!updatedArtifact) {
             return res.status(404).json({
-                error: "Card not found",
+                error: "Artifact not found",
             });
         }
 
-        return res.status(200).json(updatedCard);
+        return res.status(200).json(updatedArtifact);
     })
 );
 
