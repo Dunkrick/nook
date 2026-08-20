@@ -1,5 +1,5 @@
 import express from "express";
-import cardRouter from "./routes/artifacts.js";
+import artifactRouter from "./routes/artifacts.js";
 import authRouter from "./routes/auth.js";
 import prisma from "./prisma.js";
 import cors from "cors";
@@ -22,7 +22,7 @@ app.use(
 //middleware
 app.use(express.json());
 app.use(express.static("public"));
-app.use("/", cardRouter);
+app.use("/", artifactRouter);
 app.use("/auth", authRouter);
 
 //router
