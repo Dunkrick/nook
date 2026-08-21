@@ -1,5 +1,7 @@
 import prisma from "../src/prisma.js";
-import type { User, Workspace } from "@prisma/client";
+import type { Prisma, User, Workspace } from "@prisma/client";
+
+type TransactionClient = Prisma.TransactionClient;
 
 async function main() {
     console.log("Loading users...");
@@ -13,7 +15,7 @@ async function main() {
             await backfillUser(user);
         }
         catch (error) {
-            console.error(`Faile for ${user.email}`, error);
+            console.error(`Failed for ${user.email}`, error);
         }
     }
 
@@ -21,14 +23,21 @@ async function main() {
 }
 
 async function backfillUser(user: User) {
-    const workspace = await ensureWorkspace(user);
+    await prisma.$transaction(async (tx) => {
+        const workspace =
+            await ensureWorkspace(tx, user);
 
-    await migrateArtifacts(user, workspace);
+        await migrateArtifacts(
+            tx,
+            user,
+            workspace
+        );
+    });
 }
 
-async function ensureWorkspace(user: User) {
+async function ensureWorkspace(tx: TransactionClient, user: User) {
     let workspace =
-        await prisma.workspace.findFirst({
+        await tx.workspace.findFirst({
             where: {
                 ownerId: user.id,
                 name: "Personal",
@@ -41,7 +50,7 @@ async function ensureWorkspace(user: User) {
         );
 
         workspace =
-            await prisma.workspace.create({
+            await tx.workspace.create({
                 data: {
                     name: "Personal",
                     ownerId: user.id,
@@ -53,11 +62,12 @@ async function ensureWorkspace(user: User) {
 }
 
 async function migrateArtifacts(
+    tx: TransactionClient,
     user: User,
     workspace: Workspace
 ) {
     const result =
-        await prisma.artifact.updateMany({
+        await tx.artifact.updateMany({
             where: {
                 userId: user.id,
                 workspaceId: null,
