@@ -1,14 +1,14 @@
-interface CardBodyProps {
+interface ArtifactBodyProps {
     text: string;
 }
 
-export default function CardBody({
+export default function ArtifactBody({
     text,
-}: CardBodyProps) {
+}: ArtifactBodyProps) {
 
     return (
 
-        <p className="nook-card__body">
+        <p className="nook-artifact__body">
             {text}
         </p>
 

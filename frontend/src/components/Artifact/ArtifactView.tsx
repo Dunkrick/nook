@@ -37,10 +37,10 @@ export default function ArtifactView({
 
         <div
             className={cn(
-                "nook-card",
-                isSelected && "nook-card--selected",
-                drag.isDragging && "nook-card--dragging",
-                editing.isEditing && "nook-card--editing",
+                "nook-artifact",
+                isSelected && "nook-artifact--selected",
+                drag.isDragging && "nook-artifact--dragging",
+                editing.isEditing && "nook-artifact--editing",
             )}
             style={{
                 ...style,
@@ -67,7 +67,7 @@ export default function ArtifactView({
                     onSave={ editing.handleSave }
                     onCancel={ editing.handleCancel }/>
             ) : (
-                <div className="nook-card__content">
+                <div className="nook-artifact__content">
                     <ArtifactHeader
                         index={index}
                         onEdit={() => editing.setIsEditing(true) }

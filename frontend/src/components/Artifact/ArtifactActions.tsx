@@ -1,12 +1,12 @@
-interface CardActionsProps {
+interface ArtifactActionsProps {
     onEdit: () => void;
     onDelete: () => void;
 }
 
-export default function CardActions({ onEdit, onDelete }: CardActionsProps) {
+export default function ArtifactActions({ onEdit, onDelete }: ArtifactActionsProps) {
     return (
         <div
-            className="nook-card__actions"
+            className="nook-artifact__actions"
             onClick={(e) => e.stopPropagation()}
         >
             <button
