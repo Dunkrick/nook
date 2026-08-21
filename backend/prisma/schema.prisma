@@ -15,7 +15,8 @@ model User {
   email        String     @unique
   passwordHash String
   createdAt    DateTime   @default(now())
-  workspaces    Workspace[]
+  workspaces   Workspace[]
+  artifacts    Artifact[]
 }
 
 model Workspace {
