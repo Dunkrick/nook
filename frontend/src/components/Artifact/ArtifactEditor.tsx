@@ -1,4 +1,4 @@
-interface CardEditorProps {
+interface ArtifactEditorProps {
     editText: string;
     inputRef: React.RefObject<HTMLInputElement | null>;
     onTextChange: (text: string) => void;
@@ -7,16 +7,16 @@ interface CardEditorProps {
     onCancel: () => void;
 }
 
-export default function CardEditor({
+export default function ArtifactEditor({
     editText,
     inputRef,
     onTextChange,
     onKeyDown,
     onSave,
     onCancel,
-}: CardEditorProps) {
+}: ArtifactEditorProps) {
     return (
-        <div className="nook-card__editor">
+        <div className="nook-artifact__editor">
             <input
                 value={editText}
                 ref={inputRef}

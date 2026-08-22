@@ -1,23 +1,23 @@
-import CardActions from "./ArtifactActions";
+import ArtifactActions from "./ArtifactActions";
 
-interface CardHeaderProps {
+interface ArtifactHeaderProps {
     index: number;
     onEdit: () => void;
     onDelete: () => void;
 }
 
-export default function CardHeader({
+export default function ArtifactHeader({
     index,
     onEdit,
     onDelete,
-}: CardHeaderProps) {
+}: ArtifactHeaderProps) {
     return (
-        <div className="nook-card__header">
-            <span className="nook-card__number">
+        <div className="nook-artifact__header">
+            <span className="nook-artifact__number">
                 {(index + 1).toString().padStart(2, "0")}
             </span>
 
-            <CardActions
+            <ArtifactActions
                 onEdit={onEdit}
                 onDelete={onDelete}
             />

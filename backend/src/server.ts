@@ -8,14 +8,28 @@ import { errorHandler } from "./lib/error.js";
 const app = express();
 const PORT = process.env.PORT || 3003;
 
-const allowedOrigins = ["http://localhost:5173"];
-if (process.env.FRONTEND_URL) {
-    allowedOrigins.push(process.env.FRONTEND_URL.replace(/\/$/, ""));
-}
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://nookmy.vercel.app",
+];
 
 app.use(
     cors({
-        origin: allowedOrigins,
+        origin(origin, callback) {
+            // Allow server-to-server requests (no Origin header)
+            if (!origin) {
+                return callback(null, true);
+            }
+
+            if (allowedOrigins.includes(origin)) {
+                return callback(null, true);
+            }
+
+            console.error("Blocked CORS Origin:", origin);
+
+            return callback(new Error("Not allowed by CORS"));
+        },
+        credentials: true,
     })
 );
 

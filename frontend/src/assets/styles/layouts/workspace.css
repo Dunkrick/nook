@@ -21,17 +21,19 @@
 }
 
 .nook-world {
-  position: absolute;
+  position: relative;
   left: 0;
   top: 0;
-  width: 100000px;
-  height: 100000px;
+  width: 100%;
+  height: 100%;
   z-index: var(--z-wall);
   will-change: transform;
 }
 
 .nook-wall {
-  position: absolute;
+  position: relative;
+  width: 100%;
+  height: 100%;
   inset: 0;
   z-index: var(--z-base);
   background:

@@ -1,43 +1,27 @@
 .nook-artifact {
-
-    /* Layout */
-
     position: absolute;
+
     display: flex;
     flex-direction: column;
-    /*TODO: to clean up width according to product philosophy*/
+
     min-width: var(--artifact-min-width);
     max-width: var(--artifact-max-width);
     min-height: 128px;
-    padding: var(--space-4);
 
-    /* Material */
+    padding: var(--space-4);
 
     border: 2px solid var(--border-strong);
     border-radius: var(--radius-artifact);
-    background:
-        linear-gradient(180deg,
-            color-mix(in srgb, var(--color-artifact) 30%, transparent),
-            transparent),
-        var(--artifact-color, var(--artifact-1));
+
+    background: var(--artifact-color, var(--artifact-1));
     color: var(--text-primary);
-    box-shadow:
-        4px 5px 0 color-mix(in srgb, var(--border-strong) 18%, transparent),
-        var(--elevation-artifact);
-
-    /* Motion */
-
-    transition:
-        transform var(--interaction-duration) var(--interaction-easing),
-        box-shadow var(--interaction-duration) var(--interaction-easing),
-        outline-color var(--interaction-duration) var(--interaction-easing);
-
-    /* Interaction */
 
     cursor: grab;
     user-select: none;
+
     transform:
         rotate(var(--artifact-rotate, 0deg));
+
     transform-origin: center;
 }
 
@@ -67,20 +51,6 @@
 
 .nook-artifact--editing {
     cursor: text;
-}
-
-.nook-artifact {
-    display: flex;
-    height: 100%;
-    flex: 1;
-    flex-direction: column;
-}
-
-.nook-artifact {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-3);
 }
 
 .nook-artifact__number {
@@ -143,6 +113,12 @@
     line-height: var(--leading-body);
     transform: rotate(-1deg);
     transition: box-shadow var(--motion-lift), transform var(--motion-lift);
+}
+
+.nook-artifact__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
 }
 
 .nook-draft-artifact::placeholder {
