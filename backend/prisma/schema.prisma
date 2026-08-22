@@ -6,12 +6,31 @@ datasource db {
   provider = "postgresql"
 }
 
+enum ArtifactType {
+  TEXT
+}
+
 model User {
   id           Int        @id @default(autoincrement())
   email        String     @unique
   passwordHash String
   createdAt    DateTime   @default(now())
+  workspaces   Workspace[]
   artifacts    Artifact[]
+}
+
+model Workspace {
+  id        Int        @id @default(autoincrement())
+  name      String
+  slug      String?     @unique
+
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now()) @updatedAt
+
+  ownerId    Int
+  owner      User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  artifacts Artifact[]
 }
 
 model Artifact {
@@ -22,11 +41,13 @@ model Artifact {
   y         Float        @default(0)
   createdAt DateTime     @default(now())
   updatedAt DateTime     @default(now()) @updatedAt
-  userId    Int
   zIndex    Int          @default(0)
-  user      User         @relation(fields: [userId], references: [id])
-}
 
-enum ArtifactType {
-  TEXT
+  //existing ownership (temp)
+  userId    Int
+  user      User         @relation(fields: [userId], references: [id])
+
+  //New ownership (temp)
+  workspaceId Int?
+  workspace Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 }
