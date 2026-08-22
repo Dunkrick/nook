@@ -8,6 +8,7 @@ import {
 
 import { authenticate } from "../middleware/auth.js";
 import { asyncHandler } from "../middleware/async.js";
+import { validateCreateWorkspace } from "../validation/workspaces.js";
 
 const router = express.Router();
 
@@ -45,6 +46,7 @@ router.get(
 router.post(
     "/",
     authenticate,
+    validateCreateWorkspace,
     asyncHandler(async (req, res) => {
         const workspace =
             await createWorkspace(
