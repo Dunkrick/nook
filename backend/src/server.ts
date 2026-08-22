@@ -1,5 +1,6 @@
 import express from "express";
 import artifactRouter from "./routes/artifacts.js";
+import workspaceRouter from "./routes/workspaces.js";
 import authRouter from "./routes/auth.js";
 import prisma from "./prisma.js";
 import cors from "cors";
@@ -38,6 +39,7 @@ app.use(express.json());
 app.use(express.static("public"));
 app.use("/", artifactRouter);
 app.use("/auth", authRouter);
+app.use("/workspaces", workspaceRouter);
 
 //router
 app.get("/health", (_, res) => {
