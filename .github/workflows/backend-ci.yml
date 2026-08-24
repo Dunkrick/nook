@@ -39,4 +39,6 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build \ -t nook-backend .
+          docker build \ 
+          -t nook-backend \ 
+          .
