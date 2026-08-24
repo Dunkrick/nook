@@ -17,6 +17,8 @@
   --color-artifact: var(--palette-paper);
   --color-selection: rgba(74, 67, 104, 0.42);
   --color-overlay: rgba(42, 36, 56, 0.18);
+  --color-grid: rgba(74, 67, 104, 0.105);
+  --color-scribble: rgba(42, 36, 56, 0.24);
 
   /* Content roles */
   --text-primary: var(--palette-ink);
@@ -46,6 +48,7 @@
   --radius-control: 8px;
   --radius-surface: 12px;
   --radius-artifact: 18px;
+  --radius-artifact-organic: 17px 21px 16px 19px;
   --radius-panel: 24px;
 
   /* Elevation follows material level, never decoration alone. */
@@ -54,10 +57,12 @@
   --elevation-drag: 0 18px 42px rgba(42, 36, 56, 0.26);
   --elevation-overlay: 0 24px 64px rgba(42, 36, 56, 0.22);
   --elevation-surface: 0 10px 30px rgba(71, 56, 54, 0.14);
+  --elevation-scribble: 3px 4px 0 rgba(42, 36, 56, 0.14);
 
   /*Artifacts*/
   --artifact-min-width: 260px;
   --artifact-max-width: 380px;
+  --render-world-size: 100000px;
   /* Layering Rules
 Wall
 ↓

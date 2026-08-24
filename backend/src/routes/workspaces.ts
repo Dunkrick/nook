@@ -4,10 +4,12 @@ import {
     getWorkspaces,
     getWorkspace,
     createWorkspace,
+    getWorkspaceArtifacts
 } from "../services/workspaces.js";
 
 import { authenticate } from "../middleware/auth.js";
 import { asyncHandler } from "../middleware/async.js";
+import { validateCreateWorkspace } from "../validation/workspaces.js";
 
 const router = express.Router();
 
@@ -45,6 +47,7 @@ router.get(
 router.post(
     "/",
     authenticate,
+    validateCreateWorkspace,
     asyncHandler(async (req, res) => {
         const workspace =
             await createWorkspace(
@@ -53,6 +56,21 @@ router.post(
             );
 
         return res.status(201).json(workspace);
+    })
+);
+
+// routes/workspaces.ts
+
+router.get(
+    "/:workspaceId/artifacts",
+    authenticate,
+    asyncHandler(async (req, res) => {
+        const artifacts = await getWorkspaceArtifacts(
+            req.user.id,
+            Number(req.params.workspaceId)
+        );
+
+        return res.status(200).json(artifacts);
     })
 );
 

@@ -8,6 +8,7 @@ datasource db {
 
 enum ArtifactType {
   TEXT
+  LINK
 }
 
 model User {

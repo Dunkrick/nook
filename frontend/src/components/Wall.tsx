@@ -1,23 +1,31 @@
-import type { TextArtifact, ArtifactUpdate, DraftArtifact, Position } from "../types/artifacts";
+import type { Artifact, ArtifactUpdate, DraftArtifact, Position } from "../types/artifacts";
 import EmptyWorkspace from "./EmptyWorkspace";
 import ArtifactComponent from "./Artifact/Artifact";
-import { ARTIFACT_ROTATIONS } from "../lib/ArtifactRotation";
+import { getArtifactColorToken, getArtifactRotation } from "../lib/ArtifactRotation";
 import DraftArtifactComponent from "./DraftArtifact";
+import ArtifactCreationPicker from "./ArtifactCreationPicker";
+import { useCanvasCamera } from "../hooks/useCanvasCamera";
+import { fromRenderPosition } from "../lib/workspace";
 
 interface WallProps {
-  artifacts: TextArtifact[];
+  artifacts: Artifact[];
   draftArtifact: DraftArtifact | null;
 
-  onCreate: (position: Position) => void;
+  createPosition: Position | null;
+  onSelectArtifactType: (type: "TEXT" | "LINK") => void;
+  onCancelCreation: () => void;
 
+  onCreate: (position: Position) => void;
   onUpdate: (id: number, update: ArtifactUpdate) => Promise<void>;
   onDelete: (id: number) => Promise<void>;
 
-  onCommitDraft: (text: string) => Promise<void>;
+  onCommitDraftText: (text: string) => Promise<void>;
+  onCommitDraftLink: (url: string) => Promise<void>;
   onCancelDraft: () => void;
 
   selectedArtifactIds: number[]
   onToggleArtifactSelection: (artifactId: number) => void
+  homePosition: Position;
 }
 
 export default function Wall({ 
@@ -26,32 +34,53 @@ export default function Wall({
     onUpdate, 
     onDelete, 
     onCreate, 
-    onCommitDraft, 
+    onCommitDraftText,
+    onCommitDraftLink,
     onCancelDraft,
     selectedArtifactIds,
     onToggleArtifactSelection,
+    createPosition,
+    onSelectArtifactType,
+    onCancelCreation,
+    homePosition,
 }: WallProps) {
+  const camera = useCanvasCamera();
+
   function handleDoubleClick(
     e: React.MouseEvent<HTMLDivElement>
 ) {
-    const world = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - world.left;
-    const y = e.clientY - world.top;
-    onCreate({
-        x,
-        y,
-    });
+    const viewport = e.currentTarget.closest(".nook-viewport");
+    if (!viewport) return;
 
+    const rect = viewport.getBoundingClientRect();
+
+    const worldPosition = camera.screenToWorld(
+        {
+            x: e.clientX,
+            y: e.clientY,
+        },
+        rect
+    );
+    onCreate(fromRenderPosition(worldPosition));
 }
   
   return (
     <div 
         className="nook-wall" 
         aria-label="Thought wall. Double-click to add a thought."
-        onDoubleClick={handleDoubleClick}>
+        onDoubleClick={handleDoubleClick}
+        >
       {artifacts.length === 0 && !draftArtifact && (
-        <EmptyWorkspace />
+        <EmptyWorkspace home={homePosition} />
       )}
+
+      {createPosition && (
+    <ArtifactCreationPicker
+        position={createPosition}
+        onSelect={onSelectArtifactType}
+        onCancel={onCancelCreation}
+    />
+)}
 
       {artifacts.map((artifact, index) => (
         <ArtifactComponent
@@ -61,23 +90,22 @@ export default function Wall({
             onUpdate={onUpdate}
             onDelete={onDelete}
             isSelected={selectedArtifactIds.includes(artifact.id)}
-            onToggleSelection={() => onToggleArtifactSelection(artifact.id)}
+                onToggleSelection={() => onToggleArtifactSelection(artifact.id)}
             style={{
-                left: artifact.x,
-                top: artifact.y,
-                "--artifact-rotate": `${ARTIFACT_ROTATIONS[index % 6]}deg`,
-                "--artifact-color": `var(--artifact-${(index % 4) + 1})`,
+                "--artifact-rotate": `${getArtifactRotation(artifact.id)}deg`,
+                "--artifact-color": `var(--artifact-${getArtifactColorToken(artifact.id)})`,
             }}
         />
     ))}
 
     {draftArtifact && (
         <DraftArtifactComponent
+            type={draftArtifact.type}
             position={{
                 x: draftArtifact.x,
                 y: draftArtifact.y,
             }}
-            onCommit={onCommitDraft}
+            onCommit={draftArtifact.type === "TEXT" ? onCommitDraftText : onCommitDraftLink}
             onCancel={onCancelDraft}
         />
     )}

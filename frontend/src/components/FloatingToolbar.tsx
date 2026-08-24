@@ -7,14 +7,6 @@ export default function FloatingToolbar({
 }: FloatingToolbarProps) {
     return (
         <header className="nook-toolbar">
-
-            <div className="nook-toolbar__brand">
-                <span className="nook-logo">
-                    Nook
-                    <span className="nook-logo__spark" />
-                </span>
-            </div>
-
             <button
                 className="nook-button nook-button--quiet nook-toolbar__button"
                 onClick={onLogout}

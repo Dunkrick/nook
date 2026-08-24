@@ -1,6 +1,7 @@
 import type {
     Artifact,
     TextArtifactContent,
+    LinkArtifactContent,
 } from "../domain/artifacts.js";
 
 import type {
@@ -12,23 +13,24 @@ import { ArtifactType } from "@prisma/client";
 export function toArtifact(
     record: PrismaArtifact
 ): Artifact {
+    let content: TextArtifactContent | LinkArtifactContent;
+
+    if (record.type === ArtifactType.TEXT) {
+        content =
+            record.content as unknown as TextArtifactContent;
+    } else {
+        content =
+            record.content as unknown as LinkArtifactContent;
+    }
+
     return {
         id: record.id,
-
         userId: record.userId,
-
-        type: ArtifactType.TEXT,
-
-        // TODO(v2):
-        // Validate JSON content before casting.
-        content:
-            record.content as unknown as TextArtifactContent,
-
+        type: record.type,
+        content,
         x: record.x,
         y: record.y,
-
         zIndex: record.zIndex,
-
         createdAt: record.createdAt,
         updatedAt: record.updatedAt,
     };

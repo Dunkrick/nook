@@ -2,7 +2,7 @@ import ArtifactActions from "./ArtifactActions";
 
 interface ArtifactHeaderProps {
     index: number;
-    onEdit: () => void;
+    onEdit?: () => void;
     onDelete: () => void;
 }
 

@@ -5,10 +5,11 @@ interface UseArtifactDragOptions {
     artifactId: number;
     initialX: number;
     initialY: number;
+    zoom: number;
     onUpdate: (id: number, update: ArtifactUpdate) => Promise<void>;
 }
 
-export function useArtifactDrag({ artifactId, initialX, initialY, onUpdate }: UseArtifactDragOptions) {
+export function useArtifactDrag({ artifactId, initialX, initialY, zoom, onUpdate }: UseArtifactDragOptions) {
     const [dragPosition, setDragPosition] = useState({ x: initialX, y: initialY });
     const [isDragging, setIsDragging] = useState(false);
     const positionRef = useRef(dragPosition);
@@ -27,8 +28,8 @@ export function useArtifactDrag({ artifactId, initialX, initialY, onUpdate }: Us
 
     const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
         if (!isDragging) return;
-        const dx = e.clientX - dragStartPos.current.x;
-        const dy = e.clientY - dragStartPos.current.y;
+        const dx = (e.clientX - dragStartPos.current.x) / zoom;
+        const dy = (e.clientY - dragStartPos.current.y) / zoom;
         const nextPosition = {
             x: dragStartArtifactPos.current.x + dx,
             y: dragStartArtifactPos.current.y + dy,

@@ -1,27 +1,47 @@
-import { WORKSPACE_ORIGIN, DEFAULT_ARTIFACT_OFFSET } from "../lib/workspace";
+import { DEFAULT_ARTIFACT_OFFSET, toRenderPosition } from "../lib/workspace";
+import type { Position } from "../types/artifacts";
 
-export default function EmptyWorkspace() {
+interface EmptyWorkspaceProps {
+    home: Position;
+}
+
+export default function EmptyWorkspace({ home }: EmptyWorkspaceProps) {
+    const primaryPosition = toRenderPosition({
+        x: home.x - 270,
+        y: home.y - 245,
+    });
+    const secondaryPosition = toRenderPosition({
+        x: home.x + DEFAULT_ARTIFACT_OFFSET.x - 20,
+        y: home.y + DEFAULT_ARTIFACT_OFFSET.y - 40,
+    });
+
     return (
         <>
             <div
                 className="nook-empty-note nook-empty-note--primary"
-                style={{ left: WORKSPACE_ORIGIN.x, top: WORKSPACE_ORIGIN.y }}
+                style={{ left: primaryPosition.x, top: primaryPosition.y }}
             >
                 <div className="nook-empty-note__eyebrow">
-                    BEGIN HERE
+                    A PLACE TO RETURN TO
                 </div>
 
-                <h2>Everything starts with one thought.</h2>
+                <h2>Your space is empty.</h2>
 
                 <p>
-                    Double-click anywhere on the wall and let the first idea
-                    land. It doesn't have to be perfect.
+                    Capture a thought, a memory, or an idea. Double-click
+                    anywhere to place your first one at the heart of this space.
                 </p>
+
+                <div className="nook-empty-note__seed" aria-hidden="true">
+                    <span />
+                    <span />
+                    <span />
+                </div>
             </div>
 
             <div
                 className="nook-empty-note nook-empty-note--secondary"
-                style={{ left: WORKSPACE_ORIGIN.x + DEFAULT_ARTIFACT_OFFSET.x, top: WORKSPACE_ORIGIN.y + DEFAULT_ARTIFACT_OFFSET.y }}>
+                style={{ left: secondaryPosition.x, top: secondaryPosition.y }}>
                 <div className="nook-empty-note__ghost-line" />
                 <div className="nook-empty-note__ghost-line short" />
                 <div className="nook-empty-note__ghost-line" />

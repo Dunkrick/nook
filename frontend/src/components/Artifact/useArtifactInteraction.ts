@@ -2,11 +2,12 @@
 //this is not a smart one, it simply composes two existing hooks
 import { useArtifactEditing } from "../../hooks/useArtifactEditing";
 import { useArtifactDrag } from "../../hooks/useArtifactDrag";
+import { useCanvasCamera } from "../../hooks/useCanvasCamera";
 
-import type { TextArtifact, ArtifactUpdate } from "../../types/artifacts";
+import type { Artifact, ArtifactUpdate } from "../../types/artifacts";
 
 interface UseArtifactInteractionProps {
-    artifact: TextArtifact;
+    artifact: Artifact;
     onUpdate: (
         id: number,
         update: ArtifactUpdate
@@ -20,10 +21,11 @@ export default function useArtifactInteraction({
     onUpdate,
     onToggleSelection,
 }: UseArtifactInteractionProps) {
+    const camera = useCanvasCamera();
 
     const editing = useArtifactEditing({
         artifactId: artifact.id,
-        initialText: artifact.content.text,
+        initialText: artifact.type === "TEXT" ? artifact.content.text : "",
         onUpdate,
     });
 
@@ -31,6 +33,7 @@ export default function useArtifactInteraction({
         artifactId: artifact.id,
         initialX: artifact.x,
         initialY: artifact.y,
+        zoom: camera.zoom,
         onUpdate,
     });
 

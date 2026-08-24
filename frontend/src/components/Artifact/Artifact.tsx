@@ -1,10 +1,10 @@
 //the container
-import type { TextArtifact, ArtifactUpdate } from "../../types/artifacts";
+import type { Artifact, ArtifactUpdate } from "../../types/artifacts";
 import ArtifactView from "./ArtifactView";
 import useArtifactInteraction from "./useArtifactInteraction";
 
 interface ArtifactProps {
-    artifact: TextArtifact;
+    artifact: Artifact;
     index: number;
     onUpdate: (
         id: number,
@@ -33,7 +33,7 @@ export default function ArtifactComponent({ artifact, index, onUpdate, onDelete,
 
         <ArtifactView
             index={index}
-            artifactText={artifact.content.text}
+            artifact={artifact}
             interaction={interaction}
             isSelected={isSelected}
             style={style}

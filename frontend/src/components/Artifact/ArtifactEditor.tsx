@@ -22,7 +22,7 @@ export default function ArtifactEditor({
                 ref={inputRef}
                 onChange={(e) => onTextChange(e.target.value)}
                 onKeyDown={onKeyDown}
-                className="nook-card__input"
+                className="nook-artifact__input"
             />
             <button
                 className="nook-button nook-button--quiet"

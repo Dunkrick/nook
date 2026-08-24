@@ -1,6 +1,6 @@
 import { getToken } from "../lib/storage";
 
-const API_URL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3003").replace(/\/$/, "");
 
 interface RequestOptions {
     body?: unknown;
@@ -52,7 +52,7 @@ async function request(method: string, endpoint: string, options?: RequestOption
             "error" in data
         ) {
             throw new Error(
-                (data as any).error.message
+                (data as { error: { message: string } }).error.message
             );
         }
 
