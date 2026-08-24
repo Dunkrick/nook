@@ -36,3 +36,7 @@ jobs:
 
       - name: Build backend
         run: npm run build
+
+      - name: Build Docker image
+        run: |
+          docker build \ -t nook-backend .

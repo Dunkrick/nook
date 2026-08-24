@@ -3,6 +3,7 @@ dist
 
 .git
 .github
+.gitignore
 
 .env
 .env.*
@@ -19,3 +20,5 @@ Dockerfile
 
 .vscode
 .idea
+
+npm-debug.log

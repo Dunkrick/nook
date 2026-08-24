@@ -17,7 +17,7 @@ RUN npx prisma generate
 RUN npm run build
 
 # ---------- Runtime ----------
-FROM node:22-slim
+FROM node:22-slim AS production
 
 WORKDIR /app
 
