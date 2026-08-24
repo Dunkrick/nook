@@ -12,6 +12,7 @@ import World from "../components/World";
 import { getWorkspaces, getWorkspaceArtifacts } from "../services/workspaces";
 import type { Workspace } from "../services/workspaces";
 import { useNavigate } from "react-router-dom";
+import WorkspaceSwitcher from "../components/WorkspaceSwitcher";
 
 export default function Home() {
     const navigate = useNavigate();
@@ -19,6 +20,7 @@ export default function Home() {
     const [draftArtifact, setDraftArtifact] = useState<DraftArtifact | null>(null);
     const [selectedArtifactIds, setSelectedArtifactIds] = useState<number[]>([]);
     const [activeWorkspace, setActiveWorkspace] = useState<Workspace | null>(null);
+    const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
     const [isInsightOpen, setIsInsightOpen] = useState(false);
 
     function handleCreateDraft(position: Position) {
@@ -50,7 +52,7 @@ export default function Home() {
     useEffect(() => {
     async function initialize() {
         const fetchedWorkspaces = await getWorkspaces();
-
+        setWorkspaces(fetchedWorkspaces);
         if (fetchedWorkspaces.length === 0) {
             setArtifacts([]);
             return;
@@ -68,6 +70,19 @@ export default function Home() {
 
     initialize();
 }, []);
+
+async function handleWorkspaceChange(
+    workspace: Workspace
+) {
+    setActiveWorkspace(workspace);
+    setSelectedArtifactIds([]);
+    setDraftArtifact(null);
+
+    const fetchedArtifacts =
+        await getWorkspaceArtifacts(workspace.id);
+
+    setArtifacts(fetchedArtifacts);
+}
 
 async function handleUpdateArtifact(id: number, update: ArtifactUpdate) {
     // Keep a snapshot in case the request fails
@@ -139,6 +154,13 @@ function handleCloseInsight(){
                     navigate("/");
                 }}
             />
+            {activeWorkspace && (
+                <WorkspaceSwitcher
+                    workspaces={workspaces}
+                    activeWorkspace={activeWorkspace}
+                    onChange={handleWorkspaceChange}
+                />
+            )}
             <Viewport>
                 <World>
                     <Wall 
