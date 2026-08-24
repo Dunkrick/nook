@@ -1,11 +1,11 @@
-import type { TextArtifact, ArtifactUpdate, DraftArtifact, Position } from "../types/artifacts";
+import type { Artifact, ArtifactUpdate, DraftArtifact, Position } from "../types/artifacts";
 import EmptyWorkspace from "./EmptyWorkspace";
 import ArtifactComponent from "./Artifact/Artifact";
 import { ARTIFACT_ROTATIONS } from "../lib/ArtifactRotation";
 import DraftArtifactComponent from "./DraftArtifact";
 
 interface WallProps {
-  artifacts: TextArtifact[];
+  artifacts: Artifact[];
   draftArtifact: DraftArtifact | null;
 
   onCreate: (position: Position) => void;

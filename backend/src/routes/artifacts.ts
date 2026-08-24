@@ -36,11 +36,8 @@ router.post(
     validateCreateArtifact,
     asyncHandler(async (req, res) => {
         const result = await createArtifact({
-            text: req.body.text,
+            ...req.body,
             userId: req.user.id,
-            workspaceId: req.body.workspaceId,
-            x: req.body.x ?? 0,
-            y: req.body.y ?? 0,
         });
 
         return res.status(201).json(result);

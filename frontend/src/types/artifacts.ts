@@ -1,6 +1,6 @@
 export interface TextArtifact {
     id: number;
-
+    userId: number;
     type: "TEXT";
 
     content: {
@@ -12,8 +12,24 @@ export interface TextArtifact {
     zIndex: number;
 }
 
+export interface LinkArtifact {
+    id: number;
+    userId: number;
+    type: "LINK";
+    content: {
+        url: string;
+    }
+    x: number;
+    y: number;
+    zIndex: number;
+}
+
+export type Artifact = | TextArtifact | LinkArtifact;
+
 export interface DraftArtifact {
-    text: string;
+    type: "TEXT" | "LINK";
+    text?: string;
+    url?: string;
     x: number;
     y: number;
 }

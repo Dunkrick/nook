@@ -1,10 +1,20 @@
-export interface CreateArtifactInput {
-    text: string;
-    userId: number;
-    x: number;
-    y: number;
-    workspaceId: number;
-}
+export type CreateArtifactInput =
+    | {
+        type: "TEXT";
+        text: string;
+        userId: number;
+        workspaceId: number;
+        x: number;
+        y: number;
+    }
+    | {
+        type: "LINK";
+        url: string;
+        userId: number;
+        workspaceId: number;
+        x: number;
+        y: number;
+    };
 
 export interface UpdateArtifactInput {
     id: number;

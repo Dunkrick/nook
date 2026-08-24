@@ -1,3 +1,23 @@
-export type { TextArtifact, TextArtifactContent } from "./text-artifact.js";
+export interface TextArtifactContent {
+    text: string;
+}
 
-export type { TextArtifact as Artifact } from "./text-artifact.js";
+export interface LinkArtifactContent {
+    url: string;
+}
+
+export type ArtifactContent =
+    | TextArtifactContent
+    | LinkArtifactContent;
+
+export interface Artifact {
+    id: number;
+    userId: number;
+    type: "TEXT" | "LINK";
+    content: ArtifactContent;
+    x: number;
+    y: number;
+    zIndex: number;
+    createdAt: Date;
+    updatedAt: Date;
+}

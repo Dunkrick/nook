@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import SelectionToolbar from "../components/SelectionToolbar"
 import { createArtifact, updateArtifact, deleteArtifact } from "../services/artifacts";
-import type { TextArtifact, ArtifactUpdate, DraftArtifact, Position } from "../types/artifacts";
+import type { Artifact, ArtifactUpdate, DraftArtifact, Position } from "../types/artifacts";
 import Wall from "../components/Wall"
 import InsightPanel from "../components/InsightPanel";
 import WorkspaceShell from "../components/WorkspaceShell";
@@ -17,7 +17,7 @@ import { getActiveWorkspaceId, setActiveWorkspaceId } from "../lib/storage";
 
 export default function Home() {
     const navigate = useNavigate();
-    const [artifacts, setArtifacts] = useState<TextArtifact[]>([]);
+    const [artifacts, setArtifacts] = useState<Artifact[]>([]);
     const [draftArtifact, setDraftArtifact] = useState<DraftArtifact | null>(null);
     const [selectedArtifactIds, setSelectedArtifactIds] = useState<number[]>([]);
     const [activeWorkspace, setActiveWorkspace] = useState<Workspace | null>(null);
@@ -26,6 +26,7 @@ export default function Home() {
 
     function handleCreateDraft(position: Position) {
         setDraftArtifact({
+            type: "TEXT",
             text: "",
             x: position.x,
             y: position.y,
@@ -77,7 +78,7 @@ export default function Home() {
 async function handleWorkspaceChange(workspace: Workspace) {
     setActiveWorkspace(workspace);
     setActiveWorkspaceId(workspace.id);
-    
+
     setSelectedArtifactIds([]);
     setDraftArtifact(null);
 

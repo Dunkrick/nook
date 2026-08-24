@@ -3,10 +3,10 @@
 import { useArtifactEditing } from "../../hooks/useArtifactEditing";
 import { useArtifactDrag } from "../../hooks/useArtifactDrag";
 
-import type { TextArtifact, ArtifactUpdate } from "../../types/artifacts";
+import type { Artifact, ArtifactUpdate } from "../../types/artifacts";
 
 interface UseArtifactInteractionProps {
-    artifact: TextArtifact;
+    artifact: Artifact;
     onUpdate: (
         id: number,
         update: ArtifactUpdate
@@ -23,7 +23,7 @@ export default function useArtifactInteraction({
 
     const editing = useArtifactEditing({
         artifactId: artifact.id,
-        initialText: artifact.content.text,
+        initialText: artifact.type === "TEXT" ? artifact.content.text : "",
         onUpdate,
     });
 

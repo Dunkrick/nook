@@ -24,12 +24,12 @@ export async function createArtifact(
         );
     }
 
+    const content = input.type === "TEXT" ? { text: input.text } : { url: input.url };
+
     const row = await prisma.artifact.create({
         data: {
-            type: ArtifactType.TEXT,
-            content: {
-                text: input.text,
-            },
+            type: input.type,
+            content,
             userId: input.userId,
             workspaceId: input.workspaceId,
             x: input.x,

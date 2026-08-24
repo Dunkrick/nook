@@ -129,3 +129,16 @@
     box-shadow: var(--elevation-overlay);
     transform: rotate(-1deg);
 }
+
+.nook-artifact__link {
+    margin: auto 0 0;
+
+    color: var(--text-primary);
+    font-size: var(--type-artifact-size);
+    font-weight: var(--weight-bold);
+    line-height: 1.32;
+
+    overflow-wrap: anywhere;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+}
