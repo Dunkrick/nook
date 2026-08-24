@@ -12,3 +12,5 @@ dist/
 
 CONTRIBUTING.md
 TODO.md
+
+backend/github-actions-key.json
