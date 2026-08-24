@@ -13,6 +13,7 @@ import { getWorkspaces, getWorkspaceArtifacts } from "../services/workspaces";
 import type { Workspace } from "../services/workspaces";
 import { useNavigate } from "react-router-dom";
 import WorkspaceSwitcher from "../components/WorkspaceSwitcher";
+import { getActiveWorkspaceId, setActiveWorkspaceId } from "../lib/storage";
 
 export default function Home() {
     const navigate = useNavigate();
@@ -58,28 +59,29 @@ export default function Home() {
             return;
         }
 
-        const workspace = fetchedWorkspaces[0];
+        const savedWorkspaceId = getActiveWorkspaceId();
+
+        const workspace = fetchedWorkspaces.find((workspace) => workspace.id === savedWorkspaceId) ?? fetchedWorkspaces[0];
 
         setActiveWorkspace(workspace);
+        setActiveWorkspaceId(workspace.id);
 
-        const fetchedArtifacts =
-            await getWorkspaceArtifacts(workspace.id);
+        const fetchedArtifacts = await getWorkspaceArtifacts(workspace.id);
 
         setArtifacts(fetchedArtifacts);
     }
 
     initialize();
-}, []);
+    }, []);
 
-async function handleWorkspaceChange(
-    workspace: Workspace
-) {
+async function handleWorkspaceChange(workspace: Workspace) {
     setActiveWorkspace(workspace);
+    setActiveWorkspaceId(workspace.id);
+    
     setSelectedArtifactIds([]);
     setDraftArtifact(null);
 
-    const fetchedArtifacts =
-        await getWorkspaceArtifacts(workspace.id);
+    const fetchedArtifacts = await getWorkspaceArtifacts(workspace.id);
 
     setArtifacts(fetchedArtifacts);
 }
