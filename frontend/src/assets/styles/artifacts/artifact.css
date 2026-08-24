@@ -142,3 +142,26 @@
     text-decoration-thickness: 2px;
     text-underline-offset: 3px;
 }
+
+.nook-artifact-picker {
+    position: absolute;
+
+    left: var(--creation-x);
+    top: var(--creation-y);
+
+    z-index: var(--z-selection);
+
+    padding: var(--space-4);
+
+    border:
+        2px solid var(--border-strong);
+
+    border-radius:
+        var(--radius-artifact);
+
+    background:
+        var(--color-surface);
+
+    box-shadow:
+        var(--elevation-overlay);
+}

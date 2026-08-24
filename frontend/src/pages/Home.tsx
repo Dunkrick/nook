@@ -23,29 +23,70 @@ export default function Home() {
     const [activeWorkspace, setActiveWorkspace] = useState<Workspace | null>(null);
     const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
     const [isInsightOpen, setIsInsightOpen] = useState(false);
+    const [creationPosition, setCreationPosition] = useState<Position | null>(null);
 
     function handleCreateDraft(position: Position) {
+        setCreationPosition(position);
+    }
+
+    function handleSelectArtifactType(
+    type: "TEXT" | "LINK"
+) {
+    if (!creationPosition) return;
+
+    if (type === "TEXT") {
         setDraftArtifact({
             type: "TEXT",
             text: "",
-            x: position.x,
-            y: position.y,
+            x: creationPosition.x,
+            y: creationPosition.y,
         });
     }
 
-    async function handleCommitDraft(text: string) {
-    if (!draftArtifact || !activeWorkspace) return;
+    if (type === "LINK") {
+        setDraftArtifact({
+            type: "LINK",
+            url: "",
+            x: creationPosition.x,
+            y: creationPosition.y,
+        });
+    }
 
-    const savedArtifact = await createArtifact({
-        text,
-        x: draftArtifact.x,
-        y: draftArtifact.y,
-        workspaceId: activeWorkspace.id,
-    });
-
-    setArtifacts((current) => [...current, savedArtifact]);
-    setDraftArtifact(null);
+    setCreationPosition(null);
 }
+    function handleCancelCreation() {
+    setCreationPosition(null);
+}
+
+    async function handleCommitDraftText(text: string) {
+        if (!draftArtifact || !activeWorkspace || draftArtifact.type !== "TEXT") return;
+
+        const savedArtifact = await createArtifact({
+            type: "TEXT",
+            text,
+            x: draftArtifact.x,
+            y: draftArtifact.y,
+            workspaceId: activeWorkspace.id,
+        });
+
+        setArtifacts((current) => [...current, savedArtifact]);
+        setDraftArtifact(null);
+    }
+
+    async function handleCommitDraftLink(url: string) {
+        if (!draftArtifact || !activeWorkspace || draftArtifact.type !== "LINK") return;
+
+        const savedArtifact = await createArtifact({
+            type: "LINK",
+            url,
+            x: draftArtifact.x,
+            y: draftArtifact.y,
+            workspaceId: activeWorkspace.id,
+        });
+
+        setArtifacts((current) => [...current, savedArtifact]);
+        setDraftArtifact(null);
+    }
 
     function handleCancelDraft() {
     setDraftArtifact(null);
@@ -169,10 +210,14 @@ function handleCloseInsight(){
                     <Wall 
                 artifacts={artifacts} 
                 draftArtifact={draftArtifact} 
+                createPosition={creationPosition}
                 onUpdate={handleUpdateArtifact} 
                 onDelete={handleDeleteArtifact} 
                 onCreate={handleCreateDraft} 
-                onCommitDraft={handleCommitDraft}
+                onSelectArtifactType={handleSelectArtifactType}
+                onCancelCreation={handleCancelCreation}
+                onCommitDraftText={handleCommitDraftText}
+                onCommitDraftLink={handleCommitDraftLink}
                 onCancelDraft={handleCancelDraft}
                 selectedArtifactIds={selectedArtifactIds}
                 onToggleArtifactSelection={toggleArtifactSelection}

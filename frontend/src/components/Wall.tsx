@@ -3,17 +3,22 @@ import EmptyWorkspace from "./EmptyWorkspace";
 import ArtifactComponent from "./Artifact/Artifact";
 import { ARTIFACT_ROTATIONS } from "../lib/ArtifactRotation";
 import DraftArtifactComponent from "./DraftArtifact";
+import ArtifactCreationPicker from "./ArtifactCreationPicker";
 
 interface WallProps {
   artifacts: Artifact[];
   draftArtifact: DraftArtifact | null;
 
-  onCreate: (position: Position) => void;
+  createPosition: Position | null;
+  onSelectArtifactType: (type: "TEXT" | "LINK") => void;
+  onCancelCreation: () => void;
 
+  onCreate: (position: Position) => void;
   onUpdate: (id: number, update: ArtifactUpdate) => Promise<void>;
   onDelete: (id: number) => Promise<void>;
 
-  onCommitDraft: (text: string) => Promise<void>;
+  onCommitDraftText: (text: string) => Promise<void>;
+  onCommitDraftLink: (url: string) => Promise<void>;
   onCancelDraft: () => void;
 
   selectedArtifactIds: number[]
@@ -26,10 +31,14 @@ export default function Wall({
     onUpdate, 
     onDelete, 
     onCreate, 
-    onCommitDraft, 
+    onCommitDraftText,
+    onCommitDraftLink,
     onCancelDraft,
     selectedArtifactIds,
     onToggleArtifactSelection,
+    createPosition,
+    onSelectArtifactType,
+    onCancelCreation,
 }: WallProps) {
   function handleDoubleClick(
     e: React.MouseEvent<HTMLDivElement>
@@ -52,6 +61,14 @@ export default function Wall({
       {artifacts.length === 0 && !draftArtifact && (
         <EmptyWorkspace />
       )}
+
+      {createPosition && (
+    <ArtifactCreationPicker
+        position={createPosition}
+        onSelect={onSelectArtifactType}
+        onCancel={onCancelCreation}
+    />
+)}
 
       {artifacts.map((artifact, index) => (
         <ArtifactComponent
@@ -77,7 +94,7 @@ export default function Wall({
                 x: draftArtifact.x,
                 y: draftArtifact.y,
             }}
-            onCommit={onCommitDraft}
+            onCommit={draftArtifact.type === "TEXT" ? onCommitDraftText : onCommitDraftLink}
             onCancel={onCancelDraft}
         />
     )}

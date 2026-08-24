@@ -1,24 +1,21 @@
 import * as api from "./api";
-import type { TextArtifact, ArtifactUpdate } from "../types/artifacts";
+import type { Artifact, TextArtifact, ArtifactUpdate } from "../types/artifacts";
 
 export async function getArtifacts(): Promise<TextArtifact[]> {
     const data = await api.get("/artifacts");
     return data as TextArtifact[];
 }
 
-export async function createArtifact({
-    text,
-    x,
-    y,
-    workspaceId
-}: {
-    text: string;
+export async function createArtifact(payload: {
+    type?: "TEXT" | "LINK";
+    text?: string;
+    url?: string;
     x?: number;
     y?: number;
     workspaceId: number;
-}): Promise<TextArtifact> {
-    const data = await api.post("/artifacts", { text, x, y, workspaceId });
-    return data as TextArtifact;
+}): Promise<Artifact> {
+    const data = await api.post("/artifacts", payload);
+    return data as Artifact;
 }
 
 export async function updateArtifact(id: number, { text, x, y }: ArtifactUpdate): Promise<TextArtifact> {
