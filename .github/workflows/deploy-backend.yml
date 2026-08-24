@@ -33,12 +33,12 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
-          -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/nook-backend/backend .
+            -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/nook-backend/backend .
 
       - name: Push image
         run: |
           docker push \
-          ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/nook-backend/backend
+            ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/nook-backend/backend
 
       - name: Deploy Cloud Run
         run: |
