@@ -26,19 +26,13 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
 
       - name: Configure Docker
-        run: |
-          gcloud auth configure-docker \
-          ${{ secrets.GCP_REGION }}-docker.pkg.dev
+        run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev
 
       - name: Build Docker image
-        run: |
-          docker build \
-            -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/nook-backend/backend .
+        run: docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/nook-backend/backend .
 
       - name: Push image
-        run: |
-          docker push \
-            ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/nook-backend/backend
+        run: docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/nook-backend/backend
 
       - name: Deploy Cloud Run
         run: |
