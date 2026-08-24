@@ -7,6 +7,7 @@ import LinkArtifactBody from "./LinkArtifactBody";
 import ArtifactEditor from "./ArtifactEditor";
 import useArtifactInteraction from "./useArtifactInteraction";
 import type { Artifact } from "../../types/artifacts";
+import { toRenderPosition } from "../../lib/workspace";
 
 interface ArtifactViewProps {
     index: number;
@@ -34,6 +35,7 @@ export default function ArtifactView({
         handleClick,
         handlePointerDown,
     } = interaction;
+    const renderPosition = toRenderPosition(drag.position);
 
     return (
 
@@ -46,8 +48,8 @@ export default function ArtifactView({
             )}
             style={{
                 ...style,
-                left: drag.position.x,
-                top: drag.position.y,
+                left: renderPosition.x,
+                top: renderPosition.y,
             }}
 
             onPointerDown={handlePointerDown}
@@ -72,7 +74,7 @@ export default function ArtifactView({
                 <div className="nook-artifact__content">
                     <ArtifactHeader
                         index={index}
-                        onEdit={() => editing.setIsEditing(true) }
+                        onEdit={artifact.type === "TEXT" ? () => editing.setIsEditing(true) : undefined}
                         onDelete={onDelete} />
                     {artifact.type === "TEXT" && (
                         <ArtifactBody text={artifact.content.text}/>

@@ -1,5 +1,5 @@
 interface ArtifactActionsProps {
-    onEdit: () => void;
+    onEdit?: () => void;
     onDelete: () => void;
 }
 
@@ -9,7 +9,7 @@ export default function ArtifactActions({ onEdit, onDelete }: ArtifactActionsPro
             className="nook-artifact__actions"
             onClick={(e) => e.stopPropagation()}
         >
-            <button
+            {onEdit && <button
                 onPointerDown={(e) => e.stopPropagation()}
                 onClick={(e) => {
                     e.stopPropagation();
@@ -19,7 +19,7 @@ export default function ArtifactActions({ onEdit, onDelete }: ArtifactActionsPro
                 aria-label="Edit thought"
             >
                 Edit
-            </button>
+            </button>}
             <button
                 onPointerDown={(e) => e.stopPropagation()}
                 onClick={(e) => {

@@ -4,6 +4,10 @@ export interface Workspace {
     id: number;
     name: string;
     createdAt: string;
+    center?: {
+        x: number;
+        y: number;
+    };
 }
 
 export async function getWorkspaces(): Promise<Workspace[]> {

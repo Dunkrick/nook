@@ -1,14 +1,13 @@
 import type { PropsWithChildren } from "react";
-import useCamera from "../hooks/useCamera";
+import { useCanvasCamera } from "../hooks/useCanvasCamera";
 
 export default function World({
     children,
 }: PropsWithChildren) {
 
-    const camera = useCamera();
+    const camera = useCanvasCamera();
 
     return (
-
         <div
             className="nook-world"
             style={{
@@ -21,7 +20,5 @@ export default function World({
         >
             {children}
         </div>
-
     );
-
 }

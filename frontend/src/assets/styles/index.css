@@ -3,6 +3,7 @@
 @import "./tokens/tokens.css";
 @import "./tokens/typography.css";
 @import "./tokens/interaction.css";
+@import "./tokens/motion.css";
 
 @import "./primitives/controls.css";
 

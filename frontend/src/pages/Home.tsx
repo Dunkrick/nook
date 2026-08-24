@@ -14,6 +14,12 @@ import type { Workspace } from "../services/workspaces";
 import { useNavigate } from "react-router-dom";
 import WorkspaceSwitcher from "../components/WorkspaceSwitcher";
 import { getActiveWorkspaceId, setActiveWorkspaceId } from "../lib/storage";
+import { CameraProvider } from "../context/CameraProvider";
+import CanvasController from "../components/CanvasController";
+import {
+    addPlacementVariation,
+    getWorkspaceHome,
+} from "../lib/workspace";
 
 export default function Home() {
     const navigate = useNavigate();
@@ -24,9 +30,16 @@ export default function Home() {
     const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
     const [isInsightOpen, setIsInsightOpen] = useState(false);
     const [creationPosition, setCreationPosition] = useState<Position | null>(null);
+    const [isWorkspaceReady, setIsWorkspaceReady] = useState(false);
 
     function handleCreateDraft(position: Position) {
-        setCreationPosition(position);
+        const isFirstArtifact = artifacts.length === 0;
+
+        setCreationPosition(
+            isFirstArtifact
+                ? getWorkspaceHome(activeWorkspace)
+                : addPlacementVariation(position)
+        );
     }
 
     function handleSelectArtifactType(
@@ -94,10 +107,12 @@ export default function Home() {
     
     useEffect(() => {
     async function initialize() {
+        setIsWorkspaceReady(false);
         const fetchedWorkspaces = await getWorkspaces();
         setWorkspaces(fetchedWorkspaces);
         if (fetchedWorkspaces.length === 0) {
             setArtifacts([]);
+            setIsWorkspaceReady(true);
             return;
         }
 
@@ -111,21 +126,52 @@ export default function Home() {
         const fetchedArtifacts = await getWorkspaceArtifacts(workspace.id);
 
         setArtifacts(fetchedArtifacts);
+        setIsWorkspaceReady(true);
     }
 
     initialize();
     }, []);
 
+    useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+        if (e.key !== "Escape") return;
+
+        if (draftArtifact) {
+            setDraftArtifact(null);
+            return;
+        }
+
+        if (creationPosition) {
+            setCreationPosition(null);
+        }
+    }
+
+    window.addEventListener(
+        "keydown",
+        handleKeyDown
+    );
+
+    return () => {
+        window.removeEventListener(
+            "keydown",
+            handleKeyDown
+        );
+    };
+}, [draftArtifact, creationPosition]);
+
 async function handleWorkspaceChange(workspace: Workspace) {
+    setIsWorkspaceReady(false);
     setActiveWorkspace(workspace);
     setActiveWorkspaceId(workspace.id);
 
     setSelectedArtifactIds([]);
     setDraftArtifact(null);
+    setCreationPosition(null);
 
     const fetchedArtifacts = await getWorkspaceArtifacts(workspace.id);
 
     setArtifacts(fetchedArtifacts);
+    setIsWorkspaceReady(true);
 }
 
 async function handleUpdateArtifact(id: number, update: ArtifactUpdate) {
@@ -189,8 +235,12 @@ function handleCloseInsight(){
     setIsInsightOpen(false);
 }
     return (
-    <div>
-        {/* HEADER */}
+        <CameraProvider>
+            <CanvasController
+                artifacts={artifacts}
+                workspace={activeWorkspace}
+                isReady={isWorkspaceReady}
+            />
         <WorkspaceShell>
             <FloatingToolbar
                 onLogout={() => {
@@ -221,6 +271,7 @@ function handleCloseInsight(){
                 onCancelDraft={handleCancelDraft}
                 selectedArtifactIds={selectedArtifactIds}
                 onToggleArtifactSelection={toggleArtifactSelection}
+                homePosition={getWorkspaceHome(activeWorkspace)}
                     />
                 </World>
             </Viewport>
@@ -237,7 +288,7 @@ function handleCloseInsight(){
                     onClose={handleCloseInsight}
                 />
             )}
-            </WorkspaceShell>
-    </div>
+        </WorkspaceShell>
+        </CameraProvider>
     );
 };

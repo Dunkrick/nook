@@ -30,6 +30,8 @@ textarea:focus-visible {
 
 .nook-button--quiet:hover { background: var(--color-artifact); }
 
+.nook-button--quiet:active { transform: rotate(-1deg) translateY(1px); }
+
 .nook-icon-button {
   display: inline-grid;
   width: 32px;

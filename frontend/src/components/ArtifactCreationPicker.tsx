@@ -1,4 +1,5 @@
 import type { Position } from "../types/artifacts";
+import { toRenderPosition } from "../lib/workspace";
 
 interface ArtifactCreationPickerProps {
     position: Position;
@@ -7,13 +8,24 @@ interface ArtifactCreationPickerProps {
 }
 
 export default function ArtifactCreationPicker({
+    position,
     onSelect,
     onCancel,
 }: ArtifactCreationPickerProps) {
+    const renderPosition = toRenderPosition(position);
+
     return (
-        <div className="nook-artifact-picker">
+        <div
+            className="nook-artifact-picker"
+            style={{
+                left: renderPosition.x,
+                top: renderPosition.y,
+            }}
+            onPointerDown={(e) => e.stopPropagation()}
+            onDoubleClick={(e) => e.stopPropagation()}
+        >
             <p className="nook-artifact-picker__title">
-                What do you want to leave here?
+                Leave something here
             </p>
 
             <div className="nook-artifact-picker__actions">
@@ -30,14 +42,15 @@ export default function ArtifactCreationPicker({
                 >
                     Link
                 </button>
-
-                <button
-                    type="button"
-                    onClick={onCancel}
-                >
-                    Cancel
-                </button>
             </div>
+
+            <button
+                type="button"
+                className="nook-artifact-picker__cancel"
+                onClick={onCancel}
+            >
+                Cancel
+            </button>
         </div>
     );
 }

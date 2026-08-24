@@ -1,17 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import type { Position } from "../types/artifacts";
+import { toRenderPosition } from "../lib/workspace";
 
 interface DraftArtifactProps {
+    type: "TEXT" | "LINK";
     position: Position;
     onCommit: (text: string) => Promise<void>;
     onCancel: () => void;
 }
 
 export default function DraftArtifactComponent({
+    type,
     position,
     onCommit,
     onCancel,
 }: DraftArtifactProps) {
+
+    const renderPosition = toRenderPosition(position);
 
     const [text, setText] = useState("");
     const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -51,10 +56,10 @@ export default function DraftArtifactComponent({
         onChange={(e) => setText(e.target.value)}
         onKeyDown={handleKeyDown}
         onDoubleClick={(e) => e.stopPropagation()}
-        placeholder="What's on your mind?"
+        placeholder={type === "LINK" ? "Paste a link worth keeping…" : "What's on your mind?"}
         style={{
-            left: position.x,
-            top: position.y,
+            left: renderPosition.x,
+            top: renderPosition.y,
         }}
     />
 );

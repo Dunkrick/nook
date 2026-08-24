@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { Workspace } from "../services/workspaces";
 
 interface WorkspaceSwitcherProps {
@@ -11,28 +12,49 @@ export default function WorkspaceSwitcher({
     activeWorkspace,
     onChange,
 }: WorkspaceSwitcherProps) {
-    return (
-        <select
-            value={activeWorkspace?.id ?? ""}
-            onChange={(event) => {
-                const workspace = workspaces.find(
-                    (workspace) =>
-                        workspace.id === Number(event.target.value)
-                );
+    const [isOpen, setIsOpen] = useState(false);
 
-                if (workspace) {
-                    onChange(workspace);
-                }
-            }}
-        >
-            {workspaces.map((workspace) => (
-                <option
-                    key={workspace.id}
-                    value={workspace.id}
+    return (
+        <div className="nook-workspace-identity">
+            <span className="nook-workspace-identity__product">
+                Nook<span className="nook-logo__spark" />
+            </span>
+
+            <button
+                type="button"
+                className="nook-workspace-identity__trigger"
+                aria-expanded={isOpen}
+                aria-controls="workspace-switcher-menu"
+                onClick={() => setIsOpen((open) => !open)}
+            >
+                <span>{activeWorkspace?.name}</span>
+                <span className="nook-workspace-identity__chevron" aria-hidden="true">⌄</span>
+            </button>
+
+            {isOpen && (
+                <div
+                    id="workspace-switcher-menu"
+                    className="nook-workspace-identity__menu"
+                    aria-label="Choose workspace"
                 >
-                    {workspace.name}
-                </option>
-            ))}
-        </select>
+                    <p>Your places</p>
+                    {workspaces.map((workspace) => (
+                        <button
+                            type="button"
+                            key={workspace.id}
+                            className="nook-workspace-identity__option"
+                            data-active={workspace.id === activeWorkspace?.id || undefined}
+                            onClick={() => {
+                                onChange(workspace);
+                                setIsOpen(false);
+                            }}
+                        >
+                            <span className="nook-workspace-identity__mark" aria-hidden="true" />
+                            {workspace.name}
+                        </button>
+                    ))}
+                </div>
+            )}
+        </div>
     );
 }

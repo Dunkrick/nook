@@ -1,28 +1,33 @@
 .nook-toolbar {
   position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: var(--space-5);
+  right: var(--space-5);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-6);
-  width: min(760px, 92vw);
-  padding: 0 var(--space-5);
+  padding: var(--space-1);
+  border: 1px solid color-mix(in srgb, var(--border-strong) 12%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-artifact) 72%, transparent);
+  box-shadow: var(--elevation-artifact);
+  backdrop-filter: blur(14px);
   z-index: var(--z-toolbar);
 }
 
-.nook-toolbar__brand {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
+.nook-workspace-identity {
+  position: fixed;
+  top: var(--space-5);
+  left: var(--space-5);
+  z-index: var(--z-toolbar);
+  display: grid;
+  justify-items: start;
+  gap: 2px;
 }
 
-.nook-logo {
+.nook-workspace-identity__product {
   display: inline-flex;
   align-items: center;
   color: var(--text-heading);
-  font-size: 25px;
+  font-size: 24px;
   font-weight: var(--weight-bold);
   letter-spacing: -0.05em;
 }
@@ -36,14 +41,92 @@
   transform: rotate(45deg);
 }
 
-.nook-toolbar__descriptor {
-  padding-left: var(--space-3);
-  border-left: 1px solid var(--border-subtle);
+.nook-workspace-identity__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 0;
+  padding: 0;
+  background: transparent;
   color: var(--text-muted);
+  cursor: pointer;
   font-size: var(--type-hint-size);
   font-weight: var(--weight-medium);
+  line-height: 1.2;
+  text-align: left;
+}
+
+.nook-workspace-identity__trigger:hover,
+.nook-workspace-identity__trigger:focus-visible {
+  color: var(--text-heading);
+}
+
+.nook-workspace-identity__chevron {
+  display: inline-block;
+  margin-top: -3px;
+  font-size: 16px;
+  transition: transform var(--motion-lift);
+}
+
+.nook-workspace-identity__trigger[aria-expanded="true"] .nook-workspace-identity__chevron {
+  transform: rotate(180deg);
+}
+
+.nook-workspace-identity__menu {
+  width: 210px;
+  margin-top: var(--space-2);
+  padding: var(--space-2);
+  border: 1px solid color-mix(in srgb, var(--border-strong) 16%, transparent);
+  border-radius: 13px 16px 14px 17px;
+  background: color-mix(in srgb, var(--color-artifact) 92%, transparent);
+  box-shadow: var(--elevation-surface);
+  backdrop-filter: blur(14px);
+  animation: nook-workspace-menu-in 180ms var(--motion-settle) both;
+}
+
+.nook-workspace-identity__menu p {
+  margin: 3px var(--space-2) var(--space-2);
+  color: var(--text-muted);
+  font-size: var(--type-overline-size);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-overline);
+}
+
+.nook-workspace-identity__option {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: var(--space-2);
+  border: 0;
+  border-radius: 9px 11px 8px 10px;
+  padding: 10px;
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.nook-workspace-identity__option:hover,
+.nook-workspace-identity__option:focus-visible,
+.nook-workspace-identity__option[data-active="true"] {
+  background: color-mix(in srgb, var(--artifact-2) 22%, transparent);
+}
+
+.nook-workspace-identity__mark {
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--border-strong);
+  border-radius: 3px 4px 2px 4px;
+  background: var(--artifact-2);
+  transform: rotate(-12deg);
 }
 
 .nook-toolbar__button {
   min-height: 40px;
+}
+
+@keyframes nook-workspace-menu-in {
+  from { opacity: 0; transform: translateY(-5px) rotate(-1deg); }
+  to { opacity: 1; transform: translateY(0) rotate(0); }
 }
