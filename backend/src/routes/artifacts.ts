@@ -38,8 +38,9 @@ router.post(
         const result = await createArtifact({
             text: req.body.text,
             userId: req.user.id,
-            x: req.body.x,
-            y: req.body.y,
+            workspaceId: req.body.workspaceId,
+            x: req.body.x ?? 0,
+            y: req.body.y ?? 0,
         });
 
         return res.status(201).json(result);

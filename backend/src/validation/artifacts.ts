@@ -2,16 +2,27 @@ import type { Request, Response, NextFunction } from "express";
 import { ValidationError } from "../lib/error.js";
 
 export function validateCreateArtifact(req: Request, res: Response, next: NextFunction) {
-    const { text, x, y } = req.body;
+    const { text, x, y, workspaceId } = req.body;
 
     if (!text?.trim()) {
         throw new ValidationError("Invalid Artifact data, artifact requires valid text.");
     }
 
-    // Clean up the body so the route gets the trimmed version
+    const parsedWorkspaceId = Number(workspaceId);
+
+    if (
+        !Number.isInteger(parsedWorkspaceId) ||
+        parsedWorkspaceId <= 0
+    ) {
+        throw new ValidationError(
+            "Invalid workspace ID."
+        );
+    }
+
     req.body.text = text.trim();
     req.body.x = Number.isFinite(Number(x)) ? Number(x) : 0;
     req.body.y = Number.isFinite(Number(y)) ? Number(y) : 0;
+    req.body.workspaceId = parsedWorkspaceId;
 
     next();
 }

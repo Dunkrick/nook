@@ -31,3 +31,18 @@ export async function createWorkspace(
         }
     });
 }
+
+export async function getWorkspaceArtifacts(
+    userId: number,
+    workspaceId: number
+) {
+    return prisma.artifact.findMany({
+        where: {
+            userId,
+            workspaceId,
+        },
+        orderBy: {
+            createdAt: "asc",
+        },
+    });
+}

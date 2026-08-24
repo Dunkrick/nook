@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import SelectionToolbar from "../components/SelectionToolbar"
-import { getArtifacts, createArtifact, updateArtifact, deleteArtifact } from "../services/artifacts";
+import { createArtifact, updateArtifact, deleteArtifact } from "../services/artifacts";
 import type { TextArtifact, ArtifactUpdate, DraftArtifact, Position } from "../types/artifacts";
 import Wall from "../components/Wall"
 import InsightPanel from "../components/InsightPanel";
@@ -9,6 +9,8 @@ import FloatingToolbar from "../components/FloatingToolbar";
 import { logout } from "../services/auth";
 import Viewport from "../components/Viewport";
 import World from "../components/World";
+import { getWorkspaces, getWorkspaceArtifacts } from "../services/workspaces";
+import type { Workspace } from "../services/workspaces";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
@@ -16,6 +18,7 @@ export default function Home() {
     const [artifacts, setArtifacts] = useState<TextArtifact[]>([]);
     const [draftArtifact, setDraftArtifact] = useState<DraftArtifact | null>(null);
     const [selectedArtifactIds, setSelectedArtifactIds] = useState<number[]>([]);
+    const [activeWorkspace, setActiveWorkspace] = useState<Workspace | null>(null);
     const [isInsightOpen, setIsInsightOpen] = useState(false);
 
     function handleCreateDraft(position: Position) {
@@ -27,29 +30,44 @@ export default function Home() {
     }
 
     async function handleCommitDraft(text: string) {
-    if (!draftArtifact) return;
+    if (!draftArtifact || !activeWorkspace) return;
 
     const savedArtifact = await createArtifact({
         text,
         x: draftArtifact.x,
         y: draftArtifact.y,
+        workspaceId: activeWorkspace.id,
     });
 
     setArtifacts((current) => [...current, savedArtifact]);
     setDraftArtifact(null);
-    }
+}
 
     function handleCancelDraft() {
     setDraftArtifact(null);
     }
     
     useEffect(() => {
-        async function fetchArtifacts() {
-            const fetchedArtifacts = await getArtifacts();
-            setArtifacts(fetchedArtifacts);
+    async function initialize() {
+        const fetchedWorkspaces = await getWorkspaces();
+
+        if (fetchedWorkspaces.length === 0) {
+            setArtifacts([]);
+            return;
         }
-        fetchArtifacts();
-    }, []);
+
+        const workspace = fetchedWorkspaces[0];
+
+        setActiveWorkspace(workspace);
+
+        const fetchedArtifacts =
+            await getWorkspaceArtifacts(workspace.id);
+
+        setArtifacts(fetchedArtifacts);
+    }
+
+    initialize();
+}, []);
 
 async function handleUpdateArtifact(id: number, update: ArtifactUpdate) {
     // Keep a snapshot in case the request fails

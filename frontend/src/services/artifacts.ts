@@ -9,13 +9,15 @@ export async function getArtifacts(): Promise<TextArtifact[]> {
 export async function createArtifact({
     text,
     x,
-    y
+    y,
+    workspaceId
 }: {
     text: string;
     x?: number;
     y?: number;
+    workspaceId: number;
 }): Promise<TextArtifact> {
-    const data = await api.post("/artifacts", { text, x, y });
+    const data = await api.post("/artifacts", { text, x, y, workspaceId });
     return data as TextArtifact;
 }
 

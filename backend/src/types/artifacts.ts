@@ -3,6 +3,7 @@ export interface CreateArtifactInput {
     userId: number;
     x: number;
     y: number;
+    workspaceId: number;
 }
 
 export interface UpdateArtifactInput {
