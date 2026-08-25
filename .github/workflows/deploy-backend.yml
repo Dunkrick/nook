@@ -84,4 +84,5 @@ jobs:
             --image ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/nook-backend/backend:${{ github.sha }} \
             --region ${{ secrets.GCP_REGION }} \
             --platform managed \
+            --service-account 902490290476-compute@developer.gserviceaccount.com \
             --allow-unauthenticated
