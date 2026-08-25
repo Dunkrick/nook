@@ -14,8 +14,8 @@ RUN npm ci
 
 COPY . .
 
-RUN npx prisma generate
 RUN npm run build
+
 
 # ---------- Runtime ----------
 FROM node:22-slim AS production
