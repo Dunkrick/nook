@@ -28,6 +28,7 @@ jobs:
       - name: Verify GCP identity
         run: |
           gcloud auth list
+          gcloug config list
 
       - name: Configure Docker
         run: |
@@ -43,6 +44,11 @@ jobs:
         run: |
           docker build \
             -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/nook-backend/backend:${{ github.sha }} .
+
+      - name: Test Artifact Registry access
+        run: |
+          gcloud artifacts repositories describe nook-backend \
+          --location=asia-south1
 
       - name: Push image
         run: |
