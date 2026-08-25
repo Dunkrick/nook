@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output = "../src/generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -13,24 +13,24 @@ enum ArtifactType {
 }
 
 model User {
-  id           Int        @id @default(autoincrement())
-  email        String     @unique
+  id           Int         @id @default(autoincrement())
+  email        String      @unique
   passwordHash String
-  createdAt    DateTime   @default(now())
+  createdAt    DateTime    @default(now())
   workspaces   Workspace[]
   artifacts    Artifact[]
 }
 
 model Workspace {
-  id        Int        @id @default(autoincrement())
-  name      String
-  slug      String?     @unique
+  id   Int     @id @default(autoincrement())
+  name String
+  slug String? @unique
 
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @default(now()) @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
-  ownerId    Int
-  owner      User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId Int
+  owner   User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
   artifacts Artifact[]
 }
@@ -46,10 +46,10 @@ model Artifact {
   zIndex    Int          @default(0)
 
   //existing ownership (temp)
-  userId    Int
-  user      User         @relation(fields: [userId], references: [id])
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
 
   //New ownership (temp)
   workspaceId Int?
-  workspace Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspace   Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 }

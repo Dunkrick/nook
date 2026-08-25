@@ -6,9 +6,9 @@ import type {
 
 import type {
     Artifact as PrismaArtifact,
-} from "@prisma/client";
+} from "../generated/prisma/client.js";
 
-import { ArtifactType } from "@prisma/client";
+import { ArtifactType } from "../generated/prisma/client.js";
 
 export function toArtifact(
     record: PrismaArtifact

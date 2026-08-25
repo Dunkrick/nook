@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import prisma from "../prisma.js";
 import { ValidationError } from "../lib/error.js";
 import type { RegisterUserInput, AuthResponse, LoginUserInput } from "../types/auth.js";
-import type { User } from "@prisma/client";
+import type { User } from "../generated/prisma/client.js";
 import { env } from "../config/env.js";
 
 function createAuthResponse(user: User): AuthResponse {

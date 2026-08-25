@@ -1,4 +1,4 @@
-import type { ArtifactType } from "@prisma/client";
+import type { ArtifactType } from "../generated/prisma/client.js";
 
 export interface TextArtifactContent {
     text: string;

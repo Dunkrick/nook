@@ -4,7 +4,7 @@ import {
     CreateArtifactInput,
     UpdateArtifactInput,
 } from "../types/artifacts.js";
-import { Prisma, ArtifactType } from "@prisma/client";
+import { Prisma, ArtifactType } from "../generated/prisma/client.js";
 import { ValidationError } from "../lib/error.js";
 
 export async function createArtifact(
