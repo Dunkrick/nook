@@ -25,6 +25,28 @@ jobs:
       - name: Setup gcloud
         uses: google-github-actions/setup-gcloud@v2
 
+      - name: Diagnose GCP context
+        run: |
+          echo "=== AUTH ==="
+          gcloud auth list
+
+          echo "=== CONFIG ==="
+          gcloud config list
+
+          echo "=== PROJECT ==="
+          gcloud config get-value project
+
+          echo "=== PROJECT FROM SECRET ==="
+          echo "${{ secrets.GCP_PROJECT_ID }}"
+
+          echo "=== REGION FROM SECRET ==="
+          echo "${{ secrets.GCP_REGION }}"
+
+          echo "=== ARTIFACT REGISTRY ==="
+          gcloud artifacts repositories describe nook-backend \
+            --location="${{ secrets.GCP_REGION }}" \
+            --project="${{ secrets.GCP_PROJECT_ID }}"
+
       - name: Verify GCP identity
         run: |
           gcloud auth list
@@ -42,6 +64,11 @@ jobs:
 
       - name: Verify Artifact Registry
         run: |
+          echo "Project: ${{ secrets.GCP_PROJECT_ID }}"
+          echo "Region: ${{ secrets.GCP_REGION }}"
+
+          gcloud config get-value project
+
           gcloud artifacts repositories describe nook-backend \
             --location=${{ secrets.GCP_REGION }} \
             --project=${{ secrets.GCP_PROJECT_ID }}
