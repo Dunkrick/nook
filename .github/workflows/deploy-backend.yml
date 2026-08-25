@@ -28,7 +28,7 @@ jobs:
       - name: Verify GCP identity
         run: |
           gcloud auth list
-          gcloug config list
+          gcloud config list
 
       - name: Configure Docker
         run: |
@@ -58,7 +58,7 @@ jobs:
       - name: Deploy Cloud Run
         run: |
           gcloud run deploy nook-backend \
-          --image ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/nook-backend/backend \
-          --region ${{ secrets.GCP_REGION }} \
-          --platform managed \
-          --allow-unauthenticated
+            --image ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/nook-backend/backend:${{ github.sha }} \
+            --region ${{ secrets.GCP_REGION }} \
+            --platform managed \
+            --allow-unauthenticated
