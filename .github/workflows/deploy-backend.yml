@@ -22,10 +22,15 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
-          token_format: access_token
 
       - name: Setup gcloud
         uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker
+        run: |
+          gcloud auth configure-docker \
+            ${{ secrets.GCP_REGION }}-docker.pkg.dev \
+            --quiet
 
       - name: Verify GCP identity
         run: |
@@ -49,6 +54,11 @@ jobs:
           gcloud artifacts repositories describe nook-backend \
             --location=${{ secrets.GCP_REGION }} \
             --project=${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Test Docker credential
+        run: |
+          gcloud auth print-access-token > /tmp/gcp-token
+          echo "Token generated successfully"
 
       - name: Push image
         run: |
