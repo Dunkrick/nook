@@ -1,6 +1,7 @@
 //middleware owns authentication
 import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import { env } from "../config/env.js";
 
 import { ValidationError } from "../lib/error.js";
 
@@ -21,7 +22,7 @@ export function authenticate(
     //Extract the token
     const token = authHeader.split(" ")[1];
     //Read the secret
-    const secret = process.env.JWT_SECRET;
+    const secret = env.JWT_SECRET;
 
     if (!secret) {
         throw new Error("JWT_SECRET is not configured");

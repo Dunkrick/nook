@@ -4,10 +4,11 @@ import prisma from "../prisma.js";
 import { ValidationError } from "../lib/error.js";
 import type { RegisterUserInput, AuthResponse, LoginUserInput } from "../types/auth.js";
 import type { User } from "@prisma/client";
+import { env } from "../config/env.js";
 
 function createAuthResponse(user: User): AuthResponse {
     //get jwt secret
-    const secret = process.env.JWT_SECRET;
+    const secret = env.JWT_SECRET;
 
     //check if jwt secret is configured
     if (!secret) {
