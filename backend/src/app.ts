@@ -5,6 +5,7 @@ import artifactRouter from "./routes/artifacts.js";
 import workspaceRouter from "./routes/workspaces.js";
 import authRouter from "./routes/auth.js";
 import { errorHandler } from "./lib/error.js";
+import prisma from "./prisma.js";
 
 const app = express();
 
@@ -38,12 +39,24 @@ app.use("/", artifactRouter);
 app.use("/auth", authRouter);
 app.use("/workspaces", workspaceRouter);
 
-app.get("/health", (_req, res) => {
-  res.status(200).json({
-    status: "ok",
-    database: "connected",
-    version: "1.1.0",
-  });
+app.get("/health", async (_req, res) => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+
+    res.status(200).json({
+      status: "ok",
+      database: "connected",
+      version: "1.1.0",
+    });
+  } catch (error) {
+    console.error("Health check failed:", error);
+
+    res.status(503).json({
+      status: "degraded",
+      database: "disconnected",
+      version: "1.1.0",
+    });
+  }
 });
 
 app.get("/", (_req, res) => {

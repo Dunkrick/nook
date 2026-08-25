@@ -98,3 +98,17 @@ jobs:
             --platform managed \
             --service-account 902490290476-compute@developer.gserviceaccount.com \
             --allow-unauthenticated
+
+      - name: Verify deployment
+        run: |
+          URL=$(gcloud run services describe nook-backend \
+            --region ${{ secrets.GCP_REGION }} \
+            --format='value(status.url)')
+
+          echo "Health check: $URL/health"
+
+          curl --fail --silent --show-error \
+            --max-time 30 \
+            "$URL/health"
+
+          echo "Deployment verified successfully."
