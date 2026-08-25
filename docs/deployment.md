@@ -1,50 +1,65 @@
 # Deployment
 
-Nook's backend is deployed using Docker and Google Cloud Run.
+Nook's backend is deployed via GitHub Actions to Google Cloud Run.
 
 ---
 
-## Stack
+## Architecture
 
-- Docker
-- Google Artifact Registry
-- Google Cloud Run
-- Neon PostgreSQL
+| Component          | Role                              |
+|--------------------|-----------------------------------|
+| GitHub Actions     | CI/CD pipeline                    |
+| Docker             | Builds the backend image          |
+| Artifact Registry  | Stores versioned images           |
+| Cloud Run          | Runs the containerised backend    |
+| PostgreSQL (Neon)  | Managed database                  |
 
 ---
 
-## Build
+## Trigger
 
-```bash
-cd backend
+Pipeline runs on every push to `main`.
 
-docker buildx build \
-  --platform linux/amd64 \
-  -t asia-south1-docker.pkg.dev/<PROJECT_ID>/nook-backend/nook-backend:latest \
-  --load \
-  .
+---
+
+## Image Naming
+
+```
+REGION-docker.pkg.dev/PROJECT_ID/nook-backend/backend:GIT_SHA
 ```
 
 ---
 
-## Push
+## Deployment Verification
 
-```bash
-docker push \
-asia-south1-docker.pkg.dev/<PROJECT_ID>/nook-backend/nook-backend:latest
+After deploy, the pipeline calls:
+
 ```
+GET /health
+```
+
+A non-2xx response fails the pipeline.
 
 ---
 
-## Deploy
+## Required GitHub Secrets
 
-```bash
-gcloud run deploy nook-backend \
-  --image asia-south1-docker.pkg.dev/<PROJECT_ID>/nook-backend/nook-backend:latest \
-  --region asia-south1 \
-  --platform managed \
-  --allow-unauthenticated
-```
+| Secret            | Description                        |
+|-------------------|------------------------------------|
+| `GCP_PROJECT_ID`  | Google Cloud project ID            |
+| `GCP_REGION`      | Deployment region                  |
+| `GCP_SA_KEY`      | Service account JSON key           |
+
+---
+
+## Failure Semantics
+
+| Step                      | Behaviour on failure        |
+|---------------------------|-----------------------------|
+| Docker build              | Pipeline stops              |
+| Artifact Registry push    | Pipeline stops              |
+| Cloud Run deployment      | Pipeline stops              |
+| `GET /health` non-2xx     | Pipeline fails              |
 
 ---
 
@@ -52,15 +67,13 @@ gcloud run deploy nook-backend \
 
 Cloud Run requires:
 
-- DATABASE_URL
-- JWT_SECRET
-- FRONTEND_URL
+- `DATABASE_URL`
+- `JWT_SECRET`
+- `FRONTEND_URL`
 
 ---
 
 ## Production
-
-Current production backend
 
 ```
 https://nook-backend-902490290476.asia-south1.run.app
