@@ -13,7 +13,7 @@ export default function Register() {
     };
 
     return (
-        <div className="auth-content">
+        <>
             <header className="auth-heading">
                 <p className="auth-eyebrow">
                     Make a little room
@@ -28,7 +28,7 @@ export default function Register() {
                 </p>
             </header>
 
-            <div className="auth-form-wrapper">
+            <div className="auth-form-transition">
                 <AuthForm
                     buttonText="Create Nook"
                     loadingButtonText="Making your Nook..."
@@ -41,6 +41,6 @@ export default function Register() {
                     successMessage="Let's put something in it."
                 />
             </div>
-        </div>
+        </>
     );
 }

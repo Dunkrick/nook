@@ -13,7 +13,7 @@ export default function Login() {
     };
 
     return (
-        <div className="auth-content">
+        <>
             <header className="auth-heading">
                 <p className="auth-eyebrow">
                     Welcome back
@@ -28,7 +28,7 @@ export default function Login() {
                 </p>
             </header>
 
-            <div className="auth-form-wrapper">
+            <div className="auth-form-transition">
                 <AuthForm
                     buttonText="Login"
                     loadingButtonText="Coming back..."
@@ -41,6 +41,6 @@ export default function Login() {
                     successMessage="Opening your Nook..."
                 />
             </div>
-        </div>
+        </>
     );
 }

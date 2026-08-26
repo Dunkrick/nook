@@ -330,17 +330,9 @@
    FORM
    ========================================================== */
 
-.auth-form-wrapper {
+.auth-form {
     width: 100%;
-}
 
-
-/*
-   AuthForm currently renders a bare <form>, so the auth
-   layer owns its visual treatment.
-*/
-
-.auth-form-wrapper form {
     display: flex;
     flex-direction: column;
 
@@ -352,12 +344,12 @@
    FIELD GROUPS
    ========================================================== */
 
-.auth-form-wrapper form > div:not(.auth-toggle-container) {
+.auth-field {
     display: flex;
     flex-direction: column;
 }
 
-.auth-form-wrapper label {
+.auth-field label {
     display: block;
 
     margin-bottom: var(--space-2);
@@ -369,7 +361,7 @@
 }
 
 
-.auth-form-wrapper input {
+.auth-field input {
     width: 100%;
 
     min-height: 48px;
@@ -393,16 +385,16 @@
         background var(--interaction-duration) var(--interaction-easing);
 }
 
-.auth-form-wrapper input::placeholder {
+.auth-field input::placeholder {
     color: var(--text-muted);
     opacity: 0.7;
 }
 
-.auth-form-wrapper input:hover {
+.auth-field input:hover {
     border-color: rgba(42, 36, 56, 0.25);
 }
 
-.auth-form-wrapper input:focus {
+.auth-field input:focus {
     border-color: var(--accent-primary);
 
     box-shadow:
@@ -411,7 +403,7 @@
     background: var(--color-artifact);
 }
 
-.auth-form-wrapper input:disabled {
+.auth-field input:disabled {
     cursor: not-allowed;
     opacity: 0.6;
 }
@@ -421,7 +413,7 @@
    ERROR
    ========================================================== */
 
-.auth-form-wrapper form > p {
+.auth-error {
     margin-top: calc(var(--space-2) * -1);
 
     color: var(--palette-coral-deep);
@@ -435,7 +427,7 @@
    PRIMARY ACTION
    ========================================================== */
 
-.auth-form-wrapper button[type="submit"] {
+.auth-submit {
     width: 100%;
 
     min-height: 48px;
@@ -461,7 +453,7 @@
         opacity var(--interaction-duration) var(--interaction-easing);
 }
 
-.auth-form-wrapper button[type="submit"]:hover:not(:disabled) {
+.auth-submit:hover:not(:disabled) {
     transform: translateY(var(--interaction-hover-lift));
 
     background: var(--accent-primary);
@@ -469,11 +461,11 @@
     box-shadow: var(--elevation-artifact);
 }
 
-.auth-form-wrapper button[type="submit"]:active:not(:disabled) {
+.auth-submit:active:not(:disabled) {
     transform: translateY(0);
 }
 
-.auth-form-wrapper button[type="submit"]:disabled {
+.auth-submit:disabled {
     cursor: wait;
     opacity: 0.65;
 }
@@ -638,7 +630,7 @@
     .auth-shell,
     .auth-form-transition,
     .auth-block,
-    .auth-form-wrapper button[type="submit"],
+    .auth-submit,
     .auth-toggle-btn,
     .auth-success,
     .auth-success__mark,
