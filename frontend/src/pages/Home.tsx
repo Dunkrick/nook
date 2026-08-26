@@ -16,10 +16,7 @@ import WorkspaceSwitcher from "../components/WorkspaceSwitcher";
 import { getActiveWorkspaceId, setActiveWorkspaceId } from "../lib/storage";
 import { CameraProvider } from "../context/CameraProvider";
 import CanvasController from "../components/CanvasController";
-import {
-    addPlacementVariation,
-    getWorkspaceHome,
-} from "../lib/workspace";
+import { getWorkspaceHome } from "../lib/workspace";
 
 export default function Home() {
     const navigate = useNavigate();
@@ -33,13 +30,7 @@ export default function Home() {
     const [isWorkspaceReady, setIsWorkspaceReady] = useState(false);
 
     function handleCreateDraft(position: Position) {
-        const isFirstArtifact = artifacts.length === 0;
-
-        setCreationPosition(
-            isFirstArtifact
-                ? getWorkspaceHome(activeWorkspace)
-                : addPlacementVariation(position)
-        );
+        setCreationPosition(position);
     }
 
     function handleSelectArtifactType(
