@@ -33,12 +33,22 @@ export async function createWorkspace(
 }
 
 export async function getWorkspaceArtifacts(
-    userId: number,
-    workspaceId: number
+    workspaceId: number,
+    userId: number
 ) {
+    const workspace = await prisma.workspace.findFirst({
+        where: {
+            id: workspaceId,
+            ownerId: userId,
+        },
+    });
+
+    if (!workspace) {
+        return null;
+    }
+
     return prisma.artifact.findMany({
         where: {
-            userId,
             workspaceId,
         },
         orderBy: {

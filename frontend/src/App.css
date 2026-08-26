@@ -1,107 +1,49 @@
-.auth-container {
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: var(--space-5);
-  background: var(--color-canvas);
+/* ==========================================================
+   ROOT APPLICATION
+   ========================================================== */
+
+#root {
+    min-height: 100svh;
 }
 
-.auth-header {
-  text-align: center;
-  margin-bottom: var(--space-4);
+/* ==========================================================
+   GENERAL APPLICATION STATES
+   ========================================================== */
+
+.app-loading {
+    min-height: 100svh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--color-canvas);
+    color: var(--text-muted);
+
+    font-family: var(--font-ui);
+    font-size: var(--type-body-size);
 }
 
-.auth-tagline {
-  font-weight: var(--weight-medium);
-  font-size: var(--type-body-size);
-  color: var(--text-primary);
-  margin: var(--space-2) var(--space-5) 0;
+/* ==========================================================
+   ACCESSIBILITY
+   ========================================================== */
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 3px;
 }
 
-.auth-artifact {
-  width: 100%;
-  max-width: 400px;
-  padding: var(--space-7) var(--space-6);
-  background: var(--color-artifact);
-  border: 2px solid var(--border-strong);
-  border-radius: var(--radius-panel);
-  display: flex;
-  flex-direction: column;
-}
+/* ==========================================================
+   REDUCED MOTION
+   ========================================================== */
 
-.auth-artifact label {
-  display: block;
-  text-align: left;
-  font-size: var(--type-label-size);
-  font-weight: var(--weight-semibold);
-  margin-bottom: var(--space-2);
-  color: var(--text-heading);
-}
-
-.auth-artifact input {
-  width: 100%;
-  padding: var(--space-3) var(--space-4);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-control);
-  background: var(--color-canvas);
-  color: var(--text-primary);
-  font-family: var(--font-ui);
-  font-size: var(--type-body-size);
-  box-sizing: border-box;
-  transition: border-color 0.2s;
-}
-
-.auth-artifact input:focus {
-  outline: none;
-  border-color: var(--accent-primary);
-}
-
-.auth-artifact button[type="submit"] {
-  background: var(--accent-action);
-  color: var(--text-on-dark);
-  font-family: var(--font-ui);
-  font-size: var(--type-label-size);
-  font-weight: var(--weight-medium);
-  padding: var(--space-3);
-  border: none;
-  border-radius: var(--radius-control);
-  margin-top: var(--space-5);
-  cursor: pointer;
-  transition: opacity 0.2s;
-  width: 100%;
-}
-
-.auth-artifact button[type="submit"]:hover {
-  opacity: 0.9;
-}
-
-.auth-artifact form {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
-
-.auth-toggle-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  margin-top: var(--space-4);
-  font-size: var(--type-label-size);
-}
-
-.auth-toggle-btn {
-  background: transparent;
-  border: none;
-  color: var(--accent-primary);
-  font-weight: var(--weight-medium);
-  cursor: pointer;
-  font-family: var(--font-ui);
-  padding: 0;
-}
-
-.auth-toggle-btn:hover {
-  text-decoration: underline;
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+    }
 }

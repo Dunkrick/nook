@@ -70,6 +70,12 @@ router.get(
             Number(req.params.workspaceId)
         );
 
+        if (!artifacts){
+            return res.status(404).json({
+                error: "Workspace not found",
+            });
+        }
+
         return res.status(200).json(artifacts);
     })
 );
