@@ -1,5 +1,5 @@
 import prisma from "../src/prisma.js";
-import type { Prisma, User, Workspace } from "@prisma/client";
+import type { Prisma, User, Workspace } from "../src/generated/prisma/client.js";
 
 type TransactionClient = Prisma.TransactionClient;
 
@@ -16,6 +16,7 @@ async function main() {
         }
         catch (error) {
             console.error(`Failed for ${user.email}`, error);
+            throw error;
         }
     }
 
@@ -83,7 +84,10 @@ async function migrateArtifacts(
 }
 
 main()
-    .catch(console.error)
+    .catch((error) => {
+        console.error(error);
+        process.exitCode = 1;
+    })
     .finally(async () => {
         await prisma.$disconnect();
     });

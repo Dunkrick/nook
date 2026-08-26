@@ -40,9 +40,7 @@ export async function createArtifact(
     return toArtifact(row);
 }
 
-export async function getArtifacts(
-    userId: number
-) {
+export async function getArtifacts(userId: number) {
     const rows = await prisma.artifact.findMany({
         where: {
             userId,
