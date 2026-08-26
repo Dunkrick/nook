@@ -219,7 +219,7 @@
 }
 
 .auth-scene__line {
-    width: 28px;
+    width: 15px;
     height: 1px;
 
     background: rgba(255, 253, 251, 0.35);
@@ -641,6 +641,14 @@
 }
 
 /* ==========================================================
+   AUTH ROUTE CONTENT
+   ========================================================== */
+
+.auth-route-content {
+    width: 100%;
+}
+
+/* ==========================================================
    FORM TRANSITION
    ========================================================== */
 
@@ -655,6 +663,7 @@
 */
 
 .auth-form-transition {
+    width: 100%;
     animation: auth-form-enter 360ms var(--motion-settle) both;
     transform-origin: center top;
 }

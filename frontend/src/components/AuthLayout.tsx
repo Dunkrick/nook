@@ -1,13 +1,79 @@
-import { Outlet } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import AuthForm from "./AuthForm";
+import * as authService from "../services/auth";
+
+type AuthMode = "login" | "register";
+
+const AUTH_CONTENT = {
+    login: {
+        eyebrow: "Welcome back",
+        title: "Back to your Nook.",
+        description: "The things you left here are still waiting.",
+        buttonText: "Login",
+        loadingButtonText: "Coming back...",
+        togglePrompt: "Don't have an account?",
+        toggleButtonText: "Create one",
+        successTitle: "You're back.",
+        successMessage: "Opening your Nook...",
+    },
+    register: {
+        eyebrow: "Make a little room",
+        title: "Create your Nook.",
+        description: "A quiet place for the things worth keeping.",
+        buttonText: "Create Nook",
+        loadingButtonText: "Making your Nook...",
+        togglePrompt: "Already have an account?",
+        toggleButtonText: "Come back in",
+        successTitle: "Your Nook is ready.",
+        successMessage: "Let's put something in it.",
+    },
+} as const;
 
 export default function AuthLayout() {
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const mode: AuthMode =
+        location.pathname === "/register"
+            ? "register"
+            : "login";
+
+    const content = AUTH_CONTENT[mode];
+
+    /*
+     * This key changes only when the authentication mode changes.
+     * It is intentionally NOT applied to the shell or heading.
+     */
+    const [formKey, setFormKey] = useState(mode);
+
+    if (formKey !== mode) {
+        setFormKey(mode);
+    }
+
+    const handleSubmit = async (credentials: {
+        email: string;
+        password: string;
+    }) => {
+        if (mode === "login") {
+            await authService.login(credentials);
+        } else {
+            await authService.register(credentials);
+        }
+    };
+
     return (
         <main className="auth-page">
             <section className="auth-shell">
-                {/* ======================================================
-                    LEFT — THE NOOK WORLD
-                   ====================================================== */}
-                <aside className="auth-scene" aria-hidden="true">
+
+                {/* ==================================================
+                    LEFT - THE NOOK WORLD
+                   ================================================== */}
+
+                <aside
+                    className="auth-scene"
+                    aria-hidden="true"
+                >
                     <div className="auth-scene__brand">
                         <div className="auth-brand">
                             <img
@@ -69,11 +135,13 @@ export default function AuthLayout() {
                     </div>
                 </aside>
 
-                {/* ======================================================
-                    RIGHT — AUTH INTERACTION
-                   ====================================================== */}
+                {/* ==================================================
+                    RIGHT - AUTH INTERACTION
+                   ================================================== */}
+
                 <section className="auth-panel">
                     <div className="auth-panel__content">
+
                         <div className="auth-mobile-brand">
                             <div className="auth-brand">
                                 <img
@@ -88,14 +156,64 @@ export default function AuthLayout() {
                             </div>
                         </div>
 
-                        {/* Login / Register render their heading + form here */}
-                        <div className="auth-form-viewport">
-                            <Outlet />
+                        {/* ==========================================
+                            HEADING - STABLE REGION
+                           ========================================== */}
+
+                        <header className="auth-heading">
+                            <p className="auth-eyebrow">
+                                {content.eyebrow}
+                            </p>
+
+                            <h1>
+                                {content.title}
+                            </h1>
+
+                            <p className="auth-description">
+                                {content.description}
+                            </p>
+                        </header>
+
+                        {/* ==========================================
+                            FORM - ONLY REGION THAT TRANSITIONS
+                           ========================================== */}
+
+                        <div
+                            key={mode}
+                            className="auth-form-transition"
+                        >
+                            <AuthForm
+                                buttonText={content.buttonText}
+                                loadingButtonText={
+                                    content.loadingButtonText
+                                }
+                                onSubmit={handleSubmit}
+                                onSuccess={() =>
+                                    navigate("/home")
+                                }
+                                togglePrompt={content.togglePrompt}
+                                toggleButtonText={
+                                    content.toggleButtonText
+                                }
+                                onToggle={() =>
+                                    navigate(
+                                        mode === "login"
+                                            ? "/register"
+                                            : "/",
+                                    )
+                                }
+                                successTitle={content.successTitle}
+                                successMessage={
+                                    content.successMessage
+                                }
+                            />
                         </div>
                     </div>
 
                     <footer className="auth-footer">
-                        <span>Your quiet place to think.</span>
+                        <span>
+                            Your quiet place to think.
+                        </span>
                     </footer>
                 </section>
             </section>
