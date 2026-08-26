@@ -1,30 +1,44 @@
 import { useNavigate } from "react-router-dom";
 import AuthForm from "../components/AuthForm";
 import * as authService from "../services/auth";
-import "../App.css";
 
 export default function Login() {
     const navigate = useNavigate();
 
-    const handleSubmit = async (credentials: { email: string; password: string }) => {
+    const handleSubmit = async (credentials: {
+        email: string;
+        password: string;
+    }) => {
         await authService.login(credentials);
     };
 
     return (
-        <div className="auth-container">
-            <div className="auth-header">
-                <h1 className="nook-logo">Nook<span className="nook-logo__spark"></span></h1>
-                <p className="auth-tagline">Turning thoughts into momentum.</p>
-            </div>
-            <div className="auth-artifact">
+        <div className="auth-content">
+            <header className="auth-heading">
+                <p className="auth-eyebrow">
+                    Welcome back
+                </p>
+
+                <h1>
+                    Back to your Nook.
+                </h1>
+
+                <p className="auth-description">
+                    The things you left here are still waiting.
+                </p>
+            </header>
+
+            <div className="auth-form-wrapper">
                 <AuthForm
                     buttonText="Login"
-                    loadingButtonText="Logging in..."
+                    loadingButtonText="Coming back..."
                     onSubmit={handleSubmit}
                     onSuccess={() => navigate("/home")}
                     togglePrompt="Don't have an account?"
-                    toggleButtonText="Register"
+                    toggleButtonText="Create one"
                     onToggle={() => navigate("/register")}
+                    successTitle="You're back."
+                    successMessage="Opening your Nook..."
                 />
             </div>
         </div>

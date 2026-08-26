@@ -1,31 +1,46 @@
 import { useNavigate } from "react-router-dom";
 import AuthForm from "../components/AuthForm";
 import * as authService from "../services/auth";
-import "../App.css";
 
 export default function Register() {
     const navigate = useNavigate();
 
-    const handleSubmit = async (credentials: { email: string; password: string }) => {
+    const handleSubmit = async (credentials: {
+        email: string;
+        password: string;
+    }) => {
         await authService.register(credentials);
     };
 
-    return (<div className="auth-container">
-            <div className="auth-header">
-                <h1 className="nook-logo">Nook<span className="nook-logo__spark"></span></h1>
-                <p className="auth-tagline">Turning thoughts into momentum.</p>
+    return (
+        <div className="auth-content">
+            <header className="auth-heading">
+                <p className="auth-eyebrow">
+                    Make a little room
+                </p>
+
+                <h1>
+                    Create your Nook.
+                </h1>
+
+                <p className="auth-description">
+                    A quiet place for the things worth keeping.
+                </p>
+            </header>
+
+            <div className="auth-form-wrapper">
+                <AuthForm
+                    buttonText="Create Nook"
+                    loadingButtonText="Making your Nook..."
+                    onSubmit={handleSubmit}
+                    onSuccess={() => navigate("/home")}
+                    togglePrompt="Already have an account?"
+                    toggleButtonText="Come back in"
+                    onToggle={() => navigate("/")}
+                    successTitle="Your Nook is ready."
+                    successMessage="Let's put something in it."
+                />
             </div>
-            <div className="auth-artifact">
-        <AuthForm
-            buttonText="Register"
-            loadingButtonText="Registering..."
-            onSubmit={handleSubmit}
-            onSuccess={() => navigate("/home")}
-            togglePrompt="Already have an account?"
-            toggleButtonText="Login"
-            onToggle={() => navigate("/")}
-        />
-        </div>
         </div>
     );
 }
