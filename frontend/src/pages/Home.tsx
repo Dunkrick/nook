@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import SelectionToolbar from "../components/SelectionToolbar"
-import { createArtifact, updateArtifact, deleteArtifact } from "../services/artifacts";
+import { createArtifact, updateArtifact, deleteArtifact } from "../services/workspaces";
 import type { Artifact, ArtifactUpdate, DraftArtifact, Position } from "../types/artifacts";
 import Wall from "../components/Wall"
 import InsightPanel from "../components/InsightPanel";
@@ -65,13 +65,15 @@ export default function Home() {
     async function handleCommitDraftText(text: string) {
         if (!draftArtifact || !activeWorkspace || draftArtifact.type !== "TEXT") return;
 
-        const savedArtifact = await createArtifact({
-            type: "TEXT",
-            text,
-            x: draftArtifact.x,
-            y: draftArtifact.y,
-            workspaceId: activeWorkspace.id,
-        });
+        const savedArtifact = await createArtifact(
+            activeWorkspace.id,
+            {
+                type: "TEXT",
+                text,
+                x: draftArtifact.x,
+                y: draftArtifact.y,
+            }
+        );
 
         setArtifacts((current) => [...current, savedArtifact]);
         setDraftArtifact(null);
@@ -80,13 +82,15 @@ export default function Home() {
     async function handleCommitDraftLink(url: string) {
         if (!draftArtifact || !activeWorkspace || draftArtifact.type !== "LINK") return;
 
-        const savedArtifact = await createArtifact({
-            type: "LINK",
-            url,
-            x: draftArtifact.x,
-            y: draftArtifact.y,
-            workspaceId: activeWorkspace.id,
-        });
+        const savedArtifact = await createArtifact(
+            activeWorkspace.id,
+            {
+                type: "LINK",
+                url,
+                x: draftArtifact.x,
+                y: draftArtifact.y,
+            }
+        );
 
         setArtifacts((current) => [...current, savedArtifact]);
         setDraftArtifact(null);
@@ -166,6 +170,8 @@ async function handleWorkspaceChange(workspace: Workspace) {
 }
 
 async function handleUpdateArtifact(id: number, update: ArtifactUpdate) {
+    if(!activeWorkspace) return;
+    
     // Keep a snapshot in case the request fails
     const previousArtifacts = artifacts;
 
@@ -179,7 +185,7 @@ async function handleUpdateArtifact(id: number, update: ArtifactUpdate) {
     );
 
     try {
-        const updated = await updateArtifact(id, update);
+        const updated = await updateArtifact(activeWorkspace.id, id, update);
 
         // Synchronize with the server response
         setArtifacts((current) =>
@@ -195,8 +201,10 @@ async function handleUpdateArtifact(id: number, update: ArtifactUpdate) {
 }
 
 async function handleDeleteArtifact(id: number) {
+    if(!activeWorkspace) return;
+    
     // Call the backend to delete
-    await deleteArtifact(id);
+    await deleteArtifact(activeWorkspace.id, id);
     
     // Filter it out of our local React state
     setArtifacts((currentArtifacts) => currentArtifacts.filter((artifact) => artifact.id !== id));
