@@ -30,20 +30,6 @@ router.get("/artifacts", authenticate, asyncHandler(async (req, res) => {
     res.status(200).json(artifacts);
 }));
 
-router.post(
-    "/artifacts",
-    authenticate,
-    validateCreateArtifact,
-    asyncHandler(async (req, res) => {
-        const result = await createArtifact({
-            ...req.body,
-            userId: req.user.id,
-        });
-
-        return res.status(201).json(result);
-    })
-);
-
 router.delete(
     "/artifacts/:id",
     authenticate,
