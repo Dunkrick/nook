@@ -49,7 +49,8 @@ export async function getWorkspaceArtifacts(
 
     return prisma.artifact.findMany({
         where: {
-            workspaceId,
+            userId,
+            workspaceId
         },
         orderBy: {
             createdAt: "asc",

@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 import { ValidationError } from "../lib/error.js";
 
 export function validateCreateArtifact(req: Request, _res: Response, next: NextFunction) {
-    const { type, text, url, x, y, workspaceId } = req.body;
+    const { type, text, url, x, y } = req.body;
 
     if (type !== "TEXT" && type !== "LINK") {
         throw new ValidationError("Invalid artifact type.");
@@ -12,6 +12,7 @@ export function validateCreateArtifact(req: Request, _res: Response, next: NextF
         if(typeof text !== "string" || text.trim() === ""){
             throw new ValidationError("Text artifact requires valid text.");
         }
+        req.body.text = text.trim();
     }
 
     if(type === "LINK"){
@@ -22,20 +23,8 @@ export function validateCreateArtifact(req: Request, _res: Response, next: NextF
         req.body.url = url.trim();
     }
 
-    const parsedWorkspaceId = Number(workspaceId);
-
-    if (
-        !Number.isInteger(parsedWorkspaceId) ||
-        parsedWorkspaceId <= 0
-    ) {
-        throw new ValidationError(
-            "Invalid workspace ID."
-        );
-    }
-
     req.body.x = Number.isFinite(Number(x)) ? Number(x) : 0;
     req.body.y = Number.isFinite(Number(y)) ? Number(y) : 0;
-    req.body.workspaceId = parsedWorkspaceId;
 
     next();
 }
