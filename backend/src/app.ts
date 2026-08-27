@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 
-import artifactRouter from "./routes/artifacts.js";
 import workspaceRouter from "./routes/workspaces.js";
 import authRouter from "./routes/auth.js";
 import { errorHandler } from "./lib/error.js";
@@ -35,7 +34,6 @@ app.use(
 app.use(express.json());
 app.use(express.static("public"));
 
-app.use("/", artifactRouter);
 app.use("/auth", authRouter);
 app.use("/workspaces", workspaceRouter);
 
