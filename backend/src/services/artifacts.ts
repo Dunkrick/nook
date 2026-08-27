@@ -40,28 +40,17 @@ export async function createArtifact(
     return toArtifact(row);
 }
 
-export async function getArtifacts(userId: number) {
-    const rows = await prisma.artifact.findMany({
-        where: {
-            userId,
-        },
-        orderBy: {
-            createdAt: "desc",
-        },
-    });
-
-    return rows.map(toArtifact);
-}
-
 export async function deleteArtifact(
     id: number,
-    userId: number
+    userId: number,
+    workspaceId: number,
 ) {
     try {
         await prisma.artifact.delete({
             where: {
                 id,
                 userId,
+                workspaceId,
             },
         });
 
@@ -111,6 +100,7 @@ export async function updateArtifact(
             where: {
                 id: input.id,
                 userId: input.userId,
+                workspaceId: input.workspaceId,
             },
             data,
         });

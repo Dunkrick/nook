@@ -19,6 +19,7 @@ export type CreateArtifactInput =
 export interface UpdateArtifactInput {
     id: number;
     userId: number;
+    workspaceId: number;
     text?: string;
     x?: number;
     y?: number;
