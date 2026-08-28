@@ -1,10 +1,12 @@
 import { useState } from "react";
 
 interface FirstWorkspaceProps {
+    userName: string;
     onCreate: (name: string) => Promise<void>;
 }
 
 export default function FirstWorkspace({
+    userName,
     onCreate,
 }: FirstWorkspaceProps) {
     const [name, setName] = useState("Personal");
@@ -33,7 +35,11 @@ export default function FirstWorkspace({
                     YOUR FIRST SPACE
                 </p>
 
-                <h1>Give your thoughts somewhere to land.</h1>
+                <h1>Welcome, {userName}.</h1>
+
+                <p className="nook-first-workspace__headline">
+                    Give your thoughts somewhere to land.
+                </p>
 
                 <p>
                     Create a space for the ideas, resources, and things

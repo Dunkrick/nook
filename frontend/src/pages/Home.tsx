@@ -11,8 +11,7 @@ import Viewport from "../components/Viewport";
 import World from "../components/World";
 import type { Workspace } from "../services/workspaces";
 import { useNavigate } from "react-router-dom";
-import WorkspaceSwitcher from "../components/WorkspaceSwitcher";
-import { getActiveWorkspaceId, setActiveWorkspaceId } from "../lib/storage";
+import { getActiveWorkspaceId, setActiveWorkspaceId, getUser } from "../lib/storage";
 import { CameraProvider } from "../context/CameraProvider";
 import CanvasController from "../components/CanvasController";
 import { getWorkspaceHome } from "../lib/workspace";
@@ -20,6 +19,7 @@ import FirstWorkspace from "../components/FirstWorkspace";
 
 export default function Home() {
     const navigate = useNavigate();
+    const user = getUser();
     const [artifacts, setArtifacts] = useState<Artifact[]>([]);
     const [draftArtifact, setDraftArtifact] = useState<DraftArtifact | null>(null);
     const [selectedArtifactIds, setSelectedArtifactIds] = useState<number[]>([]);
@@ -367,6 +367,11 @@ function handleCloseInsight(){
             />
         <WorkspaceShell>
             <FloatingToolbar
+                userName={user?.name ?? "there"}
+                activeWorkspace={activeWorkspace}
+                workspaces={workspaces}
+                onWorkspaceChange={handleWorkspaceChange}
+                onCreateWorkspace={handleCreateWorkspace}
                 onLogout={() => {
                     logout();
                     navigate("/");
@@ -374,17 +379,11 @@ function handleCloseInsight(){
             />
             {!activeWorkspace ? (
                 <FirstWorkspace
+                    userName={user?.name ?? "there"}
                     onCreate={handleCreateWorkspace}
                 />
             ) : (
                 <>
-                    <WorkspaceSwitcher
-                        workspaces={workspaces}
-                        activeWorkspace={activeWorkspace}
-                        onChange={handleWorkspaceChange}
-                        onCreate={handleCreateWorkspace}
-                    />
-
                     <Viewport>
                         <World>
                             <Wall

@@ -47,10 +47,6 @@ export default function WorkspaceSwitcher({
 
     return (
         <div className="nook-workspace-identity">
-            <span className="nook-workspace-identity__product">
-                Nook<span className="nook-logo__spark" />
-            </span>
-
             <button
                 type="button"
                 className="nook-workspace-identity__trigger"
