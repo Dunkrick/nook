@@ -68,8 +68,7 @@ export default function ArtifactView({
                     inputRef={ editing.inputRef as React.RefObject<HTMLInputElement> }
                     onTextChange={ editing.setEditText }
                     onKeyDown={ editing.handleKeyDown }
-                    onSave={ editing.handleSave }
-                    onCancel={ editing.handleCancel }/>
+                />
             ) : (
                 <div className="nook-artifact__content">
                     <ArtifactHeader
