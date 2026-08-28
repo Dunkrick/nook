@@ -120,11 +120,24 @@
 .nook-artifact--selected {
     outline: 2px solid color-mix(
         in srgb,
-        var(--text-heading) 70%,
+        var(--text-heading) 48%,
         transparent
     );
 
     outline-offset: 5px;
+
+    box-shadow:
+        0 0 0 1px color-mix(
+            in srgb,
+            var(--color-surface) 70%,
+            transparent
+        ),
+        7px 10px 0 color-mix(
+            in srgb,
+            var(--border-strong) 16%,
+            transparent
+        ),
+        var(--elevation-artifact-hover);
 }
 
 /*
