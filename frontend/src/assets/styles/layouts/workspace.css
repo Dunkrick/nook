@@ -190,3 +190,19 @@
   cursor: not-allowed;
   transform: none;
 }
+
+.nook-save-error {
+    position: fixed;
+    left: 50%;
+    bottom: var(--space-6);
+    z-index: var(--z-toast);
+    transform: translateX(-50%);
+    padding: 10px 16px;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    background: var(--color-artifact);
+    color: var(--text-primary);
+    box-shadow: var(--elevation-artifact);
+    font-size: var(--type-label-size);
+    font-weight: var(--weight-semibold);
+}

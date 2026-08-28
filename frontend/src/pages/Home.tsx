@@ -28,6 +28,7 @@ export default function Home() {
     const [isInsightOpen, setIsInsightOpen] = useState(false);
     const [creationPosition, setCreationPosition] = useState<Position | null>(null);
     const [isWorkspaceReady, setIsWorkspaceReady] = useState(false);
+    const [saveError, setSaveError] = useState<string | null>(null);
 
     async function handleCreateWorkspace(name: string) {
         const workspace = await createWorkspace(name);
@@ -84,6 +85,8 @@ export default function Home() {
             return;
         }
 
+        setSaveError(null);
+
     const optimisticArtifact: TextArtifact = {
         id: -Date.now(),
             userId: 0,
@@ -129,69 +132,76 @@ export default function Home() {
                         artifact.id !== optimisticArtifact.id
                 )
             );
-
+            setSaveError("Couldn't save that. Please try again.");
+            setTimeout(() => {
+                setSaveError(null);
+            }, 3000);
             console.error(error);
         }
     }
 
     async function handleCommitDraftLink(url: string) {
-    if (
-        !draftArtifact ||
-        !activeWorkspace ||
-        draftArtifact.type !== "LINK"
-    ) {
-        return;
-    }
+        if (
+            !draftArtifact ||
+            !activeWorkspace ||
+            draftArtifact.type !== "LINK"
+        ) {
+            return;
+        }
+        setSaveError(null);
 
-    const optimisticArtifact: LinkArtifact = {
-        id: -Date.now(),
-        userId: 0,
-        workspaceId: activeWorkspace.id,
-        type: "LINK",
-        content: {
-            url,
-        },
-        x: draftArtifact.x,
-        y: draftArtifact.y,
-        zIndex: 0,
-    };
-
-    setArtifacts((current) => [
-        ...current,
-        optimisticArtifact,
-    ]);
-
-    setDraftArtifact(null);
-
-    try {
-        const savedArtifact = await createArtifact(
-            activeWorkspace.id,
-            {
-                type: "LINK",
+        const optimisticArtifact: LinkArtifact = {
+            id: -Date.now(),
+            userId: 0,
+            workspaceId: activeWorkspace.id,
+            type: "LINK",
+            content: {
                 url,
-                x: draftArtifact.x,
-                y: draftArtifact.y,
-            }
-        );
+            },
+            x: draftArtifact.x,
+            y: draftArtifact.y,
+            zIndex: 0,
+        };
 
-        setArtifacts((current) =>
-            current.map((artifact) =>
-                artifact.id === optimisticArtifact.id
-                    ? savedArtifact
-                    : artifact
-            )
-        );
-    } catch (error) {
-        setArtifacts((current) =>
-            current.filter(
-                (artifact) =>
-                    artifact.id !== optimisticArtifact.id
-            )
-        );
+        setArtifacts((current) => [
+            ...current,
+            optimisticArtifact,
+        ]);
 
-        console.error(error);
+        setDraftArtifact(null);
+
+        try {
+            const savedArtifact = await createArtifact(
+                activeWorkspace.id,
+                {
+                    type: "LINK",
+                    url,
+                    x: draftArtifact.x,
+                    y: draftArtifact.y,
+                }
+            );
+
+            setArtifacts((current) =>
+                current.map((artifact) =>
+                    artifact.id === optimisticArtifact.id
+                        ? savedArtifact
+                        : artifact
+                )
+            );
+        } catch (error) {
+            setArtifacts((current) =>
+                current.filter(
+                    (artifact) =>
+                        artifact.id !== optimisticArtifact.id
+                )
+            );
+            setSaveError("Couldn't save that. Please try again.");
+            setTimeout(() => {
+                setSaveError(null);
+            }, 3000);
+            console.error(error);
+        }
     }
-}
 
     function handleCancelDraft() {
     setDraftArtifact(null);
@@ -409,6 +419,14 @@ function handleCloseInsight(){
                     selectedCount={selectedArtifactIds.length}
                     onClose={handleCloseInsight}
                 />
+            )}
+            {saveError && (
+                <div
+                    className="nook-save-error"
+                    role="alert"
+                >
+                    {saveError}
+                </div>
             )}
         </WorkspaceShell>
         </CameraProvider>
