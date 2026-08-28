@@ -52,13 +52,21 @@ export default function AuthLayout() {
     }
 
     const handleSubmit = async (credentials: {
+        name?: string;
         email: string;
         password: string;
-    }) => {
+        }) => {
         if (mode === "login") {
-            await authService.login(credentials);
+            await authService.login({
+                email: credentials.email,
+                password: credentials.password,
+            });
         } else {
-            await authService.register(credentials);
+            await authService.register({
+                name: credentials.name ?? "",
+                email: credentials.email,
+                password: credentials.password,
+            });
         }
     };
 
@@ -183,6 +191,7 @@ export default function AuthLayout() {
                             className="auth-form-transition"
                         >
                             <AuthForm
+                                isRegisterMode={mode === "register"}
                                 buttonText={content.buttonText}
                                 loadingButtonText={
                                     content.loadingButtonText

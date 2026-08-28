@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 
 interface AuthFormProps {
+    isRegisterMode: boolean;
     buttonText: string;
     loadingButtonText: string;
     successTitle: string;
     successMessage: string;
     onSubmit: (credentials: {
+        name?: string;
         email: string;
         password: string;
     }) => Promise<void>;
@@ -24,6 +26,7 @@ const wait = (milliseconds: number) =>
     });
 
 export default function AuthForm({
+    isRegisterMode,
     buttonText,
     loadingButtonText,
     successTitle,
@@ -34,6 +37,7 @@ export default function AuthForm({
     toggleButtonText,
     onToggle,
 }: AuthFormProps) {
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -65,6 +69,11 @@ export default function AuthForm({
             return;
         }
 
+        if (isRegisterMode && name.trim() === "") {
+            setError("Name is required.");
+            return;
+        }
+
         setError("");
         setLoading(true);
 
@@ -72,6 +81,7 @@ export default function AuthForm({
 
         try {
             await onSubmit({
+                ...(isRegisterMode ? { name: name.trim() } : {}),
                 email: email.trim(),
                 password,
             });
@@ -150,6 +160,28 @@ export default function AuthForm({
             }`}
             onSubmit={handleSubmit}
         >
+            {isRegisterMode && (
+                <div className="auth-field">
+                    <label htmlFor="name">
+                        Name
+                    </label>
+
+                    <input
+                        id="name"
+                        name="name"
+                        type="text"
+                        autoComplete="name"
+                        value={name}
+                        onChange={(event) =>
+                            setName(event.target.value)
+                        }
+                        placeholder="Rick"
+                        disabled={loading}
+                        required
+                    />
+                </div>
+            )}
+
             <div className="auth-field">
                 <label htmlFor="email">
                     Email
