@@ -133,7 +133,6 @@ export default function useCamera() {
     }
 
     function zoomAtPoint(event: React.WheelEvent<HTMLDivElement>) {
-        event.preventDefault();
         stopCameraAnimation();
         const bounds = event.currentTarget.getBoundingClientRect();
         const point = { x: event.clientX - bounds.left, y: event.clientY - bounds.top };

@@ -132,6 +132,7 @@
     line-height: var(--leading-body);
     transform: rotate(-1deg);
     transition: box-shadow var(--motion-lift), transform var(--motion-lift);
+    animation: nook-draft-enter 180ms ease-out;
 }
 
 .nook-artifact__content {
@@ -232,4 +233,28 @@
     background: transparent;
 
     color: var(--text-muted);
+}
+
+@keyframes nook-draft-enter {
+    from {
+        opacity: 0;
+        transform: rotate(-1deg) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: rotate(-1deg) scale(1);
+    }
+}
+
+@keyframes nook-draft-pop-out {
+    from {
+        opacity: 1;
+        transform: rotate(-1deg) scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: rotate(-1deg) scale(0.98);
+    }
 }

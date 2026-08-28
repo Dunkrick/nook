@@ -88,3 +88,105 @@
     padding: 106px var(--space-5) var(--space-5);
   }
 }
+
+.nook-first-workspace {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--space-7);
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      color-mix(in srgb, var(--accent-primary) 8%, transparent),
+      transparent 34rem
+    );
+}
+
+.nook-first-workspace__card {
+  width: min(100%, 520px);
+  padding: var(--space-8);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-panel);
+  background: var(--color-artifact);
+  box-shadow: var(--elevation-surface);
+  transform: rotate(-1deg);
+}
+
+.nook-first-workspace__eyebrow {
+  margin: 0 0 var(--space-4);
+  color: var(--accent-action);
+  font-family: var(--font-mono);
+  font-size: var(--type-overline-size);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-overline);
+}
+
+.nook-first-workspace__card h1 {
+  max-width: 440px;
+  margin: 0 0 var(--space-4);
+  color: var(--text-heading);
+  font-size: clamp(2rem, 5vw, 3rem);
+  letter-spacing: var(--tracking-tight);
+}
+
+.nook-first-workspace__card > p {
+  max-width: 430px;
+  margin: 0 0 var(--space-7);
+  color: var(--text-muted);
+  line-height: var(--leading-body);
+}
+
+.nook-first-workspace form {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.nook-first-workspace label {
+  color: var(--text-primary);
+  font-size: var(--type-label-size);
+  font-weight: var(--weight-semibold);
+}
+
+.nook-first-workspace input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-control);
+  background: var(--color-canvas);
+  color: var(--text-primary);
+  font: inherit;
+}
+
+.nook-first-workspace button {
+  min-height: 48px;
+  margin-top: var(--space-2);
+  padding: 0 var(--space-5);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--border-strong);
+  color: var(--text-on-dark);
+  font-size: var(--type-label-size);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--text-heading);
+  transition:
+    transform var(--motion-lift),
+    box-shadow var(--motion-lift);
+}
+
+.nook-first-workspace button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 0 var(--text-heading);
+}
+
+.nook-first-workspace button:active {
+  transform: translateY(0);
+}
+
+.nook-first-workspace button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}

@@ -1,6 +1,7 @@
 export interface TextArtifact {
     id: number;
     userId: number;
+    workspaceId: number;
     type: "TEXT";
 
     content: {
@@ -15,6 +16,7 @@ export interface TextArtifact {
 export interface LinkArtifact {
     id: number;
     userId: number;
+    workspaceId: number;
     type: "LINK";
     content: {
         url: string;
