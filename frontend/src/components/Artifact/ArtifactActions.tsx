@@ -3,33 +3,43 @@ interface ArtifactActionsProps {
     onDelete: () => void;
 }
 
-export default function ArtifactActions({ onEdit, onDelete }: ArtifactActionsProps) {
+export default function ArtifactActions({
+    onEdit,
+    onDelete,
+}: ArtifactActionsProps) {
     return (
         <div
             className="nook-artifact__actions"
             onClick={(e) => e.stopPropagation()}
         >
-            {onEdit && <button
-                onPointerDown={(e) => e.stopPropagation()}
-                onClick={(e) => {
-                    e.stopPropagation();
-                    onEdit();
-                }}
-                className="nook-icon-button"
-                aria-label="Edit thought"
-            >
-                Edit
-            </button>}
+            {onEdit && (
+                <button
+                    type="button"
+                    onPointerDown={(e) => e.stopPropagation()}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onEdit();
+                    }}
+                    className="nook-artifact__action"
+                    aria-label="Edit thought"
+                    title="Edit"
+                >
+                    ✎
+                </button>
+            )}
+
             <button
+                type="button"
                 onPointerDown={(e) => e.stopPropagation()}
                 onClick={(e) => {
                     e.stopPropagation();
                     onDelete();
                 }}
-                className="nook-icon-button nook-icon-button--danger"
+                className="nook-artifact__action nook-artifact__action--danger"
                 aria-label="Delete thought"
+                title="Delete"
             >
-                Delete
+                ×
             </button>
         </div>
     );
