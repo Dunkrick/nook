@@ -32,7 +32,7 @@ export default function Home() {
     async function handleCreateWorkspace(name: string) {
         const workspace = await createWorkspace(name);
 
-        setWorkspaces([workspace]);
+        setWorkspaces((current) => [...current, workspace]);
         setActiveWorkspace(workspace);
         setActiveWorkspaceId(workspace.id);
 
@@ -330,6 +330,7 @@ function handleCloseInsight(){
                         workspaces={workspaces}
                         activeWorkspace={activeWorkspace}
                         onChange={handleWorkspaceChange}
+                        onCreate={handleCreateWorkspace}
                     />
 
                     <Viewport>

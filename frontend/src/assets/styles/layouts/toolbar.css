@@ -130,3 +130,92 @@
   from { opacity: 0; transform: translateY(-5px) rotate(-1deg); }
   to { opacity: 1; transform: translateY(0) rotate(0); }
 }
+
+.nook-workspace-identity__new {
+    width: 100%;
+    margin-top: var(--space-2);
+    padding: var(--space-3) var(--space-2);
+    border: 1px dashed var(--border-subtle);
+    border-radius: var(--radius-control);
+    background: transparent;
+    color: var(--text-muted);
+    text-align: left;
+    font-size: var(--type-label-size);
+    font-weight: var(--weight-semibold);
+    cursor: pointer;
+    transition:
+        background-color var(--motion-lift),
+        color var(--motion-lift),
+        border-color var(--motion-lift);
+}
+
+.nook-workspace-identity__new:hover {
+    background: color-mix(
+        in srgb,
+        var(--color-artifact) 72%,
+        transparent
+    );
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+}
+
+.nook-workspace-identity__create {
+    display: grid;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border-subtle);
+}
+
+.nook-workspace-identity__create input {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: var(--space-3);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-control);
+    background: var(--color-artifact);
+    color: var(--text-primary);
+    font: inherit;
+}
+
+.nook-workspace-identity__create input::placeholder {
+    color: var(--text-muted);
+}
+
+.nook-workspace-identity__create input:focus {
+    border-color: var(--border-strong);
+}
+
+.nook-workspace-identity__create > div {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.nook-workspace-identity__create button {
+    min-height: 34px;
+    padding: 0 var(--space-3);
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    background: var(--color-artifact);
+    color: var(--text-primary);
+    font: inherit;
+    font-size: var(--type-hint-size);
+    font-weight: var(--weight-semibold);
+    cursor: pointer;
+}
+
+.nook-workspace-identity__create button[type="submit"] {
+    border-color: var(--border-strong);
+    background: var(--border-strong);
+    color: var(--text-on-dark);
+}
+
+.nook-workspace-identity__create button:hover:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+.nook-workspace-identity__create button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
