@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import SelectionToolbar from "../components/SelectionToolbar"
 import { createArtifact, updateArtifact, deleteArtifact, getWorkspaces, getWorkspaceArtifacts, createWorkspace } from "../services/workspaces";
-import type { Artifact, ArtifactUpdate, DraftArtifact, Position, TextArtifact } from "../types/artifacts";
+import type { Artifact, ArtifactUpdate, DraftArtifact, Position, TextArtifact, LinkArtifact } from "../types/artifacts";
 import Wall from "../components/Wall"
 import InsightPanel from "../components/InsightPanel";
 import WorkspaceShell from "../components/WorkspaceShell";
@@ -135,8 +135,35 @@ export default function Home() {
     }
 
     async function handleCommitDraftLink(url: string) {
-        if (!draftArtifact || !activeWorkspace || draftArtifact.type !== "LINK") return;
+    if (
+        !draftArtifact ||
+        !activeWorkspace ||
+        draftArtifact.type !== "LINK"
+    ) {
+        return;
+    }
 
+    const optimisticArtifact: LinkArtifact = {
+        id: -Date.now(),
+        userId: 0,
+        workspaceId: activeWorkspace.id,
+        type: "LINK",
+        content: {
+            url,
+        },
+        x: draftArtifact.x,
+        y: draftArtifact.y,
+        zIndex: 0,
+    };
+
+    setArtifacts((current) => [
+        ...current,
+        optimisticArtifact,
+    ]);
+
+    setDraftArtifact(null);
+
+    try {
         const savedArtifact = await createArtifact(
             activeWorkspace.id,
             {
@@ -147,9 +174,24 @@ export default function Home() {
             }
         );
 
-        setArtifacts((current) => [...current, savedArtifact]);
-        setDraftArtifact(null);
+        setArtifacts((current) =>
+            current.map((artifact) =>
+                artifact.id === optimisticArtifact.id
+                    ? savedArtifact
+                    : artifact
+            )
+        );
+    } catch (error) {
+        setArtifacts((current) =>
+            current.filter(
+                (artifact) =>
+                    artifact.id !== optimisticArtifact.id
+            )
+        );
+
+        console.error(error);
     }
+}
 
     function handleCancelDraft() {
     setDraftArtifact(null);
