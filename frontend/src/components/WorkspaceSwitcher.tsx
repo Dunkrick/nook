@@ -46,87 +46,111 @@ export default function WorkspaceSwitcher({
 }
 
     return (
-        <div className="nook-workspace-identity">
-            <button
-                type="button"
-                className="nook-workspace-identity__trigger"
-                aria-expanded={isOpen}
-                aria-controls="workspace-switcher-menu"
-                onClick={() => setIsOpen((open) => !open)}
+    <div className="nook-workspace-switcher">
+        <button
+            type="button"
+            className="nook-workspace-switcher__trigger"
+            aria-expanded={isOpen}
+            aria-controls="workspace-switcher-menu"
+            onClick={() => setIsOpen((open) => !open)}
+        >
+            <span className="nook-workspace-switcher__name">
+                {activeWorkspace?.name}
+            </span>
+
+            <span
+                className="nook-workspace-switcher__chevron"
+                aria-hidden="true"
             >
-                <span>{activeWorkspace?.name}</span>
-                <span className="nook-workspace-identity__chevron" aria-hidden="true">⌄</span>
-            </button>
+                ⌄
+            </span>
+        </button>
 
-            {isOpen && (
-                <div
-                    id="workspace-switcher-menu"
-                    className="nook-workspace-identity__menu"
-                    aria-label="Choose workspace"
-                >
-                    <p>Your places</p>
-                    {workspaces.map((workspace) => (
-                        <button
-                            type="button"
-                            key={workspace.id}
-                            className="nook-workspace-identity__option"
-                            data-active={workspace.id === activeWorkspace?.id || undefined}
-                            onClick={() => {
-                                onChange(workspace);
-                                setIsOpen(false);
-                            }}
-                        >
-                            <span className="nook-workspace-identity__mark" aria-hidden="true" />
-                            {workspace.name}
-                        </button>
-                    ))}
-                    {!isCreating && (
-                        <button
-                            type="button"
-                            className="nook-workspace-identity__new"
-                            onClick={() => setIsCreating(true)}
-                        >
-                            + New space
-                        </button>
-                    )}
+        {isOpen && (
+            <div
+                id="workspace-switcher-menu"
+                className="nook-workspace-switcher__menu"
+                aria-label="Choose workspace"
+            >
+                <p>Your places</p>
 
-                    {isCreating && (
-                        <form
-                            className="nook-workspace-identity__create"
-                            onSubmit={handleCreate}
-                        >
-                            <input
-                                autoFocus
-                                value={workspaceName}
-                                onChange={(e) => setWorkspaceName(e.target.value)}
-                                onKeyDown={handleCreateKeyDown}
-                                placeholder="Workspace name"
-                                aria-label="New workspace name"
-                            />
+                {workspaces.map((workspace) => (
+                    <button
+                        type="button"
+                        key={workspace.id}
+                        className="nook-workspace-switcher__option"
+                        data-active={
+                            workspace.id === activeWorkspace?.id ||
+                            undefined
+                        }
+                        onClick={() => {
+                            onChange(workspace);
+                            setIsOpen(false);
+                        }}
+                    >
+                        <span
+                            className="nook-workspace-switcher__mark"
+                            aria-hidden="true"
+                        />
 
-                            <div>
-                                <button
-                                    type="submit"
-                                    disabled={!workspaceName.trim() || isSubmitting}
-                                >
-                                    {isSubmitting ? "Creating…" : "Create"}
-                                </button>
+                        {workspace.name}
+                    </button>
+                ))}
 
-                                <button
-                                    type="button"
-                                    disabled={isSubmitting}
-                                    onClick={() => {
-                                        setWorkspaceName("");
-                                        setIsCreating(false);
-                                    }}
-                                >
-                                    Cancel
-                                </button>
-                            </div>
-                        </form>
-                    )}
-                </div>
-            )}
-        </div>
-    );
+                {!isCreating && (
+                    <button
+                        type="button"
+                        className="nook-workspace-switcher__new"
+                        onClick={() => setIsCreating(true)}
+                    >
+                        + New space
+                    </button>
+                )}
+
+                {isCreating && (
+                    <form
+                        className="nook-workspace-switcher__create"
+                        onSubmit={handleCreate}
+                    >
+                        <input
+                            autoFocus
+                            value={workspaceName}
+                            onChange={(e) =>
+                                setWorkspaceName(e.target.value)
+                            }
+                            onKeyDown={handleCreateKeyDown}
+                            placeholder="Workspace name"
+                            aria-label="New workspace name"
+                        />
+
+                        <div>
+                            <button
+                                type="submit"
+                                disabled={
+                                    !workspaceName.trim() ||
+                                    isSubmitting
+                                }
+                            >
+                                {isSubmitting
+                                    ? "Creating…"
+                                    : "Create"}
+                            </button>
+
+                            <button
+                                type="button"
+                                disabled={isSubmitting}
+                                onClick={() => {
+                                    setWorkspaceName("");
+                                    setIsCreating(false);
+                                }}
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                )}
+            </div>
+        )}
+    </div>
+);
 }
