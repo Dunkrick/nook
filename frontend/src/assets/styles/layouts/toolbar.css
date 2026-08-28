@@ -1,132 +1,451 @@
 .nook-toolbar {
-  position: fixed;
-  top: var(--space-5);
-  right: var(--space-5);
-  display: flex;
-  align-items: center;
-  padding: var(--space-1);
-  border: 1px solid color-mix(in srgb, var(--border-strong) 12%, transparent);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--color-artifact) 72%, transparent);
-  box-shadow: var(--elevation-artifact);
-  backdrop-filter: blur(14px);
-  z-index: var(--z-toolbar);
+    position: fixed;
+    top: var(--space-4);
+    left: 50%;
+    transform: translateX(-50%);
+
+    z-index: var(--z-toolbar);
+
+    display: flex;
+    align-items: center;
+    gap: 2px;
+
+    min-height: 46px;
+    padding: 5px 7px;
+
+    border: 1px solid color-mix(
+        in srgb,
+        var(--border-strong) 13%,
+        transparent
+    );
+
+    border-radius: 16px 18px 15px 17px;
+
+    background: color-mix(
+        in srgb,
+        var(--color-artifact) 91%,
+        transparent
+    );
+
+    box-shadow:
+        0 2px 0 color-mix(
+            in srgb,
+            var(--border-strong) 8%,
+            transparent
+        ),
+        0 9px 26px rgba(42, 36, 56, 0.11);
+
+    backdrop-filter: blur(16px);
 }
 
-.nook-workspace-identity {
-  position: fixed;
-  top: var(--space-5);
-  left: var(--space-5);
-  z-index: var(--z-toolbar);
-  display: grid;
-  justify-items: start;
-  gap: 2px;
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.nook-toolbar__brand {
+    padding: 0 13px;
+
+    color: var(--text-heading);
+
+    font-size: 19px;
+    font-weight: var(--weight-bold);
+    letter-spacing: -0.05em;
+    line-height: 1;
 }
 
-.nook-workspace-identity__product {
-  display: inline-flex;
-  align-items: center;
-  color: var(--text-heading);
-  font-size: 24px;
-  font-weight: var(--weight-bold);
-  letter-spacing: -0.05em;
+
+/* =========================================================
+   WORKSPACE SWITCHER
+   ========================================================= */
+
+.nook-workspace-switcher {
+    position: relative;
+
+    display: flex;
+    align-items: center;
 }
 
-.nook-logo__spark {
-  width: 8px;
-  height: 8px;
-  margin: 0 0 1px 3px;
-  border-radius: 2px;
-  background: var(--accent-primary);
-  transform: rotate(45deg);
+.nook-workspace-switcher__trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    min-height: 34px;
+    padding: 0 11px;
+
+    border: 1px solid transparent;
+    border-radius: 10px 11px 9px 10px;
+
+    background: transparent;
+    color: var(--text-primary);
+
+    cursor: pointer;
+
+    font: inherit;
+    font-size: var(--type-hint-size);
+    font-weight: var(--weight-semibold);
+    line-height: 1;
+    text-align: left;
+
+    transition:
+        background-color var(--motion-lift),
+        border-color var(--motion-lift),
+        color var(--motion-lift);
 }
 
-.nook-workspace-identity__trigger {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  border: 0;
-  padding: 0;
-  background: transparent;
-  color: var(--text-muted);
-  cursor: pointer;
-  font-size: var(--type-hint-size);
-  font-weight: var(--weight-medium);
-  line-height: 1.2;
-  text-align: left;
+.nook-workspace-switcher__trigger:hover,
+.nook-workspace-switcher__trigger:focus-visible {
+    background: color-mix(
+        in srgb,
+        var(--border-strong) 6%,
+        transparent
+    );
+
+    border-color: color-mix(
+        in srgb,
+        var(--border-strong) 9%,
+        transparent
+    );
+
+    color: var(--text-heading);
 }
 
-.nook-workspace-identity__trigger:hover,
-.nook-workspace-identity__trigger:focus-visible {
-  color: var(--text-heading);
+.nook-workspace-switcher__name {
+    max-width: 180px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.nook-workspace-identity__chevron {
-  display: inline-block;
-  margin-top: -3px;
-  font-size: 16px;
-  transition: transform var(--motion-lift);
+.nook-workspace-switcher__chevron {
+    display: inline-block;
+
+    margin-top: -2px;
+
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1;
+
+    transition: transform var(--motion-lift);
 }
 
-.nook-workspace-identity__trigger[aria-expanded="true"] .nook-workspace-identity__chevron {
-  transform: rotate(180deg);
+.nook-workspace-switcher__trigger[aria-expanded="true"]
+.nook-workspace-switcher__chevron {
+    transform: rotate(180deg);
 }
 
-.nook-workspace-identity__menu {
-  width: 210px;
-  margin-top: var(--space-2);
-  padding: var(--space-2);
-  border: 1px solid color-mix(in srgb, var(--border-strong) 16%, transparent);
-  border-radius: 13px 16px 14px 17px;
-  background: color-mix(in srgb, var(--color-artifact) 92%, transparent);
-  box-shadow: var(--elevation-surface);
-  backdrop-filter: blur(14px);
-  animation: nook-workspace-menu-in 180ms var(--motion-settle) both;
+
+/* =========================================================
+   WORKSPACE MENU
+   ========================================================= */
+
+.nook-workspace-switcher__menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+
+    width: 210px;
+
+    margin: 0;
+    padding: var(--space-2);
+
+    border: 1px solid color-mix(
+        in srgb,
+        var(--border-strong) 16%,
+        transparent
+    );
+
+    border-radius: 13px 16px 14px 17px;
+
+    background: color-mix(
+        in srgb,
+        var(--color-artifact) 94%,
+        transparent
+    );
+
+    box-shadow: var(--elevation-surface);
+
+    backdrop-filter: blur(14px);
+
+    animation:
+        nook-workspace-menu-in
+        180ms
+        var(--motion-settle)
+        both;
 }
 
-.nook-workspace-identity__menu p {
-  margin: 3px var(--space-2) var(--space-2);
-  color: var(--text-muted);
-  font-size: var(--type-overline-size);
-  font-weight: var(--weight-bold);
-  letter-spacing: var(--tracking-overline);
+.nook-workspace-switcher__menu p {
+    margin: 3px var(--space-2) var(--space-2);
+
+    color: var(--text-muted);
+
+    font-size: var(--type-overline-size);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-overline);
 }
 
-.nook-workspace-identity__option {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  gap: var(--space-2);
-  border: 0;
-  border-radius: 9px 11px 8px 10px;
-  padding: 10px;
-  background: transparent;
-  color: var(--text-primary);
-  cursor: pointer;
-  font: inherit;
-  text-align: left;
+.nook-workspace-switcher__option {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: var(--space-2);
+
+    border: 0;
+    border-radius: 9px 11px 8px 10px;
+
+    padding: 10px;
+
+    background: transparent;
+    color: var(--text-primary);
+
+    cursor: pointer;
+
+    font: inherit;
+    text-align: left;
 }
 
-.nook-workspace-identity__option:hover,
-.nook-workspace-identity__option:focus-visible,
-.nook-workspace-identity__option[data-active="true"] {
-  background: color-mix(in srgb, var(--artifact-2) 22%, transparent);
+.nook-workspace-switcher__option:hover,
+.nook-workspace-switcher__option:focus-visible,
+.nook-workspace-switcher__option[data-active="true"] {
+    background: color-mix(
+        in srgb,
+        var(--artifact-2) 18%,
+        transparent
+    );
 }
 
-.nook-workspace-identity__mark {
-  width: 9px;
-  height: 9px;
-  border: 1px solid var(--border-strong);
-  border-radius: 3px 4px 2px 4px;
-  background: var(--artifact-2);
-  transform: rotate(-12deg);
+.nook-workspace-switcher__mark {
+    width: 9px;
+    height: 9px;
+
+    flex-shrink: 0;
+
+    border: 1px solid var(--border-strong);
+    border-radius: 3px 4px 2px 4px;
+
+    background: var(--artifact-2);
+
+    transform: rotate(-12deg);
 }
+
+
+/* =========================================================
+   CREATE WORKSPACE
+   ========================================================= */
+
+.nook-workspace-switcher__new {
+    width: 100%;
+
+    margin-top: var(--space-2);
+    padding: var(--space-3) var(--space-2);
+
+    border: 1px dashed var(--border-subtle);
+    border-radius: var(--radius-control);
+
+    background: transparent;
+    color: var(--text-muted);
+
+    text-align: left;
+
+    font-size: var(--type-label-size);
+    font-weight: var(--weight-semibold);
+
+    cursor: pointer;
+
+    transition:
+        background-color var(--motion-lift),
+        color var(--motion-lift),
+        border-color var(--motion-lift);
+}
+
+.nook-workspace-switcher__new:hover {
+    background: color-mix(
+        in srgb,
+        var(--color-artifact) 72%,
+        transparent
+    );
+
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+}
+
+.nook-workspace-switcher__create {
+    display: grid;
+    gap: var(--space-2);
+
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+
+    border-top: 1px solid var(--border-subtle);
+}
+
+.nook-workspace-switcher__create input {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+
+    padding: var(--space-3);
+
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-control);
+
+    background: var(--color-artifact);
+    color: var(--text-primary);
+
+    font: inherit;
+}
+
+.nook-workspace-switcher__create input::placeholder {
+    color: var(--text-muted);
+}
+
+.nook-workspace-switcher__create input:focus {
+    border-color: var(--border-strong);
+}
+
+.nook-workspace-switcher__create > div {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.nook-workspace-switcher__create button {
+    min-height: 34px;
+    padding: 0 var(--space-3);
+
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+
+    background: var(--color-artifact);
+    color: var(--text-primary);
+
+    font: inherit;
+    font-size: var(--type-hint-size);
+    font-weight: var(--weight-semibold);
+
+    cursor: pointer;
+}
+
+.nook-workspace-switcher__create button[type="submit"] {
+    border-color: var(--border-strong);
+
+    background: var(--border-strong);
+    color: var(--text-on-dark);
+}
+
+.nook-workspace-switcher__create button:hover:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+.nook-workspace-switcher__create button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+
+/* =========================================================
+   DIVIDER
+   ========================================================= */
+
+.nook-toolbar__divider {
+    width: 1px;
+    height: 22px;
+
+    margin: 0 5px;
+
+    background: color-mix(
+        in srgb,
+        var(--border-strong) 12%,
+        transparent
+    );
+}
+
+
+/* =========================================================
+   ACCOUNT
+   ========================================================= */
+
+.nook-toolbar__account {
+    padding: 0 9px;
+
+    color: var(--text-muted);
+
+    font-size: var(--type-hint-size);
+    font-weight: var(--weight-medium);
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
 
 .nook-toolbar__button {
-  min-height: 40px;
+    min-height: 34px;
+    padding: 0 11px;
+
+    border: 1px solid transparent;
+    border-radius: 10px 11px 9px 10px;
+
+    background: transparent;
+    color: var(--text-muted);
+
+    box-shadow: none;
+
+    font-size: var(--type-hint-size);
+    font-weight: var(--weight-medium);
 }
 
+.nook-toolbar__button:hover {
+    transform: none;
+
+    background: color-mix(
+        in srgb,
+        var(--border-strong) 6%,
+        transparent
+    );
+
+    color: var(--text-primary);
+
+    box-shadow: none;
+}
+
+
+/* =========================================================
+   MENU ANIMATION
+   ========================================================= */
+
 @keyframes nook-workspace-menu-in {
-  from { opacity: 0; transform: translateY(-5px) rotate(-1deg); }
-  to { opacity: 1; transform: translateY(0) rotate(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-5px) rotate(-1deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) rotate(0);
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 640px) {
+    .nook-toolbar {
+        top: var(--space-3);
+
+        max-width: calc(100vw - 24px);
+    }
+
+    .nook-toolbar__brand {
+        padding-inline: 9px;
+    }
+
+    .nook-toolbar__account {
+        display: none;
+    }
 }

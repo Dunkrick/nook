@@ -10,7 +10,12 @@
 
     padding: var(--space-4);
 
-    border: 2px solid var(--border-strong);
+    border: 1px solid color-mix(
+        in srgb,
+        var(--border-strong) 32%,
+        transparent
+    );
+
     border-radius: var(--radius-artifact-organic);
 
     background: var(--artifact-color, var(--artifact-1));
@@ -23,63 +28,128 @@
         rotate(var(--artifact-rotate, 0deg));
 
     transform-origin: center;
-    box-shadow: var(--elevation-scribble), var(--elevation-artifact);
-    transition: transform var(--motion-settle), box-shadow var(--motion-lift), outline-color var(--motion-lift);
+
+    box-shadow:
+        2px 3px 0 color-mix(
+            in srgb,
+            var(--border-strong) 10%,
+            transparent
+        ),
+        var(--elevation-artifact);
+
+    transition:
+        transform var(--motion-lift),
+        box-shadow var(--motion-lift),
+        border-color var(--motion-lift);
 }
 
+/*
+ * Subtle inner paper edge.
+ *
+ * This is deliberately quiet. The artifact should feel physical
+ * without looking decorated.
+ */
 .nook-artifact::before {
     position: absolute;
     inset: 5px;
-    border: 1px solid rgba(255, 253, 251, 0.28);
-    border-radius: 14px 18px 13px 16px;
+
+    border: 1px solid rgba(255, 253, 251, 0.24);
+    border-radius: 13px 17px 12px 15px;
+
     content: "";
+
     opacity: 0.7;
     pointer-events: none;
 }
 
+/*
+ * Hover:
+ * Lift the artifact slightly rather than dramatically scaling it.
+ */
 .nook-artifact:hover {
-
     transform:
-        rotate(var(--artifact-rotate)) translateY(var(--interaction-hover-lift)) scale(var(--interaction-hover-scale));
+        rotate(var(--artifact-rotate, 0deg))
+        translateY(-3px);
+
+    border-color: color-mix(
+        in srgb,
+        var(--border-strong) 46%,
+        transparent
+    );
 
     box-shadow:
-        6px 8px 0 color-mix(in srgb, var(--border-strong) 20%, transparent),
+        3px 5px 0 color-mix(
+            in srgb,
+            var(--border-strong) 14%,
+            transparent
+        ),
         var(--elevation-artifact-hover);
-
 }
 
+/*
+ * Dragging:
+ * The artifact becomes physically "picked up".
+ */
 .nook-artifact--dragging {
-    cursor: grabbing;
     z-index: var(--z-selection);
+
+    cursor: grabbing;
+
+    border-color: var(--border-strong);
+
     transition: none;
-    transform: rotate(var(--artifact-rotate)) scale(var(--interaction-drag-scale));
-    box-shadow: 10px 14px 0 color-mix(in srgb, var(--border-strong) 18%, transparent), var(--elevation-drag);
+
+    transform:
+        rotate(var(--artifact-rotate, 0deg))
+        scale(1.015);
+
+    box-shadow:
+        6px 9px 0 color-mix(
+            in srgb,
+            var(--border-strong) 15%,
+            transparent
+        ),
+        var(--elevation-drag);
 }
 
+/*
+ * Selection:
+ * Keep the selection state obvious without competing
+ * with the artifact itself.
+ */
 .nook-artifact--selected {
-    outline: 2px dashed var(--text-heading);
+    outline: 2px solid color-mix(
+        in srgb,
+        var(--text-heading) 48%,
+        transparent
+    );
+
     outline-offset: 5px;
+
+    box-shadow:
+        0 0 0 1px color-mix(
+            in srgb,
+            var(--color-surface) 70%,
+            transparent
+        ),
+        7px 10px 0 color-mix(
+            in srgb,
+            var(--border-strong) 16%,
+            transparent
+        ),
+        var(--elevation-artifact-hover);
 }
 
+/*
+ * Editing removes the "grab me" affordance.
+ */
 .nook-artifact--editing {
     cursor: text;
 }
 
-.nook-artifact__number {
-    font-size: var(--type-overline-size);
-    font-weight: var(--weight-medium);
-    letter-spacing: var(--tracking-overline);
-    opacity: .72;
-}
-
-.nook-artifact__body {
-    margin: auto 0 0;
-    font-size: var(--type-artifact-size);
-    font-weight: var(--weight-bold);
-    line-height: 1.32;
-    letter-spacing: -.02em;
-    overflow-wrap: anywhere;
-}
+/* ---------------------------------------------------------------
+   Header
+   --------------------------------------------------------------- */
 
 .nook-artifact__header {
     display: flex;
@@ -88,12 +158,32 @@
     gap: var(--space-3);
 }
 
+.nook-artifact__number {
+    color: color-mix(
+        in srgb,
+        var(--text-primary) 64%,
+        transparent
+    );
+
+    font-size: var(--type-overline-size);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-overline);
+    line-height: 1;
+}
+
+/*
+ * Actions remain invisible until the artifact is interacted with.
+ */
 .nook-artifact__actions {
     display: flex;
-    gap: var(--space-1);
+    align-items: center;
+    gap: 3px;
+
     opacity: 0;
     pointer-events: none;
-    transition: opacity var(--motion-lift);
+
+    transition:
+        opacity var(--motion-lift);
 }
 
 .nook-artifact:hover .nook-artifact__actions,
@@ -102,42 +192,232 @@
     pointer-events: auto;
 }
 
-.nook-artifact__editor {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--space-2);
+.nook-artifact__action {
+    display: grid;
+    width: 26px;
+    height: 26px;
+    place-items: center;
+
+    padding: 0;
+
+    border: 1px solid color-mix(
+        in srgb,
+        var(--border-strong) 18%,
+        transparent
+    );
+
+    border-radius: 7px;
+
+    background: color-mix(
+        in srgb,
+        var(--color-artifact) 34%,
+        transparent
+    );
+
+    color: color-mix(
+        in srgb,
+        var(--text-primary) 72%,
+        transparent
+    );
+
+    cursor: pointer;
+
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: var(--weight-semibold);
+    line-height: 1;
+
+    box-shadow: none;
+
+    transition:
+        background-color var(--motion-lift),
+        border-color var(--motion-lift),
+        color var(--motion-lift),
+        transform var(--motion-lift);
 }
 
-.nook-artifact__input {
-    min-width: 0;
-    flex: 1;
-    border: 1px solid color-mix(in srgb, var(--border-strong) 44%, transparent);
-    border-radius: var(--radius-control);
-    padding: var(--space-3);
-    background: color-mix(in srgb, var(--color-artifact) 64%, transparent);
+.nook-artifact__action:hover {
+    background: color-mix(
+        in srgb,
+        var(--color-artifact) 72%,
+        transparent
+    );
+
+    border-color: color-mix(
+        in srgb,
+        var(--border-strong) 32%,
+        transparent
+    );
+
     color: var(--text-primary);
+
+    transform: translateY(-1px);
 }
 
-.nook-draft-artifact {
-    position: absolute;
-    width: var(--artifact-min-width);
-    min-height: 150px;
-    resize: both;
-    padding: var(--space-4);
-    border: 2px dashed var(--text-heading);
-    border-radius: var(--radius-artifact-organic);
-    background: var(--color-artifact);
-    color: var(--text-primary);
-    box-shadow: var(--elevation-overlay);
-    line-height: var(--leading-body);
-    transform: rotate(-1deg);
-    transition: box-shadow var(--motion-lift), transform var(--motion-lift);
+.nook-artifact__action--danger:hover {
+    border-color: color-mix(
+        in srgb,
+        var(--accent-action) 32%,
+        transparent
+    );
+
+    color: var(--accent-action);
 }
+
+/* ---------------------------------------------------------------
+   Content
+   --------------------------------------------------------------- */
 
 .nook-artifact__content {
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
+
+    height: 100%;
+}
+
+.nook-artifact__body {
+    margin: auto 0 0;
+
+    max-width: 32ch;
+
+    color: var(--text-primary);
+
+    font-size: var(--type-artifact-size);
+    font-weight: var(--weight-bold);
+    line-height: 1.32;
+    letter-spacing: -0.02em;
+
+    overflow-wrap: anywhere;
+}
+
+/* ---------------------------------------------------------------
+   Link artifacts
+   --------------------------------------------------------------- */
+
+.nook-artifact__link {
+    margin: auto 0 0;
+
+    max-width: 34ch;
+
+    color: var(--text-primary);
+
+    font-size: var(--type-artifact-size);
+    font-weight: var(--weight-bold);
+    line-height: 1.32;
+
+    overflow-wrap: anywhere;
+
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 3px;
+
+    transition:
+        color var(--motion-lift);
+}
+
+.nook-artifact__link:hover {
+    color: var(--text-heading);
+}
+
+/* ---------------------------------------------------------------
+   Editing
+   --------------------------------------------------------------- */
+
+.nook-artifact__editor {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+
+    margin: auto 0 0;
+}
+
+.nook-artifact__input {
+    min-width: 0;
+    flex: 1;
+
+    padding: var(--space-3);
+
+    border: 1px solid color-mix(
+        in srgb,
+        var(--border-strong) 38%,
+        transparent
+    );
+
+    border-radius: var(--radius-control);
+
+    background: color-mix(
+        in srgb,
+        var(--color-artifact) 72%,
+        transparent
+    );
+
+    color: var(--text-primary);
+
+    font: inherit;
+    font-weight: var(--weight-semibold);
+
+    outline: none;
+
+    transition:
+        border-color var(--motion-lift),
+        box-shadow var(--motion-lift);
+}
+
+.nook-artifact__input:focus {
+    border-color: var(--border-strong);
+
+    box-shadow:
+        0 0 0 3px color-mix(
+            in srgb,
+            var(--focus-ring) 55%,
+            transparent
+        );
+}
+
+/* ---------------------------------------------------------------
+   Draft artifact
+   --------------------------------------------------------------- */
+
+.nook-draft-artifact {
+    position: absolute;
+
+    width: var(--artifact-min-width);
+    min-height: 150px;
+
+    resize: both;
+
+    padding: var(--space-4);
+
+    border: 1px dashed color-mix(
+        in srgb,
+        var(--text-heading) 62%,
+        transparent
+    );
+
+    border-radius: var(--radius-artifact-organic);
+
+    background: color-mix(
+        in srgb,
+        var(--color-artifact) 94%,
+        transparent
+    );
+
+    color: var(--text-primary);
+
+    box-shadow: var(--elevation-overlay);
+
+    line-height: var(--leading-body);
+
+    outline: none;
+
+    transform: rotate(-1deg);
+
+    transition:
+        box-shadow var(--motion-lift),
+        border-color var(--motion-lift);
+
+    animation:
+        nook-draft-enter 180ms ease-out;
 }
 
 .nook-draft-artifact::placeholder {
@@ -145,25 +425,24 @@
 }
 
 .nook-draft-artifact:focus {
-    box-shadow: var(--elevation-overlay);
-    transform: rotate(-1deg);
+    border-color: var(--text-heading);
+
+    box-shadow:
+        4px 6px 0 color-mix(
+            in srgb,
+            var(--border-strong) 10%,
+            transparent
+        ),
+        var(--elevation-overlay);
 }
 
-.nook-artifact__link {
-    margin: auto 0 0;
-
-    color: var(--text-primary);
-    font-size: var(--type-artifact-size);
-    font-weight: var(--weight-bold);
-    line-height: 1.32;
-
-    overflow-wrap: anywhere;
-    text-decoration-thickness: 2px;
-    text-underline-offset: 3px;
-}
+/* ---------------------------------------------------------------
+   Artifact picker
+   --------------------------------------------------------------- */
 
 .nook-artifact-picker {
     position: absolute;
+
     z-index: var(--z-selection);
 
     width: max-content;
@@ -171,22 +450,23 @@
 
     padding: var(--space-4);
 
-    border:
-        2px solid var(--border-strong);
+    border: 1px solid color-mix(
+        in srgb,
+        var(--border-strong) 35%,
+        transparent
+    );
 
     border-radius: var(--radius-artifact-organic);
 
-    background:
-        var(--color-surface);
+    background: var(--color-surface);
 
-    color:
-        var(--text-primary);
+    color: var(--text-primary);
 
-    box-shadow:
-        var(--elevation-overlay);
+    box-shadow: var(--elevation-overlay);
 
     transform:
-        translate(-8px, -8px) rotate(-1deg);
+        translate(-8px, -8px)
+        rotate(-1deg);
 
     transform-origin: top left;
 }
@@ -208,19 +488,29 @@
 
 .nook-artifact-picker button {
     cursor: pointer;
+
     border: 1px solid var(--border-strong);
     border-radius: 999px;
+
     padding: 7px 11px;
+
     background: var(--color-artifact);
     color: var(--text-primary);
+
     font-size: var(--type-hint-size);
     font-weight: var(--weight-semibold);
-    transition: transform var(--motion-lift), background-color var(--motion-lift);
+
+    transition:
+        transform var(--motion-lift),
+        background-color var(--motion-lift);
 }
 
 .nook-artifact-picker button:hover {
     background: var(--artifact-2);
-    transform: rotate(-2deg) translateY(-1px);
+
+    transform:
+        translateY(-1px)
+        rotate(-1deg);
 }
 
 .nook-artifact-picker__cancel {
@@ -232,4 +522,44 @@
     background: transparent;
 
     color: var(--text-muted);
+}
+
+/* ---------------------------------------------------------------
+   Motion
+   --------------------------------------------------------------- */
+
+@keyframes nook-draft-enter {
+    from {
+        opacity: 0;
+
+        transform:
+            rotate(-1deg)
+            scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            rotate(-1deg)
+            scale(1);
+    }
+}
+
+@keyframes nook-draft-pop-out {
+    from {
+        opacity: 1;
+
+        transform:
+            rotate(-1deg)
+            scale(1);
+    }
+
+    to {
+        opacity: 0;
+
+        transform:
+            rotate(-1deg)
+            scale(0.98);
+    }
 }

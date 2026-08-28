@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import SelectionToolbar from "../components/SelectionToolbar"
-import { createArtifact, updateArtifact, deleteArtifact } from "../services/workspaces";
-import type { Artifact, ArtifactUpdate, DraftArtifact, Position } from "../types/artifacts";
+import { createArtifact, updateArtifact, deleteArtifact, getWorkspaces, getWorkspaceArtifacts, createWorkspace } from "../services/workspaces";
+import type { Artifact, ArtifactUpdate, DraftArtifact, Position, TextArtifact, LinkArtifact } from "../types/artifacts";
 import Wall from "../components/Wall"
 import InsightPanel from "../components/InsightPanel";
 import WorkspaceShell from "../components/WorkspaceShell";
@@ -9,17 +9,17 @@ import FloatingToolbar from "../components/FloatingToolbar";
 import { logout } from "../services/auth";
 import Viewport from "../components/Viewport";
 import World from "../components/World";
-import { getWorkspaces, getWorkspaceArtifacts } from "../services/workspaces";
 import type { Workspace } from "../services/workspaces";
 import { useNavigate } from "react-router-dom";
-import WorkspaceSwitcher from "../components/WorkspaceSwitcher";
-import { getActiveWorkspaceId, setActiveWorkspaceId } from "../lib/storage";
+import { getActiveWorkspaceId, setActiveWorkspaceId, getUser } from "../lib/storage";
 import { CameraProvider } from "../context/CameraProvider";
 import CanvasController from "../components/CanvasController";
 import { getWorkspaceHome } from "../lib/workspace";
+import FirstWorkspace from "../components/FirstWorkspace";
 
 export default function Home() {
     const navigate = useNavigate();
+    const user = getUser();
     const [artifacts, setArtifacts] = useState<Artifact[]>([]);
     const [draftArtifact, setDraftArtifact] = useState<DraftArtifact | null>(null);
     const [selectedArtifactIds, setSelectedArtifactIds] = useState<number[]>([]);
@@ -28,72 +28,179 @@ export default function Home() {
     const [isInsightOpen, setIsInsightOpen] = useState(false);
     const [creationPosition, setCreationPosition] = useState<Position | null>(null);
     const [isWorkspaceReady, setIsWorkspaceReady] = useState(false);
+    const [saveError, setSaveError] = useState<string | null>(null);
+
+    async function handleCreateWorkspace(name: string) {
+        const workspace = await createWorkspace(name);
+
+        setWorkspaces((current) => [...current, workspace]);
+        setActiveWorkspace(workspace);
+        setActiveWorkspaceId(workspace.id);
+
+        setArtifacts([]);
+        setSelectedArtifactIds([]);
+        setDraftArtifact(null);
+        setCreationPosition(null);
+        setIsWorkspaceReady(true);
+    }
 
     function handleCreateDraft(position: Position) {
         setCreationPosition(position);
     }
 
-    function handleSelectArtifactType(
-    type: "TEXT" | "LINK"
-) {
-    if (!creationPosition) return;
+    function handleSelectArtifactType(type: "TEXT" | "LINK") {
+        if (!creationPosition) return;
 
-    if (type === "TEXT") {
-        setDraftArtifact({
-            type: "TEXT",
-            text: "",
-            x: creationPosition.x,
-            y: creationPosition.y,
-        });
+        if (type === "TEXT") {
+            setDraftArtifact({
+                type: "TEXT",
+                text: "",
+                x: creationPosition.x,
+                y: creationPosition.y,
+            });
+        }
+
+        if (type === "LINK") {
+            setDraftArtifact({
+                type: "LINK",
+                url: "",
+                x: creationPosition.x,
+                y: creationPosition.y,
+            });
+        }
+
+        setCreationPosition(null);
     }
-
-    if (type === "LINK") {
-        setDraftArtifact({
-            type: "LINK",
-            url: "",
-            x: creationPosition.x,
-            y: creationPosition.y,
-        });
-    }
-
-    setCreationPosition(null);
-}
+    
     function handleCancelCreation() {
-    setCreationPosition(null);
-}
+        setCreationPosition(null);
+    }
 
     async function handleCommitDraftText(text: string) {
-        if (!draftArtifact || !activeWorkspace || draftArtifact.type !== "TEXT") return;
+        if (
+            !draftArtifact ||
+            !activeWorkspace ||
+            draftArtifact.type !== "TEXT"
+        ) {
+            return;
+        }
 
-        const savedArtifact = await createArtifact(
-            activeWorkspace.id,
-            {
-                type: "TEXT",
+        setSaveError(null);
+
+    const optimisticArtifact: TextArtifact = {
+        id: -Date.now(),
+            userId: 0,
+            workspaceId: activeWorkspace.id,
+            type: "TEXT",
+            content: {
                 text,
-                x: draftArtifact.x,
-                y: draftArtifact.y,
-            }
-        );
+            },
+            x: draftArtifact.x,
+            y: draftArtifact.y,
+            zIndex: 0,
+        };
 
-        setArtifacts((current) => [...current, savedArtifact]);
-        setDraftArtifact(null);
+            setArtifacts((current) => [
+                ...current,
+                optimisticArtifact,
+            ]);
+
+            setDraftArtifact(null);
+
+            try {
+                const savedArtifact = await createArtifact(
+                    activeWorkspace.id,
+                    {
+                    type: "TEXT",
+                    text,
+                    x: draftArtifact.x,
+                    y: draftArtifact.y,
+                }
+            );
+
+            setArtifacts((current) =>
+                current.map((artifact) =>
+                    artifact.id === optimisticArtifact.id
+                        ? savedArtifact
+                        : artifact
+                )
+            );
+        } catch (error) {
+            setArtifacts((current) =>
+                current.filter(
+                    (artifact) =>
+                        artifact.id !== optimisticArtifact.id
+                )
+            );
+            setSaveError("Couldn't save that. Please try again.");
+            setTimeout(() => {
+                setSaveError(null);
+            }, 3000);
+            console.error(error);
+        }
     }
 
     async function handleCommitDraftLink(url: string) {
-        if (!draftArtifact || !activeWorkspace || draftArtifact.type !== "LINK") return;
+        if (
+            !draftArtifact ||
+            !activeWorkspace ||
+            draftArtifact.type !== "LINK"
+        ) {
+            return;
+        }
+        setSaveError(null);
 
-        const savedArtifact = await createArtifact(
-            activeWorkspace.id,
-            {
-                type: "LINK",
+        const optimisticArtifact: LinkArtifact = {
+            id: -Date.now(),
+            userId: 0,
+            workspaceId: activeWorkspace.id,
+            type: "LINK",
+            content: {
                 url,
-                x: draftArtifact.x,
-                y: draftArtifact.y,
-            }
-        );
+            },
+            x: draftArtifact.x,
+            y: draftArtifact.y,
+            zIndex: 0,
+        };
 
-        setArtifacts((current) => [...current, savedArtifact]);
+        setArtifacts((current) => [
+            ...current,
+            optimisticArtifact,
+        ]);
+
         setDraftArtifact(null);
+
+        try {
+            const savedArtifact = await createArtifact(
+                activeWorkspace.id,
+                {
+                    type: "LINK",
+                    url,
+                    x: draftArtifact.x,
+                    y: draftArtifact.y,
+                }
+            );
+
+            setArtifacts((current) =>
+                current.map((artifact) =>
+                    artifact.id === optimisticArtifact.id
+                        ? savedArtifact
+                        : artifact
+                )
+            );
+        } catch (error) {
+            setArtifacts((current) =>
+                current.filter(
+                    (artifact) =>
+                        artifact.id !== optimisticArtifact.id
+                )
+            );
+            setSaveError("Couldn't save that. Please try again.");
+            setTimeout(() => {
+                setSaveError(null);
+            }, 3000);
+            console.error(error);
+        }
     }
 
     function handleCancelDraft() {
@@ -169,13 +276,20 @@ async function handleWorkspaceChange(workspace: Workspace) {
     setIsWorkspaceReady(true);
 }
 
-async function handleUpdateArtifact(id: number, update: ArtifactUpdate) {
-    if(!activeWorkspace) return;
-    
-    // Keep a snapshot in case the request fails
+async function handleUpdateArtifact(
+    id: number,
+    update: ArtifactUpdate
+) {
+    if (!activeWorkspace) return;
+
+    const artifact = artifacts.find(
+        (artifact) => artifact.id === id
+    );
+
+    if (!artifact) return;
+
     const previousArtifacts = artifacts;
 
-    // Optimistic UI update
     setArtifacts((current) =>
         current.map((artifact) =>
             artifact.id === id
@@ -184,20 +298,31 @@ async function handleUpdateArtifact(id: number, update: ArtifactUpdate) {
         )
     );
 
-    try {
-        const updated = await updateArtifact(activeWorkspace.id, id, update);
+    // Optimistic-only artifact; it has not received a database ID yet.
+    if (id < 0) return;
 
-        // Synchronize with the server response
+    try {
+        const updated = await updateArtifact(
+            activeWorkspace.id,
+            id,
+            update
+        );
+
         setArtifacts((current) =>
             current.map((artifact) =>
                 artifact.id === id ? updated : artifact
             )
         );
     } catch (error) {
-        // Roll back if persistence failed
         setArtifacts(previousArtifacts);
         console.error(error);
     }
+
+    console.log("UPDATE ARTIFACT", {
+        activeWorkspaceId: activeWorkspace?.id,
+        artifactId: id,
+        artifact: artifacts.find((artifact) => artifact.id === id),
+    });
 }
 
 async function handleDeleteArtifact(id: number) {
@@ -242,38 +367,45 @@ function handleCloseInsight(){
             />
         <WorkspaceShell>
             <FloatingToolbar
+                userName={user?.name ?? "there"}
+                activeWorkspace={activeWorkspace}
+                workspaces={workspaces}
+                onWorkspaceChange={handleWorkspaceChange}
+                onCreateWorkspace={handleCreateWorkspace}
                 onLogout={() => {
                     logout();
                     navigate("/");
                 }}
             />
-            {activeWorkspace && (
-                <WorkspaceSwitcher
-                    workspaces={workspaces}
-                    activeWorkspace={activeWorkspace}
-                    onChange={handleWorkspaceChange}
+            {!activeWorkspace ? (
+                <FirstWorkspace
+                    userName={user?.name ?? "there"}
+                    onCreate={handleCreateWorkspace}
                 />
+            ) : (
+                <>
+                    <Viewport>
+                        <World>
+                            <Wall
+                                artifacts={artifacts}
+                                draftArtifact={draftArtifact}
+                                createPosition={creationPosition}
+                                onUpdate={handleUpdateArtifact}
+                                onDelete={handleDeleteArtifact}
+                                onCreate={handleCreateDraft}
+                                onSelectArtifactType={handleSelectArtifactType}
+                                onCancelCreation={handleCancelCreation}
+                                onCommitDraftText={handleCommitDraftText}
+                                onCommitDraftLink={handleCommitDraftLink}
+                                onCancelDraft={handleCancelDraft}
+                                selectedArtifactIds={selectedArtifactIds}
+                                onToggleArtifactSelection={toggleArtifactSelection}
+                                homePosition={getWorkspaceHome(activeWorkspace)}
+                            />
+                        </World>
+                    </Viewport>
+                </>
             )}
-            <Viewport>
-                <World>
-                    <Wall 
-                artifacts={artifacts} 
-                draftArtifact={draftArtifact} 
-                createPosition={creationPosition}
-                onUpdate={handleUpdateArtifact} 
-                onDelete={handleDeleteArtifact} 
-                onCreate={handleCreateDraft} 
-                onSelectArtifactType={handleSelectArtifactType}
-                onCancelCreation={handleCancelCreation}
-                onCommitDraftText={handleCommitDraftText}
-                onCommitDraftLink={handleCommitDraftLink}
-                onCancelDraft={handleCancelDraft}
-                selectedArtifactIds={selectedArtifactIds}
-                onToggleArtifactSelection={toggleArtifactSelection}
-                homePosition={getWorkspaceHome(activeWorkspace)}
-                    />
-                </World>
-            </Viewport>
             {selectedArtifactIds.length > 0 && (
                 <SelectionToolbar
                     selectedCount={selectedArtifactIds.length}
@@ -286,6 +418,14 @@ function handleCloseInsight(){
                     selectedCount={selectedArtifactIds.length}
                     onClose={handleCloseInsight}
                 />
+            )}
+            {saveError && (
+                <div
+                    className="nook-save-error"
+                    role="alert"
+                >
+                    {saveError}
+                </div>
             )}
         </WorkspaceShell>
         </CameraProvider>

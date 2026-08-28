@@ -23,7 +23,7 @@ function createAuthResponse(user: User): AuthResponse {
         }
     );
     // return the authResponse
-    return { token, user: { id: user.id, email: user.email } };
+    return { token, user: { id: user.id, name: user.name, email: user.email } };
 }
 
 export async function registerUser(
@@ -47,6 +47,7 @@ export async function registerUser(
     // 3. Create the new user in the database
     const user = await prisma.user.create({
         data: {
+            name: userData.name,
             email: userData.email,
             passwordHash,
         },

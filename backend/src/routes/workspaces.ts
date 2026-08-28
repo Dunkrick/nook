@@ -69,8 +69,8 @@ router.get(
     asyncHandler(async (req, res) => {
         const workspaceId = parseWorkspaceId(req.params.workspaceId);
         const artifacts = await getWorkspaceArtifacts(
-            req.user.id,
-            workspaceId
+            workspaceId,
+            req.user.id
         );
 
         if (!artifacts){
