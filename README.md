@@ -1,38 +1,81 @@
 # Nook
 
-> A wall-first workspace that feels like paper but behaves like software.
+> A spatial workspace for capturing thoughts, connecting ideas, and making sense of what matters.
 
-Nook is a full-stack spatial thinking workspace designed for brainstorming, reflection, and organizing ideas visually.
+Nook is a full-stack thinking workspace built around a simple idea:
 
-Instead of forcing thoughts into lists or folders, Nook lets users capture ideas directly on an infinite workspace and evolve them naturally.
+**Thinking should feel spatial before it feels structured.**
+
+Instead of forcing ideas into folders, documents, or rigid workflows, Nook lets users place thoughts directly onto a workspace and interact with them naturally.
+
+Capture first.
+
+Organize later.
+
+Make meaning when ready.
 
 ---
 
 # Vision
 
-Most productivity tools optimize for managing tasks.
+Most software asks people to structure their thinking before they have finished thinking.
 
-Nook optimizes for thinking.
+Nook takes the opposite approach.
 
-The goal is to create software that feels closer to pinning notes on a wall than filling out forms.
+The workspace acts like a physical wall:
 
-Future versions will gradually evolve into an AI-assisted thinking workspace while keeping interaction lightweight and distraction-free.
+- place ideas freely
+- move them around
+- edit them in context
+- select related thoughts
+- gradually discover patterns
+
+The long-term vision is to evolve Nook into an AI-assisted thinking environment where AI helps users reflect on their ideas without interrupting the act of thinking itself.
 
 ---
 
-# Current Features
+# Current Capabilities
 
-- JWT Authentication
-- Spatial wall workspace
-- Double-click anywhere to create notes
-- Draft note workflow
-- Drag & drop positioning
-- Inline editing
-- Delete notes
-- Optimistic UI updates
-- Multi-card selection
+## Authentication
+
+- User registration
+- User login
+- JWT-based authentication
+- Protected application routes
+- Private user workspaces
+- Password visibility toggle
+
+## Spatial Workspace
+
+- Artifact-based workspace
+- Text artifacts
+- Link artifacts
+- Double-click creation
+- Draft artifact workflow
+- Drag and reposition artifacts
+- Inline text editing
+- Delete artifacts
+- Multi-artifact selection
+- Selection toolbar
 - Insight panel foundation
-- Responsive design token system
+
+## Interaction Model
+
+- Explicit interaction states
+- Editing state coordinated across the workspace
+- Dragging disabled while editing
+- Workspace-level editing ownership
+- Optimistic artifact updates
+
+## Design System
+
+- Semantic design tokens
+- Typography scale
+- Spacing system
+- Motion tokens
+- Elevation tokens
+- Interaction state model
+- Responsive layouts
 
 ---
 
@@ -44,7 +87,8 @@ Future versions will gradually evolve into an AI-assisted thinking workspace whi
 - TypeScript
 - Vite
 - React Router
-- CSS Design Tokens
+- CSS
+- Semantic design tokens
 
 ## Backend
 
@@ -52,7 +96,7 @@ Future versions will gradually evolve into an AI-assisted thinking workspace whi
 - TypeScript
 - Prisma ORM
 - PostgreSQL
-- JWT Authentication
+- JWT authentication
 
 ## Infrastructure
 
@@ -65,11 +109,17 @@ Future versions will gradually evolve into an AI-assisted thinking workspace whi
 
 # Repository Structure
 
-```
+```text
 nook/
 
 ├── frontend/
 │   ├── src/
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   └── types/
+│   │
 │   ├── public/
 │   └── package.json
 │
@@ -80,152 +130,12 @@ nook/
 │   └── package.json
 │
 ├── docs/
+│   ├── adr/
+│   ├── design-system/
+│   └── brand/
 │
+├── ARCHITECTURE.md
+├── CHANGELOG.md
 ├── package.json
 └── README.md
 ```
-
----
-
-# Local Development
-
-## Install
-
-```bash
-npm install
-```
-
----
-
-## Start both applications
-
-```bash
-npm run dev
-```
-
----
-
-Frontend
-
-```
-http://localhost:5173
-```
-
-Backend
-
-```
-http://localhost:3003
-```
-
----
-
-# Environment Variables
-
-## backend/.env
-
-```env
-PORT=3003
-
-DATABASE_URL=
-
-JWT_SECRET=
-
-FRONTEND_URL=http://localhost:5173
-```
-
----
-
-## frontend/.env
-
-```env
-VITE_API_URL=http://localhost:3003
-```
-
----
-
-# Production Architecture
-
-```
-                React Frontend
-                       │
-                       ▼
-          Google Cloud Run (Express)
-                       │
-                       ▼
-                Prisma ORM
-                       │
-                       ▼
-              Neon PostgreSQL
-```
-
----
-
-# Core Interaction
-
-```
-Double Click
-      │
-      ▼
- Draft Card
-      │
-      ▼
- Persisted Card
-      │
-      ▼
- Drag • Edit • Delete
-      │
-      ▼
- Spatial Workspace
-```
-
----
-
-## Documentation
-
-- Architecture Decision Records → `/docs/adr`
-- Cleanup Log → `/docs/cleanup-log.md`
-
----
-
-# Roadmap
-
-## v1.2
-
-- Production frontend deployment
-- Connect frontend to Cloud Run
-- Polish workspace interactions
-- Sticky floating toolbar
-- Workspace navigation improvements
-
----
-
-## v1.3
-
-- Infinite canvas
-- Canvas panning
-- Zoom
-- Rectangle selection
-- Keyboard shortcuts
-
----
-
-## v2.0
-
-- AI Reflection Engine
-- Card grouping
-- Insight generation
-- Theme extraction
-- Reflection sessions
-
----
-
-# Principles
-
-Nook follows a few product principles throughout its evolution.
-
-- Wall-first, never form-first.
-- Capture before organization.
-- Calm by default.
-- AI assists, never interrupts.
-- Local interactions should feel immediate.
-- Human-first interaction over excessive automation.
