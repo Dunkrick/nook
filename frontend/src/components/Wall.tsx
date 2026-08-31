@@ -25,6 +25,10 @@ interface WallProps {
 
   selectedArtifactIds: number[]
   onToggleArtifactSelection: (artifactId: number) => void
+
+  editingArtifactId: number | null;
+  onEditingArtifactChange: (artifactId: number | null) => void;
+
   homePosition: Position;
 }
 
@@ -42,6 +46,8 @@ export default function Wall({
     createPosition,
     onSelectArtifactType,
     onCancelCreation,
+    editingArtifactId,
+    onEditingArtifactChange,
     homePosition,
 }: WallProps) {
   const camera = useCanvasCamera();
@@ -49,6 +55,11 @@ export default function Wall({
   function handleDoubleClick(
     e: React.MouseEvent<HTMLDivElement>
 ) {
+    if (editingArtifactId !== null) {
+        onEditingArtifactChange(null);
+        return;
+    }
+
     const viewport = e.currentTarget.closest(".nook-viewport");
     if (!viewport) return;
 
@@ -63,11 +74,24 @@ export default function Wall({
     );
     onCreate(fromRenderPosition(worldPosition));
 }
+
+function handlePointerDown(
+    e: React.PointerEvent<HTMLDivElement>
+) {
+    if (e.target !== e.currentTarget) {
+        return;
+    }
+
+    if (editingArtifactId !== null) {
+        onEditingArtifactChange(null);
+    }
+}
   
   return (
     <div 
         className="nook-wall" 
         aria-label="Thought wall. Double-click to add a thought."
+        onPointerDown={handlePointerDown}
         onDoubleClick={handleDoubleClick}
         >
       {artifacts.length === 0 && !draftArtifact && (
@@ -89,8 +113,16 @@ export default function Wall({
             index={index}
             onUpdate={onUpdate}
             onDelete={onDelete}
+            
             isSelected={selectedArtifactIds.includes(artifact.id)}
-                onToggleSelection={() => onToggleArtifactSelection(artifact.id)}
+            onToggleSelection={() => onToggleArtifactSelection(artifact.id)}
+            isEditing={editingArtifactId === artifact.id}
+            onEditingChange={(isEditing) =>
+                onEditingArtifactChange(
+                    isEditing ? artifact.id : null
+                )
+            }
+            
             style={{
                 "--artifact-rotate": `${getArtifactRotation(artifact.id)}deg`,
                 "--artifact-color": `var(--artifact-${getArtifactColorToken(artifact.id)})`,

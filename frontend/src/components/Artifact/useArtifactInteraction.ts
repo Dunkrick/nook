@@ -8,25 +8,37 @@ import type { Artifact, ArtifactUpdate } from "../../types/artifacts";
 
 interface UseArtifactInteractionProps {
     artifact: Artifact;
+
     onUpdate: (
         id: number,
         update: ArtifactUpdate
     ) => Promise<void>;
 
     onToggleSelection: () => void;
+
+    isEditing: boolean;
+    onEditingChange: (isEditing: boolean) => void;
 }
 
 export default function useArtifactInteraction({
     artifact,
     onUpdate,
     onToggleSelection,
+    isEditing,
+    onEditingChange,
 }: UseArtifactInteractionProps) {
     const camera = useCanvasCamera();
 
     const editing = useArtifactEditing({
         artifactId: artifact.id,
-        initialText: artifact.type === "TEXT" ? artifact.content.text : "",
+        initialText:
+            artifact.type === "TEXT"
+                ? artifact.content.text
+                : "",
+
+        isEditing,
         onUpdate,
+        onEditingChange,
     });
 
     const drag = useArtifactDrag({

@@ -4,12 +4,25 @@ import type { ArtifactUpdate } from "../types/artifacts";
 interface UseArtifactEditingOptions {
     artifactId: number;
     initialText: string;
-    onUpdate: (id: number, update: ArtifactUpdate) => Promise<void>;
+
+    isEditing: boolean;
+
+    onUpdate: (
+        id: number,
+        update: ArtifactUpdate
+    ) => Promise<void>;
+
+    onEditingChange: (isEditing: boolean) => void;
 }
 
-export function useArtifactEditing({ artifactId, initialText, onUpdate }: UseArtifactEditingOptions) {
+export function useArtifactEditing({
+    artifactId,
+    initialText,
+    isEditing,
+    onUpdate,
+    onEditingChange,
+}: UseArtifactEditingOptions) {
     const inputRef = useRef<HTMLInputElement>(null);
-    const [isEditing, setIsEditing] = useState(false);
     const [editText, setEditText] = useState(initialText);
 
     useEffect(() => {
@@ -18,15 +31,27 @@ export function useArtifactEditing({ artifactId, initialText, onUpdate }: UseArt
         }
     }, [isEditing]);
 
+    const startEditing = () => {
+        onEditingChange(true);
+    };
+
+    const stopEditing = () => {
+        onEditingChange(false);
+    };
+
     const handleSave = async () => {
         if (!editText.trim()) return;
-        await onUpdate(artifactId, { text: editText });
-        setIsEditing(false);
+
+        await onUpdate(artifactId, {
+            text: editText,
+        });
+
+        stopEditing();
     };
 
     const handleCancel = () => {
         setEditText(initialText);
-        setIsEditing(false);
+        stopEditing();
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -45,8 +70,10 @@ export function useArtifactEditing({ artifactId, initialText, onUpdate }: UseArt
         isEditing,
         editText,
         inputRef,
+
         setEditText,
-        setIsEditing,
+        startEditing,
+
         handleSave,
         handleCancel,
         handleKeyDown,

@@ -44,6 +44,7 @@ export default function AuthForm({
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         if (!success) {
@@ -86,17 +87,8 @@ export default function AuthForm({
                 password,
             });
 
-            /*
-             * We intentionally keep the loading state visible for a
-             * short moment even if the backend responds immediately.
-             *
-             * This prevents:
-             *
-             * click → instant success → instant navigation
-             *
-             * from making the product feel mechanical.
-             */
             const elapsed = performance.now() - startedAt;
+
             const remaining = Math.max(
                 0,
                 MIN_LOADING_TIME - elapsed,
@@ -109,11 +101,6 @@ export default function AuthForm({
             setLoading(false);
             setSuccess(true);
         } catch (err) {
-            /*
-             * Errors should not feel artificially delayed.
-             *
-             * If the backend fails, tell the user immediately.
-             */
             setLoading(false);
 
             if (err instanceof Error) {
@@ -207,19 +194,79 @@ export default function AuthForm({
                     Password
                 </label>
 
-                <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="current-password"
-                    value={password}
-                    onChange={(event) =>
-                        setPassword(event.target.value)
-                    }
-                    placeholder="Your password"
-                    disabled={loading}
-                    required
-                />
+                <div className="auth-password-input">
+                    <input
+                        id="password"
+                        name="password"
+                        type={
+                            showPassword
+                                ? "text"
+                                : "password"
+                        }
+                        autoComplete={
+                            isRegisterMode
+                                ? "new-password"
+                                : "current-password"
+                        }
+                        value={password}
+                        onChange={(event) =>
+                            setPassword(event.target.value)
+                        }
+                        placeholder="Your password"
+                        disabled={loading}
+                        required
+                    />
+
+                    <button
+                        type="button"
+                        className="auth-password-toggle"
+                        onClick={() =>
+                            setShowPassword(
+                                (current) => !current,
+                            )
+                        }
+                        disabled={loading}
+                        aria-label={
+                            showPassword
+                                ? "Hide password"
+                                : "Show password"
+                        }
+                    >
+                        {showPassword ? (
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M3 3l18 18" />
+                                <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8" />
+                                <path d="M9.9 4.2A10.7 10.7 0 0 1 12 4c7 0 10 8 10 8a18.6 18.6 0 0 1-3.1 4.2" />
+                                <path d="M6.2 6.2A18.7 18.7 0 0 0 2 12s3 8 10 8a10.8 10.8 0 0 0 3.5-.6" />
+                            </svg>
+                        ) : (
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
+                                <circle
+                                    cx="12"
+                                    cy="12"
+                                    r="3"
+                                />
+                            </svg>
+                        )}
+                    </button>
+                </div>
             </div>
 
             {error && (
@@ -244,7 +291,9 @@ export default function AuthForm({
                             <span />
                         </span>
 
-                        <span>{loadingButtonText}</span>
+                        <span>
+                            {loadingButtonText}
+                        </span>
                     </span>
                 ) : (
                     buttonText

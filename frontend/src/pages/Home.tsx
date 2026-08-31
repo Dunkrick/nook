@@ -29,6 +29,7 @@ export default function Home() {
     const [creationPosition, setCreationPosition] = useState<Position | null>(null);
     const [isWorkspaceReady, setIsWorkspaceReady] = useState(false);
     const [saveError, setSaveError] = useState<string | null>(null);
+    const [editingArtifactId, setEditingArtifactId] = useState<number | null>(null);
 
     async function handleCreateWorkspace(name: string) {
         const workspace = await createWorkspace(name);
@@ -46,6 +47,12 @@ export default function Home() {
 
     function handleCreateDraft(position: Position) {
         setCreationPosition(position);
+    }
+
+    function handleEditingArtifactChange(
+        artifactId: number | null
+    ) {
+        setEditingArtifactId(artifactId);
     }
 
     function handleSelectArtifactType(type: "TEXT" | "LINK") {
@@ -390,16 +397,24 @@ function handleCloseInsight(){
                                 artifacts={artifacts}
                                 draftArtifact={draftArtifact}
                                 createPosition={creationPosition}
+
                                 onUpdate={handleUpdateArtifact}
                                 onDelete={handleDeleteArtifact}
                                 onCreate={handleCreateDraft}
+
                                 onSelectArtifactType={handleSelectArtifactType}
                                 onCancelCreation={handleCancelCreation}
+
                                 onCommitDraftText={handleCommitDraftText}
                                 onCommitDraftLink={handleCommitDraftLink}
                                 onCancelDraft={handleCancelDraft}
+
                                 selectedArtifactIds={selectedArtifactIds}
                                 onToggleArtifactSelection={toggleArtifactSelection}
+
+                                editingArtifactId={editingArtifactId}
+                                onEditingArtifactChange={handleEditingArtifactChange}
+
                                 homePosition={getWorkspaceHome(activeWorkspace)}
                             />
                         </World>

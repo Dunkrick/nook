@@ -15,6 +15,7 @@ interface ArtifactViewProps {
     interaction: ReturnType<typeof useArtifactInteraction>;
     isSelected: boolean;
     onDelete: () => void;
+
     style?: React.CSSProperties & {
         [key: `--${string}`]: string | number;
     };
@@ -68,12 +69,18 @@ export default function ArtifactView({
                     inputRef={ editing.inputRef as React.RefObject<HTMLInputElement> }
                     onTextChange={ editing.setEditText }
                     onKeyDown={ editing.handleKeyDown }
+                    onSave={ editing.handleSave }
+                    onCancel={ editing.handleCancel }
                 />
             ) : (
                 <div className="nook-artifact__content">
                     <ArtifactHeader
                         index={index}
-                        onEdit={artifact.type === "TEXT" ? () => editing.setIsEditing(true) : undefined}
+                        onEdit={
+                            artifact.type === "TEXT"
+                                ? editing.startEditing
+                                : undefined
+                        }
                         onDelete={onDelete} />
                     {artifact.type === "TEXT" && (
                         <ArtifactBody text={artifact.content.text}/>
