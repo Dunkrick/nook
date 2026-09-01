@@ -26,6 +26,12 @@ export function useArtifactEditing({
     const [editText, setEditText] = useState(initialText);
 
     useEffect(() => {
+        if (!isEditing) {
+            setEditText(initialText);
+        }
+    }, [initialText, isEditing]);
+
+    useEffect(() => {
         if (isEditing) {
             inputRef.current?.focus();
         }
