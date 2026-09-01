@@ -57,9 +57,13 @@ export default function ArtifactView({
             onPointerMove={drag.handlePointerMove}
             onPointerUp={drag.handlePointerUp}
             onPointerCancel={drag.handlePointerCancel}
-            onDoubleClick={(e) =>
-                e.stopPropagation()
-            }
+            onDoubleClick={(e) => {
+                e.stopPropagation();
+
+                if (artifact.type === "TEXT") {
+                    editing.startEditing();
+                }
+            }}
             onClick={handleClick}>
 
             {editing.isEditing ? (
