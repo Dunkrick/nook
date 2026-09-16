@@ -8,6 +8,7 @@ import ArtifactEditor from "./ArtifactEditor";
 import useArtifactInteraction from "./useArtifactInteraction";
 import type { Artifact } from "../../types/artifacts";
 import { toRenderPosition } from "../../lib/workspace";
+import PolaroidArtifactBody from "./PolaroidArtifactBody";
 
 interface ArtifactViewProps {
     index: number;
@@ -92,6 +93,10 @@ export default function ArtifactView({
 
                     {artifact.type === "LINK" && (
                         <LinkArtifactBody url={artifact.content.url}/>
+                    )}
+
+                    {artifact.type === "POLAROID" && (
+                        <PolaroidArtifactBody imageUrl={artifact.content.imageUrl}/>
                     )}
                 </div>
             )}

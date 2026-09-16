@@ -6,14 +6,24 @@ export interface LinkArtifactContent {
     url: string;
 }
 
+export interface PolaroidArtifactContent {
+    imageUrl: string;
+}
+
 export type ArtifactContent =
     | TextArtifactContent
-    | LinkArtifactContent;
+    | LinkArtifactContent
+    | PolaroidArtifactContent;
+
+export type ArtifactType =
+    | "TEXT"
+    | "LINK"
+    | "POLAROID";
 
 export interface Artifact {
     id: number;
     userId: number;
-    type: "TEXT" | "LINK";
+    type: ArtifactType;
     content: ArtifactContent;
     x: number;
     y: number;

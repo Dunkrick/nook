@@ -14,6 +14,14 @@ export type CreateArtifactInput =
         workspaceId: number;
         x: number;
         y: number;
+    }
+    | {
+        type: "POLAROID";
+        imageUrl: string;
+        userId: number;
+        workspaceId: number;
+        x: number;
+        y: number;
     };
 
 export interface UpdateArtifactInput {

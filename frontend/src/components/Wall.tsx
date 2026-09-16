@@ -3,6 +3,7 @@ import EmptyWorkspace from "./EmptyWorkspace";
 import ArtifactComponent from "./Artifact/Artifact";
 import { getArtifactColorToken, getArtifactRotation } from "../lib/ArtifactRotation";
 import DraftArtifactComponent from "./DraftArtifact";
+import PolaroidDraft from "./PolaroidDraft";
 import ArtifactCreationPicker from "./ArtifactCreationPicker";
 import { useCanvasCamera } from "../hooks/useCanvasCamera";
 import { fromRenderPosition } from "../lib/workspace";
@@ -12,7 +13,7 @@ interface WallProps {
   draftArtifact: DraftArtifact | null;
 
   createPosition: Position | null;
-  onSelectArtifactType: (type: "TEXT" | "LINK") => void;
+  onSelectArtifactType: (type: "TEXT" | "LINK" | "POLAROID") => void;
   onCancelCreation: () => void;
 
   onCreate: (position: Position) => void;
@@ -21,6 +22,7 @@ interface WallProps {
 
   onCommitDraftText: (text: string) => Promise<void>;
   onCommitDraftLink: (url: string) => Promise<void>;
+  onCommitDraftPolaroid: (imageUrl: string) => Promise<void>;
   onCancelDraft: () => void;
 
   selectedArtifactIds: number[]
@@ -40,6 +42,7 @@ export default function Wall({
     onCreate, 
     onCommitDraftText,
     onCommitDraftLink,
+    onCommitDraftPolaroid,
     onCancelDraft,
     selectedArtifactIds,
     onToggleArtifactSelection,
@@ -131,15 +134,30 @@ function handlePointerDown(
     ))}
 
     {draftArtifact && (
-        <DraftArtifactComponent
-            type={draftArtifact.type}
-            position={{
-                x: draftArtifact.x,
-                y: draftArtifact.y,
-            }}
-            onCommit={draftArtifact.type === "TEXT" ? onCommitDraftText : onCommitDraftLink}
-            onCancel={onCancelDraft}
-        />
+        draftArtifact.type === "POLAROID" ? (
+            <PolaroidDraft
+                position={{
+                    x: draftArtifact.x,
+                    y: draftArtifact.y,
+                }}
+                onCommit={onCommitDraftPolaroid}
+                onCancel={onCancelDraft}
+            />
+        ) : (
+            <DraftArtifactComponent
+                type={draftArtifact.type}
+                position={{
+                    x: draftArtifact.x,
+                    y: draftArtifact.y,
+                }}
+                onCommit={
+                    draftArtifact.type === "TEXT"
+                        ? onCommitDraftText
+                        : onCommitDraftLink
+                }
+                onCancel={onCancelDraft}
+            />
+        )
     )}
 
     </div>

@@ -3,7 +3,7 @@ import type { Position } from "../types/artifacts";
 import { toRenderPosition } from "../lib/workspace";
 
 interface DraftArtifactProps {
-    type: "TEXT" | "LINK";
+    type: "TEXT" | "LINK" | "POLAROID";
     position: Position;
     onCommit: (text: string) => Promise<void>;
     onCancel: () => void;

@@ -3,7 +3,7 @@ import { toRenderPosition } from "../lib/workspace";
 
 interface ArtifactCreationPickerProps {
     position: Position;
-    onSelect: (type: "TEXT" | "LINK") => void;
+    onSelect: (type: "TEXT" | "LINK" | "POLAROID") => void;
     onCancel: () => void;
 }
 
@@ -41,6 +41,13 @@ export default function ArtifactCreationPicker({
                     onClick={() => onSelect("LINK")}
                 >
                     Link
+                </button>
+
+                <button
+                    type="button"
+                    onClick={() => onSelect("POLAROID")}
+                >
+                    Photo
                 </button>
             </div>
 

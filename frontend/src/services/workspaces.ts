@@ -28,9 +28,10 @@ export async function getWorkspaceArtifacts(workspaceId: number) {
 export async function createArtifact(
     workspaceId: number,
     payload: {
-        type?: "TEXT" | "LINK";
+        type?: "TEXT" | "LINK" | "POLAROID";
         text?: string;
         url?: string;
+        imageUrl?: string;
         x?: number;
         y?: number;
     }

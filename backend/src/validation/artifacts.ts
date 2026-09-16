@@ -2,9 +2,9 @@ import type { Request, Response, NextFunction } from "express";
 import { ValidationError } from "../lib/error.js";
 
 export function validateCreateArtifact(req: Request, _res: Response, next: NextFunction) {
-    const { type, text, url, x, y } = req.body;
+    const { type, text, url, imageUrl, x, y } = req.body;
 
-    if (type !== "TEXT" && type !== "LINK") {
+    if (type !== "TEXT" && type !== "LINK" && type !== "POLAROID") {
         throw new ValidationError("Invalid artifact type.");
     }
 
@@ -21,6 +21,16 @@ export function validateCreateArtifact(req: Request, _res: Response, next: NextF
         }
 
         req.body.url = url.trim();
+    }
+
+    if (type === "POLAROID") {
+        if (typeof imageUrl !== "string" || imageUrl.trim() === "") {
+            throw new ValidationError(
+                "Polaroid artifact requires a valid imageUrl."
+            );
+        }
+
+        req.body.imageUrl = imageUrl.trim();
     }
 
     req.body.x = Number.isFinite(Number(x)) ? Number(x) : 0;

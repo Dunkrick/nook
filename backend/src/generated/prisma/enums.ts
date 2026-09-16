@@ -11,7 +11,8 @@
 
 export const ArtifactType = {
   TEXT: 'TEXT',
-  LINK: 'LINK'
+  LINK: 'LINK',
+  POLAROID: 'POLAROID'
 } as const
 
 export type ArtifactType = (typeof ArtifactType)[keyof typeof ArtifactType]

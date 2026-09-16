@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import SelectionToolbar from "../components/SelectionToolbar"
 import { createArtifact, updateArtifact, deleteArtifact, getWorkspaces, getWorkspaceArtifacts, createWorkspace } from "../services/workspaces";
-import type { Artifact, ArtifactUpdate, DraftArtifact, Position, TextArtifact, LinkArtifact } from "../types/artifacts";
+import type { Artifact, ArtifactUpdate, DraftArtifact, Position, TextArtifact, LinkArtifact, PolaroidArtifact } from "../types/artifacts";
 import Wall from "../components/Wall"
 import InsightPanel from "../components/InsightPanel";
 import WorkspaceShell from "../components/WorkspaceShell";
@@ -55,7 +55,7 @@ export default function Home() {
         setEditingArtifactId(artifactId);
     }
 
-    function handleSelectArtifactType(type: "TEXT" | "LINK") {
+    function handleSelectArtifactType(type: "TEXT" | "LINK" | "POLAROID") {
         if (!creationPosition) return;
 
         if (type === "TEXT") {
@@ -71,6 +71,15 @@ export default function Home() {
             setDraftArtifact({
                 type: "LINK",
                 url: "",
+                x: creationPosition.x,
+                y: creationPosition.y,
+            });
+        }
+
+        if (type === "POLAROID") {
+            setDraftArtifact({
+                type: "POLAROID",
+                imageUrl: "",
                 x: creationPosition.x,
                 y: creationPosition.y,
             });
@@ -209,6 +218,73 @@ export default function Home() {
             console.error(error);
         }
     }
+
+    async function handleCommitDraftPolaroid(imageUrl: string) {
+    if (
+        !draftArtifact ||
+        !activeWorkspace ||
+        draftArtifact.type !== "POLAROID"
+    ) {
+        return;
+    }
+
+    setSaveError(null);
+
+    const optimisticArtifact: PolaroidArtifact = {
+        id: -Date.now(),
+        userId: 0,
+        workspaceId: activeWorkspace.id,
+        type: "POLAROID",
+        content: {
+            imageUrl,
+        },
+        x: draftArtifact.x,
+        y: draftArtifact.y,
+        zIndex: 0,
+    };
+
+    setArtifacts((current) => [
+        ...current,
+        optimisticArtifact,
+    ]);
+
+    setDraftArtifact(null);
+
+    try {
+        const savedArtifact = await createArtifact(
+            activeWorkspace.id,
+            {
+                type: "POLAROID",
+                imageUrl,
+                x: draftArtifact.x,
+                y: draftArtifact.y,
+            }
+        );
+
+        setArtifacts((current) =>
+            current.map((artifact) =>
+                artifact.id === optimisticArtifact.id
+                    ? savedArtifact
+                    : artifact
+            )
+        );
+    } catch (error) {
+        setArtifacts((current) =>
+            current.filter(
+                (artifact) =>
+                    artifact.id !== optimisticArtifact.id
+            )
+        );
+
+        setSaveError("Couldn't save that. Please try again.");
+
+        setTimeout(() => {
+            setSaveError(null);
+        }, 3000);
+
+        console.error(error);
+    }
+}
 
     function handleCancelDraft() {
     setDraftArtifact(null);
@@ -407,6 +483,7 @@ function handleCloseInsight(){
 
                                 onCommitDraftText={handleCommitDraftText}
                                 onCommitDraftLink={handleCommitDraftLink}
+                                onCommitDraftPolaroid={handleCommitDraftPolaroid}
                                 onCancelDraft={handleCancelDraft}
 
                                 selectedArtifactIds={selectedArtifactIds}

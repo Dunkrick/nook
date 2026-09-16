@@ -24,7 +24,12 @@ export async function createArtifact(
         );
     }
 
-    const content = input.type === "TEXT" ? { text: input.text } : { url: input.url };
+    const content =
+        input.type === "TEXT"
+            ? { text: input.text }
+            : input.type === "LINK"
+            ? { url: input.url }
+            : { imageUrl: input.imageUrl };
 
     const row = await prisma.artifact.create({
         data: {

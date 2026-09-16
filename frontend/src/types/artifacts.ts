@@ -26,12 +26,26 @@ export interface LinkArtifact {
     zIndex: number;
 }
 
-export type Artifact = | TextArtifact | LinkArtifact;
+export interface PolaroidArtifact {
+    id: number;
+    userId: number;
+    workspaceId: number;
+    type: "POLAROID";
+    content: {
+        imageUrl: string;
+    };
+    x: number;
+    y: number;
+    zIndex: number;
+}
+
+export type Artifact = | TextArtifact | LinkArtifact | PolaroidArtifact;
 
 export interface DraftArtifact {
-    type: "TEXT" | "LINK";
+    type: "TEXT" | "LINK" | "POLAROID";
     text?: string;
     url?: string;
+    imageUrl?: string;
     x: number;
     y: number;
 }
