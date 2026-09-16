@@ -11,9 +11,11 @@ interface RequestOptions {
 async function request(method: string, endpoint: string, options?: RequestOptions) {
     const token = getToken();
 
-    const headers: Record<string, string> = {
-        "Content-Type": "application/json",
-    };
+    const headers: Record<string, string> = {};
+
+    if (!(options?.body instanceof FormData)) {
+        headers["Content-Type"] = "application/json";
+    }
 
     const fetchOptions: RequestInit = {
         method,
@@ -29,7 +31,10 @@ async function request(method: string, endpoint: string, options?: RequestOption
     }
 
     if (options?.body !== undefined) {
-        fetchOptions.body = JSON.stringify(options.body);
+        fetchOptions.body =
+            options.body instanceof FormData
+                ? options.body
+                : JSON.stringify(options.body);
     }
 
     const response = await fetch(
@@ -81,4 +86,13 @@ export async function patch(endpoint: string, body = {}) {
 
 export async function del(endpoint: string) {
     return request("DELETE", endpoint);
+}
+
+export async function postForm(
+    endpoint: string,
+    formData: FormData
+) {
+    return request("POST", endpoint, {
+        body: formData,
+    });
 }
