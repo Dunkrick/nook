@@ -31,3 +31,7 @@ Once accepted, ADRs are considered part of the project's engineering history and
 | ADR-0006 | Draft state separated from persisted cards | Accepted |
 | ADR-0007 | Backend containerization | Accepted |
 | ADR-0008 | Google Cloud Run deployment | Accepted |
+| ADR-0009 | Viewport and world separation | Accepted |
+| ADR-0010 | Frontend design system | Accepted |
+| ADR-0011 | Workspace owns active editing state | Accepted |
+| ADR-0012 | Signed image URLs as JSON over redirects | Accepted |

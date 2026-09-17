@@ -10,6 +10,14 @@ The project follows Semantic Versioning.
 
 ### Added
 
+#### Polaroid Artifacts & Media Storage
+
+- Support for Polaroid photo artifacts on the spatial canvas.
+- Direct-to-storage uploads via short-lived signed URLs (`POST /uploads/sign`).
+- Private Google Cloud Storage bucket integration with per-user storage isolation (`uploads/users/{userId}/...`).
+- Authenticated signed URL endpoint (`GET /artifacts/:id/image`) for secure image retrieval without proxying binary data through Cloud Run.
+- Dedicated Polaroid creation draft UI and interactive canvas placement.
+
 #### Authentication
 
 - User registration and login flows.
@@ -21,7 +29,7 @@ The project follows Semantic Versioning.
 #### Workspace
 
 - Artifact-based workspace model.
-- Support for text and link artifacts.
+- Support for text, link, and polaroid photo artifacts.
 - Workspace-level editing coordination.
 - Explicit editing ownership through `editingArtifactId`.
 - Editing state propagation from artifacts through the workspace.
@@ -43,6 +51,18 @@ The project follows Semantic Versioning.
   - editing behavior
   - dragging behavior
 - Workspace-level coordination for mutually exclusive editing interactions.
+- Pluggable Object Storage interface (`ObjectStorage`) backed by `GoogleCloudStorage`.
+
+---
+
+### Fixed
+
+#### CORS & Image Delivery Architecture
+
+- **Resolved Cross-Origin Redirect CORS Failure (`ERR_FAILED 200 (OK)`)**:
+  - **Issue**: The backend `/artifacts/:id/image` endpoint previously issued an HTTP `302 Found` redirecting to signed Google Cloud Storage URLs. When the frontend fetched this endpoint with an `Authorization` header, the browser followed the cross-origin redirect (`run.app` → `storage.googleapis.com`) and applied WHATWG Fetch specification rules by stripping headers and taining the request with `Origin: null`. Because GCS does not match `Origin: null` against allowed origin lists, it withheld the `Access-Control-Allow-Origin` header, causing the browser to block the image response.
+  - **Resolution**: Updated `GET /artifacts/:id/image` to return a JSON payload `{ url: signedUrl }` with HTTP `200 OK`. The frontend requests the URL via authenticated JSON API call and renders `<img src={url} />` directly.
+  - **Benefits**: Completely bypasses cross-origin redirect CORS complications, eliminates client-side `Blob` memory retention and `URL.createObjectURL` leaks, and restores native browser HTTP caching and progressive image streaming.
 
 ---
 

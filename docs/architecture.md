@@ -10,23 +10,22 @@ The architecture favors simple, replaceable components with clear ownership. Eve
 
 ```text
                 Browser
-                    │
-                    ▼
-          React + TypeScript
-                    │
-          HTTP (REST + JWT)
-                    │
-                    ▼
-          Express + TypeScript
-                    │
-              Route Layer
-                    │
-             Service Layer
-                    │
-               Prisma ORM
-                    │
-                    ▼
-            Neon PostgreSQL
+              │         │
+              │         ▼ (Direct Upload / Image Load via Signed URLs)
+              │    Google Cloud Storage
+              │
+              ▼ (REST + JWT)
+    Express + TypeScript (Cloud Run)
+              │
+         Route Layer
+              │
+        Service Layer
+         │         │
+         ▼         ▼
+    Prisma ORM   ObjectStorage (GCS)
+         │
+         ▼
+  Neon PostgreSQL
 ```
 
 ---
@@ -125,16 +124,15 @@ The frontend follows a simple ownership model.
 ## Deployment
 
 ```text
-React Frontend
-       │
-       ▼
-Cloud Run (Express)
-       │
-       ▼
-Prisma ORM
-       │
-       ▼
-Neon PostgreSQL
+       React Frontend (Vercel)
+          │            │
+          │            ▼ (Direct uploads & image loads via Signed URLs)
+          │       GCS Bucket (nook-media)
+          ▼
+Cloud Run (Express Backend)
+          │
+          ▼
+Neon PostgreSQL (Prisma ORM)
 ```
 
-The frontend and backend are deployed independently, allowing each application to evolve without coupling deployment pipelines.
+The frontend and backend are deployed independently, allowing each application to evolve without coupling deployment pipelines. Media bytes flow directly between the browser and Google Cloud Storage via cryptographic signed URLs, keeping Cloud Run stateless and lightweight.

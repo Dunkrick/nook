@@ -50,6 +50,8 @@ The long-term vision is to evolve Nook into an AI-assisted thinking environment 
 - Artifact-based workspace
 - Text artifacts
 - Link artifacts
+- Polaroid photo artifacts
+- Direct image upload via signed URLs
 - Double-click creation
 - Draft artifact workflow
 - Drag and reposition artifacts
@@ -97,11 +99,13 @@ The long-term vision is to evolve Nook into an AI-assisted thinking environment 
 - Prisma ORM
 - PostgreSQL
 - JWT authentication
+- Google Cloud Storage client
 
 ## Infrastructure
 
 - Docker
 - Google Cloud Run
+- Google Cloud Storage (Media & Signed URLs)
 - Google Artifact Registry
 - Neon PostgreSQL
 

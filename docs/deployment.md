@@ -70,6 +70,37 @@ Cloud Run requires:
 - `DATABASE_URL`
 - `JWT_SECRET`
 - `FRONTEND_URL`
+- `GCS_BUCKET_NAME`
+
+---
+
+## Object Storage (Google Cloud Storage)
+
+Media artifacts (Polaroids) are stored in Google Cloud Storage.
+
+### Bucket CORS Configuration
+
+Direct uploads (via signed `PUT` URLs) from the web browser require CORS enabled on the storage bucket.
+
+Create `cors.json`:
+```json
+[
+  {
+    "origin": [
+      "https://nookmy.vercel.app",
+      "http://localhost:5173"
+    ],
+    "method": ["GET", "PUT"],
+    "responseHeader": ["Content-Type"],
+    "maxAgeSeconds": 3600
+  }
+]
+```
+
+Apply the configuration:
+```bash
+gcloud storage buckets update gs://YOUR_BUCKET_NAME --cors-file=cors.json
+```
 
 ---
 
