@@ -10,16 +10,15 @@ interface PolaroidArtifactBodyProps {
 export default function PolaroidArtifactBody({
     artifactId,
 }: PolaroidArtifactBodyProps) {
-    const [blobUrl, setBlobUrl] = useState<string | null>(null);
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        let revoked = false;
-        let objectUrl: string | null = null;
+        let isCancelled = false;
 
         async function loadImage() {
             setError(false);
-            setBlobUrl(null);
+            setImageUrl(null);
 
             const token = getToken();
 
@@ -30,24 +29,25 @@ export default function PolaroidArtifactBody({
                         headers: token
                             ? { Authorization: `Bearer ${token}` }
                             : {},
-                        // Follow the redirect to GCS automatically.
-                        redirect: "follow",
                     },
                 );
 
                 if (!response.ok) {
-                    setError(true);
+                    if (!isCancelled) setError(true);
                     return;
                 }
 
-                const blob = await response.blob();
+                const data = (await response.json()) as { url?: string };
 
-                if (!revoked) {
-                    objectUrl = URL.createObjectURL(blob);
-                    setBlobUrl(objectUrl);
+                if (!isCancelled) {
+                    if (data.url) {
+                        setImageUrl(data.url);
+                    } else {
+                        setError(true);
+                    }
                 }
             } catch {
-                if (!revoked) {
+                if (!isCancelled) {
                     setError(true);
                 }
             }
@@ -56,10 +56,7 @@ export default function PolaroidArtifactBody({
         loadImage();
 
         return () => {
-            revoked = true;
-            if (objectUrl) {
-                URL.revokeObjectURL(objectUrl);
-            }
+            isCancelled = true;
         };
     }, [artifactId]);
 
@@ -70,8 +67,8 @@ export default function PolaroidArtifactBody({
                     <span className="nook-polaroid__error">
                         Image unavailable
                     </span>
-                ) : blobUrl ? (
-                    <img src={blobUrl} alt="Saved photo" />
+                ) : imageUrl ? (
+                    <img src={imageUrl} alt="Saved photo" />
                 ) : (
                     <span className="nook-polaroid__loading" />
                 )}

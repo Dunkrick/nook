@@ -5,13 +5,12 @@ import PolaroidArtifactBody from "./PolaroidArtifactBody";
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 const FAKE_TOKEN = "test-jwt-token";
-const FAKE_BLOB_URL = "blob:http://localhost/fake-object-url";
-const FAKE_BLOB = new Blob(["fake image bytes"], { type: "image/jpeg" });
+const FAKE_IMAGE_URL = "https://storage.googleapis.com/bucket/photo.jpg";
 
-function makeOkResponse(blob = FAKE_BLOB): Response {
+function makeOkResponse(url = FAKE_IMAGE_URL): Response {
     return {
         ok: true,
-        blob: () => Promise.resolve(blob),
+        json: () => Promise.resolve({ url }),
     } as unknown as Response;
 }
 
@@ -19,7 +18,7 @@ function makeErrorResponse(status = 403): Response {
     return {
         ok: false,
         status,
-        blob: vi.fn(),
+        json: vi.fn(),
     } as unknown as Response;
 }
 
@@ -33,10 +32,6 @@ vi.mock("../../lib/storage", () => ({
 
 beforeEach(() => {
     vi.stubGlobal("fetch", vi.fn());
-    vi.stubGlobal("URL", {
-        createObjectURL: vi.fn().mockReturnValue(FAKE_BLOB_URL),
-        revokeObjectURL: vi.fn(),
-    });
 });
 
 afterEach(() => {
@@ -85,8 +80,7 @@ describe("PolaroidArtifactBody", () => {
         const img = await screen.findByRole("img", { name: /saved photo/i });
 
         expect(img).toBeInTheDocument();
-        expect(img).toHaveAttribute("src", FAKE_BLOB_URL);
-        expect(URL.createObjectURL).toHaveBeenCalledWith(FAKE_BLOB);
+        expect(img).toHaveAttribute("src", FAKE_IMAGE_URL);
     });
 
     it("shows a fallback and does not render a broken img on a failed request", async () => {
@@ -99,19 +93,7 @@ describe("PolaroidArtifactBody", () => {
         expect(screen.queryByRole("img")).not.toBeInTheDocument();
     });
 
-    it("revokes the blob URL when the component unmounts", async () => {
-        vi.mocked(fetch).mockResolvedValue(makeOkResponse());
-
-        const { unmount } = render(<PolaroidArtifactBody artifactId={55} />);
-
-        await screen.findByRole("img");
-
-        unmount();
-
-        expect(URL.revokeObjectURL).toHaveBeenCalledWith(FAKE_BLOB_URL);
-    });
-
-    it("revokes the old blob URL and fetches a new one when artifactId changes", async () => {
+    it("fetches a new image when artifactId changes", async () => {
         vi.mocked(fetch).mockResolvedValue(makeOkResponse());
 
         const { rerender } = render(<PolaroidArtifactBody artifactId={55} />);
@@ -122,10 +104,6 @@ describe("PolaroidArtifactBody", () => {
         rerender(<PolaroidArtifactBody artifactId={56} />);
 
         await waitFor(() => {
-            // The old URL should have been revoked
-            expect(URL.revokeObjectURL).toHaveBeenCalledWith(FAKE_BLOB_URL);
-
-            // A fresh fetch for the new artifact ID should have been made
             expect(fetch).toHaveBeenCalledWith(
                 expect.stringContaining("/artifacts/56/image"),
                 expect.anything(),

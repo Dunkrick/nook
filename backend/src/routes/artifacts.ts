@@ -14,8 +14,8 @@ const storage = new GoogleCloudStorage(env.GCS_BUCKET_NAME);
 /**
  * GET /artifacts/:id/image
  *
- * Authenticates the request, verifies ownership, then redirects the browser
- * to a short-lived signed GCS URL. Cloud Run never proxies image bytes.
+ * Authenticates the request, verifies ownership, then returns a short-lived
+ * signed GCS URL as JSON. Cloud Run never proxies image bytes.
  */
 router.get(
     "/:id/image",
@@ -29,7 +29,7 @@ router.get(
 
         const signedUrl = await getArtifactImageUrl(id, req.user.id, storage);
 
-        res.redirect(302, signedUrl);
+        res.status(200).json({ url: signedUrl });
     }),
 );
 
