@@ -22,7 +22,7 @@ interface WallProps {
 
   onCommitDraftText: (text: string) => Promise<void>;
   onCommitDraftLink: (url: string) => Promise<void>;
-  onCommitDraftPolaroid: (imageUrl: string) => Promise<void>;
+  onCommitDraftPolaroid: (imageKey: string) => Promise<void>;
   onCancelDraft: () => void;
 
   selectedArtifactIds: number[]

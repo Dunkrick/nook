@@ -29,7 +29,7 @@ export async function createArtifact(
             ? { text: input.text }
             : input.type === "LINK"
             ? { url: input.url }
-            : { imageUrl: input.imageUrl };
+            : { imageKey: input.imageKey };
 
     const row = await prisma.artifact.create({
         data: {

@@ -79,7 +79,7 @@ export default function Home() {
         if (type === "POLAROID") {
             setDraftArtifact({
                 type: "POLAROID",
-                imageUrl: "",
+                imageKey: "",
                 x: creationPosition.x,
                 y: creationPosition.y,
             });
@@ -219,7 +219,7 @@ export default function Home() {
         }
     }
 
-    async function handleCommitDraftPolaroid(imageUrl: string) {
+    async function handleCommitDraftPolaroid(imageKey: string) {
     if (
         !draftArtifact ||
         !activeWorkspace ||
@@ -236,7 +236,7 @@ export default function Home() {
         workspaceId: activeWorkspace.id,
         type: "POLAROID",
         content: {
-            imageUrl,
+            imageKey,
         },
         x: draftArtifact.x,
         y: draftArtifact.y,
@@ -255,7 +255,7 @@ export default function Home() {
             activeWorkspace.id,
             {
                 type: "POLAROID",
-                imageUrl,
+                imageKey,
                 x: draftArtifact.x,
                 y: draftArtifact.y,
             }

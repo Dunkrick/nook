@@ -88,11 +88,11 @@ export async function del(endpoint: string) {
     return request("DELETE", endpoint);
 }
 
-export async function postForm(
+export async function postForm<T = unknown>(
     endpoint: string,
     formData: FormData
-) {
+): Promise<T> {
     return request("POST", endpoint, {
         body: formData,
-    });
+    }) as Promise<T>;
 }

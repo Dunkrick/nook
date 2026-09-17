@@ -96,7 +96,7 @@ export default function ArtifactView({
                     )}
 
                     {artifact.type === "POLAROID" && (
-                        <PolaroidArtifactBody imageUrl={artifact.content.imageUrl}/>
+                        <PolaroidArtifactBody artifactId={artifact.id}/>
                     )}
                 </div>
             )}

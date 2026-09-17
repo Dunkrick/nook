@@ -32,7 +32,7 @@ export interface PolaroidArtifact {
     workspaceId: number;
     type: "POLAROID";
     content: {
-        imageUrl: string;
+        imageKey: string;
     };
     x: number;
     y: number;
@@ -45,7 +45,7 @@ export interface DraftArtifact {
     type: "TEXT" | "LINK" | "POLAROID";
     text?: string;
     url?: string;
-    imageUrl?: string;
+    imageKey?: string;
     x: number;
     y: number;
 }

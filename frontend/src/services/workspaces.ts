@@ -31,7 +31,7 @@ export async function createArtifact(
         type?: "TEXT" | "LINK" | "POLAROID";
         text?: string;
         url?: string;
-        imageUrl?: string;
+        imageKey?: string;
         x?: number;
         y?: number;
     }

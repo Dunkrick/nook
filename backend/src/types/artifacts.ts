@@ -17,7 +17,7 @@ export type CreateArtifactInput =
     }
     | {
         type: "POLAROID";
-        imageUrl: string;
+        imageKey: string;
         userId: number;
         workspaceId: number;
         x: number;

@@ -1,6 +1,7 @@
 import { postForm } from "./api";
 
 export interface UploadedImage {
+    key: string;
     url: string;
     filename: string;
     contentType: string;
@@ -14,5 +15,10 @@ export async function uploadImage(
 
     formData.append("file", file);
 
-    return postForm("/uploads", formData);
+    const response = await postForm<{ success: boolean; data: UploadedImage }>(
+        "/uploads",
+        formData
+    );
+
+    return response.data;
 }

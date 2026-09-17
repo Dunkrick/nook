@@ -1,10 +1,11 @@
 import { useState } from "react";
 import type { Position } from "../types/artifacts";
 import { toRenderPosition } from "../lib/workspace";
+import { uploadImage } from "../services/uploads";
 
 interface PolaroidDraftProps {
     position: Position;
-    onCommit: (imageUrl: string) => Promise<void>;
+    onCommit: (imageKey: string) => Promise<void>;
     onCancel: () => void;
 }
 
@@ -14,18 +15,19 @@ export default function PolaroidDraft({
     onCancel,
 }: PolaroidDraftProps) {
     const renderPosition = toRenderPosition(position);
-    const [imageUrl, setImageUrl] = useState("");
+    const [file, setFile] = useState<File | null>(null);
+    const [previewUrl, setPreviewUrl] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
-    const trimmedUrl = imageUrl.trim();
 
     async function handleCommit() {
-        if (!trimmedUrl || isLoading) return;
+        if (!file || isLoading) return;
 
         setIsLoading(true);
 
         try {
-            await onCommit(trimmedUrl);
+            const uploaded = await uploadImage(file);
+            await onCommit(uploaded.key);
         } finally {
             setIsLoading(false);
         }
@@ -61,18 +63,24 @@ export default function PolaroidDraft({
 
             <input
                 autoFocus
-                type="url"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                onChange={(e) => {
+                    const selectedFile = e.target.files?.[0];
+
+                    if (!selectedFile) return;
+
+                    setFile(selectedFile);
+                    setPreviewUrl(URL.createObjectURL(selectedFile));
+                }}
                 onKeyDown={handleKeyDown}
-                placeholder="Paste an image URL…"
                 disabled={isLoading}
             />
 
-            {trimmedUrl && (
+            {previewUrl && (
                 <div className="nook-polaroid-draft__preview">
                     <img
-                        src={trimmedUrl}
+                        src={previewUrl}
                         alt="Photo preview"
                     />
                 </div>
@@ -82,7 +90,7 @@ export default function PolaroidDraft({
                 <button
                     type="button"
                     onClick={() => void handleCommit()}
-                    disabled={!trimmedUrl || isLoading}
+                    disabled={!file || isLoading}
                 >
                     {isLoading ? "Adding…" : "Add Photo"}
                 </button>
