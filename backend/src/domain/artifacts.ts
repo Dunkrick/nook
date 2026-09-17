@@ -7,7 +7,7 @@ export interface LinkArtifactContent {
 }
 
 export interface PolaroidArtifactContent {
-    imageUrl: string;
+    imageKey: string;
 }
 
 export type ArtifactContent =

@@ -5,6 +5,8 @@ import workspaceRouter from "./routes/workspaces.js";
 import authRouter from "./routes/auth.js";
 import { errorHandler } from "./lib/error.js";
 import prisma from "./prisma.js";
+import uploadRouter from "./routes/uploads.js";
+import artifactRouter from "./routes/artifacts.js";
 
 const app = express();
 
@@ -36,6 +38,8 @@ app.use(express.static("public"));
 
 app.use("/auth", authRouter);
 app.use("/workspaces", workspaceRouter);
+app.use("/uploads", uploadRouter);
+app.use("/artifacts", artifactRouter);
 
 app.get("/health", async (_req, res) => {
   try {
