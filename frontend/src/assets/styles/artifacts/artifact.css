@@ -304,19 +304,47 @@
 
     font-size: var(--type-artifact-size);
     font-weight: var(--weight-bold);
-    line-height: 1.32;
+    line-height: 1.35;
 
     overflow-wrap: anywhere;
+    word-break: break-word;
 
-    text-decoration-thickness: 1.5px;
-    text-underline-offset: 3px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-1);
+
+    border-bottom: 2px solid color-mix(
+        in srgb,
+        var(--border-strong) 36%,
+        transparent
+    );
+    padding-bottom: 2px;
 
     transition:
-        color var(--motion-lift);
+        color var(--motion-lift),
+        border-color var(--motion-lift);
+}
+
+.nook-artifact__link::after {
+    content: "↗";
+    font-size: 0.85em;
+    font-weight: var(--weight-semibold);
+    opacity: 0.7;
+    margin-left: 2px;
+    transition:
+        transform var(--motion-lift),
+        opacity var(--motion-lift);
 }
 
 .nook-artifact__link:hover {
     color: var(--text-heading);
+    border-color: var(--border-strong);
+}
+
+.nook-artifact__link:hover::after {
+    opacity: 1;
+    transform: translate(2px, -2px);
 }
 
 /* ---------------------------------------------------------------
@@ -524,42 +552,157 @@
     color: var(--text-muted);
 }
 
+/* ---------------------------------------------------------------
+   Polaroid artifacts
+   --------------------------------------------------------------- */
+
+.nook-artifact--polaroid {
+    width: var(--artifact-min-width);
+}
+
+.nook-artifact--polaroid .nook-artifact__content {
+    gap: var(--space-2);
+}
+
+.nook-polaroid {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: auto 0 0;
+}
+
+.nook-polaroid__image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: var(--radius-surface);
+    overflow: hidden;
+    background: color-mix(
+        in srgb,
+        var(--border-strong) 8%,
+        transparent
+    );
+    border: 1px solid color-mix(
+        in srgb,
+        var(--border-strong) 14%,
+        transparent
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.nook-polaroid__image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    border-radius: inherit;
+    transition: transform var(--motion-lift);
+}
+
+.nook-artifact:hover .nook-polaroid__image img {
+    transform: scale(1.025);
+}
+
+.nook-polaroid__loading {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 2px solid color-mix(
+        in srgb,
+        var(--border-strong) 20%,
+        transparent
+    );
+    border-top-color: var(--border-strong);
+    border-radius: 50%;
+    animation: nook-spin 0.8s linear infinite;
+}
+
+.nook-polaroid__error {
+    font-size: var(--type-hint-size);
+    color: color-mix(
+        in srgb,
+        var(--text-primary) 70%,
+        transparent
+    );
+    font-weight: var(--weight-medium);
+    padding: var(--space-3);
+    text-align: center;
+}
+
+@keyframes nook-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ---------------------------------------------------------------
+   Polaroid draft
+   --------------------------------------------------------------- */
+
 .nook-polaroid-draft {
     position: absolute;
-    z-index: 20;
+    z-index: var(--z-selection);
     width: 280px;
     padding: var(--space-4);
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius-card);
-    background: var(--surface-primary);
-    box-shadow: var(--shadow-floating);
+    border: 1px solid color-mix(
+        in srgb,
+        var(--border-strong) 35%,
+        transparent
+    );
+    border-radius: var(--radius-artifact-organic);
+    background: var(--color-surface);
+    box-shadow: var(--elevation-overlay);
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
+    transform: rotate(-1deg);
+    animation: nook-draft-enter 180ms ease-out;
 }
 
 .nook-polaroid-draft__title {
     margin: 0;
-    color: var(--text-primary);
-    font-weight: var(--weight-semibold);
+    color: var(--text-heading);
+    font-size: var(--type-overline-size);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-overline);
 }
 
-.nook-polaroid-draft input {
+.nook-polaroid-draft input[type="file"] {
     width: 100%;
     box-sizing: border-box;
-    padding: var(--space-3);
-    border: 1px solid var(--border-strong);
+    padding: var(--space-2);
+    border: 1px dashed color-mix(
+        in srgb,
+        var(--border-strong) 35%,
+        transparent
+    );
     border-radius: var(--radius-control);
-    background: var(--surface-secondary);
+    background: var(--color-artifact);
     color: var(--text-primary);
     font: inherit;
+    font-size: var(--type-hint-size);
+    cursor: pointer;
 }
 
 .nook-polaroid-draft__preview {
     width: 100%;
     aspect-ratio: 1;
     overflow: hidden;
-    background: var(--surface-secondary);
+    border-radius: var(--radius-surface);
+    border: 1px solid color-mix(
+        in srgb,
+        var(--border-strong) 14%,
+        transparent
+    );
+    background: color-mix(
+        in srgb,
+        var(--border-strong) 8%,
+        transparent
+    );
 }
 
 .nook-polaroid-draft__preview img {
@@ -571,16 +714,41 @@
 
 .nook-polaroid-draft__actions {
     display: flex;
+    align-items: center;
     gap: var(--space-2);
+    margin-top: var(--space-1);
 }
 
 .nook-polaroid-draft__actions button {
-    padding: var(--space-2) var(--space-3);
+    cursor: pointer;
     border: 1px solid var(--border-strong);
-    border-radius: var(--radius-control);
+    border-radius: 999px;
+    padding: 7px 14px;
+    background: var(--color-artifact);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: var(--type-hint-size);
+    font-weight: var(--weight-semibold);
+    transition:
+        transform var(--motion-lift),
+        background-color var(--motion-lift);
+}
+
+.nook-polaroid-draft__actions button:hover:not(:disabled) {
+    background: var(--artifact-2);
+    transform: translateY(-1px) rotate(-1deg);
+}
+
+.nook-polaroid-draft__actions button:last-child {
+    border: 0;
+    background: transparent;
+    color: var(--text-muted);
+}
+
+.nook-polaroid-draft__actions button:last-child:hover:not(:disabled) {
     background: transparent;
     color: var(--text-primary);
-    cursor: pointer;
+    transform: translateY(-1px);
 }
 
 .nook-polaroid-draft__actions button:disabled {

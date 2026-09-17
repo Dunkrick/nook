@@ -44,6 +44,7 @@ export default function ArtifactView({
         <div
             className={cn(
                 "nook-artifact",
+                `nook-artifact--${artifact.type.toLowerCase()}`,
                 isSelected && "nook-artifact--selected",
                 drag.isDragging && "nook-artifact--dragging",
                 editing.isEditing && "nook-artifact--editing",
