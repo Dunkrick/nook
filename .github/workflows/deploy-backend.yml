@@ -95,7 +95,7 @@ jobs:
           gcloud run deploy nook-backend \
             --image ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/nook-backend/backend:${{ github.sha }} \
             --region ${{ secrets.GCP_REGION }} \
-            --set-env-vars="GCS_BUCKET_NAME=nook-media-438271" \
+            --update-env-vars="GCS_BUCKET_NAME=nook-media-438271" \
             --platform managed \
             --service-account 902490290476-compute@developer.gserviceaccount.com \
             --allow-unauthenticated
