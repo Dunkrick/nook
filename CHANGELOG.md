@@ -10,76 +10,117 @@ The project follows Semantic Versioning.
 
 ### Added
 
-#### Polaroid Artifacts & Media Storage
+#### Polaroid artifacts and private media
 
-- Support for Polaroid photo artifacts on the spatial canvas.
-- Direct-to-storage uploads via short-lived signed URLs (`POST /uploads/sign`).
-- Private Google Cloud Storage bucket integration with per-user storage isolation (`uploads/users/{userId}/...`).
-- Authenticated signed URL endpoint (`GET /artifacts/:id/image`) for secure image retrieval without proxying binary data through Cloud Run.
-- Dedicated Polaroid creation draft UI and interactive canvas placement.
+- Added `POLAROID` artifacts backed by an `imageKey` stored in artifact JSON.
+- Added authenticated `POST /uploads` multipart upload flow.
+- Added image validation for JPEG, PNG, and WebP files.
+- Added a 10 MB image upload limit.
+- Added private Google Cloud Storage integration.
+- Added per-user object keys under `uploads/users/{userId}/...`.
+- Added short-lived signed read URLs for private Polaroid images.
+- Added authenticated `GET /artifacts/:id/image`.
+- Added Polaroid rendering that fetches the signed URL through the authenticated API before rendering the image.
 
-#### Authentication
+#### Authentication and workspaces
 
-- User registration and login flows.
-- JWT-based authenticated sessions.
-- Protected frontend routes.
-- Private user workspaces.
-- Password visibility control integrated directly into the password input.
+- Added user registration and login flows.
+- Added JWT-based authentication.
+- Added protected workspace and artifact operations.
+- Added workspace ownership checks.
+- Added artifact ownership checks.
+- Added workspace-scoped artifact CRUD operations.
 
-#### Workspace
+#### Artifact model
 
-- Artifact-based workspace model.
-- Support for text, link, and polaroid photo artifacts.
-- Workspace-level editing coordination.
-- Explicit editing ownership through `editingArtifactId`.
-- Editing state propagation from artifacts through the workspace.
-- Prevention of conflicting drag and edit interactions.
+- Replaced the older card-oriented domain terminology with `Artifact`.
+- Added artifact types:
+  - `TEXT`
+  - `LINK`
+  - `POLAROID`
+- Added flexible JSON content for type-specific artifact data.
+- Kept spatial coordinates (`x`, `y`) and `zIndex` as first-class persisted fields.
 
-#### Interaction
+#### Storage architecture
 
-- Improved artifact interaction composition.
-- Dedicated artifact interaction orchestration hook.
-- Editing and dragging composed from focused interaction hooks.
-- Multi-selection interaction support.
-- Selection toolbar integration.
+- Added the `ObjectStorage` interface.
+- Added Google Cloud Storage as the current storage implementation.
+- Separated binary media storage from PostgreSQL artifact records.
 
-#### Architecture
+#### Testing and deployment
 
-- Clear separation between:
-  - artifact presentation
-  - artifact interaction orchestration
-  - editing behavior
-  - dragging behavior
-- Workspace-level coordination for mutually exclusive editing interactions.
-- Pluggable Object Storage interface (`ObjectStorage`) backed by `GoogleCloudStorage`.
-
----
-
-### Fixed
-
-#### CORS & Image Delivery Architecture
-
-- **Resolved Cross-Origin Redirect CORS Failure (`ERR_FAILED 200 (OK)`)**:
-  - **Issue**: The backend `/artifacts/:id/image` endpoint previously issued an HTTP `302 Found` redirecting to signed Google Cloud Storage URLs. When the frontend fetched this endpoint with an `Authorization` header, the browser followed the cross-origin redirect (`run.app` → `storage.googleapis.com`) and applied WHATWG Fetch specification rules by stripping headers and taining the request with `Origin: null`. Because GCS does not match `Origin: null` against allowed origin lists, it withheld the `Access-Control-Allow-Origin` header, causing the browser to block the image response.
-  - **Resolution**: Updated `GET /artifacts/:id/image` to return a JSON payload `{ url: signedUrl }` with HTTP `200 OK`. The frontend requests the URL via authenticated JSON API call and renders `<img src={url} />` directly.
-  - **Benefits**: Completely bypasses cross-origin redirect CORS complications, eliminates client-side `Blob` memory retention and `URL.createObjectURL` leaks, and restores native browser HTTP caching and progressive image streaming.
+- Added backend unit tests with Vitest.
+- Added frontend component tests with Vitest.
+- Added backend type checking to CI.
+- Added backend production build verification to CI.
+- Added Docker image build verification to CI.
+- Added Cloud Run deployment through GitHub Actions.
+- Added `/health` deployment verification.
 
 ---
 
 ### Changed
 
-#### Frontend
+#### Image delivery
 
-- Evolved terminology from card-centric interactions toward artifact-centric interactions.
-- Refined interaction ownership between `Home`, `Wall`, and `Artifact`.
-- Improved password input UX with an inline visibility control.
-- Improved interaction consistency between editing and dragging.
+The Polaroid image endpoint no longer redirects the browser directly to a signed Google Cloud Storage URL.
 
-#### Documentation
+Previous flow:
 
-- Updated README to reflect the current workspace architecture.
-- Updated roadmap to reflect the current frontend and user phase.
-- Updated architecture documentation with artifact interaction ownership.
+```text
+Browser
+  ↓
+GET /artifacts/:id/image
+  ↓ 302
+Google Cloud Storage
+```
+
+Current flow:
+
+```text
+Browser
+  ↓ authenticated API request
+GET /artifacts/:id/image
+  ↓ 200 { url }
+Browser
+  ↓
+signed GCS URL
+  ↓
+private image
+```
+
+This keeps authorization at the Nook API boundary and avoids the browser behavior associated with an authenticated request following a cross-origin redirect.
+
+#### Upload architecture
+
+The media upload flow is now server-mediated:
+
+```text
+Browser
+  ↓ multipart/form-data
+POST /uploads
+  ↓
+Express + Multer
+  ↓
+ObjectStorage
+  ↓
+Google Cloud Storage
+```
+
+The previous documentation describing `POST /uploads/sign` and direct browser `PUT` uploads is obsolete.
+
+#### Domain terminology
+
+- Evolved from card-centric terminology toward artifact-centric terminology.
+- Workspace interactions now operate on artifacts.
+- Media references are represented by `imageKey` rather than public image URLs.
+
+#### Backend structure
+
+- Business logic is separated into services.
+- Routes focus on HTTP concerns.
+- Storage is accessed through an explicit abstraction.
+- Artifact records are mapped into domain objects before being returned by services.
 
 ---
 
@@ -91,19 +132,14 @@ The project follows Semantic Versioning.
 
 - Containerized backend using Docker.
 - Production deployment to Google Cloud Run.
-- Google Artifact Registry for Docker image management.
+- Google Artifact Registry for container images.
 - Health check endpoint for production verification.
-
-#### Development Experience
-
-- Repository restructured into independent `frontend/` and `backend/` applications.
-- Root workspace orchestrator for local development.
 - Cloud deployment documentation.
 
 #### Product
 
 - Spatial wall-first interaction model.
-- Draft cards created directly on the canvas.
+- Draft artifacts created directly on the canvas.
 - Optimistic drag persistence.
 - Multi-selection toolbar.
 - Insight panel foundation.
@@ -123,8 +159,8 @@ The project follows Semantic Versioning.
 - Refined wall-first interaction.
 - Improved drag responsiveness.
 - Improved optimistic UI updates.
-- Semantic design token system.
-- Initial workspace redesign.
+- Added semantic design tokens.
+- Continued workspace redesign.
 
 ---
 
@@ -149,11 +185,11 @@ The project follows Semantic Versioning.
 - TypeScript.
 - Prisma ORM.
 - PostgreSQL persistence.
-- JWT Authentication.
+- JWT authentication.
 - Validation middleware.
 - Global error handling.
 
-#### Design System
+#### Design system
 
 - Semantic design tokens.
 - Brand color system.
