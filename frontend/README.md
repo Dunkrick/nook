@@ -1,6 +1,6 @@
-# DreamWall Frontend
+# Nook Frontend
 
-This is the React frontend for DreamWall, built with Vite and TypeScript.
+This is the React frontend for Nook, built with Vite and TypeScript.
 
 ## Quick Start
 
@@ -11,9 +11,11 @@ npm run dev
 ```
 
 ## Styling
-The application relies on a structural design system using CSS tokens from `src/assets/dreamwall-tokens.css`. All styling adheres strictly to the brand guidelines (sentence-case logo, structured block elements with 2px charcoal borders, and 24px rounded corners).
+
+The application relies on a structural design system using design tokens from `src/assets/nook-tokens.json`. All styling adheres strictly to the brand guidelines (sentence-case logo, structured block elements with 2px charcoal borders, and 24px rounded corners).
 
 ## Architecture
+
 - `src/pages`: Page-level route components.
 - `src/components`: Reusable UI elements (e.g., `AuthForm`).
 - `src/services`: API handlers bridging the React UI and Express backend.
