@@ -15,10 +15,13 @@ GitHub
   ▼
 GitHub Actions
   │
-  ├── npm ci
-  ├── typecheck
-  ├── backend build
-  └── Docker build
+  ├── CI: npm ci
+  ├── CI: typecheck
+  ├── CI: backend tests
+  ├── CI: backend build
+  ├── CI: Docker build
+  │
+  └── Deploy: Docker image → Artifact Registry → Cloud Run
         │
         ▼
 Google Artifact Registry

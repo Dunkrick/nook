@@ -50,7 +50,7 @@ Instead of forcing ideas into folders, documents, or rigid workflows, Nook lets 
 - Pluggable `ObjectStorage` abstraction
 - Backend unit tests with Vitest
 - Frontend component tests with Vitest
-- Type checking and production builds in CI
+- Backend tests, type checking, and production builds in CI
 - Dockerized backend
 - Google Cloud Run deployment through GitHub Actions
 
@@ -86,7 +86,7 @@ PostgreSQL / Neon
 
 The browser never receives public access to the media bucket. A Polaroid image is stored as an `imageKey` in artifact JSON, and the authenticated API verifies ownership before issuing a short-lived signed read URL.
 
-See [`ARCHITECTURE.md`](./ARCHITECTURE.md) for request flows and layer responsibilities.
+See [`docs/architecture.md`](./docs/architecture.md) for request flows and layer responsibilities.
 
 ---
 
@@ -209,7 +209,6 @@ nook/
 │   ├── setup.md
 │   └── deployment.md
 │
-├── ARCHITECTURE.md
 ├── CHANGELOG.md
 ├── package.json
 └── README.md

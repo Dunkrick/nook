@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import { env } from "./config/env.js";
 
 import workspaceRouter from "./routes/workspaces.js";
 import authRouter from "./routes/auth.js";
@@ -11,8 +12,8 @@ import artifactRouter from "./routes/artifacts.js";
 const app = express();
 
 const allowedOrigins = [
+  env.FRONTEND_URL,
   "http://localhost:5173",
-  "https://nookmy.vercel.app",
 ];
 
 app.use(

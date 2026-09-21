@@ -13,6 +13,7 @@ export function toArtifact(
     return {
         id: record.id,
         userId: record.userId,
+        workspaceId: record.workspaceId,
         type: record.type,
         content: record.content as unknown as ArtifactContent,
         x: record.x,

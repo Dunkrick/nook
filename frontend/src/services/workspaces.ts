@@ -21,7 +21,7 @@ export async function createWorkspace(name: string): Promise<Workspace> {
     });
 }
 
-export async function getWorkspaceArtifacts(workspaceId: number) {
+export async function getWorkspaceArtifacts(workspaceId: number): Promise<Artifact[]> {
     return get(`/workspaces/${workspaceId}/artifacts`);
 }
 

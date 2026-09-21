@@ -51,6 +51,7 @@ The project follows Semantic Versioning.
 
 - Added backend unit tests with Vitest.
 - Added frontend component tests with Vitest.
+- Added backend test execution to CI.
 - Added backend type checking to CI.
 - Added backend production build verification to CI.
 - Added Docker image build verification to CI.
