@@ -235,7 +235,7 @@ export type ArtifactGroupByOutputType = {
   updatedAt: Date
   zIndex: number
   userId: number
-  workspaceId: number | null
+  workspaceId: number
   _count: ArtifactCountAggregateOutputType | null
   _avg: ArtifactAvgAggregateOutputType | null
   _sum: ArtifactSumAggregateOutputType | null
@@ -271,9 +271,9 @@ export type ArtifactWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Artifact"> | Date | string
   zIndex?: Prisma.IntFilter<"Artifact"> | number
   userId?: Prisma.IntFilter<"Artifact"> | number
-  workspaceId?: Prisma.IntNullableFilter<"Artifact"> | number | null
+  workspaceId?: Prisma.IntFilter<"Artifact"> | number
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  workspace?: Prisma.XOR<Prisma.WorkspaceNullableScalarRelationFilter, Prisma.WorkspaceWhereInput> | null
+  workspace?: Prisma.XOR<Prisma.WorkspaceScalarRelationFilter, Prisma.WorkspaceWhereInput>
 }
 
 export type ArtifactOrderByWithRelationInput = {
@@ -286,7 +286,7 @@ export type ArtifactOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   zIndex?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  workspaceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  workspaceId?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   workspace?: Prisma.WorkspaceOrderByWithRelationInput
 }
@@ -304,9 +304,9 @@ export type ArtifactWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Artifact"> | Date | string
   zIndex?: Prisma.IntFilter<"Artifact"> | number
   userId?: Prisma.IntFilter<"Artifact"> | number
-  workspaceId?: Prisma.IntNullableFilter<"Artifact"> | number | null
+  workspaceId?: Prisma.IntFilter<"Artifact"> | number
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  workspace?: Prisma.XOR<Prisma.WorkspaceNullableScalarRelationFilter, Prisma.WorkspaceWhereInput> | null
+  workspace?: Prisma.XOR<Prisma.WorkspaceScalarRelationFilter, Prisma.WorkspaceWhereInput>
 }, "id">
 
 export type ArtifactOrderByWithAggregationInput = {
@@ -319,7 +319,7 @@ export type ArtifactOrderByWithAggregationInput = {
   updatedAt?: Prisma.SortOrder
   zIndex?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  workspaceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  workspaceId?: Prisma.SortOrder
   _count?: Prisma.ArtifactCountOrderByAggregateInput
   _avg?: Prisma.ArtifactAvgOrderByAggregateInput
   _max?: Prisma.ArtifactMaxOrderByAggregateInput
@@ -340,7 +340,7 @@ export type ArtifactScalarWhereWithAggregatesInput = {
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Artifact"> | Date | string
   zIndex?: Prisma.IntWithAggregatesFilter<"Artifact"> | number
   userId?: Prisma.IntWithAggregatesFilter<"Artifact"> | number
-  workspaceId?: Prisma.IntNullableWithAggregatesFilter<"Artifact"> | number | null
+  workspaceId?: Prisma.IntWithAggregatesFilter<"Artifact"> | number
 }
 
 export type ArtifactCreateInput = {
@@ -352,7 +352,7 @@ export type ArtifactCreateInput = {
   updatedAt?: Date | string
   zIndex?: number
   user: Prisma.UserCreateNestedOneWithoutArtifactsInput
-  workspace?: Prisma.WorkspaceCreateNestedOneWithoutArtifactsInput
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutArtifactsInput
 }
 
 export type ArtifactUncheckedCreateInput = {
@@ -365,7 +365,7 @@ export type ArtifactUncheckedCreateInput = {
   updatedAt?: Date | string
   zIndex?: number
   userId: number
-  workspaceId?: number | null
+  workspaceId: number
 }
 
 export type ArtifactUpdateInput = {
@@ -377,7 +377,7 @@ export type ArtifactUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   zIndex?: Prisma.IntFieldUpdateOperationsInput | number
   user?: Prisma.UserUpdateOneRequiredWithoutArtifactsNestedInput
-  workspace?: Prisma.WorkspaceUpdateOneWithoutArtifactsNestedInput
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutArtifactsNestedInput
 }
 
 export type ArtifactUncheckedUpdateInput = {
@@ -390,7 +390,7 @@ export type ArtifactUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   zIndex?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
-  workspaceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  workspaceId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ArtifactCreateManyInput = {
@@ -403,7 +403,7 @@ export type ArtifactCreateManyInput = {
   updatedAt?: Date | string
   zIndex?: number
   userId: number
-  workspaceId?: number | null
+  workspaceId: number
 }
 
 export type ArtifactUpdateManyMutationInput = {
@@ -426,7 +426,7 @@ export type ArtifactUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   zIndex?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
-  workspaceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  workspaceId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ArtifactListRelationFilter = {
@@ -590,14 +590,6 @@ export type FloatFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type ArtifactCreateWithoutUserInput = {
   type: $Enums.ArtifactType
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -606,7 +598,7 @@ export type ArtifactCreateWithoutUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   zIndex?: number
-  workspace?: Prisma.WorkspaceCreateNestedOneWithoutArtifactsInput
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutArtifactsInput
 }
 
 export type ArtifactUncheckedCreateWithoutUserInput = {
@@ -618,7 +610,7 @@ export type ArtifactUncheckedCreateWithoutUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   zIndex?: number
-  workspaceId?: number | null
+  workspaceId: number
 }
 
 export type ArtifactCreateOrConnectWithoutUserInput = {
@@ -660,7 +652,7 @@ export type ArtifactScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Artifact"> | Date | string
   zIndex?: Prisma.IntFilter<"Artifact"> | number
   userId?: Prisma.IntFilter<"Artifact"> | number
-  workspaceId?: Prisma.IntNullableFilter<"Artifact"> | number | null
+  workspaceId?: Prisma.IntFilter<"Artifact"> | number
 }
 
 export type ArtifactCreateWithoutWorkspaceInput = {
@@ -721,7 +713,7 @@ export type ArtifactCreateManyUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   zIndex?: number
-  workspaceId?: number | null
+  workspaceId: number
 }
 
 export type ArtifactUpdateWithoutUserInput = {
@@ -732,7 +724,7 @@ export type ArtifactUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   zIndex?: Prisma.IntFieldUpdateOperationsInput | number
-  workspace?: Prisma.WorkspaceUpdateOneWithoutArtifactsNestedInput
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutArtifactsNestedInput
 }
 
 export type ArtifactUncheckedUpdateWithoutUserInput = {
@@ -744,7 +736,7 @@ export type ArtifactUncheckedUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   zIndex?: Prisma.IntFieldUpdateOperationsInput | number
-  workspaceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  workspaceId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ArtifactUncheckedUpdateManyWithoutUserInput = {
@@ -756,7 +748,7 @@ export type ArtifactUncheckedUpdateManyWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   zIndex?: Prisma.IntFieldUpdateOperationsInput | number
-  workspaceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  workspaceId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ArtifactCreateManyWorkspaceInput = {
@@ -820,7 +812,7 @@ export type ArtifactSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   userId?: boolean
   workspaceId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  workspace?: boolean | Prisma.Artifact$workspaceArgs<ExtArgs>
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["artifact"]>
 
 export type ArtifactSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -835,7 +827,7 @@ export type ArtifactSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   userId?: boolean
   workspaceId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  workspace?: boolean | Prisma.Artifact$workspaceArgs<ExtArgs>
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["artifact"]>
 
 export type ArtifactSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -850,7 +842,7 @@ export type ArtifactSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   userId?: boolean
   workspaceId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  workspace?: boolean | Prisma.Artifact$workspaceArgs<ExtArgs>
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["artifact"]>
 
 export type ArtifactSelectScalar = {
@@ -869,22 +861,22 @@ export type ArtifactSelectScalar = {
 export type ArtifactOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "content" | "x" | "y" | "createdAt" | "updatedAt" | "zIndex" | "userId" | "workspaceId", ExtArgs["result"]["artifact"]>
 export type ArtifactInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  workspace?: boolean | Prisma.Artifact$workspaceArgs<ExtArgs>
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
 }
 export type ArtifactIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  workspace?: boolean | Prisma.Artifact$workspaceArgs<ExtArgs>
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
 }
 export type ArtifactIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  workspace?: boolean | Prisma.Artifact$workspaceArgs<ExtArgs>
+  workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
 }
 
 export type $ArtifactPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Artifact"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
-    workspace: Prisma.$WorkspacePayload<ExtArgs> | null
+    workspace: Prisma.$WorkspacePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -896,7 +888,7 @@ export type $ArtifactPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     updatedAt: Date
     zIndex: number
     userId: number
-    workspaceId: number | null
+    workspaceId: number
   }, ExtArgs["result"]["artifact"]>
   composites: {}
 }
@@ -1292,7 +1284,7 @@ readonly fields: ArtifactFieldRefs;
 export interface Prisma__ArtifactClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  workspace<T extends Prisma.Artifact$workspaceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Artifact$workspaceArgs<ExtArgs>>): Prisma.Prisma__WorkspaceClient<runtime.Types.Result.GetResult<Prisma.$WorkspacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  workspace<T extends Prisma.WorkspaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorkspaceDefaultArgs<ExtArgs>>): Prisma.Prisma__WorkspaceClient<runtime.Types.Result.GetResult<Prisma.$WorkspacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1730,25 +1722,6 @@ export type ArtifactDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many Artifacts to delete.
    */
   limit?: number
-}
-
-/**
- * Artifact.workspace
- */
-export type Artifact$workspaceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Workspace
-   */
-  select?: Prisma.WorkspaceSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Workspace
-   */
-  omit?: Prisma.WorkspaceOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.WorkspaceInclude<ExtArgs> | null
-  where?: Prisma.WorkspaceWhereInput
 }
 
 /**

@@ -23,7 +23,7 @@ export type ArtifactType =
 export interface Artifact {
     id: number;
     userId: number;
-    workspaceId: number | null;
+    workspaceId: number;
     type: ArtifactType;
     content: ArtifactContent;
     x: number;

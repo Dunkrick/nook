@@ -393,9 +393,9 @@ export type WorkspaceSumOrderByAggregateInput = {
   ownerId?: Prisma.SortOrder
 }
 
-export type WorkspaceNullableScalarRelationFilter = {
-  is?: Prisma.WorkspaceWhereInput | null
-  isNot?: Prisma.WorkspaceWhereInput | null
+export type WorkspaceScalarRelationFilter = {
+  is?: Prisma.WorkspaceWhereInput
+  isNot?: Prisma.WorkspaceWhereInput
 }
 
 export type WorkspaceCreateNestedManyWithoutOwnerInput = {
@@ -450,12 +450,10 @@ export type WorkspaceCreateNestedOneWithoutArtifactsInput = {
   connect?: Prisma.WorkspaceWhereUniqueInput
 }
 
-export type WorkspaceUpdateOneWithoutArtifactsNestedInput = {
+export type WorkspaceUpdateOneRequiredWithoutArtifactsNestedInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutArtifactsInput, Prisma.WorkspaceUncheckedCreateWithoutArtifactsInput>
   connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutArtifactsInput
   upsert?: Prisma.WorkspaceUpsertWithoutArtifactsInput
-  disconnect?: Prisma.WorkspaceWhereInput | boolean
-  delete?: Prisma.WorkspaceWhereInput | boolean
   connect?: Prisma.WorkspaceWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.WorkspaceUpdateToOneWithWhereWithoutArtifactsInput, Prisma.WorkspaceUpdateWithoutArtifactsInput>, Prisma.WorkspaceUncheckedUpdateWithoutArtifactsInput>
 }
