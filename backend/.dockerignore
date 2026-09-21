@@ -13,7 +13,6 @@ coverage
 *.log
 
 README.md
-ARCHITECTURE.md
 CHANGELOG.md
 
 Dockerfile
