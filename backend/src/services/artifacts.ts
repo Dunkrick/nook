@@ -7,6 +7,17 @@ import {
 import { Prisma, ArtifactType } from "../generated/prisma/client.js";
 import { ValidationError } from "../lib/error.js";
 
+function assertOwnedImageKey(imageKey: string, userId: number) {
+    const prefix = `uploads/users/${userId}/`;
+
+    if (!imageKey.startsWith(prefix)) {
+        throw new ValidationError(
+            "Image does not belong to the user.",
+            403
+        );
+    }
+}
+
 export async function createArtifact(
     input: CreateArtifactInput
 ) {
@@ -22,6 +33,10 @@ export async function createArtifact(
             "Workspace not found.",
             404
         );
+    }
+
+    if (input.type === "POLAROID") {
+        assertOwnedImageKey(input.imageKey, input.userId);
     }
 
     const content =
