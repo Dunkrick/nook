@@ -16,4 +16,5 @@ export const env = {
   JWT_SECRET: requiredEnv("JWT_SECRET"),
   FRONTEND_URL: requiredEnv("FRONTEND_URL"),
   GCS_BUCKET_NAME: requiredEnv("GCS_BUCKET_NAME"),
+  GITHUB_WEBHOOK_SECRET: requiredEnv("GITHUB_WEBHOOK_SECRET"),
 };
