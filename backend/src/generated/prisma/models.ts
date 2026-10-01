@@ -11,4 +11,5 @@
 export type * from './models/User.js'
 export type * from './models/Workspace.js'
 export type * from './models/Artifact.js'
+export type * from './models/WebhookDelivery.js'
 export type * from './commonInputTypes.js'

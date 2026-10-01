@@ -32,3 +32,8 @@ export type Workspace = Prisma.WorkspaceModel
  * 
  */
 export type Artifact = Prisma.ArtifactModel
+/**
+ * Model WebhookDelivery
+ * 
+ */
+export type WebhookDelivery = Prisma.WebhookDeliveryModel
