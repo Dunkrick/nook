@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import { env } from "./config/env.js";
-
 import workspaceRouter from "./routes/workspaces.js";
 import authRouter from "./routes/auth.js";
 import { errorHandler } from "./lib/error.js";
