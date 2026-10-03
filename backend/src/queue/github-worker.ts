@@ -8,6 +8,30 @@ import {
 } from "./github-events.js";
 import prisma from "../prisma.js";
 
+type GithubIssuePayload = {
+  action: string;
+  issue: {
+    number: number;
+    title: string;
+    body: string | null;
+    state: string;
+    html_url: string;
+  };
+  repository: {
+    owner: {
+      login: string;
+    };
+    name: string;
+  };
+};
+
+type GithubEvent = {
+  event: string;
+  deliveryId: string;
+  payload: GithubIssuePayload;
+  retryCount?: number;
+};
+
 async function startWorker() {
   const channel = await getRabbitChannel();
 
@@ -18,11 +42,9 @@ async function startWorker() {
     return;
   }
 
-  const event: {
-    event: string;
-    deliveryId: string;
-    retryCount?: number;
-  } = JSON.parse(message.content.toString());
+  const event: GithubEvent = JSON.parse(
+  message.content.toString(),
+);
 
   try {
     const retryCount = event.retryCount ?? 0;
