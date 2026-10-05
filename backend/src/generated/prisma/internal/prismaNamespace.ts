@@ -400,6 +400,7 @@ export const ModelName = {
   User: 'User',
   Workspace: 'Workspace',
   Artifact: 'Artifact',
+  GithubRepository: 'GithubRepository',
   WebhookDelivery: 'WebhookDelivery'
 } as const
 
@@ -416,7 +417,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "workspace" | "artifact" | "webhookDelivery"
+    modelProps: "user" | "workspace" | "artifact" | "githubRepository" | "webhookDelivery"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -642,6 +643,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    GithubRepository: {
+      payload: Prisma.$GithubRepositoryPayload<ExtArgs>
+      fields: Prisma.GithubRepositoryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GithubRepositoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GithubRepositoryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GithubRepositoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GithubRepositoryPayload>
+        }
+        findFirst: {
+          args: Prisma.GithubRepositoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GithubRepositoryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GithubRepositoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GithubRepositoryPayload>
+        }
+        findMany: {
+          args: Prisma.GithubRepositoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GithubRepositoryPayload>[]
+        }
+        create: {
+          args: Prisma.GithubRepositoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GithubRepositoryPayload>
+        }
+        createMany: {
+          args: Prisma.GithubRepositoryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GithubRepositoryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GithubRepositoryPayload>[]
+        }
+        delete: {
+          args: Prisma.GithubRepositoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GithubRepositoryPayload>
+        }
+        update: {
+          args: Prisma.GithubRepositoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GithubRepositoryPayload>
+        }
+        deleteMany: {
+          args: Prisma.GithubRepositoryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GithubRepositoryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GithubRepositoryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GithubRepositoryPayload>[]
+        }
+        upsert: {
+          args: Prisma.GithubRepositoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GithubRepositoryPayload>
+        }
+        aggregate: {
+          args: Prisma.GithubRepositoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGithubRepository>
+        }
+        groupBy: {
+          args: Prisma.GithubRepositoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GithubRepositoryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GithubRepositoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GithubRepositoryCountAggregateOutputType> | number
+        }
+      }
+    }
     WebhookDelivery: {
       payload: Prisma.$WebhookDeliveryPayload<ExtArgs>
       fields: Prisma.WebhookDeliveryFieldRefs
@@ -788,10 +863,24 @@ export const ArtifactScalarFieldEnum = {
   updatedAt: 'updatedAt',
   zIndex: 'zIndex',
   userId: 'userId',
-  workspaceId: 'workspaceId'
+  workspaceId: 'workspaceId',
+  source: 'source',
+  externalId: 'externalId'
 } as const
 
 export type ArtifactScalarFieldEnum = (typeof ArtifactScalarFieldEnum)[keyof typeof ArtifactScalarFieldEnum]
+
+
+export const GithubRepositoryScalarFieldEnum = {
+  id: 'id',
+  owner: 'owner',
+  name: 'name',
+  workspaceId: 'workspaceId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type GithubRepositoryScalarFieldEnum = (typeof GithubRepositoryScalarFieldEnum)[keyof typeof GithubRepositoryScalarFieldEnum]
 
 
 export const WebhookDeliveryScalarFieldEnum = {
@@ -1089,6 +1178,7 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   workspace?: Prisma.WorkspaceOmit
   artifact?: Prisma.ArtifactOmit
+  githubRepository?: Prisma.GithubRepositoryOmit
   webhookDelivery?: Prisma.WebhookDeliveryOmit
 }
 

@@ -218,6 +218,7 @@ export type UserWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   workspaces?: Prisma.WorkspaceListRelationFilter
   artifacts?: Prisma.ArtifactListRelationFilter
+  githubRepositories?: Prisma.GithubRepositoryListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -228,6 +229,7 @@ export type UserOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   workspaces?: Prisma.WorkspaceOrderByRelationAggregateInput
   artifacts?: Prisma.ArtifactOrderByRelationAggregateInput
+  githubRepositories?: Prisma.GithubRepositoryOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -241,6 +243,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   workspaces?: Prisma.WorkspaceListRelationFilter
   artifacts?: Prisma.ArtifactListRelationFilter
+  githubRepositories?: Prisma.GithubRepositoryListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -274,6 +277,7 @@ export type UserCreateInput = {
   createdAt?: Date | string
   workspaces?: Prisma.WorkspaceCreateNestedManyWithoutOwnerInput
   artifacts?: Prisma.ArtifactCreateNestedManyWithoutUserInput
+  githubRepositories?: Prisma.GithubRepositoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -284,6 +288,7 @@ export type UserUncheckedCreateInput = {
   createdAt?: Date | string
   workspaces?: Prisma.WorkspaceUncheckedCreateNestedManyWithoutOwnerInput
   artifacts?: Prisma.ArtifactUncheckedCreateNestedManyWithoutUserInput
+  githubRepositories?: Prisma.GithubRepositoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -293,6 +298,7 @@ export type UserUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workspaces?: Prisma.WorkspaceUpdateManyWithoutOwnerNestedInput
   artifacts?: Prisma.ArtifactUpdateManyWithoutUserNestedInput
+  githubRepositories?: Prisma.GithubRepositoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -303,6 +309,7 @@ export type UserUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workspaces?: Prisma.WorkspaceUncheckedUpdateManyWithoutOwnerNestedInput
   artifacts?: Prisma.ArtifactUncheckedUpdateManyWithoutUserNestedInput
+  githubRepositories?: Prisma.GithubRepositoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -409,12 +416,27 @@ export type UserUpdateOneRequiredWithoutArtifactsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutArtifactsInput, Prisma.UserUpdateWithoutArtifactsInput>, Prisma.UserUncheckedUpdateWithoutArtifactsInput>
 }
 
+export type UserCreateNestedOneWithoutGithubRepositoriesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutGithubRepositoriesInput, Prisma.UserUncheckedCreateWithoutGithubRepositoriesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGithubRepositoriesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutGithubRepositoriesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutGithubRepositoriesInput, Prisma.UserUncheckedCreateWithoutGithubRepositoriesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGithubRepositoriesInput
+  upsert?: Prisma.UserUpsertWithoutGithubRepositoriesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutGithubRepositoriesInput, Prisma.UserUpdateWithoutGithubRepositoriesInput>, Prisma.UserUncheckedUpdateWithoutGithubRepositoriesInput>
+}
+
 export type UserCreateWithoutWorkspacesInput = {
   name?: string
   email: string
   passwordHash: string
   createdAt?: Date | string
   artifacts?: Prisma.ArtifactCreateNestedManyWithoutUserInput
+  githubRepositories?: Prisma.GithubRepositoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutWorkspacesInput = {
@@ -424,6 +446,7 @@ export type UserUncheckedCreateWithoutWorkspacesInput = {
   passwordHash: string
   createdAt?: Date | string
   artifacts?: Prisma.ArtifactUncheckedCreateNestedManyWithoutUserInput
+  githubRepositories?: Prisma.GithubRepositoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutWorkspacesInput = {
@@ -448,6 +471,7 @@ export type UserUpdateWithoutWorkspacesInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   artifacts?: Prisma.ArtifactUpdateManyWithoutUserNestedInput
+  githubRepositories?: Prisma.GithubRepositoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutWorkspacesInput = {
@@ -457,6 +481,7 @@ export type UserUncheckedUpdateWithoutWorkspacesInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   artifacts?: Prisma.ArtifactUncheckedUpdateManyWithoutUserNestedInput
+  githubRepositories?: Prisma.GithubRepositoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutArtifactsInput = {
@@ -465,6 +490,7 @@ export type UserCreateWithoutArtifactsInput = {
   passwordHash: string
   createdAt?: Date | string
   workspaces?: Prisma.WorkspaceCreateNestedManyWithoutOwnerInput
+  githubRepositories?: Prisma.GithubRepositoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutArtifactsInput = {
@@ -474,6 +500,7 @@ export type UserUncheckedCreateWithoutArtifactsInput = {
   passwordHash: string
   createdAt?: Date | string
   workspaces?: Prisma.WorkspaceUncheckedCreateNestedManyWithoutOwnerInput
+  githubRepositories?: Prisma.GithubRepositoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutArtifactsInput = {
@@ -498,6 +525,7 @@ export type UserUpdateWithoutArtifactsInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workspaces?: Prisma.WorkspaceUpdateManyWithoutOwnerNestedInput
+  githubRepositories?: Prisma.GithubRepositoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutArtifactsInput = {
@@ -507,6 +535,61 @@ export type UserUncheckedUpdateWithoutArtifactsInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workspaces?: Prisma.WorkspaceUncheckedUpdateManyWithoutOwnerNestedInput
+  githubRepositories?: Prisma.GithubRepositoryUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutGithubRepositoriesInput = {
+  name?: string
+  email: string
+  passwordHash: string
+  createdAt?: Date | string
+  workspaces?: Prisma.WorkspaceCreateNestedManyWithoutOwnerInput
+  artifacts?: Prisma.ArtifactCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutGithubRepositoriesInput = {
+  id?: number
+  name?: string
+  email: string
+  passwordHash: string
+  createdAt?: Date | string
+  workspaces?: Prisma.WorkspaceUncheckedCreateNestedManyWithoutOwnerInput
+  artifacts?: Prisma.ArtifactUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutGithubRepositoriesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutGithubRepositoriesInput, Prisma.UserUncheckedCreateWithoutGithubRepositoriesInput>
+}
+
+export type UserUpsertWithoutGithubRepositoriesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutGithubRepositoriesInput, Prisma.UserUncheckedUpdateWithoutGithubRepositoriesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutGithubRepositoriesInput, Prisma.UserUncheckedCreateWithoutGithubRepositoriesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutGithubRepositoriesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutGithubRepositoriesInput, Prisma.UserUncheckedUpdateWithoutGithubRepositoriesInput>
+}
+
+export type UserUpdateWithoutGithubRepositoriesInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  workspaces?: Prisma.WorkspaceUpdateManyWithoutOwnerNestedInput
+  artifacts?: Prisma.ArtifactUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutGithubRepositoriesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  workspaces?: Prisma.WorkspaceUncheckedUpdateManyWithoutOwnerNestedInput
+  artifacts?: Prisma.ArtifactUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -517,11 +600,13 @@ export type UserUncheckedUpdateWithoutArtifactsInput = {
 export type UserCountOutputType = {
   workspaces: number
   artifacts: number
+  githubRepositories: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   workspaces?: boolean | UserCountOutputTypeCountWorkspacesArgs
   artifacts?: boolean | UserCountOutputTypeCountArtifactsArgs
+  githubRepositories?: boolean | UserCountOutputTypeCountGithubRepositoriesArgs
 }
 
 /**
@@ -548,6 +633,13 @@ export type UserCountOutputTypeCountArtifactsArgs<ExtArgs extends runtime.Types.
   where?: Prisma.ArtifactWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountGithubRepositoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GithubRepositoryWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -557,6 +649,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   workspaces?: boolean | Prisma.User$workspacesArgs<ExtArgs>
   artifacts?: boolean | Prisma.User$artifactsArgs<ExtArgs>
+  githubRepositories?: boolean | Prisma.User$githubRepositoriesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -588,6 +681,7 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   workspaces?: boolean | Prisma.User$workspacesArgs<ExtArgs>
   artifacts?: boolean | Prisma.User$artifactsArgs<ExtArgs>
+  githubRepositories?: boolean | Prisma.User$githubRepositoriesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -598,6 +692,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     workspaces: Prisma.$WorkspacePayload<ExtArgs>[]
     artifacts: Prisma.$ArtifactPayload<ExtArgs>[]
+    githubRepositories: Prisma.$GithubRepositoryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1001,6 +1096,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   workspaces<T extends Prisma.User$workspacesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$workspacesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkspacePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   artifacts<T extends Prisma.User$artifactsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$artifactsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ArtifactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  githubRepositories<T extends Prisma.User$githubRepositoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$githubRepositoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GithubRepositoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1473,6 +1569,30 @@ export type User$artifactsArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.ArtifactScalarFieldEnum | Prisma.ArtifactScalarFieldEnum[]
+}
+
+/**
+ * User.githubRepositories
+ */
+export type User$githubRepositoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GithubRepository
+   */
+  select?: Prisma.GithubRepositorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GithubRepository
+   */
+  omit?: Prisma.GithubRepositoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GithubRepositoryInclude<ExtArgs> | null
+  where?: Prisma.GithubRepositoryWhereInput
+  orderBy?: Prisma.GithubRepositoryOrderByWithRelationInput | Prisma.GithubRepositoryOrderByWithRelationInput[]
+  cursor?: Prisma.GithubRepositoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GithubRepositoryScalarFieldEnum | Prisma.GithubRepositoryScalarFieldEnum[]
 }
 
 /**

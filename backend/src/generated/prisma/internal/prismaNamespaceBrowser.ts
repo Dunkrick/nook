@@ -54,6 +54,7 @@ export const ModelName = {
   User: 'User',
   Workspace: 'Workspace',
   Artifact: 'Artifact',
+  GithubRepository: 'GithubRepository',
   WebhookDelivery: 'WebhookDelivery'
 } as const
 
@@ -106,10 +107,24 @@ export const ArtifactScalarFieldEnum = {
   updatedAt: 'updatedAt',
   zIndex: 'zIndex',
   userId: 'userId',
-  workspaceId: 'workspaceId'
+  workspaceId: 'workspaceId',
+  source: 'source',
+  externalId: 'externalId'
 } as const
 
 export type ArtifactScalarFieldEnum = (typeof ArtifactScalarFieldEnum)[keyof typeof ArtifactScalarFieldEnum]
+
+
+export const GithubRepositoryScalarFieldEnum = {
+  id: 'id',
+  owner: 'owner',
+  name: 'name',
+  workspaceId: 'workspaceId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type GithubRepositoryScalarFieldEnum = (typeof GithubRepositoryScalarFieldEnum)[keyof typeof GithubRepositoryScalarFieldEnum]
 
 
 export const WebhookDeliveryScalarFieldEnum = {
