@@ -7,6 +7,7 @@ import {
   GITHUB_RETRY_QUEUE_3,
 } from "./github-events.js";
 import prisma from "../prisma.js";
+import { syncGithubIssue } from "../services/github-sync.js";
 
 type GithubIssuePayload = {
   action: string;
@@ -55,30 +56,52 @@ async function startWorker() {
       retryCount,
     });
 
-    const existing = await prisma.webhookDelivery.findUnique({
+    const result = await prisma.$transaction(async (tx) => {
+    const existing = await tx.webhookDelivery.findUnique({
       where: {
         deliveryId: event.deliveryId,
       },
     });
 
     if (existing) {
+      return {
+            duplicate: true,
+            artifact: null,
+          };
+    }
+
+      let artifact = null;
+
+      if (event.event === "issues") {
+        artifact = await syncGithubIssue(event.payload, tx);
+      }
+
+      await tx.webhookDelivery.create({
+        data: {
+            deliveryId: event.deliveryId,
+            event: event.event,
+          status: "PROCESSED",
+          processedAt: new Date(),
+        },
+      });
+
+        return {
+          duplicate: false,
+          artifact,
+        };
+    });
+
+    if (result.duplicate) {
       console.log(
         "Duplicate webhook, skipping:",
         event.deliveryId,
       );
-
-      channel.ack(message);
-      return;
-    }
-
-    await prisma.webhookDelivery.create({
-      data: {
-        deliveryId: event.deliveryId,
-        event: event.event,
-        status: "PROCESSED",
-        processedAt: new Date(),
-      },
-    });
+    } else if (result.artifact) {
+    console.log(
+      "GitHub issue synchronized to Nook:",
+      result.artifact.id,
+    );
+  }
 
     channel.ack(message);
   } catch (error) {
