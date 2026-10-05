@@ -11,7 +11,8 @@
     "test:watch": "vitest src",
     "start": "node dist/server.js",
     "setup": "prisma generate && prisma migrate dev",
-    "worker": "tsx src/queue/github-worker.ts",
+    "worker": "node dist/queue/github-worker.js",
+    "dev:worker": "tsx src/queue/github-worker.ts",
     "lint": "...",
     "format": "..."
   },
