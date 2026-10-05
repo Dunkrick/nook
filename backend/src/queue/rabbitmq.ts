@@ -1,6 +1,5 @@
 import amqp, { type Channel, type ChannelModel } from "amqplib";
-
-const RABBITMQ_URL = "amqp://localhost:5672";
+import { env } from "../config/env.js";
 
 export const GITHUB_QUEUE = "github-events";
 export const GITHUB_DLQ = "github-events-dlq";
@@ -13,7 +12,7 @@ export async function getRabbitChannel(): Promise<Channel> {
     return channel;
   }
 
-  connection = await amqp.connect(RABBITMQ_URL);
+  connection = await amqp.connect(env.RABBITMQ_URL);
   channel = await connection.createChannel();
 
   await channel.assertQueue(GITHUB_DLQ, {
