@@ -5,6 +5,7 @@ import {
   GITHUB_RETRY_QUEUE_1,
   GITHUB_RETRY_QUEUE_2,
   GITHUB_RETRY_QUEUE_3,
+  setupGithubQueue,
 } from "./github-events.js";
 import prisma from "../prisma.js";
 import { syncGithubIssue } from "../services/github-sync.js";
@@ -34,8 +35,9 @@ type GithubEvent = {
 };
 
 async function startWorker() {
-  const channel = await getRabbitChannel();
+  await setupGithubQueue();
 
+  const channel = await getRabbitChannel();
   console.log("GitHub worker started. Waiting for messages...");
 
   await channel.consume(GITHUB_QUEUE, async (message) => {
