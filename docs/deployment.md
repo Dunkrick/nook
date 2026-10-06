@@ -35,16 +35,205 @@ Google Cloud Run
 
 ---
 
+## GitHub event-processing infrastructure
+
+GitHub issue synchronization uses a separate asynchronous processing pipeline.
+
+```text
+GitHub
+  │
+  │ webhook
+  ▼
+Cloud Run API
+  │
+  │ publish
+  ▼
+CloudAMQP / RabbitMQ
+  │
+  │ consume
+  ▼
+Cloud Run Worker Pool
+  │
+  │ Prisma
+  ▼
+Neon PostgreSQL
+```
+
+### API
+
+The existing Cloud Run service:
+
+```text
+nook-backend
+```
+
+receives GitHub webhooks at:
+
+```text
+POST /webhooks/github
+```
+
+The webhook request is authenticated using:
+
+```text
+GITHUB_WEBHOOK_SECRET
+```
+
+and published to RabbitMQ after signature verification.
+
+### Worker
+
+The GitHub worker runs independently as:
+
+```text
+Cloud Run Worker Pool
+nook-github-worker
+```
+
+The worker command is:
+
+```text
+node dist/queue/github-worker.js
+```
+
+The worker initializes the RabbitMQ queue topology before consuming messages.
+
+### RabbitMQ
+
+RabbitMQ is hosted by CloudAMQP.
+
+Queues:
+
+```text
+github-events
+github-events-retry-1
+github-events-retry-2
+github-events-retry-3
+github-events-dlq
+```
+
+Retry delays:
+
+```text
+5 seconds
+10 seconds
+20 seconds
+```
+
+Repeated failures are moved to the dead-letter queue.
+
+### Runtime secrets
+
+The GitHub processing runtime uses Google Secret Manager for:
+
+```text
+DATABASE_URL
+JWT_SECRET
+RABBITMQ_URL
+GITHUB_WEBHOOK_SECRET
+```
+
+The corresponding Secret Manager records are:
+
+```text
+nook-database-url
+nook-jwt-secret
+nook-rabbitmq-url
+nook-github-webhook-secret
+```
+
+Non-secret runtime configuration remains environment-based.
+
+### Deployment safety
+
+GitHub infrastructure was deployed using a zero-traffic Cloud Run revision before production promotion.
+
+The validation sequence was:
+
+```text
+Build immutable image
+        ↓
+Deploy candidate API revision
+        ↓
+Health check
+        ↓
+Deploy worker pool
+        ↓
+Verify worker startup
+        ↓
+Run real GitHub issue events
+        ↓
+Verify PostgreSQL persistence
+        ↓
+Promote candidate revision
+```
+
+The API and worker use the same immutable container image.
+
+### Production validation
+
+The production pipeline was verified using a real GitHub repository and issue.
+
+The tested lifecycle was:
+
+```text
+opened
+  ↓
+edited
+  ↓
+closed
+  ↓
+reopened
+```
+
+All events updated the same Nook artifact.
+
+The production health endpoint returned:
+
+```json
+{
+  "status": "ok",
+  "database": "connected",
+  "version": "1.1.0"
+}
+```
+
+This verifies that the deployed API can start and reach the production database.
+
+### Current production runtime
+
+```text
+API:
+  nook-backend
+
+Worker:
+  nook-github-worker
+
+Database:
+  Neon PostgreSQL
+
+Message broker:
+  CloudAMQP / RabbitMQ
+
+Container registry:
+  Google Artifact Registry
+```
+
+---
+
 ## Infrastructure
 
-| Component            | Responsibility          |
-| -------------------- | ----------------------- |
-| GitHub Actions       | CI/CD                   |
-| Docker               | Backend container image |
-| Artifact Registry    | Container image storage |
-| Cloud Run            | Backend runtime         |
-| Neon PostgreSQL      | Relational database     |
-| Google Cloud Storage | Private media storage   |
+| Component             | Responsibility               |
+| --------------------- | ---------------------------- |
+| GitHub Actions        | CI/CD                        |
+| Docker                | Backend container image      |
+| Artifact Registry     | Container image storage      |
+| Cloud Run             | HTTP API runtime             |
+| Cloud Run Worker Pool | GitHub event processing      |
+| CloudAMQP / RabbitMQ  | Asynchronous event transport |
+| Neon PostgreSQL       | Relational database          |
+| Google Cloud Storage  | Private media storage        |
+| Secret Manager        | Production secrets           |
 
 ---
 
@@ -102,7 +291,12 @@ GCS_BUCKET_NAME
 The backend also reads:
 
 ```text
-PORT
+DATABASE_URL
+JWT_SECRET
+FRONTEND_URL
+GCS_BUCKET_NAME
+GITHUB_WEBHOOK_SECRET
+RABBITMQ_URL
 ```
 
 Cloud Run supplies the runtime port through its environment.
@@ -248,4 +442,7 @@ The browser still requests the signed GCS read URL when rendering a private Pola
 [ ] Database is reachable from Cloud Run
 [ ] Docker image targets linux/amd64
 [ ] /health returns 2xx
+[ ] RABBITMQ_URL and GITHUB_WEBHOOK_SECRET are configured
+[ ] GitHub Worker is deployed and consuming from queues
+[ ] Webhook deliveries are succeeding in GitHub repo settings
 ```

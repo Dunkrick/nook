@@ -90,6 +90,41 @@ See [`docs/architecture.md`](./docs/architecture.md) for request flows and layer
 
 ---
 
+## GitHub Integration
+
+Nook can synchronize GitHub issues into spatial workspace artifacts.
+
+```text
+GitHub
+  ↓
+Webhook
+  ↓
+RabbitMQ
+  ↓
+Background Worker
+  ↓
+PostgreSQL
+  ↓
+Nook Artifact
+```
+
+The integration includes:
+- HMAC-SHA256 webhook verification
+- asynchronous RabbitMQ processing
+- retry queues and dead-letter handling
+- webhook delivery idempotency
+- transactional persistence
+- GitHub issue → Nook artifact upserts
+- production deployment on Cloud Run
+- independent GitHub worker runtime
+
+Supported issue lifecycle:
+`opened` → `edited` → `closed` → `reopened`
+
+See [GitHub Integration](docs/integrations/github.md) for the implementation details.
+
+---
+
 ## Artifact model
 
 Nook currently represents three artifact types:

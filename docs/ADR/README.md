@@ -35,3 +35,5 @@ Once accepted, ADRs are considered part of the project's engineering history and
 | ADR-0010 | Frontend design system | Accepted |
 | ADR-0011 | Workspace owns active editing state | Accepted |
 | ADR-0012 | Signed image URLs as JSON over redirects | Accepted |
+| ADR-0013 | Event-driven GitHub webhook processing | Accepted |
+| ADR-0014 | Separate GitHub worker runtime | Accepted |
