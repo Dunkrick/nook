@@ -120,6 +120,31 @@ Prisma / ObjectStorage
 Response
 ```
 
+## Asynchronous GitHub architecture
+
+GitHub synchronization is handled separately from normal HTTP request processing.
+
+```text
+GitHub
+  ↓
+/webhooks/github
+  ↓
+HMAC verification
+  ↓
+RabbitMQ
+  ↓
+GitHub Worker
+  ↓
+GitHub Sync Service
+  ↓
+Prisma
+  ↓
+PostgreSQL
+```
+
+The webhook route is intentionally thin. It authenticates and publishes the event; synchronization is performed asynchronously by the worker.
+The worker owns retry, dead-letter, idempotency, and GitHub issue synchronization behavior.
+
 ### Routes
 
 Routes translate HTTP requests into application-service calls.

@@ -56,3 +56,13 @@ export type Workspace = Prisma.WorkspaceModel
  * 
  */
 export type Artifact = Prisma.ArtifactModel
+/**
+ * Model GithubRepository
+ * 
+ */
+export type GithubRepository = Prisma.GithubRepositoryModel
+/**
+ * Model WebhookDelivery
+ * 
+ */
+export type WebhookDelivery = Prisma.WebhookDeliveryModel

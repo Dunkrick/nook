@@ -1,13 +1,13 @@
 import express from "express";
 import cors from "cors";
 import { env } from "./config/env.js";
-
 import workspaceRouter from "./routes/workspaces.js";
 import authRouter from "./routes/auth.js";
 import { errorHandler } from "./lib/error.js";
 import prisma from "./prisma.js";
 import uploadRouter from "./routes/uploads.js";
 import artifactRouter from "./routes/artifacts.js";
+import githubWebhookRouter from "./routes/github-webhooks.js"
 
 const app = express();
 
@@ -32,6 +32,12 @@ app.use(
     },
     credentials: true,
   })
+);
+
+app.use(
+  "/webhooks/github", 
+  express.raw({ type: "application/json" }), 
+  githubWebhookRouter,
 );
 
 app.use(express.json());

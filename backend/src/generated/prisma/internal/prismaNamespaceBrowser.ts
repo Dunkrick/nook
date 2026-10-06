@@ -53,7 +53,9 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   Workspace: 'Workspace',
-  Artifact: 'Artifact'
+  Artifact: 'Artifact',
+  GithubRepository: 'GithubRepository',
+  WebhookDelivery: 'WebhookDelivery'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -105,10 +107,36 @@ export const ArtifactScalarFieldEnum = {
   updatedAt: 'updatedAt',
   zIndex: 'zIndex',
   userId: 'userId',
-  workspaceId: 'workspaceId'
+  workspaceId: 'workspaceId',
+  source: 'source',
+  externalId: 'externalId'
 } as const
 
 export type ArtifactScalarFieldEnum = (typeof ArtifactScalarFieldEnum)[keyof typeof ArtifactScalarFieldEnum]
+
+
+export const GithubRepositoryScalarFieldEnum = {
+  id: 'id',
+  owner: 'owner',
+  name: 'name',
+  workspaceId: 'workspaceId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type GithubRepositoryScalarFieldEnum = (typeof GithubRepositoryScalarFieldEnum)[keyof typeof GithubRepositoryScalarFieldEnum]
+
+
+export const WebhookDeliveryScalarFieldEnum = {
+  id: 'id',
+  deliveryId: 'deliveryId',
+  event: 'event',
+  status: 'status',
+  receivedAt: 'receivedAt',
+  processedAt: 'processedAt'
+} as const
+
+export type WebhookDeliveryScalarFieldEnum = (typeof WebhookDeliveryScalarFieldEnum)[keyof typeof WebhookDeliveryScalarFieldEnum]
 
 
 export const SortOrder = {

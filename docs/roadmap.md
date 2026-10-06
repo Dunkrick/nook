@@ -20,3 +20,22 @@ flowchart TD
     V4[Version 4<br/>Spatial Intelligence]) --> V5
     V5[Version 5<br/>AI-Assisted Thinking Experience]
 ```
+
+---
+
+## GitHub Integration
+
+### V1 — GitHub → Nook
+- Synchronize GitHub issues into Nook artifacts
+- Map repositories to workspaces
+- Preserve issue identity and lifecycle state
+
+### V2 — Nook → GitHub
+- Create GitHub issues from Nook
+- Link Nook artifacts to created issues
+
+### V3 — Bidirectional synchronization
+- Synchronize state changes in both directions
+
+### V4 — Project workflow
+- Ideas → Issues → PRs → Shipped

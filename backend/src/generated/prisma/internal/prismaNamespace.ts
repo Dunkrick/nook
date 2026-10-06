@@ -399,7 +399,9 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   User: 'User',
   Workspace: 'Workspace',
-  Artifact: 'Artifact'
+  Artifact: 'Artifact',
+  GithubRepository: 'GithubRepository',
+  WebhookDelivery: 'WebhookDelivery'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -415,7 +417,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "workspace" | "artifact"
+    modelProps: "user" | "workspace" | "artifact" | "githubRepository" | "webhookDelivery"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -641,6 +643,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    GithubRepository: {
+      payload: Prisma.$GithubRepositoryPayload<ExtArgs>
+      fields: Prisma.GithubRepositoryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GithubRepositoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GithubRepositoryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GithubRepositoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GithubRepositoryPayload>
+        }
+        findFirst: {
+          args: Prisma.GithubRepositoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GithubRepositoryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GithubRepositoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GithubRepositoryPayload>
+        }
+        findMany: {
+          args: Prisma.GithubRepositoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GithubRepositoryPayload>[]
+        }
+        create: {
+          args: Prisma.GithubRepositoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GithubRepositoryPayload>
+        }
+        createMany: {
+          args: Prisma.GithubRepositoryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GithubRepositoryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GithubRepositoryPayload>[]
+        }
+        delete: {
+          args: Prisma.GithubRepositoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GithubRepositoryPayload>
+        }
+        update: {
+          args: Prisma.GithubRepositoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GithubRepositoryPayload>
+        }
+        deleteMany: {
+          args: Prisma.GithubRepositoryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GithubRepositoryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GithubRepositoryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GithubRepositoryPayload>[]
+        }
+        upsert: {
+          args: Prisma.GithubRepositoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GithubRepositoryPayload>
+        }
+        aggregate: {
+          args: Prisma.GithubRepositoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGithubRepository>
+        }
+        groupBy: {
+          args: Prisma.GithubRepositoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GithubRepositoryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GithubRepositoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GithubRepositoryCountAggregateOutputType> | number
+        }
+      }
+    }
+    WebhookDelivery: {
+      payload: Prisma.$WebhookDeliveryPayload<ExtArgs>
+      fields: Prisma.WebhookDeliveryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WebhookDeliveryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebhookDeliveryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WebhookDeliveryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebhookDeliveryPayload>
+        }
+        findFirst: {
+          args: Prisma.WebhookDeliveryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebhookDeliveryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WebhookDeliveryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebhookDeliveryPayload>
+        }
+        findMany: {
+          args: Prisma.WebhookDeliveryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebhookDeliveryPayload>[]
+        }
+        create: {
+          args: Prisma.WebhookDeliveryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebhookDeliveryPayload>
+        }
+        createMany: {
+          args: Prisma.WebhookDeliveryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WebhookDeliveryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebhookDeliveryPayload>[]
+        }
+        delete: {
+          args: Prisma.WebhookDeliveryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebhookDeliveryPayload>
+        }
+        update: {
+          args: Prisma.WebhookDeliveryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebhookDeliveryPayload>
+        }
+        deleteMany: {
+          args: Prisma.WebhookDeliveryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WebhookDeliveryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WebhookDeliveryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebhookDeliveryPayload>[]
+        }
+        upsert: {
+          args: Prisma.WebhookDeliveryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebhookDeliveryPayload>
+        }
+        aggregate: {
+          args: Prisma.WebhookDeliveryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWebhookDelivery>
+        }
+        groupBy: {
+          args: Prisma.WebhookDeliveryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WebhookDeliveryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WebhookDeliveryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WebhookDeliveryCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -713,10 +863,36 @@ export const ArtifactScalarFieldEnum = {
   updatedAt: 'updatedAt',
   zIndex: 'zIndex',
   userId: 'userId',
-  workspaceId: 'workspaceId'
+  workspaceId: 'workspaceId',
+  source: 'source',
+  externalId: 'externalId'
 } as const
 
 export type ArtifactScalarFieldEnum = (typeof ArtifactScalarFieldEnum)[keyof typeof ArtifactScalarFieldEnum]
+
+
+export const GithubRepositoryScalarFieldEnum = {
+  id: 'id',
+  owner: 'owner',
+  name: 'name',
+  workspaceId: 'workspaceId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type GithubRepositoryScalarFieldEnum = (typeof GithubRepositoryScalarFieldEnum)[keyof typeof GithubRepositoryScalarFieldEnum]
+
+
+export const WebhookDeliveryScalarFieldEnum = {
+  id: 'id',
+  deliveryId: 'deliveryId',
+  event: 'event',
+  status: 'status',
+  receivedAt: 'receivedAt',
+  processedAt: 'processedAt'
+} as const
+
+export type WebhookDeliveryScalarFieldEnum = (typeof WebhookDeliveryScalarFieldEnum)[keyof typeof WebhookDeliveryScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1002,6 +1178,8 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   workspace?: Prisma.WorkspaceOmit
   artifact?: Prisma.ArtifactOmit
+  githubRepository?: Prisma.GithubRepositoryOmit
+  webhookDelivery?: Prisma.WebhookDeliveryOmit
 }
 
 /* Types for Logging */

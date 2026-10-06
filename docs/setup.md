@@ -9,7 +9,7 @@ This guide explains how to run Nook locally.
 - Node.js 22+
 - PostgreSQL or a Neon PostgreSQL database
 - Git
-- Docker Desktop (optional)
+- Docker Desktop (recommended for running RabbitMQ locally)
 
 ---
 
@@ -56,17 +56,23 @@ JWT_SECRET=replace-with-a-long-random-secret
 FRONTEND_URL=http://localhost:5173
 
 GCS_BUCKET_NAME=your-gcs-bucket
+
+RABBITMQ_URL=amqp://guest:guest@localhost:5672
+
+GITHUB_WEBHOOK_SECRET=your-local-webhook-secret
 ```
 
 Required backend variables:
 
-| Variable          | Purpose                                           |
-| ----------------- | ------------------------------------------------- |
-| `PORT`            | Local API port; defaults to `3003`                |
-| `DATABASE_URL`    | PostgreSQL connection string                      |
-| `JWT_SECRET`      | JWT signing secret                                |
-| `FRONTEND_URL`    | Frontend URL used by the deployment configuration |
-| `GCS_BUCKET_NAME` | Google Cloud Storage bucket used for media        |
+| Variable                | Purpose                                           |
+| ----------------------- | ------------------------------------------------- |
+| `PORT`                  | Local API port; defaults to `3003`                |
+| `DATABASE_URL`          | PostgreSQL connection string                      |
+| `JWT_SECRET`            | JWT signing secret                                |
+| `FRONTEND_URL`          | Frontend URL used by the deployment configuration |
+| `GCS_BUCKET_NAME`       | Google Cloud Storage bucket used for media        |
+| `RABBITMQ_URL`          | RabbitMQ connection string                        |
+| `GITHUB_WEBHOOK_SECRET` | Secret used to verify GitHub webhook signatures   |
 
 For local development involving Polaroid uploads, Google Cloud credentials must also be available to the Google Cloud Storage client through Application Default Credentials.
 
@@ -151,6 +157,49 @@ Backend:
 
 ```bash
 npm run dev:backend
+```
+
+---
+
+## GitHub Integration (Webhooks & RabbitMQ)
+
+To develop or test GitHub issue synchronization locally, you need a running RabbitMQ instance and the background worker.
+
+### 1. Start RabbitMQ
+
+You can run RabbitMQ locally using Docker:
+
+```bash
+docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
+```
+
+This starts the broker on port `5672` and the management UI on port `15672` (default credentials: `guest` / `guest`).
+
+### 2. Run the worker
+
+The GitHub sync worker runs separately from the Express API. In a separate terminal, from the `backend` directory, run:
+
+```bash
+npm run dev:worker
+```
+
+The worker will automatically assert the necessary queue topology on startup and wait for messages.
+
+### 3. Local webhook delivery
+
+To receive webhooks from GitHub on your local machine, use a payload delivery service like [smee.io](https://smee.io/) or [ngrok](https://ngrok.com/).
+
+Using `smee.io`:
+
+1. Navigate to smee.io and "Start a new channel".
+2. Configure your GitHub repository webhook to point to the Smee channel URL.
+   - Content type: `application/json`
+   - Secret: Match your local `GITHUB_WEBHOOK_SECRET`
+   - Events: `Issues`
+3. Forward the payloads to your local backend:
+
+```bash
+npx smee-client --url https://smee.io/YOUR_CHANNEL_ID --path /webhooks/github --port 3003
 ```
 
 ---
