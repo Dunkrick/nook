@@ -34,13 +34,10 @@ type GithubEvent = {
   retryCount?: number;
 };
 
-async function startWorker() {
-  await setupGithubQueue();
-
-  const channel = await getRabbitChannel();
-  console.log("GitHub worker started. Waiting for messages...");
-
-  await channel.consume(GITHUB_QUEUE, async (message) => {
+export async function handleGithubMessage(
+  message: any, // using any here temporarily to avoid adding amqplib imports for now
+  channel: any
+) {
   if (!message) {
     return;
   }
@@ -121,6 +118,7 @@ async function startWorker() {
             persistent: true,
           },
         );
+        await channel.waitForConfirms();
 
         console.log(
           "GitHub event moved to DLQ:",
@@ -146,13 +144,12 @@ async function startWorker() {
             persistent: true,
           },
         );
-
+        await channel.waitForConfirms();
         console.log(
           `GitHub event scheduled for retry ${nextRetryCount}:`,
           event.deliveryId,
         );
       }
-
       channel.ack(message);
     } catch (publishError) {
       console.error(
@@ -164,10 +161,20 @@ async function startWorker() {
       // RabbitMQ can redeliver the original message.
     }
   }
-});
 }
 
-startWorker().catch((error) => {
-  console.error("Worker failed to start:", error);
-  process.exit(1);
-});
+async function startWorker() {
+  await setupGithubQueue();
+
+  const channel = await getRabbitChannel();
+  console.log("GitHub worker started. Waiting for messages...");
+
+  await channel.consume(GITHUB_QUEUE, (msg) => handleGithubMessage(msg, channel));
+}
+
+if (process.env.NODE_ENV !== "test") {
+  startWorker().catch((error) => {
+    console.error("Worker failed to start:", error);
+    process.exit(1);
+  });
+}

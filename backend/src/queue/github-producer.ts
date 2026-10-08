@@ -11,4 +11,6 @@ export async function publishGithubEvent(event: unknown) {
       persistent: true,
     },
   );
+
+  await channel.waitForConfirms();
 }

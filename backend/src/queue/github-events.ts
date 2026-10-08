@@ -1,11 +1,9 @@
 import { getRabbitChannel } from "./rabbitmq.js";
 
 export const GITHUB_QUEUE = "github-events";
-
 export const GITHUB_RETRY_QUEUE_1 = "github-events-retry-1";
 export const GITHUB_RETRY_QUEUE_2 = "github-events-retry-2";
 export const GITHUB_RETRY_QUEUE_3 = "github-events-retry-3";
-
 export const GITHUB_DLQ = "github-events-dlq";
 
 export async function setupGithubQueue() {
