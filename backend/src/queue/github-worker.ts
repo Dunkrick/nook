@@ -5,10 +5,10 @@ import {
   GITHUB_RETRY_QUEUE_1,
   GITHUB_RETRY_QUEUE_2,
   GITHUB_RETRY_QUEUE_3,
-  setupGithubQueue,
 } from "./github-events.js";
 import prisma from "../prisma.js";
 import { syncGithubIssue } from "../services/github-sync.js";
+import { setTimeout as sleep } from "node:timers/promises";
 
 type GithubIssuePayload = {
   action: string;
@@ -163,13 +163,46 @@ export async function handleGithubMessage(
   }
 }
 
-async function startWorker() {
-  await setupGithubQueue();
-
+async function consumeGithubEvents() {
   const channel = await getRabbitChannel();
   console.log("GitHub worker started. Waiting for messages...");
 
   await channel.consume(GITHUB_QUEUE, (msg) => handleGithubMessage(msg, channel));
+
+  // Return a promise that only resolves when the channel dies
+  return new Promise<void>((resolve) => {
+    channel.on("close", () => {
+      console.log("RabbitMQ channel closed in consumer!");
+      resolve();
+    });
+    channel.on("error", (error) => {
+      console.error("RabbitMQ channel error in consumer:", error);
+      resolve();
+    });
+  });
+}
+
+async function startWorker() {
+  let delay = 1000;
+
+  while (true) {
+    try {
+      // This will block until the connection/channel drops
+      await consumeGithubEvents();
+
+      // If we are here, we successfully connected but eventually disconnected.
+      // Reset the backoff delay.
+      delay = 1000;
+    } catch (error) {
+      console.error("GitHub worker connection failed:", error);
+    }
+
+    console.log(`Waiting ${delay}ms before reconnecting...`);
+    await sleep(delay);
+
+    // Exponential backoff, max 30 seconds
+    delay = Math.min(delay * 2, 30_000);
+  }
 }
 
 if (process.env.NODE_ENV !== "test") {
