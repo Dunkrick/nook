@@ -10,6 +10,8 @@ import prisma from "../prisma.js";
 import { syncGithubIssue } from "../services/github-sync.js";
 import { setTimeout as sleep } from "node:timers/promises";
 
+const GITHUB_WORKER_PREFETCH = 5;
+
 type GithubIssuePayload = {
   action: string;
   issue: {
@@ -163,9 +165,11 @@ export async function handleGithubMessage(
   }
 }
 
-async function consumeGithubEvents() {
+export async function consumeGithubEvents() {
   const channel = await getRabbitChannel();
   console.log("GitHub worker started. Waiting for messages...");
+
+  await channel.prefetch(GITHUB_WORKER_PREFETCH);
 
   await channel.consume(GITHUB_QUEUE, (msg) => handleGithubMessage(msg, channel));
 
@@ -182,7 +186,7 @@ async function consumeGithubEvents() {
   });
 }
 
-async function startWorker() {
+export async function startWorker() {
   let delay = 1000;
 
   while (true) {
