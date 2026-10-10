@@ -1,4 +1,4 @@
-import { getRabbitChannel } from "./rabbitmq.js";
+import type { Channel } from "amqplib";
 
 export const GITHUB_QUEUE = "github-events";
 
@@ -8,9 +8,7 @@ export const GITHUB_RETRY_QUEUE_3 = "github-events-retry-3";
 
 export const GITHUB_DLQ = "github-events-dlq";
 
-export async function setupGithubQueue() {
-  const channel = await getRabbitChannel();
-
+export async function setupGithubQueue(channel: Channel) {
   await channel.assertQueue(GITHUB_DLQ, {
     durable: true,
   });

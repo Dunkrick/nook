@@ -100,6 +100,19 @@ jobs:
             --service-account 902490290476-compute@developer.gserviceaccount.com \
             --allow-unauthenticated
 
+      - name: Deploy GitHub worker
+        run: |
+          gcloud run worker-pools deploy nook-github-worker \
+            --project="${{ secrets.GCP_PROJECT_ID }}" \
+            --region="${{ secrets.GCP_REGION }}" \
+            --image="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/nook-backend/backend:${{ github.sha }}" \
+            --command=node \
+            --args=dist/queue/github-worker.js \
+            --cpu=1 \
+            --memory=512Mi \
+            --update-env-vars="FRONTEND_URL=https://nookmy.vercel.app,GCS_BUCKET_NAME=nook-media-438271" \
+            --update-secrets="DATABASE_URL=nook-database-url:latest,JWT_SECRET=nook-jwt-secret:latest,RABBITMQ_URL=nook-rabbitmq-url:latest,GITHUB_WEBHOOK_SECRET=nook-github-webhook-secret:latest"
+
       - name: Verify deployment
         run: |
           URL=$(gcloud run services describe nook-backend \

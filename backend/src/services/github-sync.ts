@@ -1,5 +1,6 @@
 import prisma from "../prisma.js";
 import type { Prisma } from "../generated/prisma/client.js";
+import { PermanentGithubEventError } from "../queue/github-errors.js";
 
 type DbClient = Prisma.TransactionClient;
 
@@ -38,7 +39,7 @@ export async function syncGithubIssue(
   const issueNumber = payload.issue?.number;
 
   if (!owner || !name || !issueNumber) {
-    throw new Error("Invalid GitHub issue payload");
+    throw new PermanentGithubEventError("Invalid GitHub issue payload: missing owner, name, or issue number");
   }
 
   const repository = await db.githubRepository.findUnique({
@@ -51,7 +52,7 @@ export async function syncGithubIssue(
   });
 
   if (!repository) {
-    throw new Error(
+    throw new PermanentGithubEventError(
       `No Nook workspace mapped to GitHub repository ${owner}/${name}`,
     );
   }
