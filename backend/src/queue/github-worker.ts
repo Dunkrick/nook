@@ -44,9 +44,28 @@ export async function handleGithubMessage(
     return;
   }
 
-  const event: GithubEvent = JSON.parse(
-  message.content.toString(),
-);
+  let event: GithubEvent;
+
+  //parsing guard
+  try {
+    event = JSON.parse(message.content.toString());
+  } catch (error) {
+    console.error("Malformed GitHub queue message:", error);
+
+    try {
+    channel.sendToQueue(GITHUB_DLQ, message.content, {
+      persistent: true,
+    });
+
+    await channel.waitForConfirms();
+    channel.ack(message);
+  } catch (publishError) {
+    console.error("Failed to publish malformed message to DLQ:", publishError);
+    // Do not ACK the original message.
+  }
+
+  return;
+  }
 
   try {
     const retryCount = event.retryCount ?? 0;

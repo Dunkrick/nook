@@ -130,3 +130,46 @@ describe("GitHub Worker - Lifecycle (Prefetch & Reconnect)", () => {
     expect(replacementChannel.prefetch).toHaveBeenCalledWith(5);
   });
 });
+
+describe("GitHub Worker - Parsing Guard", () => {
+  let mockChannel: any;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+
+    mockChannel = {
+      ack: vi.fn(),
+      sendToQueue: vi.fn(),
+      waitForConfirms: vi.fn().mockResolvedValue(undefined),
+    };
+  });
+
+  it("Malformed JSON goes directly to the DLQ and is ACKed only after DLQ confirmation", async () => {
+    const malformedMessage = {
+      content: Buffer.from("this is not valid json {"),
+    };
+
+    await handleGithubMessage(malformedMessage, mockChannel);
+
+    expect(mockChannel.sendToQueue).toHaveBeenCalledWith(
+      "github-events-dlq",
+      malformedMessage.content,
+      { persistent: true }
+    );
+    expect(mockChannel.waitForConfirms).toHaveBeenCalled();
+    expect(mockChannel.ack).toHaveBeenCalledWith(malformedMessage);
+  });
+
+  it("DLQ publish failure leaves the original unacknowledged", async () => {
+    const malformedMessage = {
+      content: Buffer.from("this is not valid json {"),
+    };
+
+    mockChannel.waitForConfirms.mockRejectedValue(new Error("DLQ down"));
+
+    await handleGithubMessage(malformedMessage, mockChannel);
+
+    expect(mockChannel.sendToQueue).toHaveBeenCalled();
+    expect(mockChannel.ack).not.toHaveBeenCalled();
+  });
+});
