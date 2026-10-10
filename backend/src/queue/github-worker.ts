@@ -6,6 +6,7 @@ import {
   GITHUB_RETRY_QUEUE_2,
   GITHUB_RETRY_QUEUE_3,
 } from "./github-events.js";
+import { PermanentGithubEventError } from "./github-errors.js";
 import prisma from "../prisma.js";
 import { syncGithubIssue } from "../services/github-sync.js";
 import { setTimeout as sleep } from "node:timers/promises";
@@ -35,6 +36,7 @@ type GithubEvent = {
   payload: GithubIssuePayload;
   retryCount?: number;
 };
+
 
 export async function handleGithubMessage(
   message: any, // using any here temporarily to avoid adding amqplib imports for now
@@ -127,29 +129,28 @@ export async function handleGithubMessage(
   } catch (error) {
     console.error("GitHub event processing failed:", error);
 
+    // Permanent errors (e.g. unmapped repo, invalid payload) go straight to DLQ.
+    // Transient errors (e.g. DB outage) go through the bounded retry path.
+    const isPermanent = error instanceof PermanentGithubEventError;
     const retryCount = event.retryCount ?? 0;
     const nextRetryCount = retryCount + 1;
 
     try {
-      if (nextRetryCount > 3) {
+      if (isPermanent || nextRetryCount > 3) {
         channel.sendToQueue(
           GITHUB_DLQ,
           message.content,
-          {
-            persistent: true,
-          },
+          { persistent: true },
         );
         await channel.waitForConfirms();
 
         console.log(
-          "GitHub event moved to DLQ:",
-          event.deliveryId,
+          isPermanent
+            ? `GitHub event permanently failed, moved to DLQ: ${event.deliveryId}`
+            : `GitHub event moved to DLQ after ${retryCount} retries: ${event.deliveryId}`,
         );
       } else {
-        const retryEvent = {
-          ...event,
-          retryCount: nextRetryCount,
-        };
+        const retryEvent = { ...event, retryCount: nextRetryCount };
 
         const retryQueue =
           nextRetryCount === 1
@@ -161,23 +162,20 @@ export async function handleGithubMessage(
         channel.sendToQueue(
           retryQueue,
           Buffer.from(JSON.stringify(retryEvent)),
-          {
-            persistent: true,
-          },
+          { persistent: true },
         );
         await channel.waitForConfirms();
         console.log(
-          `GitHub event scheduled for retry ${nextRetryCount}:`,
-          event.deliveryId,
+          `GitHub event scheduled for retry ${nextRetryCount}: ${event.deliveryId}`,
         );
       }
+
       channel.ack(message);
     } catch (publishError) {
       console.error(
         "Failed to publish GitHub event for retry/DLQ:",
         publishError,
       );
-
       // Do not ACK.
       // RabbitMQ can redeliver the original message.
     }

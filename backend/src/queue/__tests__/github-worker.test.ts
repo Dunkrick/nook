@@ -173,3 +173,100 @@ describe("GitHub Worker - Parsing Guard", () => {
     expect(mockChannel.ack).not.toHaveBeenCalled();
   });
 });
+
+describe("GitHub Worker - Error Classification", () => {
+  let mockChannel: any;
+
+  // A well-formed message buffer for an "issues" event
+  const makeMessage = (overrides: Record<string, unknown> = {}) => ({
+    content: Buffer.from(
+      JSON.stringify({
+        event: "issues",
+        deliveryId: "delivery-abc",
+        payload: {
+          action: "opened",
+          issue: { number: 1, title: "Test", state: "open", html_url: "url", body: "" },
+          repository: { owner: { login: "acme" }, name: "repo" },
+        },
+        ...overrides,
+      })
+    ),
+  });
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+
+    mockChannel = {
+      ack: vi.fn(),
+      sendToQueue: vi.fn(),
+      waitForConfirms: vi.fn().mockResolvedValue(undefined),
+    };
+  });
+
+  it("Permanent error (unmapped repo / invalid payload) → DLQ immediately, no retries", async () => {
+    // Simulate syncGithubIssue throwing a PermanentGithubEventError (e.g. no workspace mapped)
+    const { PermanentGithubEventError } = await import("../github-errors.js");
+    vi.mocked(prisma.$transaction).mockRejectedValue(
+      new PermanentGithubEventError("No Nook workspace mapped to GitHub repository acme/repo")
+    );
+
+    await handleGithubMessage(makeMessage(), mockChannel);
+
+    // Should publish straight to DLQ — NOT to a retry queue
+    expect(mockChannel.sendToQueue).toHaveBeenCalledWith(
+      "github-events-dlq",
+      expect.anything(),
+      { persistent: true }
+    );
+    // Must confirm before ACKing
+    expect(mockChannel.waitForConfirms).toHaveBeenCalled();
+    expect(mockChannel.ack).toHaveBeenCalled();
+  });
+
+  it("Database failure (transient) → retry queue, NOT DLQ", async () => {
+    vi.mocked(prisma.$transaction).mockRejectedValue(new Error("Connection refused"));
+
+    await handleGithubMessage(makeMessage(), mockChannel);
+
+    // First call with no retryCount uses retry queue 1
+    const [queueName] = mockChannel.sendToQueue.mock.calls[0];
+    expect(queueName).toBe("github-events-retry-1");
+    expect(mockChannel.ack).toHaveBeenCalled();
+  });
+
+  it("After 3 retries, transient error → DLQ (exhausted bounded retries)", async () => {
+    vi.mocked(prisma.$transaction).mockRejectedValue(new Error("Still down"));
+
+    // Simulate a message that has already been retried 3 times
+    await handleGithubMessage(makeMessage({ retryCount: 3 }), mockChannel);
+
+    const [queueName] = mockChannel.sendToQueue.mock.calls[0];
+    expect(queueName).toBe("github-events-dlq");
+    expect(mockChannel.ack).toHaveBeenCalled();
+  });
+
+  it("DLQ publish failure → original message NOT ACKed (P0 guarantee)", async () => {
+    const { PermanentGithubEventError } = await import("../github-errors.js");
+    vi.mocked(prisma.$transaction).mockRejectedValue(
+      new PermanentGithubEventError("No workspace")
+    );
+    // Force the DLQ publish itself to fail
+    mockChannel.waitForConfirms.mockRejectedValue(new Error("DLQ broker down"));
+
+    await handleGithubMessage(makeMessage(), mockChannel);
+
+    // The original must NOT be ACKed — RabbitMQ will redeliver it
+    expect(mockChannel.ack).not.toHaveBeenCalled();
+  });
+
+  it("Unsupported event type → ACKed cleanly (no retries, no DLQ)", async () => {
+    // syncGithubIssue returns null for unsupported events, so the transaction
+    // succeeds and the message is ACKed normally — intentionally no retry loop.
+    vi.mocked(prisma.$transaction).mockResolvedValue({ duplicate: false, artifact: null });
+
+    await handleGithubMessage(makeMessage({ event: "star" }), mockChannel);
+
+    expect(mockChannel.sendToQueue).not.toHaveBeenCalled();
+    expect(mockChannel.ack).toHaveBeenCalled();
+  });
+});
