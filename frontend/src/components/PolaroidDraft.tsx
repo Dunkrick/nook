@@ -14,10 +14,12 @@ export default function PolaroidDraft({
     onCommit,
     onCancel,
 }: PolaroidDraftProps) {
+    const MAX_PHOTO_BYTES = 10 * 1024 * 1024;
     const renderPosition = toRenderPosition(position);
     const [file, setFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [fileError, setFileError] = useState("");
 
 
     async function handleCommit() {
@@ -47,6 +49,23 @@ export default function PolaroidDraft({
         }
     }
 
+    function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+        const nextFile = event.currentTarget.files?.[0];
+        if (!nextFile) return;
+
+        if (nextFile.size > MAX_PHOTO_BYTES) {
+            setFile(null);
+            setPreviewUrl("");
+            setFileError("Photo must be 10 MB or smaller.");
+            event.currentTarget.value = "";
+            return;
+        }
+
+        setFile(nextFile);
+        setPreviewUrl(URL.createObjectURL(nextFile));
+        setFileError("");
+    }
+
     return (
         <div
             className="nook-polaroid-draft"
@@ -65,17 +84,16 @@ export default function PolaroidDraft({
                 autoFocus
                 type="file"
                 accept="image/jpeg,image/png,image/webp"
-                onChange={(e) => {
-                    const selectedFile = e.target.files?.[0];
-
-                    if (!selectedFile) return;
-
-                    setFile(selectedFile);
-                    setPreviewUrl(URL.createObjectURL(selectedFile));
-                }}
+                onChange={handleFileChange}
                 onKeyDown={handleKeyDown}
                 disabled={isLoading}
             />
+
+            {fileError && (
+                <p className="nook-polaroid-draft__error" role="alert">
+                    {fileError}
+                </p>
+            )}
 
             {previewUrl && (
                 <div className="nook-polaroid-draft__preview">

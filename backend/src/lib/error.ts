@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
+import multer from "multer";
 
 export class ValidationError extends Error {
     statusCode: number;
@@ -23,6 +24,16 @@ export function errorHandler(
             success: false,
             error: {
                 message: error.message,
+            },
+        });
+    }
+
+    if (error instanceof multer.MulterError && error.code === "LIMIT_FILE_SIZE") {
+        return res.status(413).json({
+            success: false,
+            error: {
+                message: "Photo must be 10 MB or smaller.",
+                code: "FILE_TOO_LARGE",
             },
         });
     }
