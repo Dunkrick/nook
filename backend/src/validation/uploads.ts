@@ -20,7 +20,7 @@ export function validateImageUpload(file: {
 
     if (file.size > MAX_FILE_SIZE) {
         throw new ValidationError(
-            "Image must be smaller than 10 MB."
+            "Photo must be 10 MB or smaller."
         );
     }
 }
