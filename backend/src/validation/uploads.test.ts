@@ -31,7 +31,7 @@ describe("validateImageUpload", () => {
     it("rejects a file over 10 MB", () => {
         expect(() =>
             validateImageUpload({ contentType: "image/jpeg", size: 10 * MB + 1 }),
-        ).toThrow("Image must be smaller than 10 MB.");
+        ).toThrow("Photo must be 10 MB or smaller.");
     });
 
     it("accepts a file exactly at the 10 MB limit", () => {
