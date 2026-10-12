@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
-const MIN_ZOOM = 0.6;
-const MAX_ZOOM = 1.6;
+const MIN_ZOOM = 0.1;
+const MAX_ZOOM = 5;
 const WORLD_SIZE = 100_000;
 
 interface CameraPoint { x: number; y: number; }
@@ -166,18 +166,42 @@ export default function useCamera() {
         }
     }
 
-    function zoomAtPoint(event: React.WheelEvent<HTMLDivElement>) {
-        stopCameraAnimation();
-        const bounds = event.currentTarget.getBoundingClientRect();
-        const point = { x: event.clientX - bounds.left, y: event.clientY - bounds.top };
-        const current = cameraRef.current;
-        const zoom = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, current.zoom * (event.deltaY > 0 ? 0.9 : 1.1)));
-        const world = { x: (point.x - current.x) / current.zoom, y: (point.y - current.y) / current.zoom };
-        const nextX = point.x - world.x * zoom;
-        const nextY = point.y - world.y * zoom;
+    function handleWheel(event: WheelEvent) {
+        if (event.cancelable) event.preventDefault();
 
-        const clamped = clampCameraPosition( nextX, nextY, zoom );
-        updateCamera({ ...clamped, zoom, });
+        const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+        const current = cameraRef.current;
+
+        // Two-finger scroll pans workspace.
+        if (!event.ctrlKey && !event.metaKey) {
+            const position = clampCameraPosition(
+                current.x - event.deltaX,
+                current.y - event.deltaY,
+                current.zoom,
+            );
+            updateCamera({ ...current, ...position });
+            return;
+        }
+
+        // Pinch / Ctrl-or-⌘ + wheel zooms around pointer.
+        const point = {
+            x: event.clientX - rect.left,
+            y: event.clientY - rect.top,
+        };
+        const zoom = Math.min(
+            MAX_ZOOM,
+            Math.max(MIN_ZOOM, current.zoom * Math.exp(-event.deltaY * 0.001)),
+        );
+        const world = {
+            x: (point.x - current.x) / current.zoom,
+            y: (point.y - current.y) / current.zoom,
+        };
+
+        updateCamera({
+            x: point.x - world.x * zoom,
+            y: point.y - world.y * zoom,
+            zoom,
+        });
     }
 
     function screenToWorld(point: CameraPoint, bounds: DOMRect): CameraPoint {
@@ -190,6 +214,6 @@ export default function useCamera() {
         updateCamera({ ...cameraRef.current, ...position });
     }
 
-    return { ...camera, isPanning, isSpacePressed, startPan, movePan, endPan, zoomAtPoint, screenToWorld, setInitialPosition, centerOn };
+    return { ...camera, isPanning, isSpacePressed, startPan, movePan, endPan, handleWheel, screenToWorld, setInitialPosition, centerOn };
 
 }
