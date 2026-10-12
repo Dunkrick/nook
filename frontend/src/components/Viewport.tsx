@@ -1,4 +1,4 @@
-import { useRef, type PropsWithChildren } from "react";
+import { useEffect, useRef, type PropsWithChildren } from "react";
 import { useCanvasCamera } from "../hooks/useCanvasCamera";
 
 export default function Viewport({
@@ -7,6 +7,15 @@ export default function Viewport({
 
     const camera = useCanvasCamera();
     const viewportRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+
+        const handleWheel = (event: WheelEvent) => camera.handleWheel(event);
+
+        viewport.addEventListener("wheel", handleWheel, { passive: false });
+        return () => viewport.removeEventListener("wheel", handleWheel);
+    }, [camera.handleWheel]);
 
     return(
 
@@ -17,7 +26,6 @@ export default function Viewport({
             onPointerMove={camera.movePan}
             onPointerUp={camera.endPan}
             onPointerCancel={camera.endPan}
-            onWheel={camera.zoomAtPoint}
         >
 
             {children}

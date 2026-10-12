@@ -22,6 +22,7 @@
   height: 100%;
   cursor: default;
   touch-action: none;
+  overscroll-behavior: none;
 
   background:
     radial-gradient(
