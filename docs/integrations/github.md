@@ -360,6 +360,17 @@ Pull requests are ignored even when delivered through the GitHub `issues` event 
 if (payload.issue?.pull_request) return null;
 ```
 
+## Production incident: issue artifacts and canvas framing
+
+Two failures appeared together during production debugging:
+
+1. `GET /workspaces/:workspaceId/artifacts` returned `500` after GitHub issues had been stored. The active Cloud Run revision used an image whose generated Prisma client did not recognize `GITHUB_ISSUE`, so Prisma failed while reading artifacts. Updating the frontend API URL could not fix this server-side enum mismatch. Recovery required routing traffic to a revision built with `GITHUB_ISSUE` support.
+2. After the API returned artifacts, cards still appeared missing from the canvas. GitHub sync had omitted `x` and `y`; Prisma schema defaults stored both as `0`. Separately, initial framing used minimum and maximum coordinates across every artifact. Distant saved positions pulled the camera between spatial groups. Rendering and logical-to-render coordinate conversion were working; cards were outside the clipped viewport.
+
+The `500` was resolved separately by routing traffic to an enum-aware revision. [PR #28](https://github.com/Dunkrick/nook/pull/28) addresses canvas placement and framing: new GitHub issues receive deterministic, non-overlapping positions near the largest spatial cluster; GitHub updates preserve existing positions; initial framing measures card sizes, finds the main cluster by spatial proximity, and fits its bounds with padding while capping initial zoom at `1`. Distant artifacts remain rendered and reachable by pan and zoom. Workspace loading changes camera state only; it does not rewrite saved coordinates.
+
+Existing GitHub artifacts at `(0, 0)` may have received those coordinates from old Prisma defaults. Moving them requires a separate, reviewed, narrowly scoped, idempotent data repair. PR #28 does not migrate existing records; production data was not changed as part of this fix.
+
 ---
 
 # Artifact Identity
@@ -421,7 +432,7 @@ GitHub issue information is stored in the artifact's JSON content:
 The synchronized artifact uses:
 
 ```text
-type = LINK
+type = GITHUB_ISSUE
 ```
 
 ---
