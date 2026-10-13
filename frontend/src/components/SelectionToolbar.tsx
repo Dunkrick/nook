@@ -22,12 +22,12 @@ export default function SelectionToolbar({
             <button 
                 className="nook-button nook-button--primary"
                 onClick={onFindInsight}>
-                Find Insight
+                Find Insight <kbd>⏎</kbd>
             </button>
             <button 
                 className="nook-button nook-button--quiet"
                 onClick={onClearSelection}>
-                Clear
+                Clear <kbd>␛</kbd>
             </button>
         </section>
     );

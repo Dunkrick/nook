@@ -319,30 +319,54 @@ export default function Home() {
 
     useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
-        if (e.key !== "Escape") return;
+        if (e.key === "Escape") {
+            if (draftArtifact) {
+                setDraftArtifact(null);
+                return;
+            }
 
-        if (draftArtifact) {
-            setDraftArtifact(null);
+            if (creationPosition) {
+                setCreationPosition(null);
+                return;
+            }
+
+            if (isInsightOpen) {
+                setIsInsightOpen(false);
+                return;
+            }
+
+            if (selectedArtifactIds.length > 0) {
+                e.preventDefault();
+                setSelectedArtifactIds([]);
+            }
+
+            return;
+        }
+        if (
+            e.key !== "Enter" ||
+            selectedArtifactIds.length === 0 ||
+            isInsightOpen
+        ) {
             return;
         }
 
-        if (creationPosition) {
-            setCreationPosition(null);
+        const target = e.target;
+        if (
+            target instanceof HTMLElement &&
+            target.closest(
+                'input, textarea, select, button, a, [role="button"], [role="textbox"], [contenteditable]:not([contenteditable="false"])'
+            )
+        ) {
+            return;
         }
-    }
 
-    window.addEventListener(
-        "keydown",
-        handleKeyDown
-    );
+        e.preventDefault();
+        setIsInsightOpen(true);
+        }
 
-    return () => {
-        window.removeEventListener(
-            "keydown",
-            handleKeyDown
-        );
-    };
-}, [draftArtifact, creationPosition]);
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [draftArtifact,creationPosition,isInsightOpen,selectedArtifactIds.length,]);
 
 async function handleWorkspaceChange(workspace: Workspace) {
     setIsWorkspaceReady(false);

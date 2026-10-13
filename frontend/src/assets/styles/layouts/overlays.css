@@ -101,6 +101,21 @@
     letter-spacing: .08em;
 }
 
+kbd {
+  background-color: #f3f4f6;
+  color: #1f2937;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85em;
+  font-weight: 600;
+  padding: 3px 6px;
+  display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+}
+
 @keyframes nook-toolbar-enter {
     from {
         opacity: 0;
