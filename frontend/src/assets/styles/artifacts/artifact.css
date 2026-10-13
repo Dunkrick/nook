@@ -762,6 +762,72 @@
   font-size: 0.875rem;
 }
 
+.nook-github-issue {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+}
+
+.nook-github-issue__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+}
+
+.nook-github-issue__status {
+    flex: 0 0 auto;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-transform: capitalize;
+}
+
+.nook-github-issue__status--open {
+    color: #067647;
+    background: #ecfdf3;
+}
+
+.nook-github-issue__status--closed {
+    color: #6941c6;
+    background: #f4f3ff;
+}
+
+.nook-github-issue__title {
+    color: var(--text-heading);
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.35;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+}
+
+.nook-github-issue__title:hover {
+    text-decoration: underline;
+}
+
+.nook-github-issue__body {
+    display: -webkit-box;
+    margin: 0;
+    overflow: hidden;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    line-clamp: 2;
+}
+
+.nook-github-issue__author {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+}
+
 /* ---------------------------------------------------------------
    Motion
    --------------------------------------------------------------- */

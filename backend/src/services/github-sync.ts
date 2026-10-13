@@ -89,7 +89,7 @@ export async function syncGithubIssue(
       },
     },
     create: {
-      type: "LINK",
+      type: "GITHUB_ISSUE",
       source: "github",
       externalId,
       content,
@@ -97,6 +97,7 @@ export async function syncGithubIssue(
       workspaceId: repository.workspaceId,
     },
     update: {
+      type: "GITHUB_ISSUE",
       content,
     },
   });
