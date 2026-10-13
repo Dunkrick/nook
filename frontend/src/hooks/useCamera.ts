@@ -118,13 +118,18 @@ export default function useCamera() {
         },
         options?: {
             animate?: boolean;
+            zoom?: number;
         },
     ) {
         const current = cameraRef.current;
+        const zoom = Math.min(
+            MAX_ZOOM,
+            Math.max(MIN_ZOOM, options?.zoom ?? current.zoom),
+        );
         const target = {
-            ...current,
-            x: viewport.width / 2 - point.x * current.zoom,
-            y: viewport.height / 2 - point.y * current.zoom,
+            x: viewport.width / 2 - point.x * zoom,
+            y: viewport.height / 2 - point.y * zoom,
+            zoom,
         };
 
         if (options?.animate === false) {
@@ -209,7 +214,7 @@ export default function useCamera() {
         return { x: (point.x - bounds.left - current.x) / current.zoom, y: (point.y - bounds.top - current.y) / current.zoom };
     }
 
-    function setInitialPosition(position: CameraPoint) {
+    function setInitialPosition(position: CameraPoint & { zoom?: number }) {
         stopCameraAnimation();
         updateCamera({ ...cameraRef.current, ...position });
     }
