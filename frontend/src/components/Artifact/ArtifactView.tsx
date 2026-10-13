@@ -9,6 +9,7 @@ import useArtifactInteraction from "./useArtifactInteraction";
 import type { Artifact } from "../../types/artifacts";
 import { toRenderPosition } from "../../lib/workspace";
 import PolaroidArtifactBody from "./PolaroidArtifactBody";
+import GithubIssueArtifactBody from "./GithubIssueArtifactBody";
 
 interface ArtifactViewProps {
     index: number;
@@ -98,6 +99,10 @@ export default function ArtifactView({
 
                     {artifact.type === "POLAROID" && (
                         <PolaroidArtifactBody artifactId={artifact.id}/>
+                    )}
+
+                    {artifact.type === "GITHUB_ISSUE" && (
+                        <GithubIssueArtifactBody content={artifact.content} />
                     )}
                 </div>
             )}

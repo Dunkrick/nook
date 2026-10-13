@@ -15,6 +15,7 @@ enum ArtifactType {
   TEXT
   LINK
   POLAROID
+  GITHUB_ISSUE
 }
 
 model User {

@@ -10,15 +10,28 @@ export interface PolaroidArtifactContent {
     imageKey: string;
 }
 
+export interface GithubIssueArtifactContent {
+    source: string;
+    repository: string;
+    issueNumber: number;
+    title: string;
+    body: string;
+    state: "open" | "closed" | "completed" | "not-planned";
+    url: string;
+    author: string;
+}
+
 export type ArtifactContent =
     | TextArtifactContent
     | LinkArtifactContent
-    | PolaroidArtifactContent;
+    | PolaroidArtifactContent
+    | GithubIssueArtifactContent;
 
 export type ArtifactType =
     | "TEXT"
     | "LINK"
-    | "POLAROID";
+    | "POLAROID"
+    | "GITHUB_ISSUE";
 
 export interface Artifact {
     id: number;

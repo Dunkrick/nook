@@ -39,7 +39,26 @@ export interface PolaroidArtifact {
     zIndex: number;
 }
 
-export type Artifact = | TextArtifact | LinkArtifact | PolaroidArtifact;
+export interface GithubIssueArtifact {
+    id: number;
+    userId: number;
+    workspaceId: number;
+    type: "GITHUB_ISSUE";
+    content: {
+        repository: string;
+        issueNumber: number;
+        title: string;
+        body: string;
+        state: "open" | "closed";
+        url: string;
+        author: string;
+    };
+    x: number;
+    y: number;
+    zIndex: number;
+}
+
+export type Artifact = | TextArtifact | LinkArtifact | PolaroidArtifact | GithubIssueArtifact;
 
 export interface DraftArtifact {
     type: "TEXT" | "LINK" | "POLAROID";
