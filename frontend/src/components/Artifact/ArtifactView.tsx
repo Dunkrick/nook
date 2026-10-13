@@ -50,6 +50,7 @@ export default function ArtifactView({
                 drag.isDragging && "nook-artifact--dragging",
                 editing.isEditing && "nook-artifact--editing",
             )}
+            data-artifact-id={artifact.id}
             style={{
                 ...style,
                 left: renderPosition.x,

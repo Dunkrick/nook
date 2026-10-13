@@ -1,6 +1,7 @@
 import prisma from "../prisma.js";
 import type { Prisma } from "../generated/prisma/client.js";
 import { PermanentGithubEventError } from "../queue/github-errors.js";
+import { getGithubIssuePosition } from "../lib/github-issue-placement.js";
 
 type DbClient = Prisma.TransactionClient;
 
@@ -80,6 +81,22 @@ export async function syncGithubIssue(
     url: payload.issue?.html_url ?? "",
     author: payload.issue?.user?.login ?? "",
   };
+  const existingArtifact = await db.artifact.findUnique({
+    where: {
+      source_externalId: { source: "github", externalId },
+    },
+    select: { id: true },
+  });
+  let position: { x: number; y: number } | null = null;
+
+  if (!existingArtifact) {
+    const workspaceArtifacts = await db.artifact.findMany({
+      where: { workspaceId: repository.workspaceId },
+      select: { type: true, x: true, y: true, content: true },
+    });
+    position = getGithubIssuePosition(workspaceArtifacts, content);
+  }
+  const createPosition = position ?? getGithubIssuePosition([]);
 
   return db.artifact.upsert({
     where: {
@@ -93,6 +110,8 @@ export async function syncGithubIssue(
       source: "github",
       externalId,
       content,
+      x: createPosition.x,
+      y: createPosition.y,
       userId: repository.userId,
       workspaceId: repository.workspaceId,
     },
