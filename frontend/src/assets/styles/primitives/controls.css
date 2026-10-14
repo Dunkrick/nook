@@ -1,7 +1,7 @@
 button:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
-  outline: 3px solid var(--focus-ring);
+  outline: 3px solid var(--palette-ink);
   outline-offset: 3px;
 }
 

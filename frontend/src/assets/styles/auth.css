@@ -397,8 +397,7 @@
 .auth-field input:focus {
     border-color: var(--accent-primary);
 
-    box-shadow:
-        0 0 0 3px var(--focus-ring);
+    box-shadow: var(--focus-ring);
 
     background: var(--color-artifact);
 }

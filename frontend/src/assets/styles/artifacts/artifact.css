@@ -394,12 +394,7 @@
 .nook-artifact__input:focus {
     border-color: var(--border-strong);
 
-    box-shadow:
-        0 0 0 3px color-mix(
-            in srgb,
-            var(--focus-ring) 55%,
-            transparent
-        );
+    box-shadow: var(--focus-ring);
 }
 
 /* ---------------------------------------------------------------
