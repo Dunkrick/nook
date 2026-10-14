@@ -33,6 +33,7 @@ export interface PolaroidArtifact {
     type: "POLAROID";
     content: {
         imageKey: string;
+        caption?: string;
     };
     x: number;
     y: number;
@@ -71,6 +72,7 @@ export interface DraftArtifact {
 
 export interface ArtifactUpdate {
     text?: string;
+    caption?: string;
     x?: number;
     y?: number;
 }

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import SelectionToolbar from "../components/SelectionToolbar"
 import { createArtifact, updateArtifact, deleteArtifact, getWorkspaces, getWorkspaceArtifacts, createWorkspace } from "../services/workspaces";
 import type { Artifact, ArtifactUpdate, DraftArtifact, Position, TextArtifact, LinkArtifact, PolaroidArtifact } from "../types/artifacts";
+import { markPhotoAsNew } from "../lib/developingPhotos";
 import Wall from "../components/Wall"
 import InsightPanel from "../components/InsightPanel";
 import WorkspaceShell from "../components/WorkspaceShell";
@@ -16,6 +17,31 @@ import { CameraProvider } from "../context/CameraProvider";
 import CanvasController from "../components/CanvasController";
 import { getWorkspaceHome } from "../lib/workspace";
 import FirstWorkspace from "../components/FirstWorkspace";
+
+/**
+ * Applies an update to local state. A caption lives inside `content`, so it
+ * is merged there instead of landing on the artifact itself.
+ */
+function applyArtifactUpdate(
+    artifact: Artifact,
+    update: ArtifactUpdate
+): Artifact {
+    if (update.caption === undefined || artifact.type !== "POLAROID") {
+        return { ...artifact, ...update };
+    }
+
+    const content: PolaroidArtifact["content"] = {
+        ...artifact.content,
+    };
+
+    if (update.caption) {
+        content.caption = update.caption;
+    } else {
+        delete content.caption;
+    }
+
+    return { ...artifact, ...update, content };
+}
 
 export default function Home() {
     const navigate = useNavigate();
@@ -261,6 +287,9 @@ export default function Home() {
             }
         );
 
+        // Only a photo uploaded in this session develops its image.
+        markPhotoAsNew(savedArtifact.id);
+
         setArtifacts((current) =>
             current.map((artifact) =>
                 artifact.id === optimisticArtifact.id
@@ -400,7 +429,7 @@ async function handleUpdateArtifact(
     setArtifacts((current) =>
         current.map((artifact) =>
             artifact.id === id
-                ? { ...artifact, ...update }
+                ? applyArtifactUpdate(artifact, update)
                 : artifact
         )
     );
