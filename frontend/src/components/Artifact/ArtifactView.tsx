@@ -6,7 +6,7 @@ import ArtifactBody from "./ArtifactBody";
 import LinkArtifactBody from "./LinkArtifactBody";
 import ArtifactEditor from "./ArtifactEditor";
 import useArtifactInteraction from "./useArtifactInteraction";
-import type { Artifact } from "../../types/artifacts";
+import type { Artifact, ArtifactUpdate } from "../../types/artifacts";
 import { toRenderPosition } from "../../lib/workspace";
 import PolaroidArtifactBody from "./PolaroidArtifactBody";
 import GithubIssueArtifactBody from "./GithubIssueArtifactBody";
@@ -16,6 +16,7 @@ interface ArtifactViewProps {
     artifact: Artifact;
     interaction: ReturnType<typeof useArtifactInteraction>;
     isSelected: boolean;
+    onUpdate: (id: number, update: ArtifactUpdate) => Promise<void>;
     onDelete: () => void;
 
     style?: React.CSSProperties & {
@@ -28,6 +29,7 @@ export default function ArtifactView({
     artifact,
     interaction,
     isSelected,
+    onUpdate,
     onDelete,
     style,
 }: ArtifactViewProps) {
@@ -99,7 +101,14 @@ export default function ArtifactView({
                     )}
 
                     {artifact.type === "POLAROID" && (
-                        <PolaroidArtifactBody artifactId={artifact.id}/>
+                        <PolaroidArtifactBody
+                            artifactId={artifact.id}
+                            caption={artifact.content.caption}
+                            isSelected={isSelected}
+                            onSaveCaption={(caption) =>
+                                onUpdate(artifact.id, { caption })
+                            }
+                        />
                     )}
 
                     {artifact.type === "GITHUB_ISSUE" && (

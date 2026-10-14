@@ -46,6 +46,7 @@ export default function ArtifactComponent({ artifact, index, onUpdate, onDelete,
             interaction={interaction}
             isSelected={isSelected}
             style={style}
+            onUpdate={onUpdate}
             onDelete={() => onDelete(artifact.id)}
         />
     );

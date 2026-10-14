@@ -18,6 +18,7 @@
   --stock-link: #E8ECF6;
   --stock-issue: #E6F0E8;
   --stock-photo: #F6F0E2;
+  --stock-undeveloped: #A3B0A2;
 
   --state-open: #1F6B45;
   --state-closed: #5B3FA8;
@@ -85,6 +86,8 @@
   /*Artifacts*/
   --artifact-min-width: 260px;
   --artifact-max-width: 380px;
+  --polaroid-width: 280px;
+  --polaroid-caption-size: 1.5rem;
   --render-world-size: 100000px;
   /* Layering Rules
 Wall
