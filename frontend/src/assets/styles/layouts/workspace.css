@@ -174,7 +174,7 @@
   margin-top: var(--space-2);
   padding: 0 var(--space-5);
   border: 1px solid var(--border-strong);
-  border-radius: 999px;
+  border-radius: var(--radius-0);
   background: var(--border-strong);
   color: var(--text-on-dark);
   font-size: var(--type-label-size);
@@ -209,7 +209,7 @@
     transform: translateX(-50%);
     padding: 10px 16px;
     border: 1px solid var(--border-strong);
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     background: var(--color-artifact);
     color: var(--text-primary);
     box-shadow: var(--elevation-artifact);

@@ -187,7 +187,11 @@
 /* Small color marks — using the actual Nook palette */
 
 .auth-block--iris strong {
-    color: #b9b1dc;
+    color: color-mix(
+        in srgb,
+        var(--palette-iris) 40%,
+        var(--text-on-dark)
+    );
 }
 
 .auth-block--coral strong {
@@ -279,7 +283,7 @@
 .auth-brand__name {
     font-family: var(--nook-font-ui);
     font-size: 16px;
-    font-weight: 600;
+    font-weight: var(--weight-medium);
     line-height: 1;
 }
 
@@ -309,7 +313,7 @@
     color: var(--text-heading);
 
     font-size: clamp(2rem, 4vw, 2.75rem);
-    font-weight: var(--weight-semibold);
+    font-weight: var(--weight-medium);
     line-height: 1.08;
     letter-spacing: var(--tracking-tight);
 }
@@ -397,8 +401,7 @@
 .auth-field input:focus {
     border-color: var(--accent-primary);
 
-    box-shadow:
-        0 0 0 3px var(--focus-ring);
+    box-shadow: var(--focus-ring);
 
     background: var(--color-artifact);
 }
@@ -432,7 +435,7 @@
 
     padding: 0;
     border: none;
-    border-radius: 50%;
+    border-radius: var(--radius-0);
 
     background: transparent;
     color: var(--text-muted);
@@ -627,7 +630,7 @@
         grid-template-columns: 1fr;
 
         border: 0;
-        border-radius: 0;
+        border-radius: var(--radius-0);
 
         box-shadow: none;
     }

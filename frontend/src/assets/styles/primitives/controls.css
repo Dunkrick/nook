@@ -1,14 +1,14 @@
 button:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
-  outline: 3px solid var(--focus-ring);
+  outline: 3px solid var(--palette-ink);
   outline-offset: 3px;
 }
 
 .nook-button {
   min-height: 38px;
   border: 1px solid transparent;
-  border-radius: 999px; padding: 0 var(--space-4); color: var(--text-primary);
+  border-radius: var(--radius-0); padding: 0 var(--space-4); color: var(--text-primary);
   font-size: var(--type-label-size); font-weight: var(--weight-semibold);
   transition: transform var(--motion-lift), background-color var(--motion-lift), box-shadow var(--motion-lift), border-color var(--motion-lift);
 }
@@ -38,11 +38,11 @@ textarea:focus-visible {
   height: 32px;
   place-items: center;
   border: 0;
-  border-radius: 50%;
+  border-radius: var(--radius-0);
   background: transparent;
   color: inherit;
   font-size: var(--type-hint-size); font-weight: var(--weight-bold);
 }
 
 .nook-icon-button:hover { background: color-mix(in srgb, var(--border-strong) 10%, transparent); }
-.nook-icon-button--danger:hover { background: color-mix(in srgb, var(--accent-action) 18%, transparent); color: #a93e2d; }
+.nook-icon-button--danger:hover { background: color-mix(in srgb, var(--accent-action) 18%, transparent); color: var(--accent-action); }

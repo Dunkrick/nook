@@ -51,7 +51,7 @@
     margin-top: var(--space-5);
     padding: 12px;
     border: 1px dashed color-mix(in srgb, var(--border-strong) 48%, transparent);
-    border-radius: 8px 11px 7px 10px;
+    border-radius: var(--radius-0);
     background: color-mix(in srgb, var(--artifact-2) 22%, transparent);
     transform: rotate(3deg);
     animation: nook-seed-breathe 2.8s ease-in-out infinite;
@@ -60,7 +60,7 @@
 .nook-empty-note__seed span {
     display: block;
     height: 4px;
-    border-radius: 999px;
+    border-radius: var(--radius-0);
     background: color-mix(in srgb, var(--text-heading) 46%, transparent);
 }
 
@@ -71,7 +71,7 @@
     width: 100%;
     height: 11px;
     margin-bottom: var(--space-3);
-    border-radius: 999px;
+    border-radius: var(--radius-0);
     background: color-mix(in srgb, var(--border-strong) 14%, transparent);
 }
 
