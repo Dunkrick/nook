@@ -740,11 +740,11 @@
 
     pointer-events: none;
 
-    animation: nook-photo-develop var(--motion-develop) linear both;
+    animation: nook-photo-develop var(--motion-develop) both;
 }
 
 .nook-polaroid--developing .nook-polaroid__image img {
-    animation: nook-photo-fade-in var(--motion-develop) linear both;
+    animation: nook-photo-fade-in var(--motion-develop) both;
 }
 
 @keyframes nook-photo-develop {
