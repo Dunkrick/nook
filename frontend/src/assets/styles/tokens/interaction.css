@@ -16,3 +16,7 @@
         2px solid rgba(74, 67, 104, .28);
 
 }
+
+:focus-visible {
+    box-shadow: var(--focus-ring);
+}

@@ -6,16 +6,16 @@ export default function Viewport({
 }: PropsWithChildren){
 
     const camera = useCanvasCamera();
+    const { handleWheel } = camera;
     const viewportRef = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-    const viewport = viewportRef.current;
-    if (!viewport) return;
 
-        const handleWheel = (event: WheelEvent) => camera.handleWheel(event);
+    useEffect(() => {
+        const viewport = viewportRef.current;
+        if (!viewport) return;
 
         viewport.addEventListener("wheel", handleWheel, { passive: false });
         return () => viewport.removeEventListener("wheel", handleWheel);
-    }, [camera.handleWheel]);
+    }, [handleWheel]);
 
     return(
 
