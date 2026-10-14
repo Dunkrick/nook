@@ -1,11 +1,48 @@
 import type { Request, Response, NextFunction } from "express";
 import { ValidationError } from "../lib/error.js";
 
+export const CAPTION_MAX_LENGTH = 48;
+
+/**
+ * Trims a polaroid caption and checks the film-strip rules: one line, and at
+ * most CAPTION_MAX_LENGTH characters. An absent or blank caption returns an
+ * empty string, which means "no caption".
+ */
+function normalizeCaption(caption: unknown): string {
+    if (caption === undefined) {
+        return "";
+    }
+
+    if (typeof caption !== "string") {
+        throw new ValidationError("Caption must be text.");
+    }
+
+    if (/[\r\n]/.test(caption)) {
+        throw new ValidationError("Caption must be on one line.");
+    }
+
+    const trimmed = caption.trim();
+
+    if (trimmed.length > CAPTION_MAX_LENGTH) {
+        throw new ValidationError(
+            `Caption must be ${CAPTION_MAX_LENGTH} characters or fewer.`
+        );
+    }
+
+    return trimmed;
+}
+
 export function validateCreateArtifact(req: Request, _res: Response, next: NextFunction) {
     const { type, text, url, imageKey, x, y } = req.body;
 
     if (type !== "TEXT" && type !== "LINK" && type !== "POLAROID") {
         throw new ValidationError("Invalid artifact type.");
+    }
+
+    if (req.body.caption !== undefined && type !== "POLAROID") {
+        throw new ValidationError(
+            "Only polaroid artifacts can have a caption."
+        );
     }
 
     if(type === "TEXT"){
@@ -31,6 +68,7 @@ export function validateCreateArtifact(req: Request, _res: Response, next: NextF
         }
 
         req.body.imageKey = imageKey.trim();
+        req.body.caption = normalizeCaption(req.body.caption);
     }
 
     req.body.x = Number.isFinite(Number(x)) ? Number(x) : 0;
@@ -40,19 +78,25 @@ export function validateCreateArtifact(req: Request, _res: Response, next: NextF
 }
 
 export function validateUpdateArtifact(req: Request, res: Response, next: NextFunction) {
-    const { text, x, y } = req.body;
+    const { text, caption, x, y } = req.body;
     const parsedX = Number(x);
     const parsedY = Number(y);
 
     // Nothing to update
     if (
         text === undefined &&
+        caption === undefined &&
         x === undefined &&
         y === undefined
     ) {
         throw new ValidationError(
             "At least one field must be provided."
         );
+    }
+
+    if (caption !== undefined) {
+        // An empty string is valid: it clears the caption.
+        req.body.caption = normalizeCaption(caption);
     }
 
     if (text !== undefined) {

@@ -8,6 +8,7 @@ export interface LinkArtifactContent {
 
 export interface PolaroidArtifactContent {
     imageKey: string;
+    caption?: string;
 }
 
 export interface GithubIssueArtifactContent {
