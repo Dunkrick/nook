@@ -54,7 +54,7 @@
     inset: 5px;
 
     border: 1px solid rgba(255, 253, 251, 0.24);
-    border-radius: 13px 17px 12px 15px;
+    border-radius: var(--radius-0);
 
     content: "";
 
@@ -206,7 +206,7 @@
         transparent
     );
 
-    border-radius: 7px;
+    border-radius: var(--radius-0);
 
     background: color-mix(
         in srgb,
@@ -513,7 +513,7 @@
     cursor: pointer;
 
     border: 1px solid var(--border-strong);
-    border-radius: 999px;
+    border-radius: var(--radius-0);
 
     padding: 7px 11px;
 
@@ -667,7 +667,7 @@
     /* Undeveloped base: the photo before it arrives. */
     background: var(--stock-undeveloped);
 
-    border-radius: 0;
+    border-radius: var(--radius-0);
     box-shadow: inset 0 0 0 1px color-mix(
         in srgb,
         var(--border-strong) 12%,
@@ -903,7 +903,7 @@
 .nook-polaroid-draft__actions button {
     cursor: pointer;
     border: 1px solid var(--border-strong);
-    border-radius: 999px;
+    border-radius: var(--radius-0);
     padding: 7px 14px;
     background: var(--color-artifact);
     color: var(--text-primary);

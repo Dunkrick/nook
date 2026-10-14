@@ -8,7 +8,7 @@ textarea:focus-visible {
 .nook-button {
   min-height: 38px;
   border: 1px solid transparent;
-  border-radius: 999px; padding: 0 var(--space-4); color: var(--text-primary);
+  border-radius: var(--radius-0); padding: 0 var(--space-4); color: var(--text-primary);
   font-size: var(--type-label-size); font-weight: var(--weight-semibold);
   transition: transform var(--motion-lift), background-color var(--motion-lift), box-shadow var(--motion-lift), border-color var(--motion-lift);
 }
@@ -38,7 +38,7 @@ textarea:focus-visible {
   height: 32px;
   place-items: center;
   border: 0;
-  border-radius: 50%;
+  border-radius: var(--radius-0);
   background: transparent;
   color: inherit;
   font-size: var(--type-hint-size); font-weight: var(--weight-bold);
