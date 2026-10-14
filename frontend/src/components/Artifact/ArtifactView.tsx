@@ -102,6 +102,7 @@ export default function ArtifactView({
 
                     {artifact.type === "POLAROID" && (
                         <PolaroidArtifactBody
+                            key={artifact.id}
                             artifactId={artifact.id}
                             caption={artifact.content.caption}
                             isSelected={isSelected}
