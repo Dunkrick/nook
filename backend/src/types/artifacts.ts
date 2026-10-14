@@ -18,6 +18,7 @@ export type CreateArtifactInput =
     | {
         type: "POLAROID";
         imageKey: string;
+        caption?: string;
         userId: number;
         workspaceId: number;
         x: number;
@@ -29,6 +30,7 @@ export interface UpdateArtifactInput {
     userId: number;
     workspaceId: number;
     text?: string;
+    caption?: string;
     x?: number;
     y?: number;
 }

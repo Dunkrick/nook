@@ -18,6 +18,28 @@ function assertOwnedImageKey(imageKey: string, userId: number) {
     }
 }
 
+/**
+ * Copies the stored content JSON and sets or clears `caption`. Every other
+ * key, `imageKey` above all, is carried over untouched.
+ */
+function withCaption(
+    content: Prisma.JsonValue,
+    caption: string
+): Prisma.InputJsonObject {
+    const merged: Record<string, unknown> =
+        content && typeof content === "object" && !Array.isArray(content)
+            ? { ...(content as Record<string, unknown>) }
+            : {};
+
+    if (caption === "") {
+        delete merged.caption;
+    } else {
+        merged.caption = caption;
+    }
+
+    return merged as Prisma.InputJsonObject;
+}
+
 export async function createArtifact(
     input: CreateArtifactInput
 ) {
@@ -44,7 +66,10 @@ export async function createArtifact(
             ? { text: input.text }
             : input.type === "LINK"
             ? { url: input.url }
-            : { imageKey: input.imageKey };
+            : {
+                imageKey: input.imageKey,
+                ...(input.caption ? { caption: input.caption } : {}),
+            };
 
     const row = await prisma.artifact.create({
         data: {
@@ -91,9 +116,7 @@ export async function updateArtifact(
     input: UpdateArtifactInput
 ) {
     const data: {
-        content?: {
-            text: string;
-        };
+        content?: Prisma.InputJsonObject;
         x?: number;
         y?: number;
     } = {};
@@ -102,9 +125,30 @@ export async function updateArtifact(
         data.content = {
             text: input.text,
         };
+    }
 
-        // TODO(v2):
-        // Merge JSON instead of replacing the whole content object.
+    if (input.caption !== undefined) {
+        // A caption update must keep `imageKey`, so the stored content is read
+        // back and merged. A move needs no read.
+        const existing = await prisma.artifact.findFirst({
+            where: {
+                id: input.id,
+                userId: input.userId,
+                workspaceId: input.workspaceId,
+            },
+        });
+
+        if (!existing) {
+            return null;
+        }
+
+        if (existing.type !== "POLAROID") {
+            throw new ValidationError(
+                "Only polaroid artifacts can have a caption."
+            );
+        }
+
+        data.content = withCaption(existing.content, input.caption);
     }
 
     if (input.x !== undefined) {
