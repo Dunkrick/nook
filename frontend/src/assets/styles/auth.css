@@ -187,7 +187,11 @@
 /* Small color marks — using the actual Nook palette */
 
 .auth-block--iris strong {
-    color: #b9b1dc;
+    color: color-mix(
+        in srgb,
+        var(--palette-iris) 40%,
+        var(--text-on-dark)
+    );
 }
 
 .auth-block--coral strong {

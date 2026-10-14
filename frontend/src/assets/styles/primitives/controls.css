@@ -45,4 +45,4 @@ textarea:focus-visible {
 }
 
 .nook-icon-button:hover { background: color-mix(in srgb, var(--border-strong) 10%, transparent); }
-.nook-icon-button--danger:hover { background: color-mix(in srgb, var(--accent-action) 18%, transparent); color: #a93e2d; }
+.nook-icon-button--danger:hover { background: color-mix(in srgb, var(--accent-action) 18%, transparent); color: var(--accent-action); }

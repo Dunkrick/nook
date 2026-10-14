@@ -102,9 +102,9 @@
 }
 
 kbd {
-  background-color: #f3f4f6;
-  color: #1f2937;
-  border: 1px solid #d1d5db;
+  background-color: var(--color-artifact);
+  color: var(--text-primary);
+  border: var(--line-hair);
   border-radius: var(--radius-0);
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
