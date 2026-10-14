@@ -1,5 +1,17 @@
 :root {
-  --motion-lift: 180ms cubic-bezier(0.2, 0, 0, 1);
+  --motion-lift: 140ms cubic-bezier(0.2, 0, 0, 1);
   --motion-pop: 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
   --motion-settle: 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-develop: 3200ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  --motion-bulb: 1800ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

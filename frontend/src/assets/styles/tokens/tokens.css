@@ -1,6 +1,7 @@
 :root {
   /* Primitive palette: use semantic aliases below in component rules. */
-  --palette-ink: #2a2438;
+  --palette-ink: #17141F;
+  --palette-wall: #EFE9DD;
   --palette-iris: #4a4368;
   --palette-coral: #f2735c;
   --palette-coral-deep: #d9573f;
@@ -10,30 +11,41 @@
   --palette-cream: #fbf7f4;
   --palette-paper: #fffdfb;
   --palette-border: #e4dde0;
+  --palette-spark: #D6402A;
+  --palette-bulb: #FFB23E;
+
+  --stock-note: #FBF8F1;
+  --stock-link: #E8ECF6;
+  --stock-issue: #E6F0E8;
+  --stock-photo: #F6F0E2;
+
+  --state-open: #1F6B45;
+  --state-closed: #5B3FA8;
 
   /* Material roles */
-  --color-canvas: var(--palette-cream);
+  --color-canvas: var(--palette-wall);
   --color-surface: #f0e5d9;
-  --color-artifact: var(--palette-paper);
+  --color-artifact: var(--stock-note);
   --color-selection: rgba(74, 67, 104, 0.42);
   --color-overlay: rgba(42, 36, 56, 0.18);
-  --color-grid: rgba(74, 67, 104, 0.105);
+  --color-grid: rgba(23, 20, 31, 0.14);
   --color-scribble: rgba(42, 36, 56, 0.24);
 
   /* Content roles */
   --text-primary: var(--palette-ink);
-  --text-heading: var(--palette-iris);
+  --text-heading: var(--palette-ink);
   --text-muted: #756d80;
   --text-on-dark: var(--palette-cream);
   --border-subtle: var(--palette-border);
   --border-strong: var(--palette-ink);
-  --accent-primary: var(--palette-coral);
-  --accent-action: var(--palette-coral-deep);
-  --focus-ring: rgba(74, 95, 184, 0.34);
-  --artifact-1: var(--palette-coral);
-  --artifact-2: var(--palette-gold);
-  --artifact-3: var(--palette-blue);
-  --artifact-4: var(--palette-green);
+  --accent-primary: var(--palette-spark);
+  --accent-action: var(--palette-spark);
+  --focus-ring: 0 0 0 2px var(--palette-ink), 0 0 0 5px rgba(255, 178, 62, 0.6);
+  --glow-select: 0 0 0 2px var(--palette-ink), 0 0 0 5px rgba(255, 178, 62, 0.6), 0 0 22px rgba(255, 178, 62, 0.35);
+  --artifact-1: var(--stock-note);
+  --artifact-2: var(--stock-note);
+  --artifact-3: var(--stock-note);
+  --artifact-4: var(--stock-note);
 
   /* Space and shape */
   --space-1: 4px;
@@ -45,16 +57,27 @@
   --space-7: 48px;
   --space-8: 64px;
   --space-9: 96px;
-  --radius-control: 8px;
-  --radius-surface: 12px;
-  --radius-artifact: 18px;
-  --radius-artifact-organic: 17px 21px 16px 19px;
-  --radius-panel: 24px;
+  --radius-0: 0;
+  --radius-paper: 2px;
+  --radius-pill: 999px;
+  --radius-control: var(--radius-0);
+  --radius-surface: var(--radius-0);
+  --radius-artifact: var(--radius-0);
+  --radius-artifact-organic: var(--radius-0);
+  --radius-panel: var(--radius-0);
+
+  /* Lines */
+  --line-ink: 1.5px solid var(--palette-ink);
+  --line-hair: 1px solid rgba(23, 20, 31, 0.16);
+  --line-dotted: 1px dotted rgba(23, 20, 31, 0.35);
 
   /* Elevation follows material level, never decoration alone. */
-  --elevation-artifact: 0 4px 16px rgba(42, 36, 56, 0.12);
-  --elevation-artifact-hover: 0 4px 16px rgba(42, 36, 56, 0.24);
-  --elevation-drag: 0 18px 42px rgba(42, 36, 56, 0.26);
+  --shadow-lift: 4px 4px 0 var(--palette-ink);
+  --shadow-paper-rest: 0 1px 1px rgba(23, 20, 31, 0.18), 0 2px 6px rgba(23, 20, 31, 0.1);
+  --shadow-paper-lift: 0 14px 28px rgba(23, 20, 31, 0.22), 0 3px 6px rgba(23, 20, 31, 0.12);
+  --elevation-artifact: none;
+  --elevation-artifact-hover: var(--shadow-lift);
+  --elevation-drag: var(--shadow-lift);
   --elevation-overlay: 0 24px 64px rgba(42, 36, 56, 0.22);
   --elevation-surface: 0 10px 30px rgba(71, 56, 54, 0.14);
   --elevation-scribble: 3px 4px 0 rgba(42, 36, 56, 0.14);
