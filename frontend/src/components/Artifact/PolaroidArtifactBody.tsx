@@ -31,7 +31,6 @@ export default function PolaroidArtifactBody({
         developsOnFirstMount(artifactId)
     );
     const inputRef = useRef<HTMLInputElement>(null);
-    const developTriggeredRef = useRef<Set<number>>(new Set());
 
     useEffect(() => {
         let isCancelled = false;
@@ -72,15 +71,6 @@ export default function PolaroidArtifactBody({
             inputRef.current?.select();
         }
     }, [isEditing]);
-
-    // If the component receives a new artifactId (e.g. optimistic → real ID swap)
-    // and it was marked as new, start the develop animation even without a remount.
-    useEffect(() => {
-        if (developsOnFirstMount(artifactId) && !developTriggeredRef.current.has(artifactId)) {
-            developTriggeredRef.current.add(artifactId);
-            setIsDeveloping(true);
-        }
-    }, [artifactId]);
 
     useEffect(() => {
         if (!isDeveloping) {
