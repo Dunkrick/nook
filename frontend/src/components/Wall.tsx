@@ -22,7 +22,7 @@ interface WallProps {
 
   onCommitDraftText: (text: string) => Promise<void>;
   onCommitDraftLink: (url: string) => Promise<void>;
-  onCommitDraftPolaroid: (imageKey: string) => Promise<void>;
+  onCommitDraftPolaroid: (imageKey: string, caption?: string) => Promise<void>;
   onCancelDraft: () => void;
 
   selectedArtifactIds: number[]
@@ -140,7 +140,7 @@ function handlePointerDown(
                     x: draftArtifact.x,
                     y: draftArtifact.y,
                 }}
-                onCommit={onCommitDraftPolaroid}
+                onCommit={(imageKey, caption) => onCommitDraftPolaroid(imageKey, caption)}
                 onCancel={onCancelDraft}
             />
         ) : (

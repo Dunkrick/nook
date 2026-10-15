@@ -32,6 +32,7 @@ export async function createArtifact(
         text?: string;
         url?: string;
         imageKey?: string;
+        caption?: string;
         x?: number;
         y?: number;
     }
