@@ -10,7 +10,12 @@ dist/
 # OS Files
 .DS_Store
 
+# Contributor docs (do not ship)
 CONTRIBUTING.md
 TODO.md
 
+# Local verification artifacts
+.tmp-verify/
+
+# CI secrets (never commit)
 backend/github-actions-key.json
