@@ -420,3 +420,45 @@ describe("PolaroidArtifactBody develop", () => {
         ).not.toBeInTheDocument();
     });
 });
+
+
+describe("PolaroidArtifactBody while the artifact is still optimistic", () => {
+    it("does not request an image for a temporary negative id", () => {
+        get.mockResolvedValue({ url: FAKE_IMAGE_URL });
+
+        const { container } = render(
+            <PolaroidArtifactBody
+                artifactId={-1760000000000}
+                onSaveCaption={() => {}}
+            />,
+        );
+
+        expect(get).not.toHaveBeenCalled();
+        expect(
+            container.querySelector(".nook-polaroid__loading"),
+        ).not.toBeNull();
+        expect(
+            screen.queryByText(/Photo didn't load/),
+        ).not.toBeInTheDocument();
+    });
+
+    it("does not open the caption editor until the real id arrives", () => {
+        get.mockResolvedValue({ url: FAKE_IMAGE_URL });
+
+        render(
+            <PolaroidArtifactBody
+                artifactId={-5}
+                isSelected
+                onSaveCaption={() => {}}
+            />,
+        );
+
+        fireEvent.doubleClick(
+            screen.getByRole("button", { name: "Polaroid caption" }),
+        );
+
+        expect(
+            screen.queryByRole("textbox", { name: "Polaroid caption" }),
+        ).not.toBeInTheDocument();
+    });
+});
