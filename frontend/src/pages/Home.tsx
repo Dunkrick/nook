@@ -245,7 +245,7 @@ export default function Home() {
         }
     }
 
-    async function handleCommitDraftPolaroid(imageKey: string) {
+    async function handleCommitDraftPolaroid(imageKey: string, caption?: string) {
     if (
         !draftArtifact ||
         !activeWorkspace ||
@@ -256,14 +256,20 @@ export default function Home() {
 
     setSaveError(null);
 
+    const trimmedCaption = caption?.trim();
+    const content: PolaroidArtifact["content"] = {
+        imageKey,
+    };
+    if (trimmedCaption) {
+        content.caption = trimmedCaption;
+    }
+
     const optimisticArtifact: PolaroidArtifact = {
         id: -Date.now(),
         userId: 0,
         workspaceId: activeWorkspace.id,
         type: "POLAROID",
-        content: {
-            imageKey,
-        },
+        content,
         x: draftArtifact.x,
         y: draftArtifact.y,
         zIndex: 0,
@@ -282,6 +288,7 @@ export default function Home() {
             {
                 type: "POLAROID",
                 imageKey,
+                caption: trimmedCaption,
                 x: draftArtifact.x,
                 y: draftArtifact.y,
             }

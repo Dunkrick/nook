@@ -820,6 +820,54 @@
     );
 }
 
+/* Stage 2 draft actions (inside the polaroid frame) */
+.nook-polaroid__draft-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border-top: var(--line-hair);
+    margin-top: auto;
+}
+
+.nook-polaroid__draft-actions button {
+    cursor: pointer;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-0);
+    padding: 7px 14px;
+    background: var(--color-artifact);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: var(--type-hint-size);
+    font-weight: var(--weight-semibold);
+    transition:
+        transform var(--motion-lift),
+        background-color var(--motion-lift);
+}
+
+.nook-polaroid__draft-actions button:hover:not(:disabled) {
+    background: var(--artifact-2);
+    transform: translateY(-1px);
+}
+
+.nook-polaroid__draft-actions button:last-child {
+    border: 0;
+    background: transparent;
+    color: var(--text-muted);
+}
+
+.nook-polaroid__draft-actions button:last-child:hover:not(:disabled) {
+    background: transparent;
+    color: var(--text-primary);
+    transform: translateY(-1px);
+}
+
+.nook-polaroid__draft-actions button:disabled {
+    cursor: default;
+    opacity: 0.5;
+}
+
 /* ---------------------------------------------------------------
    Polaroid draft
    --------------------------------------------------------------- */
