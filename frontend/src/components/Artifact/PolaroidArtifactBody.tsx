@@ -31,8 +31,17 @@ export default function PolaroidArtifactBody({
         developsOnFirstMount(artifactId)
     );
     const inputRef = useRef<HTMLInputElement>(null);
+    const isOptimistic = artifactId <= 0;
 
     useEffect(() => {
+        // An optimistic polaroid carries a temporary negative id that the
+        // server has never heard of. Wait for the real id (the component
+        // remounts on the swap) instead of asking for an image that cannot
+        // exist yet.
+        if (isOptimistic) {
+            return;
+        }
+
         let isCancelled = false;
 
         async function loadImage() {
@@ -63,7 +72,7 @@ export default function PolaroidArtifactBody({
         return () => {
             isCancelled = true;
             };
-        }, [artifactId]);
+        }, [artifactId, isOptimistic]);
 
     useEffect(() => {
         if (isEditing) {
@@ -82,6 +91,11 @@ export default function PolaroidArtifactBody({
     }, [isDeveloping, artifactId]);
 
     function startEditing() {
+        // No caption saves until the server has the real artifact.
+        if (isOptimistic) {
+            return;
+        }
+
         setEditCaption(caption ?? "");
         setIsEditing(true);
     }
