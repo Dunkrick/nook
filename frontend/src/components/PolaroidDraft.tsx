@@ -36,10 +36,14 @@ export default function PolaroidDraft({
         if (!file || isLoading) return;
 
         setIsLoading(true);
+        setFileError("");
 
         try {
             const uploaded = await uploadImage(file);
             await onCommit(uploaded.key, caption.trim() || undefined);
+        } catch (error) {
+            console.error(error);
+            setFileError("Couldn't upload that photo. Check your connection and try again.");
         } finally {
             setIsLoading(false);
         }
@@ -124,14 +128,6 @@ export default function PolaroidDraft({
                 <div className="nook-polaroid-draft__actions">
                     <button
                         type="button"
-                        onClick={() => void handleCommit()}
-                        disabled={isLoading}
-                    >
-                        {isLoading ? "Adding…" : "Add photo"}
-                    </button>
-
-                    <button
-                        type="button"
                         onClick={onCancel}
                         disabled={isLoading}
                     >
@@ -142,10 +138,10 @@ export default function PolaroidDraft({
         );
     }
 
-    // Stage 2: File chosen — real polaroid frame with caption input
+    // Stage 2: file chosen. The frame is the draft, so you write on the photo itself.
     return (
         <div
-            className="nook-polaroid"
+            className="nook-polaroid-draft nook-polaroid-draft--framed"
             style={{
                 left: renderPosition.x,
                 top: renderPosition.y,
@@ -153,27 +149,36 @@ export default function PolaroidDraft({
             onPointerDown={(e) => e.stopPropagation()}
             onDoubleClick={(e) => e.stopPropagation()}
         >
-            <div className="nook-polaroid__image">
-                <img
-                    src={previewUrl}
-                    alt="Photo preview"
-                />
+            <div className="nook-polaroid">
+                <div className="nook-polaroid__image">
+                    <img
+                        src={previewUrl}
+                        alt="Photo preview"
+                    />
+                </div>
+
+                <div className="nook-polaroid__strip">
+                    <input
+                        ref={captionInputRef}
+                        className="nook-polaroid__caption-input"
+                        aria-label="Polaroid caption"
+                        placeholder="Write something"
+                        value={caption}
+                        maxLength={CAPTION_MAX_LENGTH}
+                        onChange={(e) => setCaption(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        disabled={isLoading}
+                    />
+                </div>
             </div>
 
-            <div className="nook-polaroid__strip">
-                <input
-                    ref={captionInputRef}
-                    className="nook-polaroid__caption-input"
-                    aria-label="Polaroid caption"
-                    placeholder="Write something"
-                    value={caption}
-                    maxLength={CAPTION_MAX_LENGTH}
-                    onChange={(e) => setCaption(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                />
-            </div>
+            {fileError && (
+                <p className="nook-polaroid-draft__error" role="alert">
+                    {fileError}
+                </p>
+            )}
 
-            <div className="nook-polaroid__draft-actions">
+            <div className="nook-polaroid-draft__actions">
                 <button
                     type="button"
                     onClick={() => void handleCommit()}
