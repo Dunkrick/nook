@@ -36,6 +36,8 @@
   --text-primary: var(--palette-ink);
   --text-heading: var(--palette-ink);
   --text-muted: #756d80;
+  /* Darker muted for light parchment surfaces (auth panel #FBF8F1 ≈ 5.4:1). */
+  --text-muted-auth: #5f5870;
   --text-on-dark: var(--palette-cream);
   --border-subtle: var(--palette-border);
   --border-strong: var(--palette-ink);

@@ -242,6 +242,15 @@
     min-height: 100%;
 
     background: var(--color-artifact);
+
+    /*
+     * --text-muted (#756d80) is ~4.27:1 on --color-artifact (#FBF8F1).
+     * Fails WCAG AA 4.5:1 for normal-sized text (eyebrow, description,
+     * footer, toggle prompt). Scope a darker value here without touching
+     * the global token (the canvas uses a darker background where the
+     * original value passes).
+     */
+    --text-muted: var(--text-muted-auth);
 }
 
 
@@ -391,7 +400,6 @@
 
 .auth-field input::placeholder {
     color: var(--text-muted);
-    opacity: 0.7;
 }
 
 .auth-field input:hover {
@@ -476,12 +484,22 @@
    ========================================================== */
 
 .auth-error {
-    margin-top: calc(var(--space-2) * -1);
+    /*
+     * Always rendered (role=alert fires on text change, not mount).
+     * visibility:hidden keeps it out of the a11y tree when empty
+     * and collapses layout so the negative margin only applies
+     * when an actual error is showing.
+     */
+    min-height: 0;
 
     color: var(--palette-coral-deep);
 
     font-size: var(--type-label-size);
     line-height: 1.45;
+}
+
+.auth-error:empty {
+    visibility: hidden;
 }
 
 
@@ -525,6 +543,11 @@
 
 .auth-submit:active:not(:disabled) {
     transform: translateY(0);
+}
+
+.auth-submit:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
 }
 
 .auth-submit:disabled {
@@ -575,6 +598,11 @@
 .auth-toggle-btn:hover {
     color: var(--accent-action);
     transform: translateY(-1px);
+}
+
+.auth-toggle-btn:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
 }
 
 
