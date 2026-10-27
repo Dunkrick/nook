@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AuthForm from "./AuthForm";
 import * as authService from "../services/auth";
 
@@ -13,7 +13,7 @@ const AUTH_CONTENT = {
         buttonText: "Login",
         loadingButtonText: "Coming back...",
         togglePrompt: "Don't have an account?",
-        toggleButtonText: "Create one",
+        toggleButtonText: "Create an account",
         successTitle: "You're back.",
         successMessage: "Opening your Nook...",
     },
@@ -46,10 +46,25 @@ export default function AuthLayout() {
      * It is intentionally NOT applied to the shell or heading.
      */
     const [formKey, setFormKey] = useState(mode);
+    const headingRef = useRef<HTMLHeadingElement>(null);
 
     if (formKey !== mode) {
         setFormKey(mode);
     }
+
+    /*
+     * When the mode changes (login ↔ register), move focus to the heading
+     * so SR users hear the new context and focus does not land on the
+     * button that triggered navigation (which may no longer exist).
+     */
+    const first = useRef(true);
+    useEffect(() => {
+        if (first.current) {
+            first.current = false;
+            return;
+        }
+        headingRef.current?.focus();
+    }, [mode]);
 
     const handleSubmit = async (credentials: {
         name?: string;
@@ -154,7 +169,7 @@ export default function AuthLayout() {
                             <div className="auth-brand">
                                 <img
                                     src="/favicon.svg"
-                                    alt="Nook"
+                                    alt=""
                                     className="auth-brand__mark"
                                 />
 
@@ -173,9 +188,9 @@ export default function AuthLayout() {
                                 {content.eyebrow}
                             </p>
 
-                            <h1>
-                                {content.title}
-                            </h1>
+                        <h1 ref={headingRef} tabIndex={-1}>
+                            {content.title}
+                        </h1>
 
                             <p className="auth-description">
                                 {content.description}

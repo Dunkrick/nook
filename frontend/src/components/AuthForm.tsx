@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 
 interface AuthFormProps {
     isRegisterMode: boolean;
@@ -45,6 +45,8 @@ export default function AuthForm({
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+
+    const errorId = useId();
 
     useEffect(() => {
         if (!success) {
@@ -186,6 +188,8 @@ export default function AuthForm({
                     placeholder="you@example.com"
                     disabled={loading}
                     required
+                    aria-invalid={error ? "true" : undefined}
+                    aria-describedby={error ? errorId : undefined}
                 />
             </div>
 
@@ -215,8 +219,15 @@ export default function AuthForm({
                         placeholder="Your password"
                         disabled={loading}
                         required
+                        aria-invalid={error ? "true" : undefined}
+                        aria-describedby={error ? errorId : undefined}
                     />
 
+                    {/*
+                     * aria-label stays constant so SR reads "Show password"
+                     * always. aria-pressed communicates the toggle state
+                     * without double-signalling a label flip.
+                     */}
                     <button
                         type="button"
                         className="auth-password-toggle"
@@ -226,11 +237,8 @@ export default function AuthForm({
                             )
                         }
                         disabled={loading}
-                        aria-label={
-                            showPassword
-                                ? "Hide password"
-                                : "Show password"
-                        }
+                        aria-label="Show password"
+                        aria-pressed={showPassword}
                     >
                         {showPassword ? (
                             <svg
@@ -269,14 +277,19 @@ export default function AuthForm({
                 </div>
             </div>
 
-            {error && (
-                <p
-                    className="auth-error"
-                    role="alert"
-                >
-                    {error}
-                </p>
-            )}
+            {/*
+             * Always rendered so React doesn't remove/re-add the node
+             * (which can swallow the alert in some SR implementations).
+             * role="alert" fires on content change, not on mount.
+             */}
+            <p
+                id={errorId}
+                className="auth-error"
+                role="alert"
+                aria-atomic="true"
+            >
+                {error}
+            </p>
 
             <button
                 className="auth-submit"
