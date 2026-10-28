@@ -6,7 +6,7 @@ import type { RegisterUserInput, AuthResponse, LoginUserInput } from "../types/a
 import type { User } from "../generated/prisma/client.js";
 import { env } from "../config/env.js";
 
-function createAuthResponse(user: User): AuthResponse {
+export function createAuthResponse(user: User): AuthResponse {
     //get jwt secret
     const secret = env.JWT_SECRET;
 
@@ -16,7 +16,7 @@ function createAuthResponse(user: User): AuthResponse {
     }
     //Generate JWT 
     const token = jwt.sign(
-        { userId: user.id },
+        { userId: user.id, email: user.email, name: user.name },
         secret,
         {
             expiresIn: "7d",
@@ -65,6 +65,13 @@ export async function loginUser(userData: LoginUserInput): Promise<AuthResponse>
 
     if (!user) {
         throw new ValidationError("Invalid email or password", 401);
+    }
+
+    if (!user.passwordHash) {
+        throw new ValidationError(
+            "This account uses social sign-in. Sign in with Google or GitHub.",
+            401
+        );
     }
 
     const isPasswordValid = await bcrypt.compare(
