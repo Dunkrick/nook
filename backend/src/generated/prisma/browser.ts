@@ -42,3 +42,8 @@ export type GithubRepository = Prisma.GithubRepositoryModel
  * 
  */
 export type WebhookDelivery = Prisma.WebhookDeliveryModel
+/**
+ * Model OAuthAccount
+ * 
+ */
+export type OAuthAccount = Prisma.OAuthAccountModel

@@ -447,10 +447,6 @@ export type WorkspaceUncheckedUpdateManyWithoutOwnerNestedInput = {
   deleteMany?: Prisma.WorkspaceScalarWhereInput | Prisma.WorkspaceScalarWhereInput[]
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type WorkspaceCreateNestedOneWithoutArtifactsInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutArtifactsInput, Prisma.WorkspaceUncheckedCreateWithoutArtifactsInput>
   connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutArtifactsInput

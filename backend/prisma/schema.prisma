@@ -22,11 +22,12 @@ model User {
   id                 Int                @id @default(autoincrement())
   name               String             @default("Friend")
   email              String             @unique
-  passwordHash       String
+  passwordHash       String?
   createdAt          DateTime           @default(now())
   workspaces         Workspace[]
   artifacts          Artifact[]
   githubRepositories GithubRepository[]
+  oauthAccounts      OAuthAccount[]
 }
 
 model Workspace {
@@ -93,4 +94,16 @@ model WebhookDelivery {
   status      String    @default("RECEIVED")
   receivedAt  DateTime  @default(now())
   processedAt DateTime?
+}
+
+model OAuthAccount {
+  id             Int      @id @default(autoincrement())
+  userId         Int
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider       String
+  providerUserId String
+  createdAt      DateTime @default(now())
+
+  @@unique([provider, providerUserId])
+  @@index([userId])
 }

@@ -18,4 +18,9 @@ export const env = {
   GCS_BUCKET_NAME: requiredEnv("GCS_BUCKET_NAME"),
   GITHUB_WEBHOOK_SECRET: requiredEnv("GITHUB_WEBHOOK_SECRET"),
   RABBITMQ_URL: requiredEnv("RABBITMQ_URL"),
+  BACKEND_URL: process.env.BACKEND_URL ?? `http://localhost:${Number(process.env.PORT ?? 3003)}`,
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID ?? "",
+  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET ?? "",
+  GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID ?? "",
+  GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET ?? "",
 };

@@ -1,6 +1,6 @@
 import { getToken } from "../lib/storage";
 
-const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3003").replace(/\/$/, "");
+export const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3003").replace(/\/$/, "");
 
 interface RequestOptions {
     body?: unknown;

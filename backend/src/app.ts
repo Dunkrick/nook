@@ -44,6 +44,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 app.use("/auth", authRouter);
+app.use("/api/auth", authRouter);
 app.use("/workspaces", workspaceRouter);
 app.use("/uploads", uploadRouter);
 app.use("/artifacts", artifactRouter);
