@@ -4,6 +4,9 @@ const requiredEnv = (name: string): string => {
   const value = process.env[name];
 
   if (!value) {
+    if (process.env.NODE_ENV === "test") {
+      return `test-${name.toLowerCase().replace(/_/g, "-")}`;
+    }
     throw new Error(`Missing required environment variable: ${name}`);
   }
 
