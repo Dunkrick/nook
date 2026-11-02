@@ -3,6 +3,17 @@ import { ValidationError } from "../lib/error.js";
 
 export const CAPTION_MAX_LENGTH = 48;
 
+export const VALID_TINTS = [
+    "cream",
+    "rose",
+    "sky",
+    "sage",
+    "lavender",
+    "butter",
+] as const;
+
+export type ValidTint = (typeof VALID_TINTS)[number];
+
 /**
  * Trims a polaroid caption and checks the film-strip rules: one line, and at
  * most CAPTION_MAX_LENGTH characters. An absent or blank caption returns an
@@ -78,7 +89,7 @@ export function validateCreateArtifact(req: Request, _res: Response, next: NextF
 }
 
 export function validateUpdateArtifact(req: Request, res: Response, next: NextFunction) {
-    const { text, caption, x, y } = req.body;
+    const { text, caption, tint, x, y } = req.body;
     const parsedX = Number(x);
     const parsedY = Number(y);
 
@@ -86,12 +97,25 @@ export function validateUpdateArtifact(req: Request, res: Response, next: NextFu
     if (
         text === undefined &&
         caption === undefined &&
+        tint === undefined &&
         x === undefined &&
         y === undefined
     ) {
         throw new ValidationError(
             "At least one field must be provided."
         );
+    }
+
+    if (tint !== undefined) {
+        if (tint === null || tint === "") {
+            req.body.tint = null;
+        } else if (typeof tint !== "string" || !VALID_TINTS.includes(tint as ValidTint)) {
+            throw new ValidationError(
+                `Tint must be one of: ${VALID_TINTS.join(", ")}.`
+            );
+        } else {
+            req.body.tint = tint;
+        }
     }
 
     if (caption !== undefined) {

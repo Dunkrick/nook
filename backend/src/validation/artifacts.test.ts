@@ -160,4 +160,29 @@ describe("validateUpdateArtifact with a caption", () => {
             "At least one field must be provided."
         );
     });
+
+    it("accepts a valid tint", () => {
+        const req = makeRequest({ tint: "rose" });
+
+        expect(() => validateUpdateArtifact(req, {} as never, () => {})).not.toThrow();
+        expect(req.body.tint).toBe("rose");
+    });
+
+    it("accepts null or empty string to reset tint", () => {
+        const req1 = makeRequest({ tint: null });
+        validateUpdateArtifact(req1, {} as never, () => {});
+        expect(req1.body.tint).toBeNull();
+
+        const req2 = makeRequest({ tint: "" });
+        validateUpdateArtifact(req2, {} as never, () => {});
+        expect(req2.body.tint).toBeNull();
+    });
+
+    it("rejects an invalid tint", () => {
+        const req = makeRequest({ tint: "neon-pink" });
+
+        expect(() => validateUpdateArtifact(req, {} as never, () => {})).toThrow(
+            "Tint must be one of: cream, rose, sky, sage, lavender, butter."
+        );
+    });
 });

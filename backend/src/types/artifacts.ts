@@ -31,6 +31,7 @@ export interface UpdateArtifactInput {
     workspaceId: number;
     text?: string;
     caption?: string;
+    tint?: string | null;
     x?: number;
     y?: number;
 }
