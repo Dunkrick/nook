@@ -12,6 +12,14 @@ Instead of forcing ideas into folders, documents, or rigid workflows, Nook lets 
 
 ---
 
+## Interface
+
+| Authentication & Entry | Spatial Canvas & Thought Wall |
+| :---: | :---: |
+| ![Nook Authentication Screen](docs/assets/screenshots/login.png) | ![Nook Spatial Canvas](docs/assets/screenshots/canvas.png) |
+
+---
+
 ## Current capabilities
 
 ### Authentication
@@ -114,6 +122,7 @@ Nook Artifact
 ```
 
 The integration includes:
+
 - HMAC-SHA256 webhook verification
 - asynchronous RabbitMQ processing
 - retry queues and dead-letter handling
