@@ -139,3 +139,158 @@ kbd {
         transform: translateX(0);
     }
 }
+
+/* ---------------------------------------------------------------
+   Color Dashboard — centralized left-docked paper tint palette
+   --------------------------------------------------------------- */
+
+.nook-color-dashboard {
+    position: fixed;
+    z-index: var(--z-toolbar);
+    top: 50%;
+    left: var(--space-4);
+    transform: translateY(-50%);
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-width: 52px;
+    padding: var(--space-3) var(--space-2);
+
+    border: 1px solid color-mix(
+        in srgb,
+        var(--border-strong) 14%,
+        transparent
+    );
+    border-radius: var(--radius-0);
+
+    background: color-mix(
+        in srgb,
+        var(--color-artifact) 92%,
+        transparent
+    );
+
+    box-shadow:
+        0 2px 0 color-mix(
+            in srgb,
+            var(--border-strong) 8%,
+            transparent
+        ),
+        0 9px 26px rgba(42, 36, 56, 0.11);
+
+    backdrop-filter: blur(16px);
+    animation: nook-dashboard-enter var(--motion-settle) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nook-color-dashboard {
+        animation: none;
+    }
+}
+
+.nook-color-dashboard__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding-bottom: var(--space-1);
+    border-bottom: 1px solid color-mix(
+        in srgb,
+        var(--border-strong) 12%,
+        transparent
+    );
+}
+
+.nook-color-dashboard__title {
+    font-size: var(--type-overline-size);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-overline);
+    text-transform: uppercase;
+    color: var(--text-heading);
+}
+
+.nook-color-dashboard__count {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.nook-color-dashboard__palette {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.nook-color-dashboard__swatch {
+    position: relative;
+    width: 26px;
+    height: 26px;
+    padding: 2px;
+
+    border: 1px solid color-mix(
+        in srgb,
+        var(--border-strong) 22%,
+        transparent
+    );
+    border-radius: var(--radius-0);
+    background: transparent;
+
+    cursor: pointer;
+    box-shadow: none;
+
+    transition:
+        border-color var(--motion-lift),
+        transform var(--motion-lift),
+        opacity var(--motion-lift);
+}
+
+.nook-color-dashboard__swatch-fill {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--swatch-color, var(--stock-note));
+    border-radius: var(--radius-0);
+}
+
+.nook-color-dashboard__swatch--default .nook-color-dashboard__swatch-fill {
+    background: var(--stock-note);
+}
+
+.nook-color-dashboard__swatch:hover:not(:disabled) {
+    border-color: color-mix(
+        in srgb,
+        var(--border-strong) 60%,
+        transparent
+    );
+    transform: translateX(1px);
+}
+
+.nook-color-dashboard__swatch--active {
+    border-color: var(--border-strong);
+    box-shadow: 0 0 0 1px var(--border-strong);
+}
+
+.nook-color-dashboard__swatch:focus-visible {
+    box-shadow: var(--focus-ring);
+    outline: none;
+}
+
+.nook-color-dashboard__swatch:disabled {
+    opacity: 0.38;
+    cursor: default;
+    transform: none;
+}
+
+@keyframes nook-dashboard-enter {
+    from {
+        opacity: 0;
+        transform: translate(-10px, -50%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(0, -50%);
+    }
+}

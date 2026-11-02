@@ -4,16 +4,12 @@ interface ArtifactHeaderProps {
     index: number;
     onEdit?: () => void;
     onDelete: () => void;
-    currentTint?: string | null;
-    onSelectTint?: (tint: string | null) => void;
 }
 
 export default function ArtifactHeader({
     index,
     onEdit,
     onDelete,
-    currentTint,
-    onSelectTint,
 }: ArtifactHeaderProps) {
     return (
         <div className="nook-artifact__header">
@@ -24,8 +20,6 @@ export default function ArtifactHeader({
             <ArtifactActions
                 onEdit={onEdit}
                 onDelete={onDelete}
-                currentTint={currentTint}
-                onSelectTint={onSelectTint}
             />
         </div>
     );

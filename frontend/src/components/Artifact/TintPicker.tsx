@@ -1,14 +1,5 @@
 import { cn } from "../../lib/cn";
-
-const TINT_OPTIONS = [
-    { key: null, label: "Default" },
-    { key: "cream", label: "Cream" },
-    { key: "rose", label: "Rose" },
-    { key: "sky", label: "Sky" },
-    { key: "sage", label: "Sage" },
-    { key: "lavender", label: "Lavender" },
-    { key: "butter", label: "Butter" },
-] as const;
+import { TINT_OPTIONS } from "../../lib/tints";
 
 interface TintPickerProps {
     currentTint?: string | null;

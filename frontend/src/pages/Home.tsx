@@ -5,6 +5,7 @@ import type { Artifact, ArtifactUpdate, DraftArtifact, Position, TextArtifact, L
 import { markPhotoAsNew } from "../lib/developingPhotos";
 import Wall from "../components/Wall"
 import InsightPanel from "../components/InsightPanel";
+import ColorDashboard from "../components/ColorDashboard";
 import WorkspaceShell from "../components/WorkspaceShell";
 import FloatingToolbar from "../components/FloatingToolbar";
 import { logout } from "../services/auth";
@@ -501,6 +502,65 @@ function handleFindInsight() {
 function handleCloseInsight(){
     setIsInsightOpen(false);
 }
+
+    const targetArtifactIds =
+        selectedArtifactIds.length > 0
+            ? selectedArtifactIds
+            : editingArtifactId !== null
+                ? [editingArtifactId]
+                : [];
+
+    const targetArtifacts = artifacts.filter((artifact) =>
+        targetArtifactIds.includes(artifact.id)
+    );
+
+    const resolvedCurrentTint =
+        targetArtifacts.length === 0
+            ? undefined
+            : targetArtifacts.every(
+                  (a) => (a.tint ?? null) === (targetArtifacts[0].tint ?? null)
+              )
+                ? (targetArtifacts[0].tint ?? null)
+                : undefined;
+
+    async function handleBatchTint(tint: string | null) {
+        if (targetArtifactIds.length === 0 || !activeWorkspace) return;
+
+        const targetSet = new Set(targetArtifactIds);
+        const previousArtifacts = artifacts;
+
+        setArtifacts((current) =>
+            current.map((artifact) =>
+                targetSet.has(artifact.id)
+                    ? { ...artifact, tint }
+                    : artifact
+            )
+        );
+
+        try {
+            await Promise.all(
+                targetArtifactIds.map(async (id) => {
+                    if (id < 0) return;
+                    const updated = await updateArtifact(
+                        activeWorkspace.id,
+                        id,
+                        { tint }
+                    );
+                    setArtifacts((current) =>
+                        current.map((a) => (a.id === id ? updated : a))
+                    );
+                })
+            );
+        } catch (error) {
+            setArtifacts(previousArtifacts);
+            setSaveError("Couldn't save that. Please try again.");
+            setTimeout(() => {
+                setSaveError(null);
+            }, 3000);
+            console.error(error);
+        }
+    }
+
     return (
         <CameraProvider>
             <CanvasController
@@ -520,6 +580,13 @@ function handleCloseInsight(){
                     navigate("/");
                 }}
             />
+            {activeWorkspace && (
+                <ColorDashboard
+                    selectedCount={targetArtifactIds.length}
+                    currentTint={resolvedCurrentTint}
+                    onSelectTint={handleBatchTint}
+                />
+            )}
             {!activeWorkspace ? (
                 <FirstWorkspace
                     userName={user?.name ?? "there"}

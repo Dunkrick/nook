@@ -265,70 +265,6 @@
 }
 
 /* ---------------------------------------------------------------
-   Tint picker — paper color palette
-   --------------------------------------------------------------- */
-
-.nook-tint-picker {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    margin-right: 2px;
-}
-
-.nook-tint-picker__dot {
-    width: 14px;
-    height: 14px;
-
-    padding: 0;
-
-    border: 1px solid color-mix(
-        in srgb,
-        var(--border-strong) 24%,
-        transparent
-    );
-
-    border-radius: var(--radius-0);
-
-    background: var(--dot-color, var(--stock-note));
-
-    cursor: pointer;
-
-    box-shadow: none;
-
-    transition:
-        border-color var(--motion-lift),
-        transform var(--motion-lift);
-}
-
-.nook-tint-picker__dot--default {
-    background: linear-gradient(
-        135deg,
-        var(--stock-note) 50%,
-        var(--stock-link) 50%
-    );
-}
-
-.nook-tint-picker__dot:hover {
-    border-color: color-mix(
-        in srgb,
-        var(--border-strong) 52%,
-        transparent
-    );
-
-    transform: translateY(-1px);
-}
-
-.nook-tint-picker__dot--active {
-    border-color: var(--border-strong);
-
-    box-shadow: 0 0 0 1px var(--border-strong);
-}
-
-.nook-tint-picker__dot:focus-visible {
-    box-shadow: var(--focus-ring);
-}
-
-/* ---------------------------------------------------------------
    Content
    --------------------------------------------------------------- */
 
@@ -709,7 +645,7 @@
     box-sizing: border-box;
     padding: 5.7% 5.7% 0;
 
-    background: var(--stock-photo);
+    background: var(--artifact-color, var(--stock-photo));
     border-radius: var(--radius-paper);
     box-shadow: var(--shadow-paper-rest);
 
