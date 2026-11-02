@@ -119,6 +119,7 @@ export async function updateArtifact(
         content?: Prisma.InputJsonObject;
         x?: number;
         y?: number;
+        tint?: string | null;
     } = {};
 
     if (input.text !== undefined) {
@@ -157,6 +158,10 @@ export async function updateArtifact(
 
     if (input.y !== undefined) {
         data.y = input.y;
+    }
+
+    if (input.tint !== undefined) {
+        data.tint = input.tint;
     }
 
     try {

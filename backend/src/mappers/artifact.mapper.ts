@@ -19,6 +19,7 @@ export function toArtifact(
         x: record.x,
         y: record.y,
         zIndex: record.zIndex,
+        tint: record.tint,
         createdAt: record.createdAt,
         updatedAt: record.updatedAt,
     };

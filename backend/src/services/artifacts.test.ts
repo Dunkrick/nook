@@ -551,6 +551,78 @@ describe("updateArtifact", () => {
 
         expect(findArtifact).not.toHaveBeenCalled();
     });
+
+    it("updates the artifact tint", async () => {
+        update.mockResolvedValue({
+            id: 55,
+            userId: 8,
+            workspaceId: 10,
+            type: "TEXT",
+            content: { text: "hello" },
+            x: 0,
+            y: 0,
+            zIndex: 0,
+            tint: "sky",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        });
+
+        const result = await updateArtifact({
+            id: 55,
+            userId: 8,
+            workspaceId: 10,
+            tint: "sky",
+        });
+
+        expect(result).not.toBeNull();
+        expect(result!.tint).toBe("sky");
+        expect(update).toHaveBeenCalledWith({
+            where: {
+                id: 55,
+                userId: 8,
+                workspaceId: 10,
+            },
+            data: {
+                tint: "sky",
+            },
+        });
+    });
+
+    it("clears the artifact tint when set to null", async () => {
+        update.mockResolvedValue({
+            id: 55,
+            userId: 8,
+            workspaceId: 10,
+            type: "TEXT",
+            content: { text: "hello" },
+            x: 0,
+            y: 0,
+            zIndex: 0,
+            tint: null,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        });
+
+        const result = await updateArtifact({
+            id: 55,
+            userId: 8,
+            workspaceId: 10,
+            tint: null,
+        });
+
+        expect(result).not.toBeNull();
+        expect(result!.tint).toBeNull();
+        expect(update).toHaveBeenCalledWith({
+            where: {
+                id: 55,
+                userId: 8,
+                workspaceId: 10,
+            },
+            data: {
+                tint: null,
+            },
+        });
+    });
 });
 
 describe("deleteArtifact", () => {

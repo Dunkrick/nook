@@ -14,6 +14,13 @@ export function getArtifactRotation(artifactId: number) {
     return ARTIFACT_ROTATIONS[Math.abs(artifactId) % ARTIFACT_ROTATIONS.length];
 }
 
-export function getArtifactColorToken(artifactId: number) {
-    return (Math.abs(artifactId) % 4) + 1;
+const TYPE_STOCK: Record<string, string> = {
+    TEXT: "var(--stock-text)",
+    LINK: "var(--stock-link)",
+    POLAROID: "var(--stock-photo)",
+    GITHUB_ISSUE: "var(--stock-issue)",
+};
+
+export function getTypeStock(type: string): string {
+    return TYPE_STOCK[type] ?? "var(--stock-text)";
 }

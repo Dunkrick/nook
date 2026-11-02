@@ -50,6 +50,7 @@ export default function ArtifactView({
                 `nook-artifact--${artifact.type.toLowerCase()}`,
                 isSelected && "nook-artifact--selected",
                 drag.isDragging && "nook-artifact--dragging",
+                drag.isSettling && "nook-artifact--settling",
                 editing.isEditing && "nook-artifact--editing",
             )}
             data-artifact-id={artifact.id}
@@ -91,7 +92,12 @@ export default function ArtifactView({
                                 ? editing.startEditing
                                 : undefined
                         }
-                        onDelete={onDelete} />
+                        onDelete={onDelete}
+                        currentTint={artifact.tint}
+                        onSelectTint={(tint) =>
+                            onUpdate(artifact.id, { tint })
+                        }
+                    />
                     {artifact.type === "TEXT" && (
                         <ArtifactBody text={artifact.content.text}/>
                     )}

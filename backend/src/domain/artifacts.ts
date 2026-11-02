@@ -43,6 +43,7 @@ export interface Artifact {
     x: number;
     y: number;
     zIndex: number;
+    tint: string | null;
     createdAt: Date;
     updatedAt: Date;
 }

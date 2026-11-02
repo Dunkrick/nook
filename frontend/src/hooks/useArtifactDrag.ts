@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import type { ArtifactUpdate } from "../types/artifacts";
 
 interface UseArtifactDragOptions {
@@ -12,12 +12,28 @@ interface UseArtifactDragOptions {
 export function useArtifactDrag({ artifactId, initialX, initialY, zoom, onUpdate }: UseArtifactDragOptions) {
     const [dragPosition, setDragPosition] = useState({ x: initialX, y: initialY });
     const [isDragging, setIsDragging] = useState(false);
+    const [isSettling, setIsSettling] = useState(false);
+    const settleTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
     const positionRef = useRef(dragPosition);
     const dragStartPos = useRef({ x: 0, y: 0 });
     const dragStartArtifactPos = useRef({ x: 0, y: 0 });
 
+    const triggerSettle = useCallback(() => {
+        setIsSettling(true);
+        if (settleTimer.current) {
+            clearTimeout(settleTimer.current);
+        }
+        settleTimer.current = setTimeout(() => {
+            setIsSettling(false);
+        }, 250);
+    }, []);
+
     const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
         const startPosition = { x: initialX, y: initialY };
+        if (settleTimer.current) {
+            clearTimeout(settleTimer.current);
+        }
+        setIsSettling(false);
         setIsDragging(true);
         dragStartPos.current = { x: e.clientX, y: e.clientY };
         dragStartArtifactPos.current = startPosition;
@@ -41,6 +57,7 @@ export function useArtifactDrag({ artifactId, initialX, initialY, zoom, onUpdate
     const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
         if (!isDragging) return;
         setIsDragging(false);
+        triggerSettle();
         e.currentTarget.releasePointerCapture(e.pointerId);
         // Fire-and-forget because Home is optimistic now
         void onUpdate(artifactId, positionRef.current);
@@ -58,6 +75,7 @@ export function useArtifactDrag({ artifactId, initialX, initialY, zoom, onUpdate
     return {
         position: isDragging ? dragPosition : { x: initialX, y: initialY },
         isDragging,
+        isSettling,
         handlePointerDown,
         handlePointerMove,
         handlePointerUp,

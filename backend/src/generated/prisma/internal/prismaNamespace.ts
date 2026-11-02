@@ -934,6 +934,7 @@ export const ArtifactScalarFieldEnum = {
   content: 'content',
   x: 'x',
   y: 'y',
+  tint: 'tint',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   zIndex: 'zIndex',

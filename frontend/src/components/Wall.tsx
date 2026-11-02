@@ -1,7 +1,7 @@
 import type { Artifact, ArtifactUpdate, DraftArtifact, Position } from "../types/artifacts";
 import EmptyWorkspace from "./EmptyWorkspace";
 import ArtifactComponent from "./Artifact/Artifact";
-import { getArtifactColorToken, getArtifactRotation } from "../lib/ArtifactRotation";
+import { getArtifactRotation, getTypeStock } from "../lib/ArtifactRotation";
 import DraftArtifactComponent from "./DraftArtifact";
 import PolaroidDraft from "./PolaroidDraft";
 import ArtifactCreationPicker from "./ArtifactCreationPicker";
@@ -128,7 +128,9 @@ function handlePointerDown(
             
             style={{
                 "--artifact-rotate": `${getArtifactRotation(artifact.id)}deg`,
-                "--artifact-color": `var(--artifact-${getArtifactColorToken(artifact.id)})`,
+                "--artifact-color": artifact.tint
+                    ? `var(--tint-${artifact.tint})`
+                    : getTypeStock(artifact.type),
             }}
         />
     ))}
