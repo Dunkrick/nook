@@ -49,6 +49,7 @@ export type ArtifactMinAggregateOutputType = {
   type: $Enums.ArtifactType | null
   x: number | null
   y: number | null
+  tint: string | null
   createdAt: Date | null
   updatedAt: Date | null
   zIndex: number | null
@@ -63,6 +64,7 @@ export type ArtifactMaxAggregateOutputType = {
   type: $Enums.ArtifactType | null
   x: number | null
   y: number | null
+  tint: string | null
   createdAt: Date | null
   updatedAt: Date | null
   zIndex: number | null
@@ -78,6 +80,7 @@ export type ArtifactCountAggregateOutputType = {
   content: number
   x: number
   y: number
+  tint: number
   createdAt: number
   updatedAt: number
   zIndex: number
@@ -112,6 +115,7 @@ export type ArtifactMinAggregateInputType = {
   type?: true
   x?: true
   y?: true
+  tint?: true
   createdAt?: true
   updatedAt?: true
   zIndex?: true
@@ -126,6 +130,7 @@ export type ArtifactMaxAggregateInputType = {
   type?: true
   x?: true
   y?: true
+  tint?: true
   createdAt?: true
   updatedAt?: true
   zIndex?: true
@@ -141,6 +146,7 @@ export type ArtifactCountAggregateInputType = {
   content?: true
   x?: true
   y?: true
+  tint?: true
   createdAt?: true
   updatedAt?: true
   zIndex?: true
@@ -243,6 +249,7 @@ export type ArtifactGroupByOutputType = {
   content: runtime.JsonValue
   x: number
   y: number
+  tint: string | null
   createdAt: Date
   updatedAt: Date
   zIndex: number
@@ -281,6 +288,7 @@ export type ArtifactWhereInput = {
   content?: Prisma.JsonFilter<"Artifact">
   x?: Prisma.FloatFilter<"Artifact"> | number
   y?: Prisma.FloatFilter<"Artifact"> | number
+  tint?: Prisma.StringNullableFilter<"Artifact"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Artifact"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Artifact"> | Date | string
   zIndex?: Prisma.IntFilter<"Artifact"> | number
@@ -298,6 +306,7 @@ export type ArtifactOrderByWithRelationInput = {
   content?: Prisma.SortOrder
   x?: Prisma.SortOrder
   y?: Prisma.SortOrder
+  tint?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   zIndex?: Prisma.SortOrder
@@ -319,6 +328,7 @@ export type ArtifactWhereUniqueInput = Prisma.AtLeast<{
   content?: Prisma.JsonFilter<"Artifact">
   x?: Prisma.FloatFilter<"Artifact"> | number
   y?: Prisma.FloatFilter<"Artifact"> | number
+  tint?: Prisma.StringNullableFilter<"Artifact"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Artifact"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Artifact"> | Date | string
   zIndex?: Prisma.IntFilter<"Artifact"> | number
@@ -336,6 +346,7 @@ export type ArtifactOrderByWithAggregationInput = {
   content?: Prisma.SortOrder
   x?: Prisma.SortOrder
   y?: Prisma.SortOrder
+  tint?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   zIndex?: Prisma.SortOrder
@@ -359,6 +370,7 @@ export type ArtifactScalarWhereWithAggregatesInput = {
   content?: Prisma.JsonWithAggregatesFilter<"Artifact">
   x?: Prisma.FloatWithAggregatesFilter<"Artifact"> | number
   y?: Prisma.FloatWithAggregatesFilter<"Artifact"> | number
+  tint?: Prisma.StringNullableWithAggregatesFilter<"Artifact"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Artifact"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Artifact"> | Date | string
   zIndex?: Prisma.IntWithAggregatesFilter<"Artifact"> | number
@@ -373,6 +385,7 @@ export type ArtifactCreateInput = {
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
   x?: number
   y?: number
+  tint?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   zIndex?: number
@@ -388,6 +401,7 @@ export type ArtifactUncheckedCreateInput = {
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
   x?: number
   y?: number
+  tint?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   zIndex?: number
@@ -402,6 +416,7 @@ export type ArtifactUpdateInput = {
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   x?: Prisma.FloatFieldUpdateOperationsInput | number
   y?: Prisma.FloatFieldUpdateOperationsInput | number
+  tint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   zIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -417,6 +432,7 @@ export type ArtifactUncheckedUpdateInput = {
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   x?: Prisma.FloatFieldUpdateOperationsInput | number
   y?: Prisma.FloatFieldUpdateOperationsInput | number
+  tint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   zIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -432,6 +448,7 @@ export type ArtifactCreateManyInput = {
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
   x?: number
   y?: number
+  tint?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   zIndex?: number
@@ -446,6 +463,7 @@ export type ArtifactUpdateManyMutationInput = {
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   x?: Prisma.FloatFieldUpdateOperationsInput | number
   y?: Prisma.FloatFieldUpdateOperationsInput | number
+  tint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   zIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -459,6 +477,7 @@ export type ArtifactUncheckedUpdateManyInput = {
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   x?: Prisma.FloatFieldUpdateOperationsInput | number
   y?: Prisma.FloatFieldUpdateOperationsInput | number
+  tint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   zIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -489,6 +508,7 @@ export type ArtifactCountOrderByAggregateInput = {
   content?: Prisma.SortOrder
   x?: Prisma.SortOrder
   y?: Prisma.SortOrder
+  tint?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   zIndex?: Prisma.SortOrder
@@ -512,6 +532,7 @@ export type ArtifactMaxOrderByAggregateInput = {
   type?: Prisma.SortOrder
   x?: Prisma.SortOrder
   y?: Prisma.SortOrder
+  tint?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   zIndex?: Prisma.SortOrder
@@ -526,6 +547,7 @@ export type ArtifactMinOrderByAggregateInput = {
   type?: Prisma.SortOrder
   x?: Prisma.SortOrder
   y?: Prisma.SortOrder
+  tint?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   zIndex?: Prisma.SortOrder
@@ -645,6 +667,7 @@ export type ArtifactCreateWithoutUserInput = {
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
   x?: number
   y?: number
+  tint?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   zIndex?: number
@@ -659,6 +682,7 @@ export type ArtifactUncheckedCreateWithoutUserInput = {
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
   x?: number
   y?: number
+  tint?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   zIndex?: number
@@ -702,6 +726,7 @@ export type ArtifactScalarWhereInput = {
   content?: Prisma.JsonFilter<"Artifact">
   x?: Prisma.FloatFilter<"Artifact"> | number
   y?: Prisma.FloatFilter<"Artifact"> | number
+  tint?: Prisma.StringNullableFilter<"Artifact"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Artifact"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Artifact"> | Date | string
   zIndex?: Prisma.IntFilter<"Artifact"> | number
@@ -716,6 +741,7 @@ export type ArtifactCreateWithoutWorkspaceInput = {
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
   x?: number
   y?: number
+  tint?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   zIndex?: number
@@ -730,6 +756,7 @@ export type ArtifactUncheckedCreateWithoutWorkspaceInput = {
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
   x?: number
   y?: number
+  tint?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   zIndex?: number
@@ -770,6 +797,7 @@ export type ArtifactCreateManyUserInput = {
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
   x?: number
   y?: number
+  tint?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   zIndex?: number
@@ -783,6 +811,7 @@ export type ArtifactUpdateWithoutUserInput = {
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   x?: Prisma.FloatFieldUpdateOperationsInput | number
   y?: Prisma.FloatFieldUpdateOperationsInput | number
+  tint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   zIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -797,6 +826,7 @@ export type ArtifactUncheckedUpdateWithoutUserInput = {
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   x?: Prisma.FloatFieldUpdateOperationsInput | number
   y?: Prisma.FloatFieldUpdateOperationsInput | number
+  tint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   zIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -811,6 +841,7 @@ export type ArtifactUncheckedUpdateManyWithoutUserInput = {
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   x?: Prisma.FloatFieldUpdateOperationsInput | number
   y?: Prisma.FloatFieldUpdateOperationsInput | number
+  tint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   zIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -825,6 +856,7 @@ export type ArtifactCreateManyWorkspaceInput = {
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
   x?: number
   y?: number
+  tint?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   zIndex?: number
@@ -838,6 +870,7 @@ export type ArtifactUpdateWithoutWorkspaceInput = {
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   x?: Prisma.FloatFieldUpdateOperationsInput | number
   y?: Prisma.FloatFieldUpdateOperationsInput | number
+  tint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   zIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -852,6 +885,7 @@ export type ArtifactUncheckedUpdateWithoutWorkspaceInput = {
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   x?: Prisma.FloatFieldUpdateOperationsInput | number
   y?: Prisma.FloatFieldUpdateOperationsInput | number
+  tint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   zIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -866,6 +900,7 @@ export type ArtifactUncheckedUpdateManyWithoutWorkspaceInput = {
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   x?: Prisma.FloatFieldUpdateOperationsInput | number
   y?: Prisma.FloatFieldUpdateOperationsInput | number
+  tint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   zIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -882,6 +917,7 @@ export type ArtifactSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   content?: boolean
   x?: boolean
   y?: boolean
+  tint?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   zIndex?: boolean
@@ -899,6 +935,7 @@ export type ArtifactSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   content?: boolean
   x?: boolean
   y?: boolean
+  tint?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   zIndex?: boolean
@@ -916,6 +953,7 @@ export type ArtifactSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   content?: boolean
   x?: boolean
   y?: boolean
+  tint?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   zIndex?: boolean
@@ -933,6 +971,7 @@ export type ArtifactSelectScalar = {
   content?: boolean
   x?: boolean
   y?: boolean
+  tint?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   zIndex?: boolean
@@ -942,7 +981,7 @@ export type ArtifactSelectScalar = {
   externalId?: boolean
 }
 
-export type ArtifactOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "content" | "x" | "y" | "createdAt" | "updatedAt" | "zIndex" | "userId" | "workspaceId" | "source" | "externalId", ExtArgs["result"]["artifact"]>
+export type ArtifactOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "content" | "x" | "y" | "tint" | "createdAt" | "updatedAt" | "zIndex" | "userId" | "workspaceId" | "source" | "externalId", ExtArgs["result"]["artifact"]>
 export type ArtifactInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
@@ -968,6 +1007,7 @@ export type $ArtifactPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     content: runtime.JsonValue
     x: number
     y: number
+    tint: string | null
     createdAt: Date
     updatedAt: Date
     zIndex: number
@@ -1405,6 +1445,7 @@ export interface ArtifactFieldRefs {
   readonly content: Prisma.FieldRef<"Artifact", 'Json'>
   readonly x: Prisma.FieldRef<"Artifact", 'Float'>
   readonly y: Prisma.FieldRef<"Artifact", 'Float'>
+  readonly tint: Prisma.FieldRef<"Artifact", 'String'>
   readonly createdAt: Prisma.FieldRef<"Artifact", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Artifact", 'DateTime'>
   readonly zIndex: Prisma.FieldRef<"Artifact", 'Int'>
