@@ -534,10 +534,6 @@ function toggleArtifactSelection(artifactId: number) {
     });
 }
 
-function handleSelectOnlyArtifact(artifactId: number) {
-    setSelectedArtifactIds([artifactId]);
-}
-
 function handleClearSelection(){
     setSelectedArtifactIds([]);
 }
@@ -667,7 +663,6 @@ function handleCloseInsight(){
 
                                 selectedArtifactIds={selectedArtifactIds}
                                 onToggleArtifactSelection={toggleArtifactSelection}
-                                onSelectOnlyArtifact={handleSelectOnlyArtifact}
                                 onClearSelection={handleClearSelection}
 
                                 editingArtifactId={editingArtifactId}

@@ -14,9 +14,7 @@ interface UseArtifactInteractionProps {
         update: ArtifactUpdate
     ) => Promise<void>;
 
-    isSelected?: boolean;
     onToggleSelection: () => void;
-    onSelectOnly?: () => void;
 
     isEditing: boolean;
     onEditingChange: (isEditing: boolean) => void;
@@ -25,9 +23,7 @@ interface UseArtifactInteractionProps {
 export default function useArtifactInteraction({
     artifact,
     onUpdate,
-    isSelected,
     onToggleSelection,
-    onSelectOnly,
     isEditing,
     onEditingChange,
 }: UseArtifactInteractionProps) {
@@ -56,18 +52,12 @@ export default function useArtifactInteraction({
     function handleClick(
         e: React.MouseEvent<HTMLDivElement>
     ) {
-        if (editing.isEditing)
+        if (!e.metaKey && !e.ctrlKey)
             return;
 
         e.stopPropagation();
 
-        if (e.metaKey || e.ctrlKey || e.shiftKey) {
-            onToggleSelection();
-        } else if (onSelectOnly) {
-            onSelectOnly();
-        } else {
-            onToggleSelection();
-        }
+        onToggleSelection();
     }
 
     function handlePointerDown(
@@ -75,10 +65,6 @@ export default function useArtifactInteraction({
     ) {
         if (editing.isEditing)
             return;
-
-        if (!isSelected && !e.metaKey && !e.ctrlKey && !e.shiftKey && onSelectOnly) {
-            onSelectOnly();
-        }
 
         drag.handlePointerDown(e);
     }

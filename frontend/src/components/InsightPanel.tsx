@@ -4,6 +4,7 @@ interface InsightPanelProps {
 }
 
 export default function InsightPanel({
+    selectedCount,
     onClose,
 }: InsightPanelProps) {
     return (
@@ -22,8 +23,14 @@ export default function InsightPanel({
                 </button>
             </header>
             <section className="nook-insight-panel__status">
-                <p className="nook-insight-panel__working">
-                    working right now
+                <div className="nook-insight-panel__working">
+                    <span className="nook-insight-panel__beacon" aria-hidden="true" />
+                    <span>working right now</span>
+                </div>
+                <p className="nook-insight-panel__working-hint">
+                    {selectedCount && selectedCount > 0
+                        ? `Scanning ${selectedCount} selected thought${selectedCount > 1 ? "s" : ""} for patterns.`
+                        : "Scanning thoughts for patterns."}
                 </p>
             </section>
         </aside>

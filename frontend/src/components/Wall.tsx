@@ -27,7 +27,6 @@ interface WallProps {
 
   selectedArtifactIds: number[];
   onToggleArtifactSelection: (artifactId: number) => void;
-  onSelectOnlyArtifact?: (artifactId: number) => void;
   onClearSelection?: () => void;
 
   editingArtifactId: number | null;
@@ -48,7 +47,6 @@ export default function Wall({
     onCancelDraft,
     selectedArtifactIds,
     onToggleArtifactSelection,
-    onSelectOnlyArtifact,
     onClearSelection,
     createPosition,
     onSelectArtifactType,
@@ -125,7 +123,6 @@ function handlePointerDown(
             
             isSelected={selectedArtifactIds.includes(artifact.id)}
             onToggleSelection={() => onToggleArtifactSelection(artifact.id)}
-            onSelectOnly={() => onSelectOnlyArtifact?.(artifact.id)}
             isEditing={editingArtifactId === artifact.id}
             onEditingChange={(isEditing) =>
                 onEditingArtifactChange(

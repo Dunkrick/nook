@@ -23,20 +23,17 @@ interface ArtifactProps {
 
     isSelected: boolean;
     onToggleSelection: () => void;
-    onSelectOnly?: () => void;
 
     isEditing: boolean;
     onEditingChange: (isEditing: boolean) => void;
 }
 
-export default function ArtifactComponent({ artifact, index, onUpdate, onDelete, style, isSelected, isEditing, onToggleSelection, onSelectOnly, onEditingChange }: ArtifactProps) {
+export default function ArtifactComponent({ artifact, index, onUpdate, onDelete, style, isSelected, isEditing, onToggleSelection, onEditingChange }: ArtifactProps) {
     const interaction =
         useArtifactInteraction({
             artifact,
             onUpdate,
-            isSelected,
             onToggleSelection,
-            onSelectOnly,
             isEditing,
             onEditingChange,
         });
