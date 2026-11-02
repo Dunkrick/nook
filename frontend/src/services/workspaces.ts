@@ -46,11 +46,11 @@ export async function createArtifact(
 export async function updateArtifact(
     workspaceId: number,
     id: number,
-    { text, caption, x, y }: ArtifactUpdate
+    { text, caption, tint, x, y }: ArtifactUpdate
 ): Promise<Artifact> {
     return patch(
         `/workspaces/${workspaceId}/artifacts/${id}`,
-        { text, caption, x, y }
+        { text, caption, tint, x, y }
     );
 }
 

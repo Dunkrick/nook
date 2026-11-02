@@ -11,6 +11,7 @@ export interface TextArtifact {
     x: number;
     y: number;
     zIndex: number;
+    tint?: string | null;
 }
 
 export interface LinkArtifact {
@@ -24,6 +25,7 @@ export interface LinkArtifact {
     x: number;
     y: number;
     zIndex: number;
+    tint?: string | null;
 }
 
 export interface PolaroidArtifact {
@@ -38,6 +40,7 @@ export interface PolaroidArtifact {
     x: number;
     y: number;
     zIndex: number;
+    tint?: string | null;
 }
 
 export interface GithubIssueArtifact {
@@ -57,6 +60,7 @@ export interface GithubIssueArtifact {
     x: number;
     y: number;
     zIndex: number;
+    tint?: string | null;
 }
 
 export type Artifact = | TextArtifact | LinkArtifact | PolaroidArtifact | GithubIssueArtifact;
@@ -73,6 +77,7 @@ export interface DraftArtifact {
 export interface ArtifactUpdate {
     text?: string;
     caption?: string;
+    tint?: string | null;
     x?: number;
     y?: number;
 }

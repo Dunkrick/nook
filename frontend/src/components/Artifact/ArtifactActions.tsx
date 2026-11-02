@@ -1,17 +1,30 @@
+import TintPicker from "./TintPicker";
+
 interface ArtifactActionsProps {
     onEdit?: () => void;
     onDelete: () => void;
+    currentTint?: string | null;
+    onSelectTint?: (tint: string | null) => void;
 }
 
 export default function ArtifactActions({
     onEdit,
     onDelete,
+    currentTint,
+    onSelectTint,
 }: ArtifactActionsProps) {
     return (
         <div
             className="nook-artifact__actions"
             onClick={(e) => e.stopPropagation()}
         >
+            {onSelectTint && (
+                <TintPicker
+                    currentTint={currentTint}
+                    onSelectTint={onSelectTint}
+                />
+            )}
+
             {onEdit && (
                 <button
                     type="button"

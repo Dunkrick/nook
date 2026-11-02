@@ -92,7 +92,12 @@ export default function ArtifactView({
                                 ? editing.startEditing
                                 : undefined
                         }
-                        onDelete={onDelete} />
+                        onDelete={onDelete}
+                        currentTint={artifact.tint}
+                        onSelectTint={(tint) =>
+                            onUpdate(artifact.id, { tint })
+                        }
+                    />
                     {artifact.type === "TEXT" && (
                         <ArtifactBody text={artifact.content.text}/>
                     )}
