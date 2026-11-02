@@ -78,6 +78,10 @@
     font-size: var(--type-label-size);
 }
 
+.nook-insight-panel__working {
+    color: var(--accent-action);
+}
+
 .nook-insight-panel__copy {
     display: grid;
     gap: var(--space-4);
