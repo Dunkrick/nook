@@ -291,6 +291,35 @@
     overflow-wrap: anywhere;
 }
 
+/*
+ * TEXT: serif voice for thoughts (design rule #4).
+ */
+.nook-artifact--text .nook-artifact__body {
+    font-family: var(--font-serif);
+    font-weight: var(--weight-medium);
+    font-size: var(--type-thought-size);
+    line-height: 1.35;
+    letter-spacing: var(--tracking-tight);
+}
+
+/*
+ * LINK: mono metadata voice for the index number (design rule #4).
+ */
+.nook-artifact--link .nook-artifact__number {
+    font-family: var(--font-mono);
+}
+
+/*
+ * GITHUB_ISSUE: tear line on ticket stub.
+ */
+.nook-artifact--github_issue {
+    border-top: 2px solid color-mix(
+        in srgb,
+        var(--border-strong) 48%,
+        transparent
+    );
+}
+
 /* ---------------------------------------------------------------
    Link artifacts
    --------------------------------------------------------------- */

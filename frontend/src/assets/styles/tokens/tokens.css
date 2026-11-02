@@ -14,11 +14,21 @@
   --palette-spark: #D6402A;
   --palette-bulb: #FFB23E;
 
+  /* Paper stocks */
   --stock-note: #FBF8F1;
+  --stock-text: var(--stock-note);
   --stock-link: #E8ECF6;
   --stock-issue: #E6F0E8;
   --stock-photo: #F6F0E2;
   --stock-undeveloped: #A3B0A2;
+
+  /* User-selectable tint palette — muted paper tones. */
+  --tint-cream: #FBF8F1;
+  --tint-rose: #F5E6E0;
+  --tint-sky: #E4EAF5;
+  --tint-sage: #E2EDE4;
+  --tint-lavender: #EAE4F2;
+  --tint-butter: #F5F0D8;
 
   --state-open: #1F6B45;
   --state-closed: #5B3FA8;
