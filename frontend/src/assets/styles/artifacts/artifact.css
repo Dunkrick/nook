@@ -1085,3 +1085,54 @@
             scale(0.98);
     }
 }
+
+/* ---------------------------------------------------------------
+   Settle — the card lands on the surface after a drag.
+   --------------------------------------------------------------- */
+
+@keyframes nook-artifact-settle {
+    0% {
+        transform:
+            rotate(var(--artifact-rotate, 0deg))
+            translateY(-4px);
+        box-shadow:
+            4px 6px 0 color-mix(
+                in srgb,
+                var(--border-strong) 14%,
+                transparent
+            ),
+            var(--elevation-artifact-hover);
+    }
+    60% {
+        transform:
+            rotate(var(--artifact-rotate, 0deg))
+            translateY(1px);
+        box-shadow:
+            1px 2px 0 color-mix(
+                in srgb,
+                var(--border-strong) 10%,
+                transparent
+            ),
+            var(--elevation-artifact);
+    }
+    100% {
+        transform:
+            rotate(var(--artifact-rotate, 0deg))
+            translateY(0);
+        box-shadow:
+            2px 3px 0 color-mix(
+                in srgb,
+                var(--border-strong) 10%,
+                transparent
+            ),
+            var(--elevation-artifact);
+    }
+}
+
+.nook-artifact--settling {
+    animation: nook-artifact-settle var(--motion-settle) ease-out forwards;
+}
+
+.nook-artifact--settling.nook-artifact--polaroid .nook-polaroid {
+    animation: nook-artifact-settle var(--motion-pop) ease-out forwards;
+}

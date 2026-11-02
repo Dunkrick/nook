@@ -50,6 +50,7 @@ export default function ArtifactView({
                 `nook-artifact--${artifact.type.toLowerCase()}`,
                 isSelected && "nook-artifact--selected",
                 drag.isDragging && "nook-artifact--dragging",
+                drag.isSettling && "nook-artifact--settling",
                 editing.isEditing && "nook-artifact--editing",
             )}
             data-artifact-id={artifact.id}
