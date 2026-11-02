@@ -30,6 +30,12 @@ The artifact is actively being repositioned.
 
 Dragging updates the visual position immediately and persists the final position optimistically.
 
+### Settling
+
+The artifact has just been released from a drag and is landing on the desk surface.
+
+A short keyframed settle animation (`--motion-settle` for notes, `--motion-pop` for photos) plays with shadow dampening to simulate physical landing. Grabbing the card again immediately interrupts the settle animation.
+
 ### Editing
 
 The artifact is being edited.

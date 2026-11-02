@@ -6,6 +6,42 @@ The project follows Semantic Versioning.
 
 ---
 
+## v1.3.0
+
+### Added
+
+#### Tactile artifact personalization and material stocks
+- Added type-specific material stocks mapping artifact types to distinct paper stock tokens (`--stock-text`, `--stock-link`, `--stock-photo`, `--stock-issue`).
+- Replaced deterministic ID-based color assignment with semantic material identities.
+- Added distinct typographic voices: `--font-serif` (`EB Garamond`) for TEXT thoughts, `--font-mono` for metadata/indices, and Caveat handwriting for polaroid captions.
+- Added tactile drop settle animation (`@keyframes nook-artifact-settle`) with shadow dampening on card landing.
+- Added user-customizable paper tint palette (`cream`, `rose`, `sky`, `sage`, `lavender`, `butter`).
+- Added accessible square swatch `TintPicker` component (`role="radiogroup"`, `role="radio"`, `aria-checked`, focus rings).
+- Added `tint String?` column to the `Artifact` database model with migration `20261102120000_add_artifact_tint`.
+- Added backend tint whitelist validation, update persistence, and unit test suites.
+
+#### OAuth 2.0 authentication
+- Added Google and GitHub OAuth 2.0 sign-in flows with automatic identity linking and reconciliation.
+- Added `OAuthAccount` database model linking external identity providers to user accounts.
+- Added `GET /auth/google`, `GET /auth/google/callback`, `GET /auth/github`, and `GET /auth/github/callback`.
+- Added frontend OAuth buttons and auth callback route.
+- Made user `passwordHash` optional to support pure OAuth users.
+
+#### GitHub issue integration
+- Added `GITHUB_ISSUE` artifacts as a first-class spatial artifact type.
+- Added webhook ingress at `POST /webhooks/github` with HMAC-SHA256 signature verification.
+- Added asynchronous RabbitMQ pipeline with publisher confirms, prefetch control, and reconnection handling.
+- Added background worker runtime (`github-worker.ts`) consuming issues and syncing state transitions (`opened`, `edited`, `closed`, `reopened`).
+- Added dead-letter queue (DLQ) routing after bounded retries for transient failures.
+- Added transactional persistence and webhook delivery idempotency tracking.
+
+#### Polaroid captions
+- Added optional caption support (`caption?`) on `POLAROID` artifacts stored in artifact JSON.
+- Added caption input in polaroid draft creation and inline double-click caption editing on the wall.
+- Added single-line enforcement and a 48-character limit.
+
+---
+
 ## v1.2.0
 
 ### Added
