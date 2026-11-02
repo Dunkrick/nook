@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { cn } from "../lib/cn";
 import { TINT_OPTIONS } from "../lib/tints";
 
@@ -12,7 +13,33 @@ export default function ColorDashboard({
     currentTint,
     onSelectTint,
 }: ColorDashboardProps) {
+    const [hoveredLabel, setHoveredLabel] = useState<string | null>(null);
     const isTargeted = selectedCount > 0;
+
+    const activeLabel =
+        TINT_OPTIONS.find((option) => option.key === (currentTint ?? null))?.label ??
+        "Default";
+
+    const subtitle = hoveredLabel
+        ? hoveredLabel
+        : isTargeted
+            ? `${selectedCount} thought${selectedCount !== 1 ? "s" : ""}`
+            : activeLabel;
+
+    function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+        if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+        e.preventDefault();
+
+        const currentIndex = TINT_OPTIONS.findIndex(
+            (option) => option.key === (currentTint ?? null)
+        );
+        const nextIndex =
+            e.key === "ArrowDown"
+                ? (currentIndex + 1) % TINT_OPTIONS.length
+                : (currentIndex - 1 + TINT_OPTIONS.length) % TINT_OPTIONS.length;
+
+        onSelectTint(TINT_OPTIONS[nextIndex].key);
+    }
 
     return (
         <aside
@@ -21,10 +48,11 @@ export default function ColorDashboard({
         >
             <div className="nook-color-dashboard__header">
                 <span className="nook-color-dashboard__title">Paper</span>
-                <span className="nook-color-dashboard__count">
-                    {isTargeted
-                        ? `${selectedCount} thought${selectedCount !== 1 ? "s" : ""}`
-                        : "Select thought"}
+                <span
+                    className="nook-color-dashboard__count"
+                    aria-live="polite"
+                >
+                    {subtitle}
                 </span>
             </div>
 
@@ -32,9 +60,10 @@ export default function ColorDashboard({
                 className="nook-color-dashboard__palette"
                 role="radiogroup"
                 aria-label="Paper tint options"
+                onKeyDown={handleKeyDown}
             >
                 {TINT_OPTIONS.map(({ key, label }) => {
-                    const isActive = isTargeted && (currentTint ?? null) === key;
+                    const isActive = (currentTint ?? null) === key;
 
                     return (
                         <button
@@ -53,11 +82,20 @@ export default function ColorDashboard({
                             role="radio"
                             aria-checked={isActive}
                             aria-label={label}
-                            title={isTargeted ? label : `Select a thought to apply ${label}`}
-                            disabled={!isTargeted}
+                            title={isTargeted ? `Apply ${label}` : `Default: ${label}`}
+                            onMouseEnter={() => setHoveredLabel(label)}
+                            onMouseLeave={() => setHoveredLabel(null)}
+                            onFocus={() => setHoveredLabel(label)}
+                            onBlur={() => setHoveredLabel(null)}
                             onClick={() => onSelectTint(key)}
                         >
                             <span className="nook-color-dashboard__swatch-fill" />
+                            {isActive && (
+                                <span
+                                    className="nook-color-dashboard__swatch-mark"
+                                    aria-hidden="true"
+                                />
+                            )}
                         </button>
                     );
                 })}

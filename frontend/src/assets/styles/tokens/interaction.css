@@ -15,6 +15,9 @@
     --interaction-selected-outline:
         2px solid rgba(74, 67, 104, .28);
 
+    /* Spatial canvas pointed vector cursor: ink body with crisp light outline */
+    --cursor-spatial:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M3 2v15.2l4.1-3.6 2.8 6.4 2.8-1.2-2.8-6.3h5.6L3 2z' fill='%2317141F' stroke='%23ffffff' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E") 3 2, default;
 }
 
 :focus-visible {

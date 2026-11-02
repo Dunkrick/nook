@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import ColorDashboard from "./ColorDashboard";
 
 describe("ColorDashboard", () => {
-    it("renders all 7 tint options and disabled state when no thoughts are selected", () => {
+    it("renders all 7 tint options in radiogroup", () => {
         const onSelectTint = vi.fn();
         render(
             <ColorDashboard
@@ -18,13 +18,13 @@ describe("ColorDashboard", () => {
         const radios = screen.getAllByRole("radio");
         expect(radios).toHaveLength(7);
         radios.forEach((radio) => {
-            expect(radio).toBeDisabled();
+            expect(radio).toBeEnabled();
         });
 
-        expect(screen.getByText("Select thought")).toBeInTheDocument();
+        expect(screen.getByText("Default")).toBeInTheDocument();
     });
 
-    it("displays count and enables swatches when thoughts are selected", () => {
+    it("displays count when thoughts are selected", () => {
         const onSelectTint = vi.fn();
         render(
             <ColorDashboard
@@ -57,12 +57,11 @@ describe("ColorDashboard", () => {
         expect(defaultRadio).toHaveAttribute("aria-checked", "false");
     });
 
-    it("triggers onSelectTint when clicking a swatch", () => {
+    it("triggers onSelectTint when clicking a swatch even when selectedCount is 0", () => {
         const onSelectTint = vi.fn();
         render(
             <ColorDashboard
-                selectedCount={1}
-                currentTint="cream"
+                selectedCount={0}
                 onSelectTint={onSelectTint}
             />
         );
@@ -89,18 +88,40 @@ describe("ColorDashboard", () => {
         expect(onSelectTint).toHaveBeenCalledWith(null);
     });
 
-    it("does not trigger onSelectTint when clicking while disabled", () => {
+    it("previews tint name on hover and restores subtitle on mouse leave", () => {
         const onSelectTint = vi.fn();
         render(
             <ColorDashboard
-                selectedCount={0}
+                selectedCount={3}
                 onSelectTint={onSelectTint}
             />
         );
 
-        const skyRadio = screen.getByRole("radio", { name: "Sky" });
-        fireEvent.click(skyRadio);
+        expect(screen.getByText("3 thoughts")).toBeInTheDocument();
 
-        expect(onSelectTint).not.toHaveBeenCalled();
+        const butterRadio = screen.getByRole("radio", { name: "Butter" });
+        fireEvent.mouseEnter(butterRadio);
+
+        expect(screen.getByText("Butter")).toBeInTheDocument();
+
+        fireEvent.mouseLeave(butterRadio);
+        expect(screen.getByText("3 thoughts")).toBeInTheDocument();
+    });
+
+    it("supports keyboard arrow navigation across swatches", () => {
+        const onSelectTint = vi.fn();
+        render(
+            <ColorDashboard
+                selectedCount={1}
+                currentTint={null}
+                onSelectTint={onSelectTint}
+            />
+        );
+
+        const group = screen.getByRole("radiogroup", { name: "Paper tint options" });
+        fireEvent.keyDown(group, { key: "ArrowDown" });
+
+        // TINT_OPTIONS[1] is cream
+        expect(onSelectTint).toHaveBeenCalledWith("cream");
     });
 });

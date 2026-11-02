@@ -20,7 +20,7 @@
   overflow: hidden;
   width: 100%;
   height: 100%;
-  cursor: default;
+  cursor: var(--cursor-spatial);
   touch-action: none;
   overscroll-behavior: none;
 
@@ -52,6 +52,7 @@
   width: var(--render-world-size);
   height: var(--render-world-size);
   z-index: var(--z-base);
+  cursor: var(--cursor-spatial);
 
   background:
     linear-gradient(

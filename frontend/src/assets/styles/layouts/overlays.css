@@ -214,24 +214,25 @@ kbd {
     font-size: 10px;
     color: var(--text-muted);
     white-space: nowrap;
+    transition: opacity var(--motion-lift);
 }
 
 .nook-color-dashboard__palette {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
 }
 
 .nook-color-dashboard__swatch {
     position: relative;
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
     padding: 2px;
 
     border: 1px solid color-mix(
         in srgb,
-        var(--border-strong) 22%,
+        var(--border-strong) 24%,
         transparent
     );
     border-radius: var(--radius-0);
@@ -243,7 +244,7 @@ kbd {
     transition:
         border-color var(--motion-lift),
         transform var(--motion-lift),
-        opacity var(--motion-lift);
+        box-shadow var(--motion-lift);
 }
 
 .nook-color-dashboard__swatch-fill {
@@ -258,29 +259,38 @@ kbd {
     background: var(--stock-note);
 }
 
-.nook-color-dashboard__swatch:hover:not(:disabled) {
-    border-color: color-mix(
-        in srgb,
-        var(--border-strong) 60%,
-        transparent
-    );
-    transform: translateX(1px);
+.nook-color-dashboard__swatch:hover {
+    border-color: var(--border-strong);
+    transform: translateX(2px) translateY(-1px);
+    box-shadow: 2px 2px 0 var(--palette-ink);
+}
+
+.nook-color-dashboard__swatch:active {
+    transform: translateX(1px) translateY(1px);
+    box-shadow: none;
+    transition-duration: 40ms;
 }
 
 .nook-color-dashboard__swatch--active {
     border-color: var(--border-strong);
-    box-shadow: 0 0 0 1px var(--border-strong);
+    box-shadow: 2px 2px 0 var(--palette-ink);
+}
+
+.nook-color-dashboard__swatch-mark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    background: var(--palette-ink);
+    transform: translate(-50%, -50%);
+    border-radius: var(--radius-0);
+    pointer-events: none;
 }
 
 .nook-color-dashboard__swatch:focus-visible {
     box-shadow: var(--focus-ring);
     outline: none;
-}
-
-.nook-color-dashboard__swatch:disabled {
-    opacity: 0.38;
-    cursor: default;
-    transform: none;
 }
 
 @keyframes nook-dashboard-enter {

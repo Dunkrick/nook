@@ -40,7 +40,8 @@
     transition:
         transform var(--motion-lift),
         box-shadow var(--motion-lift),
-        border-color var(--motion-lift);
+        border-color var(--motion-lift),
+        background-color var(--motion-settle);
 }
 
 /*
