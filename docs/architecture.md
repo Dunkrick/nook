@@ -70,6 +70,7 @@ The current artifact vocabulary is:
 - `TEXT`
 - `LINK`
 - `POLAROID`
+- `GITHUB_ISSUE`
 
 Components receive artifact data and interaction callbacks rather than directly owning persistence.
 
@@ -194,17 +195,19 @@ An artifact also belongs to a user.
 The current artifact schema stores flexible type-specific content in PostgreSQL JSON:
 
 ```text
-TEXT      → { text }
-LINK      → { url }
-POLAROID  → { imageKey }
+TEXT          → { text }
+LINK          → { url }
+POLAROID      → { imageKey, caption? }
+GITHUB_ISSUE  → { repository, issueNumber, title, body, state, url, author }
 ```
 
-Spatial properties remain first-class columns:
+Spatial and customization properties remain first-class columns:
 
 ```text
 x
 y
 zIndex
+tint
 ```
 
 This keeps positioning queryable without coupling the database schema to every artifact content shape.

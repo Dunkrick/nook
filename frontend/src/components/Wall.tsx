@@ -25,8 +25,9 @@ interface WallProps {
   onCommitDraftPolaroid: (imageKey: string, caption?: string) => Promise<void>;
   onCancelDraft: () => void;
 
-  selectedArtifactIds: number[]
-  onToggleArtifactSelection: (artifactId: number) => void
+  selectedArtifactIds: number[];
+  onToggleArtifactSelection: (artifactId: number) => void;
+  onClearSelection?: () => void;
 
   editingArtifactId: number | null;
   onEditingArtifactChange: (artifactId: number | null) => void;
@@ -46,6 +47,7 @@ export default function Wall({
     onCancelDraft,
     selectedArtifactIds,
     onToggleArtifactSelection,
+    onClearSelection,
     createPosition,
     onSelectArtifactType,
     onCancelCreation,
@@ -88,6 +90,8 @@ function handlePointerDown(
     if (editingArtifactId !== null) {
         onEditingArtifactChange(null);
     }
+
+    onClearSelection?.();
 }
   
   return (

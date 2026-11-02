@@ -60,9 +60,17 @@ GCS_BUCKET_NAME=your-gcs-bucket
 RABBITMQ_URL=amqp://guest:guest@localhost:5672
 
 GITHUB_WEBHOOK_SECRET=your-local-webhook-secret
+
+BACKEND_URL=http://localhost:3003
+
+# Optional OAuth 2.0 configuration
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+GITHUB_CLIENT_ID=your-github-client-id
+GITHUB_CLIENT_SECRET=your-github-client-secret
 ```
 
-Required backend variables:
+Required and optional backend variables:
 
 | Variable                | Purpose                                           |
 | ----------------------- | ------------------------------------------------- |
@@ -73,6 +81,11 @@ Required backend variables:
 | `GCS_BUCKET_NAME`       | Google Cloud Storage bucket used for media        |
 | `RABBITMQ_URL`          | RabbitMQ connection string                        |
 | `GITHUB_WEBHOOK_SECRET` | Secret used to verify GitHub webhook signatures   |
+| `BACKEND_URL`           | Optional; public backend URL for OAuth callbacks  |
+| `GOOGLE_CLIENT_ID`      | Optional; Google OAuth 2.0 client ID              |
+| `GOOGLE_CLIENT_SECRET`  | Optional; Google OAuth 2.0 client secret          |
+| `GITHUB_CLIENT_ID`      | Optional; GitHub OAuth App client ID              |
+| `GITHUB_CLIENT_SECRET`  | Optional; GitHub OAuth App client secret          |
 
 For local development involving Polaroid uploads, Google Cloud credentials must also be available to the Google Cloud Storage client through Application Default Credentials.
 

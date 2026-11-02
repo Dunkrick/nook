@@ -52,7 +52,6 @@ export default function useArtifactInteraction({
     function handleClick(
         e: React.MouseEvent<HTMLDivElement>
     ) {
-
         if (!e.metaKey && !e.ctrlKey)
             return;
 
@@ -64,12 +63,10 @@ export default function useArtifactInteraction({
     function handlePointerDown(
         e: React.PointerEvent<HTMLDivElement>
     ) {
-
         if (editing.isEditing)
             return;
 
         drag.handlePointerDown(e);
-
     }
 
     return {

@@ -17,6 +17,7 @@ Instead of forcing ideas into folders, documents, or rigid workflows, Nook lets 
 ### Authentication
 
 - User registration and login
+- Google and GitHub OAuth 2.0 authentication with account linking
 - JWT-based authentication
 - Protected application routes
 - Private user workspaces
@@ -25,11 +26,15 @@ Instead of forcing ideas into folders, documents, or rigid workflows, Nook lets 
 ### Spatial workspace
 
 - Workspace-based artifact model
-- Text, link, and Polaroid artifacts
+- Text, link, Polaroid (with captions), and GitHub Issue artifacts
+- Type-specific paper stocks (`--stock-text`, `--stock-link`, `--stock-photo`, `--stock-issue`)
+- User-selectable paper tint customization palette with accessible swatches
+- Physical micro-interactions: lift on hover, hold on drag, and tactile settle on drop
+- Distinct typographic voices (serif for thoughts, mono for metadata, handwriting for polaroid captions)
 - Free positioning with persisted `x` / `y` coordinates
 - Draft artifact creation
 - Drag and reposition artifacts
-- Inline text editing
+- Inline text and caption editing
 - Artifact deletion
 - Multi-artifact selection and selection toolbar
 - Foundation for future insight-oriented interactions
@@ -127,19 +132,21 @@ See [GitHub Integration](docs/integrations/github.md) for the implementation det
 
 ## Artifact model
 
-Nook currently represents three artifact types:
+Nook currently represents four artifact types:
 
-| Type       | Meaning                    | Stored content |
-| ---------- | -------------------------- | -------------- |
-| `TEXT`     | “I thought this”           | `{ text }`     |
-| `LINK`     | “I found this”             | `{ url }`      |
-| `POLAROID` | “I saw / experienced this” | `{ imageKey }` |
+| Type           | Meaning                    | Stored content                                                 |
+| -------------- | -------------------------- | -------------------------------------------------------------- |
+| `TEXT`         | “I thought this”           | `{ text }`                                                     |
+| `LINK`         | “I found this”             | `{ url }`                                                      |
+| `POLAROID`     | “I saw / experienced this” | `{ imageKey, caption? }`                                       |
+| `GITHUB_ISSUE` | “I am tracking this”       | `{ repository, issueNumber, title, body, state, url, author }` |
 
-Spatial state is stored independently from artifact content:
+Spatial state and customization are stored independently from artifact content:
 
 - `x`
 - `y`
 - `zIndex`
+- `tint` (custom paper tint override)
 - `createdAt`
 - `updatedAt`
 
@@ -153,6 +160,10 @@ The database schema lives in `backend/prisma/schema.prisma`.
 
 - `POST /auth/register`
 - `POST /auth/login`
+- `GET /auth/google`
+- `GET /auth/google/callback`
+- `GET /auth/github`
+- `GET /auth/github/callback`
 
 ### Workspaces
 
@@ -170,6 +181,10 @@ The database schema lives in `backend/prisma/schema.prisma`.
 - `GET /artifacts/:id/image`
 
 The image endpoint returns JSON containing a signed URL rather than redirecting the browser to Google Cloud Storage.
+
+### Webhooks
+
+- `POST /webhooks/github`
 
 ### Health
 

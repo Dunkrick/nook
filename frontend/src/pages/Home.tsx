@@ -5,6 +5,7 @@ import type { Artifact, ArtifactUpdate, DraftArtifact, Position, TextArtifact, L
 import { markPhotoAsNew } from "../lib/developingPhotos";
 import Wall from "../components/Wall"
 import InsightPanel from "../components/InsightPanel";
+import ColorDashboard from "../components/ColorDashboard";
 import WorkspaceShell from "../components/WorkspaceShell";
 import FloatingToolbar from "../components/FloatingToolbar";
 import { logout } from "../services/auth";
@@ -49,6 +50,7 @@ export default function Home() {
     const [artifacts, setArtifacts] = useState<Artifact[]>([]);
     const [draftArtifact, setDraftArtifact] = useState<DraftArtifact | null>(null);
     const [selectedArtifactIds, setSelectedArtifactIds] = useState<number[]>([]);
+    const [defaultTint, setDefaultTint] = useState<string | null>(null);
     const [activeWorkspace, setActiveWorkspace] = useState<Workspace | null>(null);
     const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
     const [isInsightOpen, setIsInsightOpen] = useState(false);
@@ -137,6 +139,7 @@ export default function Home() {
             content: {
                 text,
             },
+            tint: defaultTint,
             x: draftArtifact.x,
             y: draftArtifact.y,
             zIndex: 0,
@@ -160,10 +163,23 @@ export default function Home() {
                 }
             );
 
+            let finalArtifact = savedArtifact;
+            if (defaultTint) {
+                try {
+                    finalArtifact = await updateArtifact(
+                        activeWorkspace.id,
+                        savedArtifact.id,
+                        { tint: defaultTint }
+                    );
+                } catch {
+                    // Fall back to savedArtifact if tint update fails
+                }
+            }
+
             setArtifacts((current) =>
                 current.map((artifact) =>
                     artifact.id === optimisticArtifact.id
-                        ? savedArtifact
+                        ? finalArtifact
                         : artifact
                 )
             );
@@ -200,6 +216,7 @@ export default function Home() {
             content: {
                 url,
             },
+            tint: defaultTint,
             x: draftArtifact.x,
             y: draftArtifact.y,
             zIndex: 0,
@@ -223,10 +240,23 @@ export default function Home() {
                 }
             );
 
+            let finalArtifact = savedArtifact;
+            if (defaultTint) {
+                try {
+                    finalArtifact = await updateArtifact(
+                        activeWorkspace.id,
+                        savedArtifact.id,
+                        { tint: defaultTint }
+                    );
+                } catch {
+                    // Fall back to savedArtifact if tint update fails
+                }
+            }
+
             setArtifacts((current) =>
                 current.map((artifact) =>
                     artifact.id === optimisticArtifact.id
-                        ? savedArtifact
+                        ? finalArtifact
                         : artifact
                 )
             );
@@ -270,6 +300,7 @@ export default function Home() {
         workspaceId: activeWorkspace.id,
         type: "POLAROID",
         content,
+        tint: defaultTint,
         x: draftArtifact.x,
         y: draftArtifact.y,
         zIndex: 0,
@@ -297,10 +328,23 @@ export default function Home() {
         // Only a photo uploaded in this session develops its image.
         markPhotoAsNew(savedArtifact.id);
 
+        let finalArtifact = savedArtifact;
+        if (defaultTint) {
+            try {
+                finalArtifact = await updateArtifact(
+                    activeWorkspace.id,
+                    savedArtifact.id,
+                    { tint: defaultTint }
+                );
+            } catch {
+                // Fall back to savedArtifact if tint update fails
+            }
+        }
+
         setArtifacts((current) =>
             current.map((artifact) =>
                 artifact.id === optimisticArtifact.id
-                    ? savedArtifact
+                    ? finalArtifact
                     : artifact
             )
         );
@@ -501,6 +545,70 @@ function handleFindInsight() {
 function handleCloseInsight(){
     setIsInsightOpen(false);
 }
+
+    const targetArtifactIds =
+        selectedArtifactIds.length > 0
+            ? selectedArtifactIds
+            : editingArtifactId !== null
+                ? [editingArtifactId]
+                : [];
+
+    const targetArtifacts = artifacts.filter((artifact) =>
+        targetArtifactIds.includes(artifact.id)
+    );
+
+    const resolvedCurrentTint =
+        targetArtifacts.length === 0
+            ? defaultTint
+            : targetArtifacts.every(
+                  (a) => (a.tint ?? null) === (targetArtifacts[0].tint ?? null)
+              )
+                ? (targetArtifacts[0].tint ?? null)
+                : undefined;
+
+    async function handleBatchTint(tint: string | null) {
+        if (targetArtifactIds.length === 0) {
+            setDefaultTint(tint);
+            return;
+        }
+
+        if (!activeWorkspace) return;
+
+        const targetSet = new Set(targetArtifactIds);
+        const previousArtifacts = artifacts;
+
+        setArtifacts((current) =>
+            current.map((artifact) =>
+                targetSet.has(artifact.id)
+                    ? { ...artifact, tint }
+                    : artifact
+            )
+        );
+
+        try {
+            await Promise.all(
+                targetArtifactIds.map(async (id) => {
+                    if (id < 0) return;
+                    const updated = await updateArtifact(
+                        activeWorkspace.id,
+                        id,
+                        { tint }
+                    );
+                    setArtifacts((current) =>
+                        current.map((a) => (a.id === id ? updated : a))
+                    );
+                })
+            );
+        } catch (error) {
+            setArtifacts(previousArtifacts);
+            setSaveError("Couldn't save that. Please try again.");
+            setTimeout(() => {
+                setSaveError(null);
+            }, 3000);
+            console.error(error);
+        }
+    }
+
     return (
         <CameraProvider>
             <CanvasController
@@ -520,6 +628,13 @@ function handleCloseInsight(){
                     navigate("/");
                 }}
             />
+            {activeWorkspace && (
+                <ColorDashboard
+                    selectedCount={targetArtifactIds.length}
+                    currentTint={resolvedCurrentTint}
+                    onSelectTint={handleBatchTint}
+                />
+            )}
             {!activeWorkspace ? (
                 <FirstWorkspace
                     userName={user?.name ?? "there"}
@@ -548,6 +663,7 @@ function handleCloseInsight(){
 
                                 selectedArtifactIds={selectedArtifactIds}
                                 onToggleArtifactSelection={toggleArtifactSelection}
+                                onClearSelection={handleClearSelection}
 
                                 editingArtifactId={editingArtifactId}
                                 onEditingArtifactChange={handleEditingArtifactChange}
