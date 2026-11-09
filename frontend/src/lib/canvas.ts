@@ -12,6 +12,22 @@ export interface CameraFrame {
     zoom: number;
 }
 
+export interface CameraFrameOptions {
+    padding?: number;
+    paddingTop?: number;
+    paddingBottom?: number;
+    paddingLeft?: number;
+    paddingRight?: number;
+    maxZoom?: number;
+    minZoom?: number;
+    workspaceHome?: { x: number; y: number };
+}
+
+export const EMPTY_WORKSPACE_CARDS: ArtifactCardLayout[] = [
+    { x: -270, y: -245, width: 340, height: 240 },
+    { x: 340, y: 170, width: 275, height: 180 },
+];
+
 const DEFAULT_CARD_SIZE: Record<Artifact["type"], { width: number; height: number }> = {
     TEXT: { width: 380, height: 220 },
     LINK: { width: 380, height: 220 },
@@ -32,9 +48,9 @@ function proximityThreshold(cards: ArtifactCardLayout[]) {
         .sort((a, b) => a - b);
     const median = diagonals[Math.floor(diagonals.length / 2)] ?? 0;
 
-    // Neighboring cards can have a modest gap; large coordinate jumps stay
-    // outside cluster even when one card has unusual dimensions.
-    return median * 1.5;
+    // Normal workspace thoughts can be placed across the canvas. A generous
+    // threshold preserves all user thoughts while filtering extreme outliers.
+    return Math.max(median * 4, 2500);
 }
 
 export function getMainArtifactCluster(cards: ArtifactCardLayout[]) {
@@ -85,41 +101,57 @@ export function getArtifactCardSize(artifact: Artifact) {
 export function getCameraFrame(
     cards: ArtifactCardLayout[],
     viewport: { width: number; height: number },
-    options: { padding?: number; maxZoom?: number; minZoom?: number } = {},
+    options: CameraFrameOptions = {},
 ): CameraFrame {
+    const defaultPadding = options.padding ?? 64;
+    const paddingTop = options.paddingTop ?? defaultPadding;
+    const paddingBottom = options.paddingBottom ?? defaultPadding;
+    const paddingLeft = options.paddingLeft ?? defaultPadding;
+    const paddingRight = options.paddingRight ?? defaultPadding;
+
+    const availableWidth = Math.max(1, viewport.width - (paddingLeft + paddingRight));
+    const availableHeight = Math.max(1, viewport.height - (paddingTop + paddingBottom));
+
+    let targetCards = cards;
     if (cards.length === 0) {
-        return { center: { x: 0, y: 0 }, zoom: 1 };
+        const home = options.workspaceHome ?? { x: 0, y: 0 };
+        targetCards = EMPTY_WORKSPACE_CARDS.map((card) => ({
+            ...card,
+            x: card.x + home.x,
+            y: card.y + home.y,
+        }));
     }
 
-    const cluster = getMainArtifactCluster(cards);
-    const centers = cluster.map(centerOf);
-    const center = {
-        x: centers.reduce((sum, point) => sum + point.x, 0) / centers.length,
-        y: centers.reduce((sum, point) => sum + point.y, 0) / centers.length,
+    const cluster = getMainArtifactCluster(targetCards);
+    const minX = Math.min(...cluster.map((card) => card.x));
+    const maxX = Math.max(...cluster.map((card) => card.x + card.width));
+    const minY = Math.min(...cluster.map((card) => card.y));
+    const maxY = Math.max(...cluster.map((card) => card.y + card.height));
+
+    const contentWidth = Math.max(1, maxX - minX);
+    const contentHeight = Math.max(1, maxY - minY);
+    const boundingCenter = {
+        x: (minX + maxX) / 2,
+        y: (minY + maxY) / 2,
     };
-    const halfWidth = Math.max(
-        ...cluster.map((card) => Math.abs(card.x + card.width - center.x)),
-        ...cluster.map((card) => Math.abs(card.x - center.x)),
-    );
-    const halfHeight = Math.max(
-        ...cluster.map((card) => Math.abs(card.y + card.height - center.y)),
-        ...cluster.map((card) => Math.abs(card.y - center.y)),
-    );
-    const padding = options.padding ?? 64;
-    const availableWidth = Math.max(1, viewport.width - padding * 2);
-    const availableHeight = Math.max(1, viewport.height - padding * 2);
+
     const maxZoom = Math.min(1, options.maxZoom ?? 1);
     const minZoom = options.minZoom ?? 0.1;
     const fitZoom = Math.min(
         maxZoom,
-        availableWidth / (halfWidth * 2),
-        availableHeight / (halfHeight * 2),
+        availableWidth / contentWidth,
+        availableHeight / contentHeight,
     );
+    const zoom = Math.max(minZoom, fitZoom);
 
-    return {
-        center,
-        zoom: Math.max(minZoom, fitZoom),
+    // Shift center to compensate for asymmetric UI chrome (e.g. toolbar at top, palette at left)
+    // so the bounding box is visually centered in the remaining clear area.
+    const center = {
+        x: boundingCenter.x - ((paddingLeft - paddingRight) / 2) / zoom,
+        y: boundingCenter.y - ((paddingTop - paddingBottom) / 2) / zoom,
     };
+
+    return { center, zoom };
 }
 
 export function getArtifactCenter(artifacts: Artifact[]) {
@@ -130,10 +162,13 @@ export function getArtifactCenter(artifacts: Artifact[]) {
         return { x: artifact.x, y: artifact.y, ...size };
     });
     const cluster = getMainArtifactCluster(cards);
-    const centers = cluster.map(centerOf);
+    const minX = Math.min(...cluster.map((card) => card.x));
+    const maxX = Math.max(...cluster.map((card) => card.x + card.width));
+    const minY = Math.min(...cluster.map((card) => card.y));
+    const maxY = Math.max(...cluster.map((card) => card.y + card.height));
 
     return {
-        x: centers.reduce((sum, point) => sum + point.x, 0) / centers.length,
-        y: centers.reduce((sum, point) => sum + point.y, 0) / centers.length,
+        x: (minX + maxX) / 2,
+        y: (minY + maxY) / 2,
     };
 }
