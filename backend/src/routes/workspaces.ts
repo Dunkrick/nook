@@ -4,13 +4,14 @@ import {
     getWorkspaces,
     getWorkspace,
     createWorkspace,
+    updateWorkspace,
     getWorkspaceArtifacts
 } from "../services/workspaces.js";
 import { createArtifact, updateArtifact, deleteArtifact } from "../services/artifacts.js";
 
 import { authenticate } from "../middleware/auth.js";
 import { asyncHandler } from "../middleware/async.js";
-import { parseWorkspaceId, validateCreateWorkspace } from "../validation/workspaces.js";
+import { parseWorkspaceId, validateCreateWorkspace, validateUpdateWorkspace } from "../validation/workspaces.js";
 import { validateCreateArtifact, validateUpdateArtifact } from "../validation/artifacts.js";
 
 const router = express.Router();
@@ -58,6 +59,28 @@ router.post(
             );
 
         return res.status(201).json(workspace);
+    })
+);
+
+router.patch(
+    "/:id",
+    authenticate,
+    validateUpdateWorkspace,
+    asyncHandler(async (req, res) => {
+        const workspaceId = parseWorkspaceId(req.params.id);
+        const workspace = await updateWorkspace(
+            workspaceId,
+            req.user.id,
+            req.body.name.trim()
+        );
+
+        if (!workspace) {
+            return res.status(404).json({
+                error: "Workspace not found",
+            });
+        }
+
+        return res.status(200).json(workspace);
     })
 );
 

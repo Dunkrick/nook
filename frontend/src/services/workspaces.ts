@@ -21,6 +21,12 @@ export async function createWorkspace(name: string): Promise<Workspace> {
     });
 }
 
+export async function updateWorkspace(workspaceId: number, name: string): Promise<Workspace> {
+    return patch(`/workspaces/${workspaceId}`, {
+        name,
+    });
+}
+
 export async function getWorkspaceArtifacts(workspaceId: number): Promise<Artifact[]> {
     return get(`/workspaces/${workspaceId}/artifacts`);
 }

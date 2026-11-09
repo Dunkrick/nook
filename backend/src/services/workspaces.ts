@@ -32,6 +32,32 @@ export async function createWorkspace(
     });
 }
 
+export async function updateWorkspace(
+    workspaceId: number,
+    userId: number,
+    name: string
+) {
+    const existing = await prisma.workspace.findFirst({
+        where: {
+            id: workspaceId,
+            ownerId: userId,
+        },
+    });
+
+    if (!existing) {
+        return null;
+    }
+
+    return prisma.workspace.update({
+        where: {
+            id: workspaceId,
+        },
+        data: {
+            name,
+        },
+    });
+}
+
 export async function getWorkspaceArtifacts(
     workspaceId: number,
     userId: number

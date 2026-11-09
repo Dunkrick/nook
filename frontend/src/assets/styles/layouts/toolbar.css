@@ -146,7 +146,9 @@
     top: calc(100% + 8px);
     left: 0;
 
-    width: 210px;
+    min-width: 220px;
+    width: max-content;
+    max-width: 280px;
 
     margin: 0;
     padding: var(--space-2);
@@ -228,6 +230,113 @@
     background: var(--artifact-2);
 
     transform: rotate(-12deg);
+}
+
+.nook-workspace-switcher__item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.nook-workspace-switcher__item .nook-workspace-switcher__option {
+    flex: 1;
+    min-width: 0;
+}
+
+.nook-workspace-switcher__item-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.nook-workspace-switcher__action {
+    display: none;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    margin-right: var(--space-1);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-0);
+    background: var(--color-artifact);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition:
+        color var(--motion-lift),
+        border-color var(--motion-lift),
+        background-color var(--motion-lift);
+}
+
+.nook-workspace-switcher__action .nook-workspace-switcher__icon {
+    width: 12px;
+    height: 12px;
+}
+
+.nook-workspace-switcher__item:hover .nook-workspace-switcher__action,
+.nook-workspace-switcher__action:focus-visible {
+    display: inline-flex;
+}
+
+.nook-workspace-switcher__action:hover {
+    color: var(--text-primary);
+    border-color: var(--border-strong);
+}
+
+.nook-workspace-switcher__rename {
+    display: grid;
+    gap: var(--space-2);
+    width: 100%;
+    padding: var(--space-2);
+    box-sizing: border-box;
+}
+
+.nook-workspace-switcher__rename input {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-0);
+    background: var(--color-artifact);
+    color: var(--text-primary);
+    font: inherit;
+    font-size: var(--type-label-size);
+}
+
+.nook-workspace-switcher__rename input:focus {
+    border-color: var(--border-strong);
+    outline: none;
+}
+
+.nook-workspace-switcher__rename > div {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.nook-workspace-switcher__rename button {
+    min-height: 28px;
+    padding: 0 var(--space-3);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-0);
+    background: var(--color-artifact);
+    color: var(--text-primary);
+    font: inherit;
+    font-size: var(--type-overline-size);
+    font-weight: var(--weight-semibold);
+    cursor: pointer;
+}
+
+.nook-workspace-switcher__rename button[type="submit"] {
+    border-color: var(--border-strong);
+    background: var(--border-strong);
+    color: var(--text-on-dark);
+}
+
+.nook-workspace-switcher__rename button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
 }
 
 
