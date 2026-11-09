@@ -29,7 +29,7 @@ export default function Viewport({
         >
 
             {children}
-            <p className="nook-viewport__hint" aria-hidden="true">Hold space to pan · scroll to zoom</p>
+            <p className="nook-viewport__hint" aria-hidden="true">Hold space to pan · scroll to zoom · ⌘0 to fit</p>
 
         </div>
 
