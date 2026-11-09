@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import SelectionToolbar from "../components/SelectionToolbar"
-import { createArtifact, updateArtifact, deleteArtifact, getWorkspaces, getWorkspaceArtifacts, createWorkspace } from "../services/workspaces";
+import { createArtifact, updateArtifact, deleteArtifact, getWorkspaces, getWorkspaceArtifacts, createWorkspace, updateWorkspace } from "../services/workspaces";
 import type { Artifact, ArtifactUpdate, DraftArtifact, Position, TextArtifact, LinkArtifact, PolaroidArtifact } from "../types/artifacts";
 import { markPhotoAsNew } from "../lib/developingPhotos";
 import Wall from "../components/Wall"
@@ -71,6 +71,24 @@ export default function Home() {
         setDraftArtifact(null);
         setCreationPosition(null);
         setIsWorkspaceReady(true);
+    }
+
+    async function handleRenameWorkspace(workspaceId: number, name: string) {
+        try {
+            const updated = await updateWorkspace(workspaceId, name);
+            setWorkspaces((current) =>
+                current.map((w) => (w.id === workspaceId ? { ...w, name: updated.name } : w))
+            );
+            if (activeWorkspace?.id === workspaceId) {
+                setActiveWorkspace((current) => (current ? { ...current, name: updated.name } : null));
+            }
+        } catch (error) {
+            setSaveError("Couldn't update workspace. Please try again.");
+            setTimeout(() => {
+                setSaveError(null);
+            }, 3000);
+            throw error;
+        }
     }
 
     function handleCreateDraft(position: Position) {
@@ -623,6 +641,7 @@ function handleCloseInsight(){
                 workspaces={workspaces}
                 onWorkspaceChange={handleWorkspaceChange}
                 onCreateWorkspace={handleCreateWorkspace}
+                onRenameWorkspace={handleRenameWorkspace}
                 onLogout={() => {
                     logout();
                     navigate("/");

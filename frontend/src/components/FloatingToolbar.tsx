@@ -8,6 +8,7 @@ interface FloatingToolbarProps {
 
     onWorkspaceChange: (workspace: Workspace) => void;
     onCreateWorkspace: (name: string) => Promise<void>;
+    onRenameWorkspace?: (workspaceId: number, name: string) => Promise<void>;
     onLogout: () => void;
 }
 
@@ -17,6 +18,7 @@ export default function FloatingToolbar({
     workspaces,
     onWorkspaceChange,
     onCreateWorkspace,
+    onRenameWorkspace,
     onLogout,
 }: FloatingToolbarProps) {
     return (
@@ -30,6 +32,7 @@ export default function FloatingToolbar({
                 activeWorkspace={activeWorkspace}
                 onChange={onWorkspaceChange}
                 onCreate={onCreateWorkspace}
+                onRename={onRenameWorkspace}
             />
 
             <div
