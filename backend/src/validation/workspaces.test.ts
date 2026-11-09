@@ -63,3 +63,4 @@ describe("parseWorkspaceId", () => {
         expect(() => parseWorkspaceId("-5")).toThrow(ValidationError);
     });
 });
+

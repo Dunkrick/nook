@@ -253,20 +253,25 @@
     display: none;
     flex-shrink: 0;
     align-items: center;
-    padding: var(--space-1) var(--space-2);
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
     margin-right: var(--space-1);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-0);
     background: var(--color-artifact);
     color: var(--text-muted);
-    font: inherit;
-    font-size: var(--type-overline-size);
-    font-weight: var(--weight-semibold);
     cursor: pointer;
     transition:
         color var(--motion-lift),
         border-color var(--motion-lift),
         background-color var(--motion-lift);
+}
+
+.nook-workspace-switcher__action .nook-workspace-switcher__icon {
+    width: 12px;
+    height: 12px;
 }
 
 .nook-workspace-switcher__item:hover .nook-workspace-switcher__action,
