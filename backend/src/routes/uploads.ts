@@ -3,6 +3,7 @@ import multer from "multer";
 
 import { authenticate } from "../middleware/auth.js";
 import { uploadImage } from "../services/uploads.js";
+import { S3Storage } from "../storage/s3-storage.js";
 import { GoogleCloudStorage } from "../storage/google-cloud-storage.js";
 import { env } from "../config/env.js";
 
@@ -15,7 +16,9 @@ const upload = multer({
     },
 });
 
-const storage = new GoogleCloudStorage(env.GCS_BUCKET_NAME);
+const storage = env.S3_BUCKET_NAME
+    ? new S3Storage()
+    : new GoogleCloudStorage(env.GCS_BUCKET_NAME);
 
 router.post(
     "/",

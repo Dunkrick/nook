@@ -3,13 +3,16 @@ import { Router } from "express";
 import { authenticate } from "../middleware/auth.js";
 import { asyncHandler } from "../middleware/async.js";
 import { getArtifactImageUrl } from "../services/artifact-images.js";
+import { S3Storage } from "../storage/s3-storage.js";
 import { GoogleCloudStorage } from "../storage/google-cloud-storage.js";
 import { ValidationError } from "../lib/error.js";
 import { env } from "../config/env.js";
 
 const router = Router();
 
-const storage = new GoogleCloudStorage(env.GCS_BUCKET_NAME);
+const storage = env.S3_BUCKET_NAME
+    ? new S3Storage()
+    : new GoogleCloudStorage(env.GCS_BUCKET_NAME);
 
 /**
  * GET /artifacts/:id/image
