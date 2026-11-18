@@ -50,7 +50,7 @@ Instead of forcing ideas into folders, documents, or rigid workflows, Nook lets 
 ### Media
 
 - Multipart image uploads through the Nook API
-- Private Google Cloud Storage bucket
+- Private AWS S3 bucket (or local storage fallback)
 - Per-user object keys
 - JPEG, PNG, and WebP validation
 - 10 MB upload limit
@@ -60,12 +60,12 @@ Instead of forcing ideas into folders, documents, or rigid workflows, Nook lets 
 
 - Layered backend architecture: routes → services → Prisma/storage
 - Typed artifact domain model
-- Pluggable `ObjectStorage` abstraction
+- Pluggable `ObjectStorage` abstraction (AWS S3 & LocalStorage)
 - Backend unit tests with Vitest
 - Frontend component tests with Vitest
 - Backend tests, type checking, and production builds in CI
 - Dockerized backend
-- Google Cloud Run deployment through GitHub Actions
+- AWS EC2 / Docker deployment through GitHub Actions
 
 ---
 
@@ -89,7 +89,7 @@ Express + TypeScript
   ├── services
   └── storage abstraction
        ├── Prisma
-       └── Google Cloud Storage
+       └── AWS S3 / LocalStorage
               │
               └── private media + signed reads
   │
@@ -97,7 +97,7 @@ Express + TypeScript
 PostgreSQL / Neon
 ```
 
-The browser never receives public access to the media bucket. A Polaroid image is stored as an `imageKey` in artifact JSON, and the authenticated API verifies ownership before issuing a short-lived signed read URL.
+The browser never receives direct public access to private media buckets. A Polaroid image is stored as an `imageKey` in artifact JSON, and the authenticated API verifies ownership before issuing a short-lived signed read URL (or local static URL).
 
 See [`docs/architecture.md`](./docs/architecture.md) for request flows and layer responsibilities.
 
@@ -129,7 +129,7 @@ The integration includes:
 - webhook delivery idempotency
 - transactional persistence
 - GitHub issue → Nook artifact upserts
-- production deployment on Cloud Run
+- production deployment via Docker Compose on AWS EC2
 - independent GitHub worker runtime
 
 Supported issue lifecycle:
@@ -189,7 +189,7 @@ The database schema lives in `backend/prisma/schema.prisma`.
 - `POST /uploads`
 - `GET /artifacts/:id/image`
 
-The image endpoint returns JSON containing a signed URL rather than redirecting the browser to Google Cloud Storage.
+The image endpoint returns JSON containing a signed URL rather than redirecting the browser to cloud storage.
 
 ### Webhooks
 
@@ -221,16 +221,17 @@ The image endpoint returns JSON containing a signed URL rather than redirecting 
 - PostgreSQL
 - JWT authentication
 - Multer
-- Google Cloud Storage client
+- AWS S3 client (`@aws-sdk/client-s3`)
+- Local storage adapter
 - Vitest
 
 ### Infrastructure
 
-- Docker
-- Google Cloud Run
-- Google Artifact Registry
-- Google Cloud Storage
-- Neon PostgreSQL
+- Docker & Docker Compose
+- AWS EC2 (Free Tier)
+- AWS S3
+- Neon PostgreSQL / AWS RDS
+- RabbitMQ
 - GitHub Actions
 
 ---
@@ -321,9 +322,9 @@ The backend CI workflow also builds the Docker image.
 
 ## Production
 
-The backend is containerized and deployed to Google Cloud Run. GitHub Actions runs on pushes to `main`, builds the backend image, pushes it to Artifact Registry, deploys the image, and verifies the `/health` endpoint.
+The backend is containerized and deployed to AWS EC2 using Docker Compose. GitHub Actions runs on pushes to `main`, deploys database migrations, and updates the running containers on EC2.
 
-See [`docs/deployment.md`](./docs/deployment.md).
+See [`docs/aws-setup.md`](./docs/aws-setup.md) and [`docs/deployment.md`](./docs/deployment.md).
 
 ---
 

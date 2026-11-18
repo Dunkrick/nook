@@ -14,7 +14,7 @@ const storage = getObjectStorage();
  * GET /artifacts/:id/image
  *
  * Authenticates the request, verifies ownership, then returns a short-lived
- * signed GCS URL as JSON. Cloud Run never proxies image bytes.
+ * signed storage URL as JSON. Backend never proxies image bytes.
  */
 router.get(
     "/:id/image",

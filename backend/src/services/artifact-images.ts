@@ -15,8 +15,8 @@ const SIGNED_URL_TTL_SECONDS = 900; // 15 minutes
  *   4. Artifact content must contain a valid imageKey.
  *
  * This service depends on the ObjectStorage abstraction — never on
- * @google-cloud/storage directly. Inject a GoogleCloudStorage instance
- * (or a test double) from the route layer.
+ * a concrete storage provider directly. Inject an ObjectStorage instance
+ * (e.g. S3Storage, LocalStorage, or a test double) from the route layer.
  */
 export async function getArtifactImageUrl(
     artifactId: number,
