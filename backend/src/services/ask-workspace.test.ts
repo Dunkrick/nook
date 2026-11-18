@@ -1,15 +1,20 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { Artifact } from "../domain/artifacts.js";
-import type { LlmClient, LlmRequest } from "../llm/client.js";
+import type { LlmClient, LlmRequest, LlmToolDeclaration, LlmToolResult, LlmToolTurn } from "../llm/client.js";
 import type { SearchHit, SearchFilters } from "./workspace-search.js";
 
-const { searchWorkspace } = vi.hoisted(() => ({
+const { searchWorkspace, getWorkspace } = vi.hoisted(() => ({
     searchWorkspace: vi.fn(),
+    getWorkspace: vi.fn(),
 }));
 
 vi.mock("./workspace-search.js", async (importOriginal) => ({
     ...await importOriginal<typeof import("./workspace-search.js")>(),
     searchWorkspace,
+}));
+vi.mock("./workspaces.js", async (importOriginal) => ({
+    ...await importOriginal<typeof import("./workspaces.js")>(),
+    getWorkspace,
 }));
 
 import { askWorkspace, InvalidAskResponseError } from "./ask-workspace.js";
@@ -73,6 +78,16 @@ function fakeClient(outputs: string[]) {
     return { client, generate };
 }
 
+function fakeToolClient(turns: LlmToolTurn[], finalOutput = response()) {
+    const generate = vi.fn(async (_request: LlmRequest) => finalOutput);
+    const next = vi.fn(async (_results?: LlmToolResult[], _allowToolCalls?: boolean) =>
+        turns.shift() ?? { text: "", toolCalls: [] }
+    );
+    const createToolSession = vi.fn((_request: LlmRequest, _tools: LlmToolDeclaration[]) => ({ next }));
+    const client: LlmClient = { generate, createToolSession };
+    return { client, generate, next, createToolSession };
+}
+
 const filters: SearchFilters = { terms: ["release"] };
 
 describe("ask output validation", () => {
@@ -126,6 +141,7 @@ describe("buildAskPrompt", () => {
 describe("askWorkspace", () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        getWorkspace.mockResolvedValue({ id: 10, ownerId: 5 });
     });
 
     it("returns structured answer and unresolved open issues from code", async () => {
@@ -219,10 +235,139 @@ describe("askWorkspace", () => {
     });
 
     it("preserves null when workspace is not owned", async () => {
-        searchWorkspace.mockResolvedValue(null);
+        getWorkspace.mockResolvedValue(null);
         const { client, generate } = fakeClient([response()]);
 
         await expect(askWorkspace(5, 99, "release?", filters, client)).resolves.toBeNull();
         expect(generate).not.toHaveBeenCalled();
+        expect(searchWorkspace).not.toHaveBeenCalled();
+    });
+
+    it("lets model choose filters, then runs search with authenticated ids", async () => {
+        searchWorkspace.mockResolvedValue([textHit(1, "Deployed staging")]);
+        const { client, next, createToolSession } = fakeToolClient([
+            { text: "", toolCalls: [{ name: "search_workspace", args: { terms: ["deploy"], sinceDays: 7 } }] },
+            { text: response([1]), toolCalls: [] },
+        ]);
+
+        const result = await askWorkspace(5, 10, "Did I deploy this week?", filters, client);
+
+        expect(getWorkspace).toHaveBeenCalledWith(10, 5);
+        expect(createToolSession).toHaveBeenCalledWith(
+            expect.objectContaining({ userPrompt: expect.stringContaining("Did I deploy this week?") }),
+            [expect.objectContaining({ name: "search_workspace" })],
+        );
+        const declaredTools = createToolSession.mock.calls[0][1];
+        const allowedArguments = Object.keys(
+            (declaredTools[0].parameters.properties as Record<string, unknown>),
+        );
+        expect(allowedArguments).toEqual(["terms", "sinceDays", "openOnly"]);
+        expect(getWorkspace.mock.invocationCallOrder[0])
+            .toBeLessThan(createToolSession.mock.invocationCallOrder[0]);
+        expect(searchWorkspace).toHaveBeenCalledWith(5, 10, { terms: ["deploy"], sinceDays: 7, limit: 8 });
+        expect(next).toHaveBeenCalledTimes(2);
+        expect(result?.evidence.map((item) => item.artifactId)).toEqual([1]);
+    });
+
+    it("allows at most two tool iterations, then disables tools for final answer", async () => {
+        searchWorkspace
+            .mockResolvedValueOnce([textHit(1, "First result")])
+            .mockResolvedValueOnce([textHit(2, "Second result")]);
+        const { client, next } = fakeToolClient([
+            { text: "", toolCalls: [{ name: "search_workspace", args: { terms: ["first"] } }] },
+            { text: "", toolCalls: [{ name: "search_workspace", args: { terms: ["second"] } }] },
+            { text: response([1]), toolCalls: [] },
+        ]);
+
+        await askWorkspace(5, 10, "Find both", filters, client);
+
+        expect(searchWorkspace).toHaveBeenCalledTimes(2);
+        expect(next).toHaveBeenCalledTimes(3);
+        expect(next.mock.calls[2][1]).toBe(false);
+    });
+
+    it("lets model refine filters after first search returns no hits", async () => {
+        searchWorkspace
+            .mockResolvedValueOnce([])
+            .mockResolvedValueOnce([textHit(1, "Deployed staging")]);
+        const { client, next } = fakeToolClient([
+            { text: "", toolCalls: [{ name: "search_workspace", args: { terms: ["release"] } }] },
+            { text: "", toolCalls: [{ name: "search_workspace", args: { terms: ["deploy"] } }] },
+            { text: response([1]), toolCalls: [] },
+        ]);
+
+        const result = await askWorkspace(5, 10, "Did I deploy?", filters, client);
+
+        expect(searchWorkspace).toHaveBeenCalledTimes(2);
+        expect(next).toHaveBeenCalledTimes(3);
+        expect(result?.evidence.map((item) => item.artifactId)).toEqual([1]);
+    });
+
+    it("returns no-evidence after two empty tool searches without final generation", async () => {
+        searchWorkspace.mockResolvedValue([]);
+        const { client, generate, next } = fakeToolClient([
+            { text: "", toolCalls: [{ name: "search_workspace", args: { terms: ["release"] } }] },
+            { text: "", toolCalls: [{ name: "search_workspace", args: { terms: ["deploy"] } }] },
+            { text: "", toolCalls: [] },
+        ]);
+
+        const result = await askWorkspace(5, 10, "Did I deploy?", filters, client);
+
+        expect(result?.answer).toBe("I couldn't find evidence of Did I deploy? in your workspace.");
+        expect(next).toHaveBeenCalledTimes(2);
+        expect(generate).not.toHaveBeenCalled();
+    });
+
+    it("falls back to deterministic P3 filters when model skips tool", async () => {
+        searchWorkspace.mockResolvedValue([textHit(1, "Release plan")]);
+        const { client, generate } = fakeToolClient([
+            { text: response(), toolCalls: [] },
+        ]);
+
+        await expect(askWorkspace(5, 10, "release?", filters, client))
+            .resolves.toMatchObject({ answer: "The release plan is in the workspace." });
+        expect(searchWorkspace).toHaveBeenCalledWith(5, 10, filters);
+        expect(generate).toHaveBeenCalledTimes(1);
+    });
+
+    it("ignores model-supplied identity fields and uses deterministic fallback", async () => {
+        searchWorkspace.mockResolvedValue([textHit(1, "Release plan")]);
+        const { client } = fakeToolClient([
+            { text: "", toolCalls: [{
+                name: "search_workspace",
+                args: { terms: ["secret"], userId: 999, workspaceId: 777 },
+            }] },
+        ]);
+
+        await askWorkspace(5, 10, "release?", filters, client);
+
+        expect(searchWorkspace).toHaveBeenCalledTimes(1);
+        expect(searchWorkspace).toHaveBeenCalledWith(5, 10, filters);
+    });
+
+    it("falls back if model keeps requesting a tool after final mode", async () => {
+        searchWorkspace.mockResolvedValue([textHit(1, "Release plan")]);
+        const { client, generate, next } = fakeToolClient([
+            { text: "", toolCalls: [{ name: "search_workspace", args: { terms: ["release"] } }] },
+            { text: "", toolCalls: [{ name: "search_workspace", args: { terms: ["plan"] } }] },
+            { text: "", toolCalls: [{ name: "search_workspace", args: { terms: ["still"] } }] },
+        ]);
+
+        await askWorkspace(5, 10, "release?", filters, client);
+
+        expect(searchWorkspace).toHaveBeenCalledTimes(3);
+        expect(generate).toHaveBeenCalledTimes(1);
+        expect(next.mock.calls[2][1]).toBe(false);
+    });
+
+    it("uses P3 deterministic path when tool provider request fails", async () => {
+        searchWorkspace.mockResolvedValue([textHit(1, "Release plan")]);
+        const { client, generate, next } = fakeToolClient([]);
+        next.mockRejectedValue(new Error("tool API unavailable"));
+
+        await expect(askWorkspace(5, 10, "release?", filters, client))
+            .resolves.toMatchObject({ answer: "The release plan is in the workspace." });
+        expect(searchWorkspace).toHaveBeenCalledWith(5, 10, filters);
+        expect(generate).toHaveBeenCalledTimes(1);
     });
 });
