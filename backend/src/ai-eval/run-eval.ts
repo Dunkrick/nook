@@ -4,19 +4,7 @@ import { buildAskPrompt } from "../llm/prompt.js";
 import type { GeneratedAnswer } from "../validation/ask-workspace.js";
 import { parseGeneratedAnswer } from "../validation/ask-workspace.js";
 import { evalFixtures, type EvalFixture } from "./fixtures.js";
-
-type Check = "PASS" | "FAIL" | "N/A";
-
-interface EvalRow {
-    id: string;
-    expected: string;
-    shouldFind: Check;
-    shouldSayNoEvidence: Check;
-    evidenceSubset: Check;
-    validJson: Check;
-    skippedModel: boolean;
-    note: string;
-}
+import { fixtureResult, providerErrorRow, type EvalRow } from "./eval-result.js";
 
 function noEvidenceAnswer(question: string): GeneratedAnswer {
     return {
@@ -82,11 +70,12 @@ function printTable(rows: EvalRow[]) {
     console.log(widths.map((width) => "-".repeat(width)).join("-+-"));
     for (const value of values) console.log(format(value));
 
-    const failed = rows.filter((row) =>
-        [row.shouldFind, row.shouldSayNoEvidence, row.evidenceSubset, row.validJson].includes("FAIL"),
-    );
-    console.log(`\n${rows.length - failed.length}/${rows.length} fixtures passed all applicable checks.`);
-    if (failed.length > 0) process.exitCode = 1;
+    const counts = rows.reduce((total, row) => {
+        total[fixtureResult(row)] += 1;
+        return total;
+    }, { PASS: 0, FAIL: 0, ERROR: 0 });
+    console.log(`\n${counts.PASS} passed, ${counts.FAIL} failed, ${counts.ERROR} errored (${rows.length} fixtures).`);
+    if (counts.FAIL > 0 || counts.ERROR > 0) process.exitCode = 1;
 }
 
 async function main() {
@@ -101,18 +90,10 @@ async function main() {
         try {
             rows.push(evaluate(fixture, await generateAnswer(fixture)));
         } catch (error) {
-            rows.push({
-                id: fixture.id,
-                expected: fixture.expectation,
-                shouldFind: fixture.expectation === "should-find" ? "FAIL" : "N/A",
-                shouldSayNoEvidence: fixture.expectation === "should-say-no-evidence" ? "FAIL" : "N/A",
-                evidenceSubset: "FAIL",
-                validJson: "FAIL",
-                skippedModel: fixture.evidence.length === 0,
-                note: typeof error === "object" && error !== null && "status" in error
-                    ? `HTTP ${String(error.status)}`
-                    : "Provider error",
-            });
+            const status = typeof error === "object" && error !== null && "status" in error
+                ? `HTTP ${String(error.status)}`
+                : "Provider error";
+            rows.push(providerErrorRow(fixture, status));
         }
     }
     printTable(rows);
