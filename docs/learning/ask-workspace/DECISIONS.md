@@ -134,3 +134,24 @@ Decisions authorized by the task brief, with alternatives and trade-offs. Revisi
 - **Choice:** accept only terms, sinceDays, and openOnly; cap terms at 12 strings of 80 characters; reject unknown fields and never pass model-provided ids.
 - **Reason:** tool arguments are untrusted input; provider schema is not an authorization control.
 - **Trade-off:** invalid or overlong call falls back instead of trying to repair its arguments.
+
+## P5 — Trigger answers only from explicit Ask action
+
+- **Options considered:** call model when selection changes; call after user submits a question; keep placeholder panel.
+- **Choice:** open Ask panel from existing selection action and call API only on form submit.
+- **Reason:** selection alone must not trigger provider cost; explicit button gives user control and existing toolbar flow.
+- **Trade-off:** one extra action before answer; selection is not sent to backend.
+
+## P5 — Reuse workspace-wide ask endpoint
+
+- **Options considered:** extend API to accept selected artifact ids; use existing `/workspaces/:workspaceId/ask` endpoint and its workspace retrieval; send selected artifact text directly from browser.
+- **Choice:** reuse existing endpoint; show selected count as context, but explain that retrieval searches workspace.
+- **Reason:** owner accepted existing endpoint and P5 is frontend packet; keeps ownership and retrieval in backend.
+- **Trade-off:** evidence can come from unselected cards. Feature must not be described as selection-scoped until backend supports that constraint.
+
+## P5 — Link evidence to canvas cards
+
+- **Options considered:** show ids as plain text; open artifact in a new route; focus matching card in current canvas.
+- **Choice:** evidence button centers camera on source card, selects it, and closes panel.
+- **Reason:** Nook artifacts live on spatial canvas and have no detail route.
+- **Trade-off:** requires returned evidence id to still exist in current workspace state.
