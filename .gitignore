@@ -19,3 +19,9 @@ TODO.md
 
 # CI secrets (never commit)
 backend/github-actions-key.json
+
+backend/nook-key.pem
+backend/*.pem
+
+# Local media uploads
+backend/public/uploads/

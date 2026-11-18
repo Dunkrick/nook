@@ -21,3 +21,5 @@ Dockerfile
 .idea
 
 npm-debug.log
+
+nook0key.pem
