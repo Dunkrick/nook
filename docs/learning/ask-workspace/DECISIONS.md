@@ -128,6 +128,20 @@ Decisions authorized by the task brief, with alternatives and trade-offs. Revisi
 - **Reason:** bound latency/cost and keep feature useful when model tool behavior fails.
 - **Trade-off:** model cannot keep refining after two searches; P3 fallback may use less flexible filters.
 
+## P2 follow-up — Read Gemini key from process environment
+
+- **Options considered:** pass `env.API_KEY` copied at module startup; pass caller-provided key into SDK; load `.env` and pass `process.env.API_KEY` directly to `GoogleGenAI`.
+- **Choice:** import `dotenv/config` in the SDK adapter, keep missing key optional in the factory, and pass `process.env.API_KEY` directly to SDK constructor.
+- **Reason:** match local `backend/.env` setup and make credential source explicit at SDK boundary.
+- **Trade-off:** dotenv resolves `.env` from process working directory; run backend commands from `backend/` or provide environment variables another way.
+
+## P2 follow-up — Keep live verification separate from automated tests
+
+- **Options considered:** add live API call to Vitest; expose temporary test route; add manual CLI script.
+- **Choice:** add `npm run verify:gemini`, defaulting to `gemini-4-hydrogen`, with optional model argument.
+- **Reason:** explicit user-triggered request avoids network calls, cost, and key dependency in CI tests; script can be rerun when model access changes.
+- **Trade-off:** live availability can fluctuate; prior `gemini-2.5-flash` and 3.x fallback calls returned 404/503. `gemini-4-hydrogen` returned `WORKING` twice, with one 504 timeout between successful calls.
+
 ## P4 — Validate model arguments and keep identity out of tool schema
 
 - **Options considered:** trust arguments because provider schema exists; validate allowed keys and types in application; accept identity fields as hidden arguments.

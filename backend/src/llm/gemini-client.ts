@@ -1,3 +1,4 @@
+import "dotenv/config";
 import {
     FunctionCallingConfigMode,
     GoogleGenAI,
@@ -18,11 +19,14 @@ export class GeminiLlmClient implements LlmClient {
 
     constructor(
         private readonly model: string,
-        apiKey: string,
         timeoutMs: number,
     ) {
+        if (!process.env.API_KEY) {
+            throw new Error("API_KEY is required to create the Gemini client.");
+        }
+
         this.client = new GoogleGenAI({
-            apiKey,
+            apiKey: process.env.API_KEY,
             httpOptions: { timeout: timeoutMs },
         });
     }
@@ -106,11 +110,10 @@ export class GeminiLlmClient implements LlmClient {
 }
 
 export function createGeminiClient(): GeminiLlmClient | null {
-    if (!env.API_KEY) return null;
+    if (!process.env.API_KEY) return null;
 
     return new GeminiLlmClient(
         env.GEMINI_MODEL,
-        env.API_KEY,
         env.LLM_TIMEOUT_MS,
     );
 }

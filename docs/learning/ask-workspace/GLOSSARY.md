@@ -19,7 +19,7 @@ Alphabetical. Definitions describe this project; “planned” means not yet imp
 - **LLM** — Large language model; software that generates text from input text and learned patterns. Gemini is configured provider.
 - **LLM call** — One request that sends input to a model and receives generated output.
 - **Loading state** — UI shown while an API request is in progress.
-- **Model** — Trained system that generates output; `Gemini-4-Hydrogen` is configured model string.
+- **Model** — Trained system that generates output; `gemini-4-hydrogen` is configured model id.
 - **Prompt** — Instructions and input sent to an LLM.
 - **Prompt injection** — Untrusted input that tries to override model instructions.
 - **Provider** — Service that hosts or exposes a model API; this project uses Gemini API.
