@@ -1,4 +1,4 @@
-name: Deploy Backend
+name: Deploy Backend (AWS)
 
 on:
   push:
@@ -20,112 +20,33 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Authenticate GCP
-        uses: google-github-actions/auth@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          credentials_json: "${{ secrets.GCP_SA_KEY }}"
-          create_credentials_file: true
-          export_environment_variables: true
+          node-version: 22
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
 
-      - name: Verify authenticated Cloud Run access
-        run: |
-          echo "=== IDENTITY ==="
-          gcloud auth list
+      - name: Install dependencies
+        run: npm ci
 
-          echo "=== CLOUD RUN ACCESS ==="
-          gcloud run services describe nook-backend \
-            --project=nook-438271 \
-            --region=asia-south1
+      - name: Deploy Database Migrations
+        if: ${{ env.DATABASE_URL != '' }}
+        run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-      - name: Setup gcloud
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Diagnose GCP context
-        run: |
-          echo "=== AUTH ==="
-          gcloud auth list
-
-          echo "=== CONFIG ==="
-          gcloud config list
-
-          echo "=== PROJECT ==="
-          gcloud config get-value project
-
-          echo "=== PROJECT FROM SECRET ==="
-          echo "${{ secrets.GCP_PROJECT_ID }}"
-
-          echo "=== REGION FROM SECRET ==="
-          echo "${{ secrets.GCP_REGION }}"
-
-          echo "=== ARTIFACT REGISTRY ==="
-          gcloud artifacts repositories describe nook-backend \
-            --location="${{ secrets.GCP_REGION }}" \
-            --project="${{ secrets.GCP_PROJECT_ID }}"
-
-      - name: Verify GCP identity
-        run: |
-          gcloud auth list
-
-      - name: Configure Docker
-        run: |
-          gcloud auth configure-docker \
-            ${{ secrets.GCP_REGION }}-docker.pkg.dev \
-            --quiet
-
-      - name: Build Docker image
-        run: |
-          docker build \
-            -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/nook-backend/backend:${{ github.sha }} .
-
-      - name: Verify Artifact Registry
-        run: |
-          echo "Project: ${{ secrets.GCP_PROJECT_ID }}"
-          echo "Region: ${{ secrets.GCP_REGION }}"
-
-          gcloud config get-value project
-
-          gcloud artifacts repositories describe nook-backend \
-            --location=${{ secrets.GCP_REGION }} \
-            --project=${{ secrets.GCP_PROJECT_ID }}
-
-      - name: Push image
-        run: |
-          docker push \
-            ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/nook-backend/backend:${{ github.sha }}
-
-      - name: Deploy Cloud Run
-        run: |
-          gcloud run deploy nook-backend \
-            --image ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/nook-backend/backend:${{ github.sha }} \
-            --region ${{ secrets.GCP_REGION }} \
-            --update-env-vars="GCS_BUCKET_NAME=nook-media-438271" \
-            --platform managed \
-            --service-account 902490290476-compute@developer.gserviceaccount.com \
-            --allow-unauthenticated
-
-      - name: Deploy GitHub worker
-        run: |
-          gcloud run worker-pools deploy nook-github-worker \
-            --project="${{ secrets.GCP_PROJECT_ID }}" \
-            --region="${{ secrets.GCP_REGION }}" \
-            --image="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/nook-backend/backend:${{ github.sha }}" \
-            --command=node \
-            --args=dist/queue/github-worker.js \
-            --cpu=1 \
-            --memory=512Mi \
-            --update-env-vars="FRONTEND_URL=https://nookmy.vercel.app,GCS_BUCKET_NAME=nook-media-438271" \
-            --update-secrets="DATABASE_URL=nook-database-url:latest,JWT_SECRET=nook-jwt-secret:latest,RABBITMQ_URL=nook-rabbitmq-url:latest,GITHUB_WEBHOOK_SECRET=nook-github-webhook-secret:latest"
-
-      - name: Verify deployment
-        run: |
-          URL=$(gcloud run services describe nook-backend \
-            --region ${{ secrets.GCP_REGION }} \
-            --format='value(status.url)')
-
-          echo "Health check: $URL/health"
-
-          curl --fail --silent --show-error \
-            --max-time 30 \
-            "$URL/health"
-
-          echo "Deployment verified successfully."
+      - name: Deploy to AWS EC2 via SSH
+        if: ${{ env.EC2_HOST != '' && env.EC2_SSH_KEY != '' }}
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER || 'ubuntu' }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /opt/nook
+            git pull origin main
+            docker compose -f backend/docker-compose.aws.yml up -d --build

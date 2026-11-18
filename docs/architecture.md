@@ -33,8 +33,8 @@ flowchart TD
         Prisma["Prisma"]
     end
 
-    DB["PostgreSQL / Neon"]
-    GCS["Private Google Cloud Storage"]
+    DB["PostgreSQL (Neon / RDS)"]
+    StorageTarget["AWS S3 / Local Storage"]
 
     Browser --> Pages
     Pages --> Components
@@ -46,7 +46,7 @@ flowchart TD
     Domain --> Prisma
     Prisma --> DB
     Domain --> Storage
-    Storage --> GCS
+    Storage --> StorageTarget
 ```
 
 ---
@@ -226,8 +226,9 @@ Artifact
           ▼
     ObjectStorage
           │
-          ▼
- Google Cloud Storage
+     ┌────┴────────────┐
+     ▼                 ▼
+   AWS S3        LocalStorage
 ```
 
 The backend uses:
@@ -246,7 +247,7 @@ interface ObjectStorage {
 }
 ```
 
-This abstraction keeps application logic independent of Google Cloud Storage and makes the storage boundary replaceable.
+This abstraction keeps application logic independent of any concrete storage provider (AWS S3, local disk) and makes the storage boundary replaceable.
 
 ---
 
@@ -260,14 +261,14 @@ sequenceDiagram
     participant Browser
     participant API as Nook API
     participant Storage as ObjectStorage
-    participant GCS as Google Cloud Storage
+    participant Bucket as S3 / Local Disk
 
     User->>Browser: Select image
     Browser->>API: POST /uploads (multipart/form-data)
     API->>API: Authenticate + validate type/size
     API->>Storage: upload(buffer, metadata)
-    Storage->>GCS: Store object
-    GCS-->>Storage: Stored object
+    Storage->>Bucket: Store object
+    Bucket-->>Storage: Stored object
     Storage-->>API: key + metadata
     API-->>Browser: 201 { success, data }
 ```
@@ -322,19 +323,19 @@ sequenceDiagram
     participant API as Nook API
     participant DB as PostgreSQL
     participant Storage as ObjectStorage
-    participant GCS as Private GCS
+    participant Store as S3 / Local Disk
 
     Browser->>API: GET /artifacts/:id/image + JWT
     API->>DB: Find artifact
     DB-->>API: Artifact + ownership
     API->>API: Verify owner + POLAROID + imageKey
     API->>Storage: getSignedReadUrl(imageKey, 900)
-    Storage->>GCS: Generate signed read URL
-    GCS-->>Storage: Signed URL
-    Storage-->>API: Signed URL
+    Storage->>Store: Resolve signed/static read URL
+    Store-->>Storage: Read URL
+    Storage-->>API: Read URL
     API-->>Browser: 200 { url }
-    Browser->>GCS: GET signed URL
-    GCS-->>Browser: Private image bytes
+    Browser->>Store: GET image URL
+    Store-->>Browser: Private image bytes
 ```
 
 The current signed URL lifetime is 15 minutes.
@@ -438,16 +439,14 @@ Production deployment:
 ```text
 GitHub Actions
     ↓
-Docker build
+Prisma migrate deploy
     ↓
-Artifact Registry
+Deploy to AWS EC2 via SSH
     ↓
-Google Cloud Run
-    ↓
-Nook API
+Docker Compose up (API + Worker)
 ```
 
-See [`docs/deployment.md`](./docs/deployment.md) for the deployment workflow.
+See [`docs/aws-setup.md`](./aws-setup.md) and [`docs/deployment.md`](./deployment.md) for the deployment workflow.
 
 ---
 

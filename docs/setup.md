@@ -55,13 +55,19 @@ JWT_SECRET=replace-with-a-long-random-secret
 
 FRONTEND_URL=http://localhost:5173
 
-GCS_BUCKET_NAME=your-gcs-bucket
+# Storage: "local" (default for offline dev) or "s3"
+STORAGE_PROVIDER=local
+BACKEND_URL=http://localhost:3003
+
+# Required when STORAGE_PROVIDER=s3
+S3_BUCKET_NAME=your-s3-bucket
+AWS_REGION=ap-south-1
+AWS_ACCESS_KEY_ID=your-aws-access-key
+AWS_SECRET_ACCESS_KEY=your-aws-secret-key
 
 RABBITMQ_URL=amqp://guest:guest@localhost:5672
 
 GITHUB_WEBHOOK_SECRET=your-local-webhook-secret
-
-BACKEND_URL=http://localhost:3003
 
 # Optional OAuth 2.0 configuration
 GOOGLE_CLIENT_ID=your-google-client-id
@@ -75,19 +81,23 @@ Required and optional backend variables:
 | Variable                | Purpose                                           |
 | ----------------------- | ------------------------------------------------- |
 | `PORT`                  | Local API port; defaults to `3003`                |
-| `DATABASE_URL`          | PostgreSQL connection string                      |
+| `DATABASE_URL`          | PostgreSQL connection string (Neon or RDS)        |
 | `JWT_SECRET`            | JWT signing secret                                |
-| `FRONTEND_URL`          | Frontend URL used by the deployment configuration |
-| `GCS_BUCKET_NAME`       | Google Cloud Storage bucket used for media        |
+| `FRONTEND_URL`          | Frontend URL used by the CORS configuration       |
+| `STORAGE_PROVIDER`      | Media storage: `local` (default) or `s3`          |
+| `BACKEND_URL`           | Base backend URL for media reads & OAuth          |
+| `S3_BUCKET_NAME`        | AWS S3 bucket name (when `STORAGE_PROVIDER=s3`)   |
+| `AWS_REGION`            | AWS region (e.g. `ap-south-1`)                    |
+| `AWS_ACCESS_KEY_ID`     | AWS IAM access key ID                             |
+| `AWS_SECRET_ACCESS_KEY` | AWS IAM secret access key                         |
 | `RABBITMQ_URL`          | RabbitMQ connection string                        |
 | `GITHUB_WEBHOOK_SECRET` | Secret used to verify GitHub webhook signatures   |
-| `BACKEND_URL`           | Optional; public backend URL for OAuth callbacks  |
 | `GOOGLE_CLIENT_ID`      | Optional; Google OAuth 2.0 client ID              |
 | `GOOGLE_CLIENT_SECRET`  | Optional; Google OAuth 2.0 client secret          |
 | `GITHUB_CLIENT_ID`      | Optional; GitHub OAuth App client ID              |
 | `GITHUB_CLIENT_SECRET`  | Optional; GitHub OAuth App client secret          |
 
-For local development involving Polaroid uploads, Google Cloud credentials must also be available to the Google Cloud Storage client through Application Default Credentials.
+For local development involving Polaroid uploads, `STORAGE_PROVIDER=local` is the default: uploaded images are saved to `backend/public/uploads` and served directly through Express static middleware without requiring any cloud buckets or credentials. For AWS S3, set `STORAGE_PROVIDER=s3` and configure your AWS credentials.
 
 Do not commit `.env` files or credentials.
 
@@ -279,7 +289,7 @@ docker build -t nook-backend ./backend
 
 The production image is intended to run the compiled backend with Node.js.
 
-For Apple Silicon hosts, production deployment images should target `linux/amd64`, matching the Cloud Run runtime.
+For AWS EC2 deployment, see [`docs/aws-setup.md`](./aws-setup.md).
 
 ---
 
@@ -294,10 +304,10 @@ POST /uploads
   ↓
 Nook API
   ↓
-Google Cloud Storage
+AWS S3 / LocalStorage
 ```
 
-The browser does not upload directly to GCS.
+The browser does not upload directly to S3.
 
 Supported image types:
 
@@ -352,11 +362,10 @@ npx prisma migrate dev
 
 Check:
 
-1. `GCS_BUCKET_NAME` is set.
-2. Google Cloud credentials are available.
-3. The bucket exists.
-4. The runtime identity has permission to write objects and generate signed URLs.
-5. The image is JPEG, PNG, or WebP and is below 10 MB.
+1. `STORAGE_PROVIDER` is set (`local` or `s3`).
+2. If `STORAGE_PROVIDER=s3`, verify `S3_BUCKET_NAME` and AWS credentials are valid.
+3. If `STORAGE_PROVIDER=local`, ensure `backend/public/uploads` is writable.
+4. The image is JPEG, PNG, or WebP and is below 10 MB.
 
 ---
 
