@@ -11,6 +11,7 @@
     "test:watch": "vitest src",
     "start": "node dist/server.js",
     "verify:gemini": "tsx scripts/verify-gemini.ts",
+    "eval:ai": "tsx src/ai-eval/run-eval.ts",
     "setup": "prisma generate && prisma migrate dev",
     "worker": "node dist/queue/github-worker.js",
     "dev:worker": "tsx src/queue/github-worker.ts",
