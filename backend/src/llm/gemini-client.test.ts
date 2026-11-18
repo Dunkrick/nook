@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { LlmRequest, LlmToolDeclaration } from "./client.js";
 
 const sdk = vi.hoisted(() => ({
@@ -17,7 +17,7 @@ vi.mock("@google/genai", () => ({
     FunctionCallingConfigMode: { AUTO: "AUTO", NONE: "NONE" },
 }));
 
-import { GeminiLlmClient } from "./gemini-client.js";
+import { createGeminiClient, GeminiLlmClient } from "./gemini-client.js";
 
 const request: LlmRequest = {
     systemInstruction: "Use workspace evidence.",
@@ -34,6 +34,16 @@ const tool: LlmToolDeclaration = {
 describe("GeminiLlmClient tool session", () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        vi.stubEnv("API_KEY", "test-key");
+    });
+
+    afterEach(() => {
+        vi.unstubAllEnvs();
+    });
+
+    it("keeps client optional when process.env.API_KEY is empty", () => {
+        vi.stubEnv("API_KEY", "");
+        expect(createGeminiClient()).toBeNull();
     });
 
     it("sends function declaration, returns model call, and sends tool result back", async () => {
@@ -57,7 +67,7 @@ describe("GeminiLlmClient tool session", () => {
                 functionCalls: [],
                 candidates: [{ content: { role: "model", parts: [{ text: "final" }] } }],
             });
-        const client = new GeminiLlmClient("Gemini-4-Hydrogen", "test-key", 8000);
+        const client = new GeminiLlmClient("gemini-4-hydrogen", 8000);
         const session = client.createToolSession(request, [tool]);
 
         const firstTurn = await session.next();
@@ -78,7 +88,7 @@ describe("GeminiLlmClient tool session", () => {
         }]);
         expect(finalTurn.text).toContain('"answer":"Found it"');
         expect(sdk.generateContent).toHaveBeenNthCalledWith(1, expect.objectContaining({
-            model: "Gemini-4-Hydrogen",
+            model: "gemini-4-hydrogen",
             contents: [{ role: "user", parts: [{ text: "Did I deploy?" }] }],
             config: expect.objectContaining({
                 tools: [{ functionDeclarations: [tool] }],
