@@ -8,8 +8,12 @@ Alphabetical. Definitions describe this project; “planned” means not yet imp
 - **Deterministic parsing** — Fixed code rules that map same input to same parsed result.
 - **Embedding** — A list of numbers representing text in a way that can capture meaning; not used by P1.
 - **Empty state** — UI shown before an answer exists, prompting the user to ask a question.
+- **Evaluation** — Repeatable checks of model behavior against fixed questions and expected properties; P6 uses 10 manual fixtures.
 - **Evidence** — Retrieved artifact data selected to support an answer.
+- **Evidence-id subset check** — Check that every cited artifact id exists among evidence supplied to the model.
+- **Exact match** — Check requiring output text to equal a reference string character by character; brittle for varied model wording.
 - **Fallback** — Backup behavior used when preferred path cannot run.
+- **Fixture** — Fixed sample input and evidence reused for repeatable checks.
 - **Function call** — Structured request from model asking application to run a declared function.
 - **Function declaration** — Description of a function name, purpose, and allowed argument shape sent to model.
 - **Function response** — Application result returned to model after a function call.
@@ -20,6 +24,7 @@ Alphabetical. Definitions describe this project; “planned” means not yet imp
 - **LLM call** — One request that sends input to a model and receives generated output.
 - **Loading state** — UI shown while an API request is in progress.
 - **Model** — Trained system that generates output; `gemini-4-hydrogen` is configured model id.
+- **Pass/fail check** — One rule that reports whether an output meets an expected property.
 - **Prompt** — Instructions and input sent to an LLM.
 - **Prompt injection** — Untrusted input that tries to override model instructions.
 - **Provider** — Service that hosts or exposes a model API; this project uses Gemini API.

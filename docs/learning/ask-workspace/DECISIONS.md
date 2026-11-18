@@ -169,3 +169,24 @@ Decisions authorized by the task brief, with alternatives and trade-offs. Revisi
 - **Choice:** evidence button centers camera on source card, selects it, and closes panel.
 - **Reason:** Nook artifacts live on spatial canvas and have no detail route.
 - **Trade-off:** requires returned evidence id to still exist in current workspace state.
+
+## P6 — Evaluate fixed synthetic evidence without a live workspace database
+
+- **Options considered:** run fixtures against an arbitrary user workspace; create database fixtures; supply fixed artifact evidence in code.
+- **Choice:** keep 10 synthetic Nook-style evidence fixtures and send them directly through shared prompt builder and Gemini client.
+- **Reason:** repeatable questions without database writes, user data access, or workspace ownership setup; shared prompt builder preserves production caps and evidence boundaries.
+- **Trade-off:** measures answer formatting and citation behavior for curated evidence, not retrieval ranking or real-workspace answer quality.
+
+## P6 — Check answer properties instead of exact wording
+
+- **Options considered:** compare answer to a reference sentence; score broad semantic similarity; check find/no-evidence outcomes, valid JSON, and citation-id subset.
+- **Choice:** use four explicit properties and allow different answer wording.
+- **Reason:** wording can vary while model still cites supplied evidence; hard checks are easy to inspect and reproduce.
+- **Trade-off:** valid JSON plus allowed citation does not prove every answer claim is supported or correct.
+
+## P6 — Keep live evaluation manual and outside CI
+
+- **Options considered:** call Gemini from Vitest; add an evaluation endpoint; run an explicit CLI script.
+- **Choice:** add `npm run eval:ai`, which calls real model only when manually run.
+- **Reason:** keeps CI deterministic and avoids routine network cost; operator can choose current configured model.
+- **Trade-off:** developers must run evaluation manually after prompt/model changes; provider errors can make results incomplete.

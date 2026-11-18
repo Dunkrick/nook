@@ -30,3 +30,5 @@
 - 2026-11-18 — P2 follow-up: added `npm run verify:gemini`, defaulting to `gemini-2.5-flash`, plus optional model argument; key is never printed.
 - 2026-11-18 — P2 follow-up: backend typecheck and 134 tests passed. Live request hit API: `gemini-2.5-flash` returned 404; `gemini-3.8-flash` and `gemini-3.7-flash` returned 503, so no generation response verified.
 - 2026-11-18 — P2 follow-up: changed backend and verification defaults to canonical `gemini-4-hydrogen`; typecheck and 134 tests passed. `npm run verify:gemini` returned `WORKING` twice, with one HTTP 504 on repeat; key remained hidden.
+- 2026-11-18 — P6: added 10 synthetic fixtures and manual `npm run eval:ai` runner with find/no-evidence, evidence-id subset, and JSON checks; no new dependency or CI model call.
+- 2026-11-18 — P6: backend typecheck passed; `npm test` passed 19 files / 134 tests. Live evaluation had 2/10 pass: two fixed no-evidence paths passed; eight generation calls returned HTTP 503/504, so no answer-quality result was measured.
