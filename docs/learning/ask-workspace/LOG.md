@@ -17,3 +17,7 @@
 - 2026-11-18 — P3: initial typecheck caught mock function typing mismatch; typed fake `generate` with `LlmRequest`. Follow-up typecheck and all tests passed.
 - 2026-11-18 — P3: resolved missing-key/no-hit ordering against P2 grounding gate: zero hits keep fixed answer and skip model; missing key gives 503 only when evidence requires generation.
 - 2026-11-18 — P3: `npm run typecheck` passed; `npm test` passed 18 files / 124 tests, no database or Gemini network.
+- 2026-11-18 — P4: official Gemini docs confirmed function-call/result exchange; installed SDK types expose function declarations, calls, responses, and AUTO/NONE modes. Model-specific support remains unverified.
+- 2026-11-18 — P4: added provider-neutral tool session, Gemini adapter loop, `search_workspace` allowlist, two-iteration cap, authenticated identity binding, and P3 fallback.
+- 2026-11-18 — P4: first service run found skipped-tool path needed deterministic fallback; fixed. SDK mock then exposed mutable history array in recorded request; pass shallow copy per turn.
+- 2026-11-18 — P4: `npm run typecheck` passed; `npm test` passed 19 files / 133 tests with fake sessions/mocked SDK; no live Gemini/PostgreSQL calls.

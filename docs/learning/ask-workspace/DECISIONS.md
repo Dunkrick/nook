@@ -106,3 +106,31 @@ Decisions authorized by the task brief, with alternatives and trade-offs. Revisi
 - **Choice:** classify missing config as 503; provider or invalid model output as 502; log provider detail only server-side.
 - **Reason:** clients get clear retry/config action without receiving provider internals.
 - **Trade-off:** generic 502 is less specific for clients; server logs are needed to diagnose.
+
+## P4 — Let model choose only retrieval filters
+
+- **Options considered:** keep fixed P3 parsing only; expose `search_workspace` with filters; let model choose user/workspace ids or arbitrary database query.
+- **Choice:** expose one function with `terms`, `sinceDays`, and `openOnly`; application executes `searchWorkspace` using authenticated user and route workspace ids.
+- **Reason:** model can interpret varied wording while database access and authorization stay in TypeScript.
+- **Trade-off:** model can choose poor filters; validate arguments and retain P3 deterministic fallback.
+
+## P4 — Check ownership before model session
+
+- **Options considered:** let model choose filters before any ownership check; check existing `getWorkspace` first, then start tool session; use `searchWorkspace` to precheck and retrieve all artifacts.
+- **Choice:** call existing `getWorkspace(workspaceId, userId)` first; each actual search still calls ownership-safe `searchWorkspace`.
+- **Reason:** avoid sending questions from unowned workspace to model and avoid preloading all artifacts before filter selection.
+- **Trade-off:** ownership is queried again per tool search, adding small database work for stronger boundary.
+
+## P4 — Bound tool loop and preserve P3 path
+
+- **Options considered:** unbounded tool turns; max two searches then force final; no fallback when model fails to call tool.
+- **Choice:** permit at most two supported `search_workspace` calls, set function mode to `NONE` after second, and use P3 deterministic path for unsupported, malformed, skipped, or repeated tool calls.
+- **Reason:** bound latency/cost and keep feature useful when model tool behavior fails.
+- **Trade-off:** model cannot keep refining after two searches; P3 fallback may use less flexible filters.
+
+## P4 — Validate model arguments and keep identity out of tool schema
+
+- **Options considered:** trust arguments because provider schema exists; validate allowed keys and types in application; accept identity fields as hidden arguments.
+- **Choice:** accept only terms, sinceDays, and openOnly; cap terms at 12 strings of 80 characters; reject unknown fields and never pass model-provided ids.
+- **Reason:** tool arguments are untrusted input; provider schema is not an authorization control.
+- **Trade-off:** invalid or overlong call falls back instead of trying to repair its arguments.

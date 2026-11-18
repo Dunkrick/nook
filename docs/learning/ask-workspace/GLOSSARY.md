@@ -9,10 +9,13 @@ Alphabetical. Definitions describe this project; “planned” means not yet imp
 - **Embedding** — A list of numbers representing text in a way that can capture meaning; not used by P1.
 - **Evidence** — Retrieved artifact data selected to support an answer.
 - **Fallback** — Backup behavior used when preferred path cannot run.
+- **Function call** — Structured request from model asking application to run a declared function.
+- **Function declaration** — Description of a function name, purpose, and allowed argument shape sent to model.
+- **Function response** — Application result returned to model after a function call.
 - **Grounding** — Connecting an answer to selected evidence; reduces unsupported claims but does not guarantee truth.
 - **Hallucination** — Plausible-sounding model output that is not supported by source facts.
 - **JSON mode** — Provider setting that asks model to return JSON text; local validation still checks its shape.
-- **LLM** — Large language model; software that generates text from input text and learned patterns. Gemini is the planned provider.
+- **LLM** — Large language model; software that generates text from input text and learned patterns. Gemini is configured provider.
 - **LLM call** — One request that sends input to a model and receives generated output.
 - **Model** — Trained system that generates output; `Gemini-4-Hydrogen` is configured model string.
 - **Prompt** — Instructions and input sent to an LLM.
@@ -29,6 +32,11 @@ Alphabetical. Definitions describe this project; “planned” means not yet imp
 - **Temperature** — Model setting that controls randomness in generated text.
 - **Token** — A unit of text processed by a model, often a word or word fragment.
 - **Tokenization** — Splitting text into tokens so query terms and artifact text can be compared.
+- **Tool call** — One model-produced function name and argument object.
+- **Tool calling** — Model asks application to execute a declared function; model does not execute it itself.
+- **Tool declaration** — Name, purpose, and argument schema for a tool callable by model.
+- **Tool iteration** — One tool execution and result-return cycle.
+- **Tool result** — Data application returns to model after running a tool.
 - **User message** — Request content sent to a model, such as a question and evidence.
 - **Vector search** — Comparing numeric embeddings to find nearby meanings; not used by P1.
 - **Workspace** — User-owned Nook container for artifacts.

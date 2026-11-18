@@ -6,14 +6,19 @@ import type { Artifact } from "../../domain/artifacts.js";
 import type { LlmClient, LlmRequest } from "../../llm/client.js";
 import type { SearchHit } from "../../services/workspace-search.js";
 
-const { searchWorkspace, createGeminiClient } = vi.hoisted(() => ({
+const { searchWorkspace, createGeminiClient, getWorkspace } = vi.hoisted(() => ({
     searchWorkspace: vi.fn(),
     createGeminiClient: vi.fn(),
+    getWorkspace: vi.fn(),
 }));
 
 vi.mock("../../services/workspace-search.js", async (importOriginal) => ({
     ...await importOriginal<typeof import("../../services/workspace-search.js")>(),
     searchWorkspace,
+}));
+vi.mock("../../services/workspaces.js", async (importOriginal) => ({
+    ...await importOriginal<typeof import("../../services/workspaces.js")>(),
+    getWorkspace,
 }));
 vi.mock("../../llm/gemini-client.js", () => ({ createGeminiClient }));
 
@@ -69,6 +74,7 @@ describe("POST /workspaces/:workspaceId/ask", () => {
         generate = vi.fn(async (_request: LlmRequest) => generatedAnswer);
         fakeClient = { generate };
         createGeminiClient.mockReturnValue(fakeClient);
+        getWorkspace.mockResolvedValue({ id: 10, ownerId: 5 });
         searchWorkspace.mockResolvedValue([makeHit()]);
         app = buildApp();
     });
@@ -110,7 +116,7 @@ describe("POST /workspaces/:workspaceId/ask", () => {
     });
 
     it("returns 404 for another user's workspace", async () => {
-        searchWorkspace.mockResolvedValue(null);
+        getWorkspace.mockResolvedValue(null);
         createGeminiClient.mockReturnValue(null);
 
         const res = await request(app)
@@ -120,6 +126,7 @@ describe("POST /workspaces/:workspaceId/ask", () => {
 
         expect(res.status).toBe(404);
         expect(res.body.error).toBe("Workspace not found");
+        expect(searchWorkspace).not.toHaveBeenCalled();
         expect(generate).not.toHaveBeenCalled();
     });
 
