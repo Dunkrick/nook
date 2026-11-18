@@ -24,14 +24,21 @@ Retrieval finds candidate facts, but it does not turn them into a useful answer.
 - **Retry**: repeat a failed operation once. P2 retries only malformed or wrong-shaped model output once; provider/network errors go to P3 for safe HTTP handling.
 - **JSON mode**: provider setting that requests JSON text. It does not validate JSON shape, so local validation remains necessary.
 
-Model choice: owner supplied exact string `Gemini-4-Hydrogen`. I used it as default and allow `GEMINI_MODEL` override. Google’s public [model docs](https://ai.google.dev/gemini-api/docs/models?hl=en) did not verify this exact model string during P2; no real API request was made. Official SDK use follows Google’s [GenAI SDK guide](https://ai.google.dev/gemini-api/docs/libraries?hl=en) and [generate content examples](https://ai.google.dev/api/generate-content?hl=en).
+Model choice: owner supplied `Gemini-4-Hydrogen`; backend now uses canonical lowercase id `gemini-4-hydrogen` as default and allows `GEMINI_MODEL` override. Live `generateContent` calls returned `WORKING` twice on 2026-11-18, with one HTTP 504 timeout between them; this verifies text generation for this key and model at that time, not reliable availability or tool-calling support. Official SDK use follows Google’s [GenAI SDK guide](https://ai.google.dev/gemini-api/docs/libraries?hl=en) and [generate content examples](https://ai.google.dev/api/generate-content?hl=en).
+
+Credential wiring: `dotenv/config` loads `backend/.env` before the SDK client reads `process.env.API_KEY`. The optional factory returns `null` if the variable is missing, so backend can boot without a Gemini key. `backend/scripts/verify-gemini.ts` sends a one-line request to `gemini-4-hydrogen` by default; it prints response text but never prints the key.
+
+Earlier live attempts on 2026-11-18: `gemini-2.5-flash` returned HTTP 404; `gemini-3.8-flash` and `gemini-3.7-flash` returned HTTP 503. After changing default model, `gemini-4-hydrogen` returned `WORKING` twice, though one repeat timed out with HTTP 504.
 
 ## Files touched
 
 | file | what changed | why |
 |---|---|---|
 | `backend/src/llm/client.ts` | Added provider-neutral request and client interfaces | Let service tests use fake client |
-| `backend/src/llm/gemini-client.ts` | Added SDK adapter, JSON mode, temperature, timeout, and optional-key factory | Keep provider details out of service |
+| `backend/src/llm/gemini-client.ts` | Added SDK adapter, JSON mode, temperature, timeout, dotenv loading, and `process.env.API_KEY` wiring | Keep provider details out of service and use the documented local key |
+| `backend/src/llm/gemini-client.test.ts` | Checked SDK constructor receives `process.env.API_KEY` | Prevent credential source regressions |
+| `backend/scripts/verify-gemini.ts` | Added live one-prompt script using `gemini-4-hydrogen` by default | Verify local key and model access without exposing secret |
+| `backend/package.json` | Added `verify:gemini` script | Run live verification with one command; optional model argument supports fallback checks |
 | `backend/src/llm/prompt.ts` | Added system rules, evidence wrapping, escaping, and length caps | Bound model input and label external text as data |
 | `backend/src/services/ask-workspace.ts` | Added retrieve → prompt → validate → ground flow and code-derived unresolved issues | Keep database access and grounding gate in application code |
 | `backend/src/services/ask-workspace.test.ts` | Added fake-client tests for validation, retry, caps, injection, and grounding | No network or real model required in tests |
@@ -150,6 +157,28 @@ async generate(req: LlmRequest): Promise<string> {
 - The client’s `httpOptions.timeout` bounds remote request time.
 - Empty text flows to parser and gets one retry, then a clean error.
 
+### Credential setup
+
+```ts
+import "dotenv/config";
+
+constructor(private readonly model: string, timeoutMs: number) {
+    if (!process.env.API_KEY) {
+        throw new Error("API_KEY is required to create the Gemini client.");
+    }
+
+    this.client = new GoogleGenAI({
+        apiKey: process.env.API_KEY,
+        httpOptions: { timeout: timeoutMs },
+    });
+}
+```
+
+- Importing `dotenv/config` reads `.env` into `process.env` before this module constructs the SDK client.
+- Check for a missing key before SDK construction; the route-level factory returns `null` when unset, preserving optional-key app startup.
+- Pass `process.env.API_KEY` explicitly into the official SDK config after checking it exists.
+- The key stays in backend process memory and is never included in script output or prompt text.
+
 ## How to run/test it yourself
 
 From `backend/`:
@@ -157,6 +186,8 @@ From `backend/`:
 ```sh
 npm run typecheck
 npm test
+npm run verify:gemini
+npm run verify:gemini -- gemini-3.8-flash
 ```
 
 P2 output:
@@ -173,7 +204,29 @@ Tests       111 passed (111)
 exit code: 0
 ```
 
-Tests use fake `LlmClient`; no Google API request or live database needed. Real model availability and credentials were not tested.
+Tests use fake `LlmClient`; no Google API request or live database needed. The verification script makes one live request, defaults to `gemini-4-hydrogen`, and accepts an optional model argument. Successful output starts `Gemini verification passed` and contains `WORKING`. This live request checks current key/model access only; it does not validate production endpoint behavior.
+
+Actual terminal output on 2026-11-18:
+
+```text
+$ npm run verify:gemini
+Gemini verification failed (gemini-2.5-flash) (HTTP 404). Check model access and backend logs.
+
+$ npm run verify:gemini -- gemini-3.8-flash
+Gemini verification failed (gemini-3.8-flash) (HTTP 503). Check model access and backend logs.
+
+$ npm run verify:gemini -- gemini-3.7-flash
+Gemini verification failed (gemini-3.7-flash) (HTTP 503). Check model access and backend logs.
+
+$ npm run verify:gemini
+Gemini verification passed (gemini-4-hydrogen): WORKING
+
+$ npm run verify:gemini (repeat)
+Gemini verification failed (gemini-4-hydrogen) (HTTP 504). Check model access and backend logs.
+
+$ npm run verify:gemini (retry)
+Gemini verification passed (gemini-4-hydrogen): WORKING
+```
 
 ## How it can go wrong
 
@@ -189,4 +242,4 @@ Tests use fake `LlmClient`; no Google API request or live database needed. Real 
 
 ## Rating: HIGH / MEDIUM / LOW ROI for Elip, and what I must NOT claim on my resume yet
 
-**HIGH ROI**: P2 demonstrates a real provider adapter, bounded context, structured output validation, retries, and citation filtering. Do not claim Gemini-4-Hydrogen availability, a live successful model call, production readiness, prompt-injection immunity, or hallucination-free answers; none were verified here.
+**HIGH ROI**: P2 demonstrates a real provider adapter, bounded context, structured output validation, retries, citation filtering, and a verified live text-generation request. Do not claim model tool-calling support, production readiness, prompt-injection immunity, or hallucination-free answers.

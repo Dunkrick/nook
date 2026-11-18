@@ -26,3 +26,7 @@
 - 2026-11-18 — P5: replaced placeholder panel with question, result, error, and loading UI; evidence action focuses card in canvas; selection alone sends no request.
 - 2026-11-18 — P5: frontend lint, production build, and all 67 frontend tests passed. Minimal live `gemini-3.8-flash` fallback request timed out with HTTP 504; key stayed hidden and no model/config change made.
 - 2026-11-18 — P5 finding: Design Rules token grep reports one raw-color match inside an existing explanatory comment in `frontend/src/assets/styles/auth.css`; no CSS declaration. Left unrelated file unchanged; ask owner whether to remove comment in follow-up.
+- 2026-11-18 — P2 follow-up: Gemini adapter now imports `dotenv/config` and explicitly passes `process.env.API_KEY` to `GoogleGenAI`; factory still returns null when key absent.
+- 2026-11-18 — P2 follow-up: added `npm run verify:gemini`, defaulting to `gemini-2.5-flash`, plus optional model argument; key is never printed.
+- 2026-11-18 — P2 follow-up: backend typecheck and 134 tests passed. Live request hit API: `gemini-2.5-flash` returned 404; `gemini-3.8-flash` and `gemini-3.7-flash` returned 503, so no generation response verified.
+- 2026-11-18 — P2 follow-up: changed backend and verification defaults to canonical `gemini-4-hydrogen`; typecheck and 134 tests passed. `npm run verify:gemini` returned `WORKING` twice, with one HTTP 504 on repeat; key remained hidden.
