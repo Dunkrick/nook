@@ -23,14 +23,15 @@ Alphabetical. Definitions describe this project; “planned” means not yet imp
 - **LLM** — Large language model; software that generates text from input text and learned patterns. Gemini is configured provider.
 - **LLM call** — One request that sends input to a model and receives generated output.
 - **Loading state** — UI shown while an API request is in progress.
-- **Model** — Trained system that generates output; `gemini-4-hydrogen` is configured model id.
+- **Model** — Trained system that generates output; default model id is `gemini-3.6-flash`.
 - **Pass/fail check** — One rule that reports whether an output meets an expected property.
 - **Prompt** — Instructions and input sent to an LLM.
 - **Prompt injection** — Untrusted input that tries to override model instructions.
 - **Provider** — Service that hosts or exposes a model API; this project uses Gemini API.
 - **Ranking** — Ordering candidate artifacts by a score that estimates relevance.
 - **Retrieval** — Selecting relevant saved artifacts before asking an LLM.
-- **Retry** — Repeating an operation after a failure; P2 retries invalid model output once.
+- **Resume-safe claim** — A project statement supported by code and available verification.
+- **Retry** — Repeating an operation after a failure; answer parsing retries invalid JSON once, and Gemini transport retries 429/503/504 twice with backoff.
 - **Semantic search** — Search that tries to match meaning, including different words with similar intent; not used by P1.
 - **Stemming** — Reducing word forms to a shared base, such as “deploys” and “deployed” to “deploy”; not used by P1.
 - **Stopword** — Common word omitted from keyword matching because it carries little topic meaning.
@@ -42,6 +43,7 @@ Alphabetical. Definitions describe this project; “planned” means not yet imp
 - **Tool call** — One model-produced function name and argument object.
 - **Tool calling** — Model asks application to execute a declared function; model does not execute it itself.
 - **Tool declaration** — Name, purpose, and argument schema for a tool callable by model.
+- **Tool path** — Model requests a backend function, backend runs it, then sends its result back to model.
 - **Tool iteration** — One tool execution and result-return cycle.
 - **Tool result** — Data application returns to model after running a tool.
 - **User message** — Request content sent to a model, such as a question and evidence.

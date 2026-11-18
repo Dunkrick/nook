@@ -131,16 +131,19 @@ router.post(
 
     if (error instanceof LlmProviderError) {
         console.error("Ask workspace provider request failed", error.providerError);
-        return res.status(502).json({
+        const isTemporarilyUnavailable = [429, 503, 504].includes(error.statusCode ?? 0);
+        return res.status(isTemporarilyUnavailable ? 503 : 502).json({
             success: false,
-            error: { message: "Could not generate an answer. Try again." },
+            error: { message: isTemporarilyUnavailable
+                ? "Workspace answers are temporarily unavailable. Try again shortly."
+                : "Could not generate an answer. Try again." },
         });
     }
 ```
 
 - Missing API key becomes 503 only after `searchWorkspace` confirms workspace ownership.
 - Provider error gets logged on server with original details.
-- Client sees one safe 502 message; provider response or key details are not returned.
+- Client sees safe 503 for exhausted transient provider errors (429/503/504), or safe 502 for other provider failures; provider response or key details are not returned.
 - Invalid model output after retry also maps to safe 502.
 - Unknown failures are re-thrown to existing error handler as 500.
 
@@ -173,13 +176,13 @@ Supertest tests exercise endpoint with signed test token, mocked search, and fak
 
 1. **No token or bad question:** route returns 401 or 400 before retrieval; tests assert search did not run.
 2. **Unowned workspace:** existing search helper returns null and route returns 404. Missing API key does not override this ownership result.
-3. **Missing key/provider error:** owned workspace with non-empty hits and no key returns 503; zero hits still return fixed answer without key. Provider failure returns generic 502 while server logs details. No live provider call was made in P3.
+3. **Missing key/provider error:** owned workspace with non-empty hits and no key returns 503; zero hits still return fixed answer without key. Transient provider failures are retried twice, then return safe 503; other provider failures return generic 502 while server logs details. No live provider call was made in P3.
 
 ## Interview questions
 
 1. **Why does route use authenticated user id instead of request body id?** “Request fields are user-controlled. Auth middleware supplies identity, and workspace id is checked against that identity before artifact retrieval.”
 2. **Why use deterministic filters in P3?** “It gives a small predictable baseline. `this week` maps to seven days and unfinished language maps to open issues; P4 can replace intent parsing while search and ownership stay in code.”
-3. **Why return generic 502 but log the error?** “Client needs actionable failure without provider internals. Server logs preserve debugging detail without exposing it in API response.”
+3. **Why distinguish provider 503 from 502?** “A temporary provider capacity failure should tell the client to retry later; other provider failures remain a generic 502. Neither response exposes provider internals.”
 
 ## Rating: HIGH / MEDIUM / LOW ROI for Elip, and what I must NOT claim on my resume yet
 

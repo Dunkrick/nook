@@ -35,4 +35,11 @@
 - 2026-11-18 — QA: all five repo gates passed on merged `main`; local frontend and backend started, DB health returned connected, Ask unauthenticated request returned 401. Browser showed sign-in; no authenticated live Ask request was made.
 - 2026-11-18 — QA finding: P5 Ask 404 route returns string `error`, while shared frontend helper assumed nested `error.message`, causing blank alert. Fixed helper for both shapes and added three regression cases on `feat/ask-p5-error-handling`.
 - 2026-11-18 — QA finding: README still has no Ask architecture, endpoint limits, or resume-safe claims section required by P7; left README unchanged during verification. Ask owner whether to complete P7 separately.
+- 2026-11-18 — P7: README now documents Ask flow, endpoint, constraints, evaluation limits, and “built” status; production deployment/key status remains unverified.
+- 2026-11-18 — Reliability follow-up: AI Studio marks `gemini-3.6-flash` Stable and `gemini-2.5-flash` deprecated/limited; switched default and env example to stable model.
+- 2026-11-18 — Reliability follow-up: added bounded retry for Gemini 429/503/504; exhausted transient errors map to safe `/ask` 503 and eval provider failures become `ERROR`.
+- 2026-11-18 — Reliability dead end: first live eval attempt ran beyond 90 seconds because SDK default retry policy adds up to five attempts and long backoff. Stopped run, set SDK attempts to one so adapter owns the bounded two retries; live eval needs rerun.
+- 2026-11-18 — Reliability verification: `npm run eval:ai` printed 2 PASS, 0 FAIL, 8 ERROR; all eight model-backed fixtures returned HTTP 429/503/504, so no answer-quality result was measured.
+- 2026-11-18 — Production read-only check: public API `/health` returned 200 with database connected; unauthenticated `/workspaces/1/ask` returned 401. Route reachability confirmed; authenticated generation and production API_KEY remain unverified.
+- 2026-11-18 — Production frontend bundle points at an ngrok tunnel host; public API route is reachable now, but host stability and authenticated answer generation are not verified.
 - 2026-11-18 — QA: latest `npm run verify:gemini` returned `WORKING`; synthetic P4 tool-call probe returned Gemini HTTP 503 high-demand response, so model tool support remains unverified.

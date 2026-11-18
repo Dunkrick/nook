@@ -45,7 +45,7 @@ Instead of forcing ideas into folders, documents, or rigid workflows, Nook lets 
 - Inline text and caption editing
 - Artifact deletion
 - Multi-artifact selection and selection toolbar
-- Foundation for future insight-oriented interactions
+- Ask your workspace: grounded answers with key points, evidence links, and open issue follow-ups
 
 ### Media
 
@@ -183,6 +183,21 @@ The database schema lives in `backend/prisma/schema.prisma`.
 - `POST /workspaces/:workspaceId/artifacts`
 - `PATCH /workspaces/:workspaceId/artifacts/:id`
 - `DELETE /workspaces/:workspaceId/artifacts/:id`
+- `POST /workspaces/:workspaceId/ask`
+
+### Ask your workspace
+
+Ask lets an authenticated user ask a question about saved workspace artifacts. The API checks workspace ownership, retrieves up to eight relevant artifacts, then sends only that selected evidence to Gemini. Gemini returns structured JSON; backend validates the response and removes citations to artifacts outside the retrieved set. Empty retrieval returns a fixed no-evidence answer without a model call. An optional tool-calling path lets the model choose search filters; backend still runs retrieval using authenticated user and workspace ids.
+
+```text
+Question → authenticate + ownership check → keyword retrieval and ranking
+  → selected evidence → Gemini structured answer → validate + ground citations
+  → answer, key points, evidence, unresolved open issues
+```
+
+Limits: retrieval is keyword-based and in-memory, not semantic search. It reads workspace artifacts before ranking, returns at most eight hits, and uses `createdAt` for recency. Image contents are not searchable; Polaroid captions are. The UI opens Ask from selected cards, but current endpoint searches the whole workspace rather than only selected cards. The manual ten-fixture evaluation uses synthetic evidence and the single-shot prompt; it does not exercise real retrieval or the tool-calling path. It checks format and citation boundaries, not answer truth or production accuracy.
+
+**Resume-safe status:** Ask is built in this repository. Public API health responds and the Ask route requires authentication; authenticated generation and production `API_KEY` configuration are not verified, so do not describe Ask as live.
 
 ### Media
 
@@ -330,4 +345,4 @@ See [`docs/aws-setup.md`](./docs/aws-setup.md) and [`docs/deployment.md`](./docs
 
 ## Project status
 
-Nook is an actively evolving project. The current architecture prioritizes a clear artifact domain, authenticated workspace ownership, private media storage, and explicit interaction boundaries before introducing more advanced AI-assisted functionality.
+Nook is an actively evolving project. Ask your workspace is built as an authenticated, evidence-grounded workspace question feature; production answer generation has not been verified.
