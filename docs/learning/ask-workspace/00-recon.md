@@ -74,7 +74,8 @@ Exact SDK package was verified as the official `@google/genai`. Owner supplied m
 **P3 route**
 
 - `backend/src/routes/workspaces.ts`
-- `backend/src/validation/ask-workspace.ts` (if P2’s validator does not own request validation)
+- `backend/src/validation/ask-request.ts`
+- `backend/src/services/ask-workspace.ts` (only if key/error sequencing needs route integration)
 - `backend/src/routes/__tests__/workspaces-ask.test.ts`
 - `docs/learning/ask-workspace/03-route.md`
 - Shared learning files above

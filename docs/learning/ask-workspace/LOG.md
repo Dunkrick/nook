@@ -12,3 +12,8 @@
 - 2026-11-18 — P2: installed authorized `@google/genai` SDK; npm sandbox install stalled, approved network retry succeeded. npm install reported 19 audit findings (1 low, 4 moderate, 13 high, 1 critical); no audit fix or unrelated dependency change run.
 - 2026-11-18 — P2: first service test run exposed incomplete workspace-search mock; changed it to partial mock so prompt can use real text extraction. Typecheck and tests then passed.
 - 2026-11-18 — P2: `npm run typecheck` passed; `npm test` passed 17 files / 111 tests, all using fake LLM and no network.
+- 2026-11-18 — P3: created route tests first for auth, ids, body, ownership, fake-LLM success, deterministic filters, no-evidence, missing key, and provider failure.
+- 2026-11-18 — P3: made LLM client optional through ownership/search stage so unowned workspaces return 404 before missing-key 503; owned requests without key return 503.
+- 2026-11-18 — P3: initial typecheck caught mock function typing mismatch; typed fake `generate` with `LlmRequest`. Follow-up typecheck and all tests passed.
+- 2026-11-18 — P3: resolved missing-key/no-hit ordering against P2 grounding gate: zero hits keep fixed answer and skip model; missing key gives 503 only when evidence requires generation.
+- 2026-11-18 — P3: `npm run typecheck` passed; `npm test` passed 18 files / 124 tests, no database or Gemini network.
