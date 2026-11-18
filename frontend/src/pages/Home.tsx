@@ -557,10 +557,16 @@ function handleClearSelection(){
 }
 
 function handleFindInsight() {
+    if (selectedArtifactIds.length === 0) return;
     setIsInsightOpen(true);
 }
 
 function handleCloseInsight(){
+    setIsInsightOpen(false);
+}
+
+function handleEvidenceClick(artifactId: number) {
+    setSelectedArtifactIds([artifactId]);
     setIsInsightOpen(false);
 }
 
@@ -700,10 +706,13 @@ function handleCloseInsight(){
                     onClearSelection={handleClearSelection}
                 />
             )}
-            {isInsightOpen && (
+            {isInsightOpen && activeWorkspace && selectedArtifactIds.length > 0 && (
                 <InsightPanel
                     selectedCount={selectedArtifactIds.length}
+                    workspaceId={activeWorkspace.id}
+                    artifacts={artifacts}
                     onClose={handleCloseInsight}
+                    onEvidenceClick={handleEvidenceClick}
                 />
             )}
             {saveError && (
