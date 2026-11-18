@@ -170,6 +170,13 @@ Decisions authorized by the task brief, with alternatives and trade-offs. Revisi
 - **Reason:** Nook artifacts live on spatial canvas and have no detail route.
 - **Trade-off:** requires returned evidence id to still exist in current workspace state.
 
+## P5 follow-up — Normalize both API error shapes in frontend
+
+- **Options considered:** change Ask route to nest its 404 string; teach shared API helper to read string and object errors; special-case Ask component.
+- **Choice:** update shared API helper to accept both `{ error: string }` and `{ error: { message } }`, with HTTP status text as fallback.
+- **Reason:** existing routes already return both shapes; fix belongs at common HTTP boundary and keeps Ask errors visible.
+- **Trade-off:** shared helper behavior changes for every API call, so tests cover both existing error shapes.
+
 ## P6 — Evaluate fixed synthetic evidence without a live workspace database
 
 - **Options considered:** run fixtures against an arbitrary user workspace; create database fixtures; supply fixed artifact evidence in code.

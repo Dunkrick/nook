@@ -20,7 +20,7 @@ P3 parses a few exact phrases such as “this week” and “unfinished.” Natu
 
 Real fixture example: a question “Did I deploy staging?” enters model prompt without workspace identity. Gemini can ask for `terms:["deploy","staging"]`; our code calls `searchWorkspace(5, 10, filters)` using authenticated user `5` and route workspace `10`. Model never receives permission to replace either id.
 
-Google’s [function-calling guide](https://ai.google.dev/gemini-api/docs/function-calling?hl=en) confirms application must execute returned calls and send function results back. The [GenerateContent API](https://ai.google.dev/api/generate-content?hl=en) documents `functionCall` and `functionResponse` fields. These docs verify API pattern, not `Gemini-4-Hydrogen` support; no live call was made.
+Google’s [function-calling guide](https://ai.google.dev/gemini-api/docs/function-calling?hl=en) confirms application must execute returned calls and send function results back. The [GenerateContent API](https://ai.google.dev/api/generate-content?hl=en) documents `functionCall` and `functionResponse` fields. A live synthetic `search_workspace` probe on 2026-11-18 returned HTTP 503 (“currently experiencing high demand”), before a tool call was produced; model-specific tool support remains unverified.
 
 ## Files touched
 
