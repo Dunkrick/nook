@@ -29,3 +29,24 @@ Decisions authorized by the task brief, with alternatives and trade-offs. Revisi
 - **Choice:** one small `LlmClient` interface and one Gemini implementation.
 - **Reason:** lets service tests use a fake and keeps provider wire details separate.
 - **Trade-off:** adds one authorized SDK and small adapter surface; model name still needs owner confirmation before P2.
+
+## P1 — Keep retrieval deterministic and independent from database access
+
+- **Options considered:** rank inside database query; use keyword ranking in a standalone pure function; add embeddings/vector search.
+- **Choice:** `searchWorkspace` gets owned artifacts through existing service, maps them, then calls pure `rankArtifacts`.
+- **Reason:** preserves ownership pattern, makes ranking testable without PostgreSQL, and gives later retrieval implementations a stable interface.
+- **Trade-off:** all artifacts load into memory; exact terms miss paraphrases.
+
+## P1 — Combine hard filters with weighted score
+
+- **Options considered:** let recency and relevance score decide everything; apply time/type/open state as hard filters, then score keyword overlap, recency, and small type weight.
+- **Choice:** use hard filters, issue-title match weight 3, other text match weight 1, recency decay up to 0.5, and type weight up to 0.01.
+- **Reason:** temporal-only questions such as “this week” have no useful keywords, while “unfinished” should exclude closed issues regardless of score.
+- **Trade-off:** hand-set weights are explainable but not tuned against real user judgments; keyword matching has lower recall for paraphrases.
+
+## P1 — Treat stopword-only query as no keyword constraint
+
+- **Options considered:** return no hits when normalized query has no words; let independent filters such as `sinceDays` determine candidates.
+- **Choice:** empty normalized term list skips keyword matching; temporal filters remain hard filters.
+- **Reason:** “this week” is a time constraint, not a content keyword.
+- **Trade-off:** P3 must correctly translate temporal language into a filter or it may search too broadly.
