@@ -14,6 +14,28 @@ import type {
     LlmToolTurn,
 } from "./client.js";
 
+const MAX_ATTEMPTS = 3;
+const RETRYABLE_STATUS_CODES = new Set([429, 503, 504]);
+
+function providerStatus(error: unknown): number | null {
+    if (typeof error !== "object" || error === null) return null;
+    const candidate = error as { status?: unknown; statusCode?: unknown };
+    const status = candidate.status ?? candidate.statusCode;
+    return typeof status === "number" ? status : null;
+}
+
+async function withTransientRetry<T>(operation: () => Promise<T>): Promise<T> {
+    for (let attempt = 0; ; attempt += 1) {
+        try {
+            return await operation();
+        } catch (error) {
+            const retryable = RETRYABLE_STATUS_CODES.has(providerStatus(error) ?? 0);
+            if (!retryable || attempt + 1 >= MAX_ATTEMPTS) throw error;
+            await new Promise((resolve) => setTimeout(resolve, 250 * (2 ** attempt)));
+        }
+    }
+}
+
 export class GeminiLlmClient implements LlmClient {
     private readonly client: GoogleGenAI;
 
@@ -27,12 +49,12 @@ export class GeminiLlmClient implements LlmClient {
 
         this.client = new GoogleGenAI({
             apiKey: process.env.API_KEY,
-            httpOptions: { timeout: timeoutMs },
+            httpOptions: { timeout: timeoutMs, retryOptions: { attempts: 1 } },
         });
     }
 
     async generate(req: LlmRequest): Promise<string> {
-        const response = await this.client.models.generateContent({
+        const response = await withTransientRetry(() => this.client.models.generateContent({
             model: this.model,
             contents: req.userPrompt,
             config: {
@@ -40,7 +62,7 @@ export class GeminiLlmClient implements LlmClient {
                 temperature: req.temperature,
                 responseMimeType: "application/json",
             },
-        });
+        }));
 
         return response.text ?? "";
     }
@@ -80,7 +102,7 @@ export class GeminiLlmClient implements LlmClient {
                     });
                 }
 
-                const response = await this.client.models.generateContent({
+                const response = await withTransientRetry(() => this.client.models.generateContent({
                     model: this.model,
                     contents: [...contents],
                     config: {
@@ -95,7 +117,7 @@ export class GeminiLlmClient implements LlmClient {
                             },
                         },
                     },
-                });
+                }));
 
                 pendingModelContent = response.candidates?.[0]?.content ?? null;
                 return {

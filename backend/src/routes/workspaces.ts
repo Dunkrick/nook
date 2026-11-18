@@ -151,9 +151,14 @@ router.post(
 
             if (error instanceof LlmProviderError) {
                 console.error("Ask workspace provider request failed", error.providerError);
-                return res.status(502).json({
+                const isTemporarilyUnavailable = [429, 503, 504].includes(error.statusCode ?? 0);
+                return res.status(isTemporarilyUnavailable ? 503 : 502).json({
                     success: false,
-                    error: { message: "Could not generate an answer. Try again." },
+                    error: {
+                        message: isTemporarilyUnavailable
+                            ? "Workspace answers are temporarily unavailable. Try again shortly."
+                            : "Could not generate an answer. Try again.",
+                    },
                 });
             }
 
