@@ -56,9 +56,19 @@ async function request(method: string, endpoint: string, options?: RequestOption
             data !== null &&
             "error" in data
         ) {
-            throw new Error(
-                (data as { error: { message: string } }).error.message
-            );
+            const error = (data as { error: unknown }).error;
+            if (typeof error === "string" && error.trim()) {
+                throw new Error(error);
+            }
+            if (
+                typeof error === "object" &&
+                error !== null &&
+                "message" in error &&
+                typeof error.message === "string" &&
+                error.message.trim()
+            ) {
+                throw new Error(error.message);
+            }
         }
 
         throw new Error(
