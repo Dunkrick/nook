@@ -85,8 +85,10 @@ The router is mounted by existing `backend/src/app.ts`, so route should not need
 **P4 tool calling**
 
 - `backend/src/services/ask-workspace.ts`
-- `backend/src/llm/client.ts` and `backend/src/llm/gemini-client.ts` (only if SDK tool-call support requires it)
+- `backend/src/llm/client.ts`, `backend/src/llm/gemini-client.ts`, `backend/src/llm/prompt.ts`
+- `backend/src/llm/gemini-client.test.ts`
 - `backend/src/services/ask-workspace.test.ts`
+- `backend/src/routes/__tests__/workspaces-ask.test.ts` (if ownership seam needs test updates)
 - `docs/learning/ask-workspace/04-tool-calling.md`
 - Shared learning files above
 
