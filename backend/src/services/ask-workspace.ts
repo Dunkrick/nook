@@ -24,10 +24,17 @@ export class LlmUnavailableError extends Error {
 }
 
 export class LlmProviderError extends Error {
-    constructor(readonly providerError: unknown) {
+    constructor(readonly providerError: unknown, readonly statusCode: number | null) {
         super("The model request failed.");
         this.name = "LlmProviderError";
     }
+}
+
+function providerStatus(error: unknown): number | null {
+    if (typeof error !== "object" || error === null) return null;
+    const candidate = error as { status?: unknown; statusCode?: unknown };
+    const status = candidate.status ?? candidate.statusCode;
+    return typeof status === "number" ? status : null;
 }
 
 const SEARCH_WORKSPACE_TOOL: LlmToolDeclaration = {
@@ -125,7 +132,7 @@ async function generateFinalAnswer(
         try {
             raw = await llmClient.generate(prompt);
         } catch (error) {
-            throw new LlmProviderError(error);
+            throw new LlmProviderError(error, providerStatus(error));
         }
         answer = parseGeneratedAnswer(raw);
     }
@@ -184,7 +191,7 @@ async function nextToolTurn(
     try {
         return await session.next(results, allowToolCalls);
     } catch (error) {
-        throw new LlmProviderError(error);
+        throw new LlmProviderError(error, providerStatus(error));
     }
 }
 

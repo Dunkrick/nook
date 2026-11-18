@@ -214,4 +214,17 @@ describe("POST /workspaces/:workspaceId/ask", () => {
         expect(log).toHaveBeenCalled();
         log.mockRestore();
     });
+
+    it("returns safe 503 when transient provider errors remain after retries", async () => {
+        generate.mockRejectedValue({ status: 503, message: "private provider response detail" });
+
+        const res = await request(app)
+            .post("/workspaces/10/ask")
+            .set(authHeader())
+            .send({ question: "Did I deploy staging?" });
+
+        expect(res.status).toBe(503);
+        expect(res.body.error.message).toBe("Workspace answers are temporarily unavailable. Try again shortly.");
+        expect(JSON.stringify(res.body)).not.toContain("private provider response detail");
+    });
 });

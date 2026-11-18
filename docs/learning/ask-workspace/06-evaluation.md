@@ -23,7 +23,7 @@ Example: fixture `staging-deploy` asks “Did the staging deployment finish?” 
 | file | what changed | why |
 |---|---|---|
 | `backend/src/ai-eval/fixtures.ts` | Added 10 fixed questions with synthetic artifact evidence and expected outcomes | Make manual checks repeatable and safe from live workspace data |
-| `backend/src/ai-eval/run-eval.ts` | Added live Gemini runner, one invalid-JSON retry, four checks, and table output | Inspect behavior against real model manually |
+| `backend/src/ai-eval/run-eval.ts` | Added live Gemini runner, one invalid-JSON retry, four checks, and pass/fail/error table output | Inspect behavior against real model manually |
 | `backend/package.json` | Added `eval:ai` command | Run evaluation without adding a dependency |
 | `docs/learning/ask-workspace/06-evaluation.md` | Added this packet walkthrough | Explain method, checks, and limits |
 | `docs/learning/ask-workspace/GLOSSARY.md` | Added evaluation terms | Keep new vocabulary alphabetical |
@@ -91,14 +91,18 @@ From `backend/`:
 
 - `npm run typecheck` — expected: TypeScript exits 0.
 - `npm test` — expected: all Vitest files pass; evaluation script is not a Vitest test and does not run in CI.
-- `npm run eval:ai` — makes live Gemini calls for evidence-backed fixtures, skips two no-evidence calls, prints row checks and overall count. Needs `API_KEY` in `.env`; `GEMINI_MODEL` selects model or defaults to `gemini-4-hydrogen`.
-- Expected table has 10 rows with `PASS`, `FAIL`, or `N/A` in columns `should-find`, `no-evidence`, `ids-subset`, and `valid-json`.
+- `npm run eval:ai` — makes live Gemini calls for evidence-backed fixtures, skips two no-evidence calls, prints row checks and pass/fail/error counts. Needs `API_KEY` in `.env`; `GEMINI_MODEL` selects model or defaults to `gemini-3.6-flash`. Provider request failures count as `ERROR`, not answer-behavior `FAIL`.
+- Expected table has 10 rows with `PASS`, `FAIL`, `ERROR`, or `N/A` in columns `should-find`, `no-evidence`, `ids-subset`, and `valid-json`.
 
 Actual run on 2026-11-18: `npm run typecheck` passed and `npm test` passed 19 files / 134 tests. `npm run eval:ai` exited 1 with 2/10 fixtures passing: both no-evidence cases passed; all eight generation cases received HTTP 503 or 504, so this run did not measure answer quality.
 
+P6 uses hand-written evidence and shared single-shot prompt builder; it does not call `searchWorkspace` or the P4 tool path. It measures output shape and citation boundaries only, not real retrieval quality. The updated runner marks provider failures as `ERROR`.
+
+The Gemini SDK default retry policy can wait much longer than our application retry. The adapter now sets SDK attempts to one and owns two retries with 250 ms and 500 ms backoff, so fixture-level provider failures can be reported without hidden multi-minute SDK backoff. After this change, live `npm run eval:ai` printed 2 PASS, 0 FAIL, 8 ERROR; all eight Gemini calls returned HTTP 429/503/504. The no-evidence fixtures passed locally without a model call; model answer quality remains unmeasured.
+
 ## How it can go wrong
 
-1. **Provider timeout or access error.** Runner marks affected fixture checks failed and shows HTTP status only; retry later or check key/model access.
+1. **Provider timeout or access error.** Runner marks affected fixture checks `ERROR` and shows HTTP status only; retry later or check key/model access.
 2. **Model returns malformed JSON twice.** Parser rejects it and row fails `valid-json`; one retry matches production limit.
 3. **Small fixture set looks better than real usage.** Ten synthetic examples cannot represent all workspaces or wording; keep scope honest and add reviewed cases before making quality claims.
 

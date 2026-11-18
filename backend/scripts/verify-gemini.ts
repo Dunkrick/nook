@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { GoogleGenAI } from "@google/genai";
 
-const model = process.argv[2] ?? process.env.GEMINI_MODEL ?? "gemini-4-hydrogen";
+const model = process.argv[2] ?? process.env.GEMINI_MODEL ?? "gemini-3.6-flash";
 
 if (!process.env.API_KEY) {
     console.error("API_KEY is missing. Set it in backend/.env, then rerun this script from backend/.");

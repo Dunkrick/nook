@@ -16,7 +16,7 @@ const requiredEnv = (name: string): string => {
 export const env = {
   PORT: Number(process.env.PORT ?? 3003),
   API_KEY: process.env.API_KEY ?? "",
-  GEMINI_MODEL: process.env.GEMINI_MODEL ?? "gemini-4-hydrogen",
+  GEMINI_MODEL: process.env.GEMINI_MODEL ?? "gemini-3.6-flash",
   LLM_TIMEOUT_MS: (() => {
     const timeout = Number(process.env.LLM_TIMEOUT_MS ?? 15_000);
     return Number.isFinite(timeout) && timeout > 0 ? timeout : 15_000;

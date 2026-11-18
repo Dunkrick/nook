@@ -2,6 +2,22 @@
 
 Decisions authorized by the task brief, with alternatives and trade-offs. Revisit when implementation evidence requires it.
 
+## P7 — Describe Ask with verifiable claims
+
+- **Options considered:** leave README silent; advertise Ask as live; document built behavior and list unverified production state.
+- **Choice:** describe current request path and limitations; say “built” and “production availability has not been verified.”
+- **Reason:** public health and route checks prove reachability, but no authenticated generation or production key check was available in this work session.
+- **Trade-off:** README avoids a stronger launch claim until deployment and key configuration can be verified.
+
+## Reliability follow-up — Retry transient Gemini failures and report eval errors separately
+
+- **Options considered:** keep single attempts and report provider saturation as 502/FAIL; retry transient 429/503/504 and surface exhausted provider errors as 503/ERROR.
+- **Choice:** set SDK HTTP retry attempts to one; our adapter makes two bounded retries with exponential backoff, maps exhausted transient `/ask` errors to safe 503, and classifies evaluation provider failures as `ERROR`.
+- **Reason:** transient capacity failures do not show that answer behavior failed; bounded retries reduce short-lived failures without unbounded requests.
+- **Trade-off:** three total provider attempts can add up to 750 ms backoff plus three configured request timeouts; full caller duration can exceed the 15-second per-request timeout.
+- **Model choice:** AI Studio lists `gemini-3.6-flash` as Stable and lists `gemini-2.5-flash` as deprecated/limited. Use `gemini-3.6-flash` as default, with `GEMINI_MODEL` override.
+- **Evaluation limit:** P6 still supplies hand-written evidence to the single-shot prompt; it does not exercise real retrieval or tool calling.
+
 ## P0 — Keep workspace ownership and database access in application code
 
 - **Options considered:** let model query database; retrieve artifacts in application code and send selected evidence; send the whole workspace to model.

@@ -24,11 +24,13 @@ Retrieval finds candidate facts, but it does not turn them into a useful answer.
 - **Retry**: repeat a failed operation once. P2 retries only malformed or wrong-shaped model output once; provider/network errors go to P3 for safe HTTP handling.
 - **JSON mode**: provider setting that requests JSON text. It does not validate JSON shape, so local validation remains necessary.
 
-Model choice: owner supplied `Gemini-4-Hydrogen`; backend now uses canonical lowercase id `gemini-4-hydrogen` as default and allows `GEMINI_MODEL` override. Live `generateContent` calls returned `WORKING` twice on 2026-11-18, with one HTTP 504 timeout between them; this verifies text generation for this key and model at that time, not reliable availability or tool-calling support. Official SDK use follows Google’s [GenAI SDK guide](https://ai.google.dev/gemini-api/docs/libraries?hl=en) and [generate content examples](https://ai.google.dev/api/generate-content?hl=en).
+Model choice history: owner supplied `Gemini-4-Hydrogen`; this was tested and returned `WORKING` twice, with one HTTP 504 timeout. Current default is `gemini-3.6-flash`, which AI Studio lists as Stable; `GEMINI_MODEL` can override it. The stable fallback request returned HTTP 503 during this update, so current availability was not verified. This does not establish tool-calling support. Official SDK use follows Google’s [GenAI SDK guide](https://ai.google.dev/gemini-api/docs/libraries?hl=en) and [generate content examples](https://ai.google.dev/api/generate-content?hl=en).
 
-Credential wiring: `dotenv/config` loads `backend/.env` before the SDK client reads `process.env.API_KEY`. The optional factory returns `null` if the variable is missing, so backend can boot without a Gemini key. `backend/scripts/verify-gemini.ts` sends a one-line request to `gemini-4-hydrogen` by default; it prints response text but never prints the key.
+Credential wiring: `dotenv/config` loads `backend/.env` before the SDK client reads `process.env.API_KEY`. The optional factory returns `null` if the variable is missing, so backend can boot without a Gemini key. `backend/scripts/verify-gemini.ts` sends a one-line request to `gemini-3.6-flash` by default, accepts a model argument, and prints response text but never the key.
 
-Earlier live attempts on 2026-11-18: `gemini-2.5-flash` returned HTTP 404; `gemini-3.8-flash` and `gemini-3.7-flash` returned HTTP 503. After changing default model, `gemini-4-hydrogen` returned `WORKING` twice, though one repeat timed out with HTTP 504.
+Transport retry follow-up: Gemini adapter retries only HTTP 429, 503, and 504, for three total attempts with 250 ms then 500 ms backoff. SDK retries are set to one attempt so its built-in longer retry policy cannot multiply these attempts. The 15-second timeout applies per request, so worst-case total time can exceed 15 seconds. Both text generation and tool turns use the same retry wrapper.
+
+Earlier live attempts on 2026-11-18: `gemini-2.5-flash` returned HTTP 404; `gemini-3.8-flash` and `gemini-3.7-flash` returned HTTP 503. The latest `gemini-3.6-flash` probe returned HTTP 503 both inside and outside the network sandbox. These are availability observations, not proof that the listed model id is invalid.
 
 ## Files touched
 
@@ -37,7 +39,7 @@ Earlier live attempts on 2026-11-18: `gemini-2.5-flash` returned HTTP 404; `gemi
 | `backend/src/llm/client.ts` | Added provider-neutral request and client interfaces | Let service tests use fake client |
 | `backend/src/llm/gemini-client.ts` | Added SDK adapter, JSON mode, temperature, timeout, dotenv loading, and `process.env.API_KEY` wiring | Keep provider details out of service and use the documented local key |
 | `backend/src/llm/gemini-client.test.ts` | Checked SDK constructor receives `process.env.API_KEY` | Prevent credential source regressions |
-| `backend/scripts/verify-gemini.ts` | Added live one-prompt script using `gemini-4-hydrogen` by default | Verify local key and model access without exposing secret |
+| `backend/scripts/verify-gemini.ts` | Added live one-prompt script; now defaults to `gemini-3.6-flash` | Verify local key and model access without exposing secret |
 | `backend/package.json` | Added `verify:gemini` script | Run live verification with one command; optional model argument supports fallback checks |
 | `backend/src/llm/prompt.ts` | Added system rules, evidence wrapping, escaping, and length caps | Bound model input and label external text as data |
 | `backend/src/services/ask-workspace.ts` | Added retrieve → prompt → validate → ground flow and code-derived unresolved issues | Keep database access and grounding gate in application code |
@@ -204,7 +206,7 @@ Tests       111 passed (111)
 exit code: 0
 ```
 
-Tests use fake `LlmClient`; no Google API request or live database needed. The verification script makes one live request, defaults to `gemini-4-hydrogen`, and accepts an optional model argument. Successful output starts `Gemini verification passed` and contains `WORKING`. This live request checks current key/model access only; it does not validate production endpoint behavior.
+Tests use fake `LlmClient`; no Google API request or live database needed. The verification script makes one live request, defaults to `gemini-3.6-flash`, and accepts an optional model argument. Successful output starts `Gemini verification passed` and contains `WORKING`. This live request checks current key/model access only; it does not validate production endpoint behavior.
 
 Actual terminal output on 2026-11-18:
 
@@ -231,7 +233,7 @@ Gemini verification passed (gemini-4-hydrogen): WORKING
 ## How it can go wrong
 
 1. **No API key:** `API_KEY` defaults to empty; app still boots and client factory returns null. P3 must turn that into clear 503 response.
-2. **Bad model output:** JSON may be malformed or wrong-shaped. Parser retries once, then throws `InvalidAskResponseError`; P3 must convert this and provider failures to safe 502 response.
+2. **Bad model output:** JSON may be malformed or wrong-shaped. Parser retries once, then throws `InvalidAskResponseError`; route returns safe 502. Gemini transport retries only 429/503/504 twice with backoff; exhausted transient errors return safe 503.
 3. **Prompt injection or false claims:** issue body can contain attack text, so prompt marks it untrusted and escapes evidence delimiters. Model may still be influenced or make unsupported claims; tests prove code filtering behavior only, not real model resistance. Citation gate only guarantees cited ids came from retrieval.
 
 ## Interview questions
