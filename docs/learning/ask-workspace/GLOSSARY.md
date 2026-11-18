@@ -5,13 +5,19 @@ Alphabetical. Definitions describe this project; “planned” means not yet imp
 - **API key** — Secret credential used to authorize calls to an external API.
 - **Artifact** — One saved Nook item, such as a text card or GitHub issue.
 - **Context window** — Maximum amount of text a model can consider in one request.
+- **Deterministic parsing** — Fixed code rules that map same input to same parsed result.
 - **Embedding** — A list of numbers representing text in a way that can capture meaning; not used by P1.
 - **Evidence** — Retrieved artifact data selected to support an answer.
+- **Fallback** — Backup behavior used when preferred path cannot run.
 - **Grounding** — Connecting an answer to selected evidence; reduces unsupported claims but does not guarantee truth.
 - **Hallucination** — Plausible-sounding model output that is not supported by source facts.
+- **JSON mode** — Provider setting that asks model to return JSON text; local validation still checks its shape.
 - **LLM** — Large language model; software that generates text from input text and learned patterns. Gemini is the planned provider.
-- **Prompt injection** — Untrusted input that tries to override model instructions.
+- **LLM call** — One request that sends input to a model and receives generated output.
+- **Model** — Trained system that generates output; `Gemini-4-Hydrogen` is configured model string.
 - **Prompt** — Instructions and input sent to an LLM.
+- **Prompt injection** — Untrusted input that tries to override model instructions.
+- **Provider** — Service that hosts or exposes a model API; this project uses Gemini API.
 - **Ranking** — Ordering candidate artifacts by a score that estimates relevance.
 - **Retrieval** — Selecting relevant saved artifacts before asking an LLM.
 - **Retry** — Repeating an operation after a failure; P2 retries invalid model output once.

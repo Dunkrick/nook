@@ -78,3 +78,31 @@ Decisions authorized by the task brief, with alternatives and trade-offs. Revisi
 - **Choice:** use owner-provided exact string, with env override.
 - **Reason:** owner explicitly identified deployed model; agent must not guess a different one.
 - **Trade-off:** public docs did not verify string, and no live API request checked availability.
+
+## P3 — Validate route input before owned workspace search
+
+- **Options considered:** accept free-form body; parse question and workspace id before service; ask model to infer a valid request.
+- **Choice:** authenticated route parses positive workspace id, trims non-empty question, rejects over 300 characters, then calls service.
+- **Reason:** keep request boundaries explicit and avoid retrieval for malformed input.
+- **Trade-off:** simple length and type checks do not rate-limit repeated valid requests.
+
+## P3 — Parse only known temporal and open-state phrases in code
+
+- **Options considered:** no filter parsing; deterministic phrases; have model choose filters now.
+- **Choice:** `this week` maps to seven days; `unfinished`, `open`, and `follow up` map to open-only; remove stopwords and intent words from search terms.
+- **Reason:** reliable smallest baseline, testable without model, and compatible with P4 changing filter selection later.
+- **Trade-off:** synonyms outside listed phrases are not understood; empty terms can broaden search unless a hard filter applies.
+
+## P3 — Resolve ownership before returning missing-key error
+
+- **Options considered:** fail immediately if API key missing; run owned search first, then require key only when hits need generation; require key even for fixed no-evidence answer.
+- **Choice:** authenticate, validate, search; null returns 404; zero hits return fixed answer; missing key returns 503 when non-empty hits need generation.
+- **Reason:** preserve P2 zero-hit grounding gate and P3 missing-key behavior without exposing workspace existence.
+- **Trade-off:** no-hit requests can succeed while generation feature is otherwise unconfigured.
+
+## P3 — Keep provider failures safe at HTTP boundary
+
+- **Options considered:** expose provider error; pass through generic 500; log server-side and return generic 502.
+- **Choice:** classify missing config as 503; provider or invalid model output as 502; log provider detail only server-side.
+- **Reason:** clients get clear retry/config action without receiving provider internals.
+- **Trade-off:** generic 502 is less specific for clients; server logs are needed to diagnose.
