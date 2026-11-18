@@ -32,3 +32,7 @@
 - 2026-11-18 — P2 follow-up: changed backend and verification defaults to canonical `gemini-4-hydrogen`; typecheck and 134 tests passed. `npm run verify:gemini` returned `WORKING` twice, with one HTTP 504 on repeat; key remained hidden.
 - 2026-11-18 — P6: added 10 synthetic fixtures and manual `npm run eval:ai` runner with find/no-evidence, evidence-id subset, and JSON checks; no new dependency or CI model call.
 - 2026-11-18 — P6: backend typecheck passed; `npm test` passed 19 files / 134 tests. Live evaluation had 2/10 pass: two fixed no-evidence paths passed; eight generation calls returned HTTP 503/504, so no answer-quality result was measured.
+- 2026-11-18 — QA: all five repo gates passed on merged `main`; local frontend and backend started, DB health returned connected, Ask unauthenticated request returned 401. Browser showed sign-in; no authenticated live Ask request was made.
+- 2026-11-18 — QA finding: P5 Ask 404 route returns string `error`, while shared frontend helper assumed nested `error.message`, causing blank alert. Fixed helper for both shapes and added three regression cases on `feat/ask-p5-error-handling`.
+- 2026-11-18 — QA finding: README still has no Ask architecture, endpoint limits, or resume-safe claims section required by P7; left README unchanged during verification. Ask owner whether to complete P7 separately.
+- 2026-11-18 — QA: latest `npm run verify:gemini` returned `WORKING`; synthetic P4 tool-call probe returned Gemini HTTP 503 high-demand response, so model tool support remains unverified.
