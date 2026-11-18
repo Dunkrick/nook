@@ -1,3 +1,5 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import express from "express";
 import cors from "cors";
 import { env } from "./config/env.js";
@@ -7,7 +9,10 @@ import { errorHandler } from "./lib/error.js";
 import prisma from "./prisma.js";
 import uploadRouter from "./routes/uploads.js";
 import artifactRouter from "./routes/artifacts.js";
-import githubWebhookRouter from "./routes/github-webhooks.js"
+import githubWebhookRouter from "./routes/github-webhooks.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const publicDir = path.resolve(__dirname, "../public");
 
 const app = express();
 
@@ -41,6 +46,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use(express.static(publicDir));
 app.use(express.static("public"));
 
 app.use("/auth", authRouter);
