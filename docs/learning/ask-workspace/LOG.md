@@ -8,3 +8,7 @@
 - 2026-11-18 — P1: wrote retrieval tests first for extraction, term ranking, recency, time/type/open filters, temporal-only query, and unowned workspace.
 - 2026-11-18 — P1: implemented `rankArtifacts` as pure scoring function; `searchWorkspace` uses existing ownership helper and mapper.
 - 2026-11-18 — P1: `npm run typecheck` passed; `npm test` passed 16 files / 99 tests. No P1 implementation dead ends or test failures.
+- 2026-11-18 — P2: owner supplied `Gemini-4-Hydrogen`; public Google model docs did not verify exact string. Checked `API_KEY` presence only; secret stayed hidden.
+- 2026-11-18 — P2: installed authorized `@google/genai` SDK; npm sandbox install stalled, approved network retry succeeded. npm install reported 19 audit findings (1 low, 4 moderate, 13 high, 1 critical); no audit fix or unrelated dependency change run.
+- 2026-11-18 — P2: first service test run exposed incomplete workspace-search mock; changed it to partial mock so prompt can use real text extraction. Typecheck and tests then passed.
+- 2026-11-18 — P2: `npm run typecheck` passed; `npm test` passed 17 files / 111 tests, all using fake LLM and no network.
