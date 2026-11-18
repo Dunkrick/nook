@@ -15,6 +15,20 @@ export class InvalidAskResponseError extends Error {
     }
 }
 
+export class LlmUnavailableError extends Error {
+    constructor() {
+        super("Workspace answers are not configured.");
+        this.name = "LlmUnavailableError";
+    }
+}
+
+export class LlmProviderError extends Error {
+    constructor(readonly providerError: unknown) {
+        super("The model request failed.");
+        this.name = "LlmProviderError";
+    }
+}
+
 function noEvidenceAnswer(question: string): AskWorkspaceResult {
     return {
         answer: `I couldn't find evidence of ${question.trim().slice(0, 300)} in your workspace.`,
@@ -38,11 +52,12 @@ export async function askWorkspace(
     workspaceId: number,
     question: string,
     filters: SearchFilters,
-    llmClient: LlmClient,
+    llmClient: LlmClient | null,
 ): Promise<AskWorkspaceResult | null> {
     const hits = await searchWorkspace(userId, workspaceId, filters);
     if (hits === null) return null;
     if (hits.length === 0) return noEvidenceAnswer(question);
+    if (llmClient === null) throw new LlmUnavailableError();
 
     const prompt = buildAskPrompt(question, hits.map(({ artifact }) => ({
         artifactId: artifact.id,
@@ -53,7 +68,13 @@ export async function askWorkspace(
     let answer: GeneratedAnswer | null = null;
 
     for (let attempt = 0; attempt < 2 && answer === null; attempt += 1) {
-        answer = parseGeneratedAnswer(await llmClient.generate(prompt));
+        let raw: string;
+        try {
+            raw = await llmClient.generate(prompt);
+        } catch (error) {
+            throw new LlmProviderError(error);
+        }
+        answer = parseGeneratedAnswer(raw);
     }
 
     if (answer === null) throw new InvalidAskResponseError();
