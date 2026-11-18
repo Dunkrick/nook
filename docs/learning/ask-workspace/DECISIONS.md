@@ -28,7 +28,7 @@ Decisions authorized by the task brief, with alternatives and trade-offs. Revisi
 - **Options considered:** provider calls embedded in service; provider-neutral interface with Gemini implementation; multi-provider abstraction.
 - **Choice:** one small `LlmClient` interface and one Gemini implementation.
 - **Reason:** lets service tests use a fake and keeps provider wire details separate.
-- **Trade-off:** adds one authorized SDK and small adapter surface; model name still needs owner confirmation before P2.
+- **Trade-off:** adds one authorized SDK and small adapter surface; exact model string can still be unavailable to public API.
 
 ## P1 — Keep retrieval deterministic and independent from database access
 
@@ -50,3 +50,31 @@ Decisions authorized by the task brief, with alternatives and trade-offs. Revisi
 - **Choice:** empty normalized term list skips keyword matching; temporal filters remain hard filters.
 - **Reason:** “this week” is a time constraint, not a content keyword.
 - **Trade-off:** P3 must correctly translate temporal language into a filter or it may search too broadly.
+
+## P2 — Keep provider calls behind one small interface
+
+- **Options considered:** call Gemini directly from answer service; define provider-neutral `LlmClient` and one Gemini adapter; build multi-provider routing now.
+- **Choice:** use `LlmClient.generate(req)` with official `@google/genai` implementation and fake client in tests.
+- **Reason:** isolates SDK request details and keeps tests deterministic with no API call.
+- **Trade-off:** one adapter adds a small layer; changing providers still requires implementation and configuration work.
+
+## P2 — Bound and label all model context
+
+- **Options considered:** pass all artifacts and full question; cap hits, question, and each evidence text, then wrap evidence as data; let provider context window decide.
+- **Choice:** max 8 hits, 300 question characters, 1,200 evidence characters; separate system rules from user content; escape XML delimiters.
+- **Reason:** limits input size and makes evidence boundary explicit while treating third-party issue text as untrusted.
+- **Trade-off:** long text is truncated; delimiter escaping and system rules reduce risk but do not guarantee model ignores injection.
+
+## P2 — Validate response and enforce citation grounding in code
+
+- **Options considered:** trust provider JSON; validate shape and retry once; retry until valid; use model citations without checking ids.
+- **Choice:** hand-written type guard, one retry for malformed output, and filter citations against retrieved ids; zero hits bypass model.
+- **Reason:** provider output is untrusted; application code can enforce allowed evidence ids.
+- **Trade-off:** valid but unsupported prose can still pass when it cites a valid artifact; stronger claim-level grounding needs evaluation.
+
+## P2 — Use owner-provided model string as configurable default
+
+- **Options considered:** replace with a public documented model; use exact supplied `Gemini-4-Hydrogen` string and allow `GEMINI_MODEL` override; block implementation until public docs list it.
+- **Choice:** use owner-provided exact string, with env override.
+- **Reason:** owner explicitly identified deployed model; agent must not guess a different one.
+- **Trade-off:** public docs did not verify string, and no live API request checked availability.

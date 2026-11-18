@@ -64,11 +64,12 @@ These are proposals, to confirm against code at each packet start. Shared learni
 - `backend/src/llm/client.ts`, `backend/src/llm/gemini-client.ts`, and `backend/src/llm/prompt.ts`
 - `backend/src/validation/ask-workspace.ts` and its validation test
 - `backend/src/config/env.ts`
+- `backend/.env.example`
 - `backend/package.json` and `backend/package-lock.json` (official Google Gen AI SDK only)
 - `docs/learning/ask-workspace/02-llm.md`
 - Shared learning files above
 
-Exact test placement and SDK package name must be verified before P2 coding. **P2 stop condition:** model is not filled in; “Gemini API” names provider, not model. Ask Rithwick for exact Gemini model before entering P2. `API_KEY` is named in brief as env var in `backend/.env`; whether it is set is unverified without printing secret values.
+Exact SDK package was verified as the official `@google/genai`. Owner supplied model string `Gemini-4-Hydrogen`; public Google model docs did not verify that exact string, so remote availability remains unverified. P2 checked only that `API_KEY` exists in `backend/.env`; secret value was not printed.
 
 **P3 route**
 
