@@ -21,3 +21,8 @@
 - 2026-11-18 — P4: added provider-neutral tool session, Gemini adapter loop, `search_workspace` allowlist, two-iteration cap, authenticated identity binding, and P3 fallback.
 - 2026-11-18 — P4: first service run found skipped-tool path needed deterministic fallback; fixed. SDK mock then exposed mutable history array in recorded request; pass shallow copy per turn.
 - 2026-11-18 — P4: `npm run typecheck` passed; `npm test` passed 19 files / 133 tests with fake sessions/mocked SDK; no live Gemini/PostgreSQL calls.
+- 2026-11-18 — P5: owner chose InsightPanel and confirmed existing workspace ask endpoint; scope recorded: explicit Ask click triggers request, retrieval remains workspace-wide.
+- 2026-11-18 — P5: initial branch creation failed because `.git` is outside sandbox write roots; requested and received command approval, then created `feat/ask-p5-ui`.
+- 2026-11-18 — P5: replaced placeholder panel with question, result, error, and loading UI; evidence action focuses card in canvas; selection alone sends no request.
+- 2026-11-18 — P5: frontend lint, production build, and all 67 frontend tests passed. Minimal live `gemini-3.8-flash` fallback request timed out with HTTP 504; key stayed hidden and no model/config change made.
+- 2026-11-18 — P5 finding: Design Rules token grep reports one raw-color match inside an existing explanatory comment in `frontend/src/assets/styles/auth.css`; no CSS declaration. Left unrelated file unchanged; ask owner whether to remove comment in follow-up.

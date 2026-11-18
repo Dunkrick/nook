@@ -1,6 +1,17 @@
 import { get, post, patch, del } from "./api";
 import type { Artifact, ArtifactUpdate } from "../types/artifacts";
 
+export interface AskWorkspaceResponse {
+    answer: string;
+    keyPoints: Array<{ title: string; summary: string }>;
+    evidence: Array<{ artifactId: number; reason: string }>;
+    unresolvedItems: string[];
+}
+
+export function askWorkspace(workspaceId: number, question: string): Promise<AskWorkspaceResponse> {
+    return post(`/workspaces/${workspaceId}/ask`, { question });
+}
+
 export interface Workspace {
     id: number;
     name: string;

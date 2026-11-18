@@ -7,6 +7,7 @@ Alphabetical. Definitions describe this project; “planned” means not yet imp
 - **Context window** — Maximum amount of text a model can consider in one request.
 - **Deterministic parsing** — Fixed code rules that map same input to same parsed result.
 - **Embedding** — A list of numbers representing text in a way that can capture meaning; not used by P1.
+- **Empty state** — UI shown before an answer exists, prompting the user to ask a question.
 - **Evidence** — Retrieved artifact data selected to support an answer.
 - **Fallback** — Backup behavior used when preferred path cannot run.
 - **Function call** — Structured request from model asking application to run a declared function.
@@ -17,6 +18,7 @@ Alphabetical. Definitions describe this project; “planned” means not yet imp
 - **JSON mode** — Provider setting that asks model to return JSON text; local validation still checks its shape.
 - **LLM** — Large language model; software that generates text from input text and learned patterns. Gemini is configured provider.
 - **LLM call** — One request that sends input to a model and receives generated output.
+- **Loading state** — UI shown while an API request is in progress.
 - **Model** — Trained system that generates output; `Gemini-4-Hydrogen` is configured model string.
 - **Prompt** — Instructions and input sent to an LLM.
 - **Prompt injection** — Untrusted input that tries to override model instructions.
