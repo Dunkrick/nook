@@ -343,6 +343,10 @@ See [`docs/aws-setup.md`](./docs/aws-setup.md) and [`docs/deployment.md`](./docs
 
 ---
 
+Off Campus code: FM3SZH
+
+---
+
 ## Project status
 
 Nook is an actively evolving project. Ask your workspace is built as an authenticated, evidence-grounded workspace question feature; production answer generation has not been verified.
